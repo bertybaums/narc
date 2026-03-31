@@ -170,7 +170,7 @@ details > div {{ padding: 14px; background: #111122; }}
         <div class="navbar-nav">
             <a class="nav-link active-view" id="nav-about" href="#" onclick="showView('about')">About</a>
             <a class="nav-link" id="nav-browse" href="#" onclick="showView('browse')">Browse</a>
-            <a class="nav-link disabled text-muted" title="Requires hosted server">Create</a>
+            <a class="nav-link" id="nav-create" href="#" onclick="showView('create')">Create</a>
             <a class="nav-link" id="nav-inspect" href="#" onclick="showView('inspect')">Inspect</a>
         </div>
     </div>
@@ -290,6 +290,38 @@ and more. Each is rated on both <strong>human difficulty</strong> and <strong>AI
     <span class="text-muted ms-2" id="inspect-count"></span>
 </div>
 <div id="inspect-list"></div>
+</div>
+
+<!-- ==================== CREATE ==================== -->
+<div id="view-create" class="view">
+<div class="alert alert-warning d-flex align-items-center mb-3">
+    <strong class="me-2">Preview only.</strong> This page lets you design puzzles locally, but submissions are not yet being accepted. To share a puzzle you create here, download the JSON and email it to Bert.
+</div>
+<h2 class="mb-3">Create Puzzle</h2>
+<div class="d-flex gap-3 mb-3 align-items-end flex-wrap">
+    <div><label class="form-label">Puzzle ID</label>
+    <input type="text" id="create-pid" class="form-control form-control-sm" placeholder="narc_new_001" style="width:140px;"></div>
+    <div><label class="form-label">Title</label>
+    <input type="text" id="create-title" class="form-control form-control-sm" placeholder="My Puzzle" style="width:250px;"></div>
+    <div><label class="form-label">Sequence Length</label>
+    <input type="range" id="create-seq-len" class="form-range" min="3" max="8" value="4" style="width:120px;" oninput="document.getElementById('create-seq-display').textContent=this.value;buildCreateSlots();">
+    <span id="create-seq-display">4</span></div>
+</div>
+<div class="mb-3"><label class="form-label">Color</label><div id="create-picker"></div></div>
+<div class="card mb-3"><div class="card-header">Grid Sequence</div>
+<div class="card-body"><div id="create-slots" class="sequence-container"></div></div></div>
+<div class="card mb-3"><div class="card-header">Narrative</div>
+<div class="card-body"><textarea id="create-narrative" class="form-control" rows="3" placeholder="Write the clue..."></textarea></div></div>
+<div class="d-flex gap-2 mb-3">
+    <button class="btn btn-narc" onclick="downloadCreateJSON()">Download JSON</button>
+    <button class="btn btn-outline-secondary" onclick="previewCreate()">Preview</button>
+</div>
+<div id="create-preview" class="card mb-4" style="display:none;">
+    <div class="card-header">Preview</div>
+    <div class="card-body"><div id="create-preview-seq" class="sequence-container mb-3"></div>
+    <button class="narrative-reveal-btn" onclick="document.getElementById('create-preview-narr').classList.toggle('visible')">Reveal Clue</button>
+    <div class="narrative-text" id="create-preview-narr"></div></div>
+</div>
 </div>
 
 </div>
@@ -652,6 +684,146 @@ function filterInspect() {{
     }});
     document.getElementById('inspect-count').textContent = shown + ' / ' + PUZZLES.length;
 }}
+
+// ==================== CREATE ====================
+let createColor = 0;
+let createGrids = [];
+let createMasked = new Set();
+
+function initCreate() {{
+    buildColorPicker(document.getElementById('create-picker'), c => {{ createColor = c; }});
+    buildCreateSlots();
+}}
+
+function buildCreateSlots() {{
+    const n = parseInt(document.getElementById('create-seq-len').value);
+    const container = document.getElementById('create-slots');
+    container.innerHTML = '';
+    createGrids = [];
+    for (let i = 0; i < n; i++) {{
+        if (i > 0) {{
+            const arrow = document.createElement('div');
+            arrow.className = 'sequence-arrow';
+            arrow.innerHTML = '&rarr;';
+            container.appendChild(arrow);
+        }}
+        const isMasked = createMasked.has(i);
+        const slot = document.createElement('div');
+        slot.className = 'grid-slot' + (isMasked ? ' masked' : '');
+        slot.id = 'create-slot-' + i;
+        slot.innerHTML = '<div class="slot-label">Grid ' + (i+1) + '</div>' +
+            '<div class="mb-1"><input type="text" class="form-control form-control-sm d-inline-block" ' +
+            'value="5x5" style="width:60px;" onchange="resizeCreateGrid('+i+',this.value)" id="create-dim-'+i+'">' +
+            ' <input type="text" class="form-control form-control-sm d-inline-block" placeholder="label" ' +
+            'style="width:70px;" id="create-label-'+i+'"></div>' +
+            '<div class="grid-wrapper"><div id="create-canvas-'+i+'"></div></div>' +
+            '<button class="btn btn-sm mt-1 '+(isMasked?'btn-warning':'btn-outline-secondary')+'" ' +
+            'onclick="toggleCreateMask('+i+')">'+(isMasked?'Masked':'Mask')+'</button>';
+        container.appendChild(slot);
+        createGrids[i] = new Grid(5, 5);
+        renderCreateGrid(i);
+    }}
+}}
+
+function renderCreateGrid(idx) {{
+    const canvas = document.getElementById('create-canvas-' + idx);
+    renderGrid(canvas, createGrids[idx], {{
+        editable: true, cellSize: 28,
+        onCellClick: (r, c) => {{
+            createGrids[idx].grid[r][c] = createColor;
+            setCellColor(canvas.querySelectorAll('.grid_row')[r].querySelectorAll('.cell')[c], createColor);
+        }}
+    }});
+}}
+
+function resizeCreateGrid(idx, val) {{
+    const parts = val.split('x');
+    if (parts.length !== 2) return;
+    const w = parseInt(parts[0]), h = parseInt(parts[1]);
+    if (isNaN(w)||isNaN(h)||w<1||h<1||w>30||h>30) return;
+    createGrids[idx].resize(h, w);
+    renderCreateGrid(idx);
+}}
+
+function toggleCreateMask(idx) {{
+    if (createMasked.has(idx)) createMasked.delete(idx);
+    else createMasked.add(idx);
+    const slot = document.getElementById('create-slot-' + idx);
+    const btn = slot.querySelector('button:last-child');
+    if (createMasked.has(idx)) {{
+        slot.classList.add('masked'); btn.className = 'btn btn-sm mt-1 btn-warning'; btn.textContent = 'Masked';
+    }} else {{
+        slot.classList.remove('masked'); btn.className = 'btn btn-sm mt-1 btn-outline-secondary'; btn.textContent = 'Mask';
+    }}
+}}
+
+function collectCreateData() {{
+    const pid = document.getElementById('create-pid').value.trim();
+    const title = document.getElementById('create-title').value.trim();
+    const narrative = document.getElementById('create-narrative').value.trim();
+    if (!pid || !title || !narrative || createMasked.size === 0) return null;
+
+    const n = parseInt(document.getElementById('create-seq-len').value);
+    const sequence = [];
+    const maskedPositions = [...createMasked].sort((a,b) => a-b);
+    const answerGrids = {{}};
+
+    for (let i = 0; i < n; i++) {{
+        const dim = document.getElementById('create-dim-'+i).value.split('x');
+        const cols = parseInt(dim[0])||5, rows = parseInt(dim[1])||5;
+        const label = document.getElementById('create-label-'+i).value.trim();
+        const gridData = createGrids[i].toArray();
+        if (createMasked.has(i)) {{
+            answerGrids[String(i)] = gridData;
+            sequence.push({{position:i, grid:null, rows:rows, cols:cols, label:label, masked:true}});
+        }} else {{
+            sequence.push({{position:i, grid:gridData, rows:rows, cols:cols, label:label}});
+        }}
+    }}
+    return {{ puzzle_id:pid, title:title, narrative:narrative, sequence:sequence,
+              masked_positions:maskedPositions, answer_grids:answerGrids,
+              metadata:{{creator:'human',created_at:new Date().toISOString().slice(0,10)}} }};
+}}
+
+function downloadCreateJSON() {{
+    const data = collectCreateData();
+    if (!data) {{ alert('Fill in ID, title, narrative, and mask at least one grid.'); return; }}
+    const blob = new Blob([JSON.stringify(data, null, 2)], {{type: 'application/json'}});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = data.puzzle_id + '.json';
+    a.click();
+}}
+
+function previewCreate() {{
+    const data = collectCreateData();
+    if (!data) {{ alert('Fill in all fields first.'); return; }}
+    const preview = document.getElementById('create-preview');
+    preview.style.display = 'block';
+    const seqC = document.getElementById('create-preview-seq');
+    seqC.innerHTML = '';
+    data.sequence.forEach((item, i) => {{
+        if (i > 0) {{ const a = document.createElement('div'); a.className='sequence-arrow'; a.innerHTML='&rarr;'; seqC.appendChild(a); }}
+        const slot = document.createElement('div');
+        slot.className = 'grid-slot' + (item.masked ? ' masked' : '');
+        const label = document.createElement('div'); label.className='slot-label'; label.textContent='Grid '+(i+1);
+        slot.appendChild(label);
+        const wrapper = document.createElement('div'); wrapper.className='grid-wrapper';
+        const canvas = document.createElement('div');
+        if (item.masked) renderMaskedPlaceholder(canvas, item.rows, item.cols, 28);
+        else renderGrid(canvas, new Grid(item.rows, item.cols, item.grid), {{cellSize:28}});
+        wrapper.appendChild(canvas); slot.appendChild(wrapper); seqC.appendChild(slot);
+    }});
+    document.getElementById('create-preview-narr').textContent = data.narrative;
+}}
+
+// Init create when first shown
+let createInited = false;
+const origShowView = showView;
+showView = function(name) {{
+    origShowView(name);
+    if (name === 'create' && !createInited) {{ createInited = true; initCreate(); }}
+}};
 </script>
 </body>
 </html>"""
