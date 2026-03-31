@@ -52,11 +52,30 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     except Exception as e:
         return trial_id, None, None, None, str(e), 0
 
-    # Parse response grids
+    # Parse response grids — try pass-2 output first, then raw reasoning
     predicted, parsed_reasoning, parse_error = grids.parse_response_grids(text2)
 
     if predicted is None:
         predicted, _, _ = grids.parse_response_grids(reasoning)
+
+    # Pass 3: strict retry if still no parse
+    if predicted is None:
+        try:
+            masked_positions = puzzle_data["masked_positions"]
+            dimensions = [
+                (puzzle_data["sequence"][p]["rows"], puzzle_data["sequence"][p]["cols"])
+                for p in masked_positions
+            ]
+            strict_msgs = prompts.build_extraction_strict(
+                reasoning, masked_positions, dimensions
+            )
+            _, text3, latency3 = models.call_llm(extraction_config, strict_msgs)
+            total_latency += latency3
+            predicted, _, parse_error = grids.parse_response_grids(text3)
+            if predicted is not None:
+                text2 = text3  # use the successful extraction
+        except Exception:
+            pass  # keep original parse_error
 
     return trial_id, raw1, text2, reasoning, parse_error if predicted is None else None, total_latency, predicted
 

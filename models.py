@@ -55,7 +55,9 @@ def call_llm_two_pass(model_config, messages, extraction_prompt_fn,
     reasoning = msg.get("reasoning_content") or text1 or ""
 
     pass2_config = extraction_model_config or model_config
-    extraction_messages = extraction_prompt_fn(reasoning)
+    # Truncate reasoning to last 4000 chars for extraction — conclusions are at the end
+    reasoning_tail = reasoning[-4000:] if len(reasoning) > 4000 else reasoning
+    extraction_messages = extraction_prompt_fn(reasoning_tail)
     raw2, text2, latency2 = call_llm(pass2_config, extraction_messages)
 
     return raw1, reasoning, raw2, text2, latency1 + latency2

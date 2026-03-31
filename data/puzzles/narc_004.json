@@ -46,10 +46,13 @@
       "clue:direction",
       "clue:timing",
       "domain:physics",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "prism:actors",
+      "prism:teller",
+      "prism:world"
     ]
   },
-  "narrative": "A shape slides one step right each frame. When it crosses the center column, it passes through an invisible mirror and appears horizontally flipped for the rest of its journey.",
+  "narrative": "Anya's daughter liked to push her chalk mark one step to the right each time they passed the long wall on the way to school. On the morning it finally crossed the center column, the girl stopped and frowned \u2014 the shape had flipped, as if the wall were a mirror. 'It does that,' Anya said. 'Everything on the other side comes out backwards.' The shape kept sliding rightward, one step each frame, horizontally reversed from then on.",
   "puzzle_id": "narc_004",
   "sequence": [
     {

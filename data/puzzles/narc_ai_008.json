@@ -29,10 +29,12 @@
       "clue:rule",
       "domain:ml",
       "domain:information-theory",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "prism:actors",
+      "prism:feeling"
     ]
   },
-  "narrative": "Byte-pair encoding iteratively merges the most frequent adjacent token pair. At each step the two merged tokens are replaced by a single new token with a new color. Step 1 merges the pair (1,2) appearing at positions 0-1 and 4-5 into token 7 (orange). Step 2 merges the pair (3,4) at positions 1-2 and 3-4 (in the step-1 output) into token 8 (azure). Step 3 merges the pair (7,8) at positions 0-1 and 1-2 (in the step-2 output) into token 9 (maroon).",
+  "narrative": "Yusuf had been staring at the token stream for hours when the pattern clicked. Byte-pair encoding merges the most frequent adjacent pair at each step, replacing both with a single new token. Step 1 merged the pair (1,2) at positions 0-1 and 4-5 into token 7 (orange). Step 2 merged (3,4) at positions 1-2 and 3-4 in the step-1 output into token 8 (azure). Step 3 would merge (7,8) at positions 0-1 and 1-2 in the step-2 output into token 9 (maroon) \u2014 the whole sequence compressing to just two symbols. He leaned back and exhaled.",
   "puzzle_id": "narc_ai_008",
   "sequence": [
     {

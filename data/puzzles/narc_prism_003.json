@@ -1,0 +1,174 @@
+{
+  "puzzle_id": "narc_prism_003",
+  "title": "The Confession",
+  "narrative": "I need to confess what I did to my garden. Week 1: every plot was thriving -- all green (color 3). Week 2 is when I made my first mistake. I was supposed to water the whole garden, but I only watered the bottom two rows (rows 2-3). The top two rows (rows 0-1) wilted to yellow (color 4). I also left my lawnmower parked on the cell at row 2, column 0 -- it crushed that one plant, turning it red (color 2). Everything else in the bottom two rows stayed green. Week 3: I panicked. I overwatered everything. The yellow cells in the top drowned and died -- they turned red. The green cells in the bottom rows all wilted to yellow from overwatering. And that one red cell from the lawnmower? Dead beyond recovery -- it went black (color 0). Week 4: I replanted the whole garden. I managed to restore most of it to green, except the entire top row (row 0) where the soil was too damaged -- those stayed red.",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Week 1",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Week 2",
+      "rows": 4,
+      "cols": 5,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 2,
+      "label": "Week 3",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          0,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      ]
+    },
+    {
+      "position": 3,
+      "label": "Week 4",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    1
+  ],
+  "answer_grids": {
+    "1": [
+      [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        2,
+        3,
+        3,
+        3,
+        3
+      ],
+      [
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 3,
+    "ai_difficulty": 3,
+    "tags": [
+      "prism:teller",
+      "prism:feeling",
+      "arc:transformation",
+      "audience:general",
+      "domain:ecology",
+      "grids:4",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

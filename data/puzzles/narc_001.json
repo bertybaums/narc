@@ -56,10 +56,13 @@
       "arc:linear",
       "clue:direction",
       "domain:physics",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "prism:actors",
+      "prism:feeling",
+      "prism:world"
     ]
   },
-  "narrative": "A lighthouse beam sweeps clockwise, advancing one position each hour, starting from due north.",
+  "narrative": "The keeper climbs the tower stairs each night at dusk. She winds the mechanism and watches the beam sweep clockwise from due north, advancing one position each hour. The fog is thick tonight \u2014 she can hear the sea but not see it, and the light is all that stands between the ships and the rocks.",
   "puzzle_id": "narc_001",
   "sequence": [
     {

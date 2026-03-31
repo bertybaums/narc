@@ -1,0 +1,83 @@
+{
+  "answer_grids": {
+    "2": [
+      [7, 7, 7, 7, 7, 7],
+      [7, 4, 7, 7, 7, 7],
+      [7, 7, 7, 7, 7, 7],
+      [7, 7, 7, 5, 5, 5],
+      [7, 7, 7, 5, 5, 5],
+      [7, 7, 7, 5, 5, 5]
+    ]
+  },
+  "masked_positions": [2],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-31",
+    "creator": "claude",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:4",
+      "size:uniform",
+      "mask:single",
+      "prism:actors",
+      "arc:transformation",
+      "audience:science",
+      "domain:biology"
+    ]
+  },
+  "narrative": "Dr. Okonkwo studies a honeybee colony through two lenses. At the colony scale, she maps resource allocation across the hive: orange cells are honey reserves, yellow marks royal jelly stores, grey is empty comb. At the individual scale, she tracks each bee by role: workers in orange, the queen in yellow, drones in grey. Her observations alternate between scales \u2014 first colony, then colony again, then individual, then colony. In her third observation (the individual-scale one), she notes the queen has settled near the top-left of the hive at row two, column two, ringed tightly by workers. The drones idle in a block at the lower-right corner, a three-by-three cluster.",
+  "puzzle_id": "narc_prism_006",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [7, 7, 7, 7, 7, 7],
+        [7, 7, 7, 7, 7, 7],
+        [7, 7, 4, 7, 7, 7],
+        [7, 7, 7, 5, 5, 5],
+        [7, 7, 7, 5, 5, 5],
+        [7, 7, 7, 5, 5, 5]
+      ],
+      "label": "Colony map, day 1",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [4, 4, 7, 7, 7, 7],
+        [4, 4, 7, 7, 7, 7],
+        [7, 7, 7, 7, 7, 7],
+        [7, 7, 7, 7, 5, 5],
+        [7, 7, 7, 5, 5, 5],
+        [7, 7, 7, 5, 5, 5]
+      ],
+      "label": "Colony map, day 2",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "Observation 3",
+      "masked": true,
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [4, 4, 4, 7, 7, 7],
+        [4, 4, 4, 7, 7, 7],
+        [4, 4, 4, 7, 7, 7],
+        [7, 7, 7, 5, 5, 5],
+        [7, 7, 7, 5, 5, 5],
+        [7, 7, 7, 5, 5, 5]
+      ],
+      "label": "Colony map, day 3",
+      "position": 3,
+      "rows": 6
+    }
+  ],
+  "title": "The Hive"
+}

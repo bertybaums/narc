@@ -1,0 +1,211 @@
+{
+  "puzzle_id": "narc_prism_012",
+  "title": "The Inheritance",
+  "narrative": "Grandmother's house has twenty rooms in a four-by-five grid. The three siblings divide it over four rounds, with a final agreement. Round one: the eldest (blue) claims the entire top row for the attic views. Everything else is unclaimed (black). Round two: the middle child (red) claims the bottom row, wanting the garden access. The youngest (green) claims only the center cell of the grid -- a single room she loves for its skylight. Round three: the middle child expands upward, taking the two leftmost cells of the second row. The eldest reaches down, claiming the two rightmost cells of the second row. The youngest expands from her center room, claiming the cells directly above and below it in the third row, giving her a vertical strip of three rooms in column 2. Two cells on the left of the third row are designated shared space (yellow) by mutual agreement. Round four: the remaining unclaimed cells all become shared (yellow). Everyone's personal rooms stay as they are.",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Round 1",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Round 2",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "position": 2,
+      "label": "Round 3 - expansions",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          3,
+          1,
+          1
+        ],
+        [
+          4,
+          4,
+          3,
+          0,
+          0
+        ],
+        [
+          2,
+          2,
+          2,
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "position": 3,
+      "label": "Round 3 - complete",
+      "rows": 4,
+      "cols": 5,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 4,
+      "label": "Final agreement",
+      "rows": 4,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          3,
+          1,
+          1
+        ],
+        [
+          4,
+          4,
+          3,
+          4,
+          4
+        ],
+        [
+          2,
+          2,
+          3,
+          2,
+          2
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    3
+  ],
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        2,
+        2,
+        3,
+        1,
+        1
+      ],
+      [
+        4,
+        4,
+        3,
+        0,
+        0
+      ],
+      [
+        2,
+        2,
+        3,
+        2,
+        2
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 4,
+    "ai_difficulty": 4,
+    "tags": [
+      "prism:actors",
+      "prism:world",
+      "prism:events",
+      "arc:divergence",
+      "audience:humanities",
+      "domain:social-science",
+      "grids:5",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

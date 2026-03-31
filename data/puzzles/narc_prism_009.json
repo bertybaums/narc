@@ -1,0 +1,270 @@
+{
+  "puzzle_id": "narc_prism_009",
+  "title": "The Standing Ovation",
+  "narrative": "The concert hall has five rows of six seats. Before the show, everyone sits in darkness. When the soloist opens with a folk melody, the front row stands (yellow) and the second row claps seated (orange). As the piece shifts to a jazz improvisation, the standing spreads one row back -- but something unexpected happens: two audience members in the middle of the second row are so moved they begin weeping and sit back down (black), overcome with emotion. The clapping row still advances. By the third passage -- a return to the folk theme -- those two weeping listeners stand again, rejoining the ovation, and the wave continues its steady advance: three full rows standing, the fourth clapping, the back row still seated. The finale brings everyone to their feet.",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Before the performance",
+      "rows": 5,
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Folk melody",
+      "rows": 5,
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "position": 2,
+      "label": "Jazz improvisation",
+      "rows": 5,
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          0,
+          0,
+          4,
+          4
+        ],
+        [
+          7,
+          7,
+          7,
+          7,
+          7,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "position": 3,
+      "label": "Return to folk theme",
+      "rows": 5,
+      "cols": 6,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 4,
+      "label": "The finale",
+      "rows": 5,
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    3
+  ],
+  "answer_grids": {
+    "3": [
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        7,
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 3,
+    "ai_difficulty": 3,
+    "tags": [
+      "prism:feeling",
+      "prism:events",
+      "arc:linear",
+      "audience:general",
+      "domain:psychology",
+      "grids:5",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

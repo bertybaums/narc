@@ -1,0 +1,244 @@
+{
+  "puzzle_id": "narc_prism_001",
+  "title": "The Captain's Log",
+  "narrative": "Day 1: I loaded the hold with crates of fish (blue) along the top row and barrels of wine (maroon) along the bottom. Day 2: A merchant in port traded me sacks of grain (yellow) for the fish -- I replaced the entire top row with grain. Day 3: Storm at sea! The grain got soaked and spoiled. I tossed it overboard and left that row empty (black). Day 4: We docked at the spice island. I filled the empty top row with saffron (orange) and also replaced the center cell of each remaining row with saffron, since the merchant there insisted on a 'column of gold' down the middle. Day 5: Arriving home, I unloaded everything except the saffron column -- the spice merchant at the home port wanted proof of origin, so I kept those three center cells orange and cleared the rest to black.",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Day 1",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Day 2",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ]
+    },
+    {
+      "position": 2,
+      "label": "Day 3",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ]
+    },
+    {
+      "position": 3,
+      "label": "Day 4",
+      "rows": 5,
+      "cols": 5,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 4,
+      "label": "Day 5",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    3
+  ],
+  "answer_grids": {
+    "3": [
+      [
+        7,
+        7,
+        7,
+        7,
+        7
+      ],
+      [
+        0,
+        0,
+        7,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        7,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        7,
+        0,
+        0
+      ],
+      [
+        9,
+        9,
+        7,
+        9,
+        9
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 3,
+    "ai_difficulty": 3,
+    "tags": [
+      "prism:teller",
+      "arc:linear",
+      "audience:general",
+      "domain:literature",
+      "grids:5",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

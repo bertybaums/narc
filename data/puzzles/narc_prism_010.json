@@ -1,0 +1,203 @@
+{
+  "puzzle_id": "narc_prism_010",
+  "title": "The Cartographer's Dilemma",
+  "narrative": "I've been commissioned to map the valley, but my parchment is small -- a five-by-five grid -- and I can't fit everything. My first draft marked only the river running down column 2 (blue) and the forest covering the right side (green in columns 3-4). My client complained: where are the roads? So in draft two I added the east-west trade road across the middle row (yellow), cutting through both river and forest. But then the mayor objected -- the road obscured the new stone bridge, and the buildings along the north edge weren't shown. For my third draft, I kept the river and trade road exactly as before, but I replaced the forest in the top two rows with buildings (grey) to show the town quarter, while the forest remained in the bottom two rows. I also marked the bridge where the road crosses the river by changing that single cell to azure. In my final draft, the mayor asked me to remove the buildings entirely and restore the forest, but keep the bridge and road, saying 'let the travelers find the town themselves.'",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Draft 1",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Draft 2",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ]
+      ]
+    },
+    {
+      "position": 2,
+      "label": "Draft 3",
+      "rows": 5,
+      "cols": 5,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 3,
+      "label": "Draft 4",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          4,
+          4,
+          8,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          3,
+          3
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    2
+  ],
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        1,
+        5,
+        5
+      ],
+      [
+        0,
+        0,
+        1,
+        5,
+        5
+      ],
+      [
+        4,
+        4,
+        8,
+        4,
+        4
+      ],
+      [
+        0,
+        0,
+        1,
+        3,
+        3
+      ],
+      [
+        0,
+        0,
+        1,
+        3,
+        3
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 3,
+    "ai_difficulty": 4,
+    "tags": [
+      "prism:teller",
+      "prism:world",
+      "prism:actors",
+      "arc:linear",
+      "audience:general",
+      "domain:earth-science",
+      "grids:4",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

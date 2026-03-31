@@ -1,0 +1,83 @@
+{
+  "answer_grids": {
+    "2": [
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 2, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 9]
+    ]
+  },
+  "masked_positions": [2],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-31",
+    "creator": "claude",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:4",
+      "size:uniform",
+      "mask:single",
+      "prism:feeling",
+      "arc:linear",
+      "audience:general",
+      "domain:psychology"
+    ]
+  },
+  "narrative": "She sits at the window, watching the dark road. Every night, a red light drifts closer \u2014 always approaching the center of the grid, moving one step diagonally down and to the right. She cannot tell what it is. The dread thickens. In the corner of her eye, a second presence: a maroon glow at the bottom-right, which appears only on odd-numbered nights \u2014 the first night, the third, never the second or fourth. Whatever approaches, the sentinel keeps its own rhythm.",
+  "puzzle_id": "narc_prism_008",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [2, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 9]
+      ],
+      "label": "Night one",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [0, 0, 0, 0, 0],
+        [0, 2, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+      ],
+      "label": "Night two",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Night three",
+      "masked": true,
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 2, 0],
+        [0, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0]
+      ],
+      "label": "Night four",
+      "position": 3,
+      "rows": 6
+    }
+  ],
+  "title": "The Vigil"
+}

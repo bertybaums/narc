@@ -197,6 +197,16 @@ def parse_response_grids(response_text: str):
     if grid is not None:
         return {"_single": grid}, text, None
 
+    # Strategy 3: Inline numeric 2D arrays — [[0,0,1],[0,1,0]]
+    result = _extract_numeric_arrays(text)
+    if result is not None:
+        return result, text, None
+
+    # Strategy 4: Row-by-row text grids using digit sequences ("0 0 1 0 0")
+    grid = _extract_digit_grid(text)
+    if grid is not None:
+        return {"_single": grid}, text, None
+
     return None, text, "Could not parse grids from response"
 
 
@@ -259,3 +269,100 @@ def _extract_answer_block(text):
         i -= 1
 
     return None, "No grid found in response"
+
+
+def _extract_numeric_arrays(text):
+    """Extract 2D numeric arrays like [[0,0,1],[0,1,0]] from text.
+
+    Searches for the LAST occurrence of output_grids-like patterns first,
+    then falls back to finding standalone 2D arrays.
+    Returns dict keyed by position string, or None.
+    """
+    # Try to find "output_grids" or similar key with a dict of arrays
+    og_pattern = re.compile(
+        r'"?output_grids"?\s*:\s*\{([^}]*\[\[[\d,\s\[\]]+\])',
+        re.DOTALL
+    )
+    og_match = og_pattern.search(text)
+    if og_match:
+        # Try to parse from the opening brace
+        start = text.index(og_match.group(0))
+        # Find the matching close of output_grids dict
+        snippet = text[start:]
+        try_json = '{"output_grids": {' + snippet.split('{', 2)[2]
+        # Find balanced braces
+        depth = 0
+        for i, ch in enumerate(try_json):
+            if ch == '{':
+                depth += 1
+            elif ch == '}':
+                depth -= 1
+                if depth == 0:
+                    data = _try_parse_json(try_json[:i + 1])
+                    if data and isinstance(data.get("output_grids"), dict):
+                        result = {}
+                        for k, v in data["output_grids"].items():
+                            grid, err = _convert_grid(v)
+                            if grid is not None:
+                                result[str(k)] = grid
+                        if result:
+                            return result
+                    break
+
+    # Find all 2D arrays in text (last one is usually the final answer)
+    array_pattern = re.compile(r'\[\s*\[[\d,\s]+\](?:\s*,\s*\[[\d,\s]+\])*\s*\]')
+    matches = list(array_pattern.finditer(text))
+    if matches:
+        # Try the last match first (most likely to be the final answer)
+        for match in reversed(matches):
+            try:
+                arr = json.loads(match.group(0))
+                if (isinstance(arr, list) and len(arr) > 0
+                        and isinstance(arr[0], list) and len(arr[0]) > 0
+                        and all(isinstance(v, int) and 0 <= v <= 9
+                                for row in arr for v in row)):
+                    return {"_single": arr}
+            except (json.JSONDecodeError, TypeError):
+                continue
+
+    return None
+
+
+def _extract_digit_grid(text):
+    """Extract grids written as rows of space-separated digits.
+
+    Matches patterns like:
+        0 0 1 0 0
+        0 1 1 1 0
+    Searches from the end of text for the last such block.
+    """
+    digit_row = re.compile(r'^\s*(\d(?:\s+\d)+)\s*$')
+    lines = text.split('\n')
+    i = len(lines) - 1
+    while i >= 0:
+        if digit_row.match(lines[i]):
+            end = i
+            while i >= 0 and digit_row.match(lines[i]):
+                i -= 1
+            start = i + 1
+            if end - start >= 0:  # at least 1 row
+                try:
+                    grid = []
+                    row_len = None
+                    for line in lines[start:end + 1]:
+                        row = [int(d) for d in line.split()]
+                        if any(v < 0 or v > 9 for v in row):
+                            break
+                        if row_len is None:
+                            row_len = len(row)
+                        elif len(row) != row_len:
+                            break
+                        grid.append(row)
+                    else:
+                        if grid:
+                            return grid
+                except (ValueError, IndexError):
+                    pass
+            break
+        i -= 1
+    return None

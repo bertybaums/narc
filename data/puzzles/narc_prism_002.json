@@ -1,0 +1,157 @@
+{
+  "puzzle_id": "narc_prism_002",
+  "title": "Dear Committee",
+  "narrative": "Dear Selection Committee, I write to report on our bacterial culture experiment (grant #BIO-2847). Week 1: We seeded the dish with four colonies (green, color 3) at the four corners. Week 2: Each colony expanded one cell along each adjacent edge, forming a complete green border ring around the dish; the 2x2 interior remained sterile (black). Week 3 (the key result): We applied our novel antibiotic to the TOP HALF of the dish only (rows 0 and 1). Every green cell in the top half turned red (color 2) to indicate cell death, while interior cells that were already empty stayed empty. Meanwhile, the two surviving bottom colonies each expanded one cell further inward, filling the entire bottom half (rows 2 and 3) with green. Week 4: All red cells were cleared to black, and the bottom half remained fully green -- no further growth was possible since the bottom was saturated.",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Week 1",
+      "rows": 4,
+      "cols": 4,
+      "grid": [
+        [
+          3,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          3
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Week 2",
+      "rows": 4,
+      "cols": 4,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ]
+      ]
+    },
+    {
+      "position": 2,
+      "label": "Week 3",
+      "rows": 4,
+      "cols": 4,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 3,
+      "label": "Week 4",
+      "rows": 4,
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    2
+  ],
+  "answer_grids": {
+    "2": [
+      [
+        2,
+        2,
+        2,
+        2
+      ],
+      [
+        2,
+        0,
+        0,
+        2
+      ],
+      [
+        3,
+        3,
+        3,
+        3
+      ],
+      [
+        3,
+        3,
+        3,
+        3
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 3,
+    "ai_difficulty": 2,
+    "tags": [
+      "prism:teller",
+      "arc:linear",
+      "audience:science",
+      "domain:biology",
+      "grids:4",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

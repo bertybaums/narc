@@ -35,10 +35,12 @@
       "spectrum:ai-forte",
       "matrix-operations",
       "addition",
-      "transpose"
+      "transpose",
+      "prism:actors",
+      "prism:teller"
     ]
   },
-  "narrative": "First compute the element-wise sum of Grid 0 and Grid 1 (no modular reduction). Then transpose the result. Grid 2 (masked) is the transposed sum. Grid2[c][r] = Grid0[r][c] + Grid1[r][c].",
+  "narrative": "The architect spread two blueprints side by side \u2014 Floor A and Floor B \u2014 and traced her finger across the grids. 'We stack them,' she said. 'Add every cell of A to the matching cell of B, no wrapping, no reduction. Then rotate the result \u2014 swap rows and columns.' The transposed sum is what gets built: Grid2[c][r] = Grid0[r][c] + Grid1[r][c].",
   "puzzle_id": "narc_sp_010",
   "sequence": [
     {

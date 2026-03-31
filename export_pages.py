@@ -245,6 +245,14 @@ and more. Each is rated on both <strong>human difficulty</strong> and <strong>AI
 <li><strong>MARC</strong> &mdash; figurative language as a bridge between human and machine reasoning</li>
 <li><strong>Econarratology</strong> &mdash; Erin James's framework for how narratives construct
     "storyworlds" that organize spatial and temporal understanding</li>
+<li><strong>Story Prism</strong> &mdash; Erin James's narrative decomposition framework, breaking stories into five facets:
+    <em>Teller &amp; Told</em> (voice, perspective, audience),
+    <em>World</em> (setting in space and time),
+    <em>Events</em> (temporal ordering and pacing),
+    <em>Actors</em> (characters and their salience),
+    and <em>How It Feels</em> (emotion, sensation, tone).
+    NARC puzzles are tagged by which facets their narratives foreground, and variants systematically
+    vary one facet at a time to measure its effect on solvability.</li>
 <li><strong>Focalization</strong> &mdash; how the same story told from different characters'
     perspectives changes what information is foregrounded</li>
 </ul>

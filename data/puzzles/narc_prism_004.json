@@ -1,0 +1,244 @@
+{
+  "puzzle_id": "narc_prism_004",
+  "title": "The Negotiation",
+  "narrative": "Two nations dispute a 5x5 territory. Nation A (blue, color 1) holds the west; Nation B (red, color 2) holds the east. Black cells are unclaimed. Round 1: A controls column 0, B controls column 4; the middle three columns are disputed (black). Round 2: Each nation claims one more column inward -- A takes column 1, B takes column 3. Column 2 remains disputed. Round 3: Nation A's envoy proposes a bold concession: A will surrender its claim on the BOTTOM TWO ROWS (rows 3-4) of columns 0-1, making them black again, in exchange for the entire disputed column 2 turning blue. B's delegate accepts, because B cares more about the southern corridor. So in round 3: column 2 goes fully blue, but A's territory in the bottom two rows of columns 0-1 is vacated to black. B's territory is unchanged. Round 4: Final treaty. B fills the vacated southern cells (rows 3-4 of columns 0-1) with red, claiming the southern corridor. Column 2 remains blue. Everything else stays the same. Round 5: A neutral peacekeeping zone is declared along the entire column 2 border -- all cells in column 2 change from blue to grey (color 5) to mark demilitarized territory.",
+  "sequence": [
+    {
+      "position": 0,
+      "label": "Round 1",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          2
+        ]
+      ]
+    },
+    {
+      "position": 1,
+      "label": "Round 2",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          0,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          0,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          0,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          0,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          0,
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "position": 2,
+      "label": "Round 3",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          1,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          1,
+          2,
+          2
+        ]
+      ]
+    },
+    {
+      "position": 3,
+      "label": "Round 4",
+      "rows": 5,
+      "cols": 5,
+      "grid": null,
+      "masked": true
+    },
+    {
+      "position": 4,
+      "label": "Round 5",
+      "rows": 5,
+      "cols": 5,
+      "grid": [
+        [
+          1,
+          1,
+          5,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          5,
+          2,
+          2
+        ],
+        [
+          1,
+          1,
+          5,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          5,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          5,
+          2,
+          2
+        ]
+      ]
+    }
+  ],
+  "masked_positions": [
+    3
+  ],
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      [
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      [
+        1,
+        1,
+        1,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        1,
+        2,
+        2
+      ],
+      [
+        2,
+        2,
+        1,
+        2,
+        2
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "claude",
+    "created_at": "2026-03-31",
+    "human_difficulty": 3,
+    "ai_difficulty": 3,
+    "tags": [
+      "prism:actors",
+      "arc:convergence",
+      "audience:general",
+      "domain:social-science",
+      "grids:5",
+      "size:uniform",
+      "mask:single"
+    ]
+  }
+}

@@ -46,10 +46,12 @@
       "clue:timing",
       "clue:identity",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "prism:world",
+      "prism:feeling"
     ]
   },
-  "narrative": "In this checkerboard tournament, one green piece is captured each round (turns red). After a piece has been red for exactly two rounds, it gets promoted to yellow. In round 2, the piece at row 0, column 2 is captured. In round 3, the piece at row 2, column 2 is captured. In round 4, the piece at row 1, column 1 is captured, and any piece that has been red since round 2 gets promoted.",
+  "narrative": "The tournament hall was quiet except for the click of captured pieces. On the checkerboard, one green piece falls each round \u2014 turned red the moment it's taken. But the old rule still holds: after a piece has been red for exactly two rounds, it earns promotion to yellow. In round 2 they took the piece at row 0, column 2. In round 3, row 2, column 2. In round 4, row 1, column 1 fell \u2014 and any piece red since round 2 finally got its yellow crown.",
   "puzzle_id": "narc_005",
   "sequence": [
     {

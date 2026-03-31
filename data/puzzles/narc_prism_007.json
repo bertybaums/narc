@@ -1,0 +1,93 @@
+{
+  "answer_grids": {
+    "3": [
+      [8, 8, 8, 8, 8],
+      [8, 8, 8, 8, 8],
+      [1, 1, 1, 1, 1],
+      [1, 1, 1, 3, 3],
+      [3, 3, 3, 3, 3]
+    ]
+  },
+  "masked_positions": [3],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-31",
+    "creator": "claude",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "prism:feeling",
+      "prism:world",
+      "arc:transformation",
+      "audience:general",
+      "domain:earth-science"
+    ]
+  },
+  "narrative": "First the dripping. You hear it before you see it \u2014 a tick-tick-tick from the eaves of the frozen lake. The thaw creeps northward from the southern shore, one row each day. Where azure ice once locked the surface, blue meltwater pools. The east bank is sheltered by the ridge, and where that sheltered water has stood for just one full day, green shoots push through. The exposed west bank takes longer \u2014 two full days of standing water before anything grows. Each day the same rhythm: ice yields one more row to water at the melt front, and the oldest water greens according to which bank it sits on.",
+  "puzzle_id": "narc_prism_007",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8]
+      ],
+      "label": "Deep winter",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [1, 1, 1, 1, 1]
+      ],
+      "label": "First melt",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [8, 8, 8, 8, 8],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 3, 3]
+      ],
+      "label": "Cracking ice",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "The warmth arrives",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [8, 8, 8, 8, 8],
+        [1, 1, 1, 1, 1],
+        [1, 1, 1, 3, 3],
+        [3, 3, 3, 3, 3],
+        [3, 3, 3, 3, 3]
+      ],
+      "label": "Renewal",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Thaw"
+}

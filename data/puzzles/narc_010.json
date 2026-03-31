@@ -57,10 +57,13 @@
       "clue:exception",
       "clue:timing",
       "domain:earth-science",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "prism:actors",
+      "prism:feeling",
+      "prism:world"
     ]
   },
-  "narrative": "The tide rises one row each quarter, as it has since time began. But in the third quarter a seawall was built along the second row \u2014 the water could not pass it, and pooled behind the barrier instead.",
+  "narrative": "Old Mae had watched the tide rise one row each quarter since she was a girl \u2014 patient and predictable as a clock. But in the third quarter someone finally built the seawall along the second row. She stood on the harbor wall and watched the water press against the grey barrier, unable to pass, pooling thick and cold behind it.",
   "puzzle_id": "narc_010",
   "sequence": [
     {

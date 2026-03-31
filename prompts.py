@@ -37,7 +37,10 @@ Provide your answer as a JSON object:
 {{"reasoning": "your step-by-step reasoning", "output_grids": {{"{pos}": [[int, ...], ...]}}}}
 
 The grid must be a 2D array of integers (0-9) representing colors.
-The key is the grid position (0-indexed)."""
+The key is the grid position (0-indexed).
+
+IMPORTANT: You MUST end your response with your final answer as a JSON object. \
+Even if uncertain, commit to your best guess. Do not end mid-reasoning."""
     else:
         keys = ", ".join(f'"{p}"' for p in puzzle["masked_positions"])
         return f"""\
@@ -51,7 +54,10 @@ Provide your answer as a JSON object:
 {{"reasoning": "your step-by-step reasoning", "output_grids": {{{keys}: [[int, ...], ...]}}}}
 
 Each grid must be a 2D array of integers (0-9) representing colors.
-Keys are grid positions (0-indexed)."""
+Keys are grid positions (0-indexed).
+
+IMPORTANT: You MUST end your response with your final answer as a JSON object. \
+Even if uncertain, commit to your best guess. Do not end mid-reasoning."""
 
 
 def build_grids_only(puzzle):
@@ -119,11 +125,39 @@ def build_extraction(reasoning):
     """Build pass-2 extraction prompt from model reasoning."""
     return [
         {"role": "system", "content": (
-            "Extract the final answer grid(s) from the reasoning below. "
-            "Return ONLY a JSON object: "
-            '{"output_grids": {"<position>": [[int, ...], ...], ...}}\n'
-            "Each grid must be a 2D array of integers 0-9. "
-            "Keys are grid positions (0-indexed)."
+            "You are a JSON formatter. Do NOT reason, explain, or think. "
+            "Read the text below and output ONLY the final answer grid as JSON.\n\n"
+            "Format: {\"output_grids\": {\"<position>\": [[int, ...], ...]}}\n\n"
+            "Rules:\n"
+            "- Output raw JSON only. No markdown, no commentary.\n"
+            "- Grid values are integers 0-9.\n"
+            "- Position keys are 0-indexed integers as strings.\n"
+            "- If the text contains multiple grid attempts, use the LAST one."
         )},
         {"role": "user", "content": reasoning},
+    ]
+
+
+def build_extraction_strict(reasoning, masked_positions, dimensions):
+    """Build a strict pass-3 extraction prompt with explicit dimensions.
+
+    Used as a retry when the standard extraction fails to parse.
+    """
+    grid_specs = []
+    for pos, (rows, cols) in zip(masked_positions, dimensions):
+        grid_specs.append(f'  Position {pos}: {rows} rows x {cols} cols')
+    spec_text = '\n'.join(grid_specs)
+
+    example_keys = ", ".join(f'"{p}": [[int, ...], ...]' for p in masked_positions)
+    return [
+        {"role": "system", "content": (
+            "Output ONLY a JSON object. No text before or after.\n"
+            '{"output_grids": {' + example_keys + '}}'
+        )},
+        {"role": "user", "content": (
+            f"Extract the final answer grid from this reasoning. "
+            f"The grid must have these exact dimensions:\n{spec_text}\n\n"
+            f"If no clear grid is stated, make your best guess from the reasoning.\n\n"
+            f"---\n{reasoning[-3000:]}"
+        )},
     ]

@@ -47,10 +47,12 @@
       "clue:rule",
       "domain:ml",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "prism:actors",
+      "prism:world"
     ]
   },
-  "narrative": "As \u03c4\u21920, the softmax output converges to the one-hot encoding of the argmax. The pre-softmax logits have their maximum along the main diagonal. Each row's probability mass concentrates entirely on the diagonal element.",
+  "narrative": "Dr. Liang turned the temperature dial slowly toward zero and watched the display change. At high \u03c4, the softmax probabilities were nearly uniform \u2014 every row's values barely distinguishable. As \u03c4 dropped, the diagonal elements grew brighter, pulling probability mass toward themselves while the margins dimmed. She knew what was coming: as \u03c4\u21920, each row would collapse entirely onto its diagonal element, converging to a one-hot encoding of the argmax. The pre-softmax logits had their maximum along the main diagonal. She reached for the dial again.",
   "puzzle_id": "narc_ai_003",
   "sequence": [
     {
