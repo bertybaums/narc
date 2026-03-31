@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% block title %}NARC — About{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-lg-8">
+
+<h1 class="mb-4">NARC</h1>
+<p class="lead" style="color: #f59e0b;">Narrative Augmented Reasoning Challenges</p>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>What is NARC?</h4>
+        <p>NARC is a new kind of abstract reasoning puzzle. Each puzzle presents a sequence of colored grids that tell a visual "story." One or more grids in the sequence are hidden, and your goal is to reconstruct them pixel-perfectly.</p>
+        <p>The catch: <strong>the grids alone aren't enough.</strong> Each puzzle comes with a short narrative clue. Without it, the missing grid is ambiguous &mdash; multiple answers seem plausible. With the clue, exactly one answer is correct.</p>
+        <p>This is the <strong>NARC property</strong>: neither the grids nor the narrative suffice alone, but together they uniquely determine the answer.</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>How to play</h4>
+        <ol>
+            <li><strong>Look at the grid sequence.</strong> Each grid uses a 10-color palette. One or more grids are hidden, shown as a <span style="color:#f59e0b;">?</span> placeholder.</li>
+            <li><strong>Try to guess</strong> what the missing grid looks like from the visual pattern alone. You can submit a guess before seeing the clue.</li>
+            <li><strong>Reveal the clue.</strong> A short narrative provides the key insight that disambiguates the puzzle.</li>
+            <li><strong>Draw your answer.</strong> Set the colors of each cell in the missing grid and submit.</li>
+        </ol>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>Why does this matter?</h4>
+        <p>NARC investigates a fundamental question: <strong>how does narrative transform visual reasoning?</strong></p>
+        <p>Abstract grid patterns that look meaningless can become instantly comprehensible when accompanied by the right story. This "narrative augmentation" works differently for humans and AI systems &mdash; and studying where they diverge reveals something deep about how each processes language and vision together.</p>
+        <p>NARC is a sibling project to <a href="https://bertybaums.github.io/marc2/" style="color:#f59e0b;">MARC2</a> (Metaphor Abstraction and Reasoning Corpus), which explored how figurative language helps AI solve abstract reasoning tasks from the <a href="https://arcprize.org/" style="color:#f59e0b;">ARC-AGI</a> benchmark.</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>The puzzle corpus</h4>
+        <div class="row text-center my-3">
+            <div class="col">
+                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.total_puzzles }}</div>
+                <div class="text-muted">Puzzles</div>
+            </div>
+            <div class="col">
+                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.total_variants }}</div>
+                <div class="text-muted">Narrative variants</div>
+            </div>
+            <div class="col">
+                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.grid_sizes }}</div>
+                <div class="text-muted">Unique grid sizes</div>
+            </div>
+            <div class="col">
+                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">3&ndash;8</div>
+                <div class="text-muted">Grids per puzzle</div>
+            </div>
+        </div>
+        <p>Puzzles span literary classics (Hemingway, Kafka, Shelley), scientific concepts (natural selection, entropy, plate tectonics), philosophical thought experiments (the trolley problem, Plato's cave, the ship of Theseus), and more.</p>
+        <p>Each puzzle is rated on two axes: <strong>human difficulty</strong> and <strong>AI difficulty</strong> (1&ndash;5), creating a spectrum from puzzles that are easy for humans but hard for AI, to puzzles where AI excels but humans struggle.</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>Research context</h4>
+        <p>NARC draws on insights from:</p>
+        <ul>
+            <li><strong>ARC-AGI</strong> &mdash; abstract visual reasoning as an intelligence benchmark</li>
+            <li><strong>MARC</strong> &mdash; figurative language as a bridge between human and machine reasoning</li>
+            <li><strong>Econarratology</strong> &mdash; Erin James's framework for how narratives construct "storyworlds" that organize spatial and temporal understanding</li>
+            <li><strong>Focalization</strong> &mdash; how the same story told from different characters' perspectives changes what information is foregrounded</li>
+        </ul>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>Get involved</h4>
+        <p>You can:</p>
+        <ul>
+            <li><a href="/browse" style="color:#f59e0b;">Browse and solve</a> existing puzzles</li>
+            <li><a href="/create" style="color:#f59e0b;">Create and submit</a> your own puzzles</li>
+            <li><a href="/inspect" style="color:#f59e0b;">Inspect</a> how AI models perform across puzzles and narrative variants</li>
+        </ul>
+    </div>
+</div>
+
+<div class="text-center text-muted mb-4">
+    <small>University of Idaho &middot; 2026</small>
+</div>
+
+</div>
+</div>
+{% endblock %}

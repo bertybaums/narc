@@ -37,7 +37,27 @@ def normalize_puzzle_input(data):
 
 @app.route("/")
 def index():
-    return redirect(url_for("browse"))
+    return redirect(url_for("about"))
+
+
+@app.route("/about")
+def about():
+    conn = get_conn()
+    puzzles = db.get_all_puzzles(conn)
+    variant_count = conn.execute("SELECT COUNT(*) as c FROM narrative_variants").fetchone()["c"]
+    # Count unique grid sizes
+    grid_sizes = set()
+    for p in puzzles:
+        pdata = db.puzzle_to_json(p)
+        for item in pdata["sequence"]:
+            grid_sizes.add((item["rows"], item["cols"]))
+    conn.close()
+    stats = {
+        "total_puzzles": len(puzzles),
+        "total_variants": variant_count,
+        "grid_sizes": len(grid_sizes),
+    }
+    return render_template("about.html", stats=stats)
 
 
 @app.route("/inspect")
