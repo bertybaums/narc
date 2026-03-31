@@ -1,0 +1,425 @@
+{
+  "answer_grids": {
+    "4": [
+      [
+        4,
+        4,
+        3,
+        7,
+        4,
+        6
+      ],
+      [
+        4,
+        4,
+        4,
+        3,
+        1,
+        7
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        6,
+        4
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        4,
+        3
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        7,
+        1
+      ],
+      [
+        4,
+        4,
+        4,
+        4,
+        1,
+        4
+      ]
+    ]
+  },
+  "masked_positions": [
+    4
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:7",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:humanities",
+      "arc:linear",
+      "clue:direction",
+      "clue:timing",
+      "domain:social-science",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "The golden tide came from the west, washing first over those who had built with their hands. Worn red brick gave way to polished gilt. What was home became heritage, then memory, then nothing at all.",
+  "puzzle_id": "narc_036",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          2,
+          1,
+          3,
+          7,
+          2,
+          6
+        ],
+        [
+          1,
+          2,
+          2,
+          3,
+          1,
+          7
+        ],
+        [
+          3,
+          7,
+          1,
+          2,
+          6,
+          2
+        ],
+        [
+          2,
+          3,
+          6,
+          1,
+          2,
+          3
+        ],
+        [
+          6,
+          2,
+          1,
+          3,
+          7,
+          1
+        ],
+        [
+          1,
+          7,
+          2,
+          6,
+          1,
+          2
+        ]
+      ],
+      "label": "the diverse neighborhood",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          2,
+          1,
+          3,
+          7,
+          2,
+          6
+        ],
+        [
+          1,
+          2,
+          2,
+          3,
+          1,
+          7
+        ],
+        [
+          3,
+          7,
+          1,
+          2,
+          6,
+          2
+        ],
+        [
+          4,
+          3,
+          6,
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          2,
+          1,
+          3,
+          7,
+          1
+        ],
+        [
+          4,
+          4,
+          2,
+          6,
+          1,
+          2
+        ]
+      ],
+      "label": "the first arrivals",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          2,
+          1,
+          3,
+          7,
+          2,
+          6
+        ],
+        [
+          4,
+          2,
+          2,
+          3,
+          1,
+          7
+        ],
+        [
+          4,
+          4,
+          1,
+          2,
+          6,
+          2
+        ],
+        [
+          4,
+          4,
+          6,
+          1,
+          2,
+          3
+        ],
+        [
+          4,
+          4,
+          4,
+          3,
+          7,
+          1
+        ],
+        [
+          4,
+          4,
+          4,
+          6,
+          1,
+          2
+        ]
+      ],
+      "label": "the spreading gold",
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          1,
+          3,
+          7,
+          2,
+          6
+        ],
+        [
+          4,
+          4,
+          2,
+          3,
+          1,
+          7
+        ],
+        [
+          4,
+          4,
+          4,
+          2,
+          6,
+          2
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          2,
+          3
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          7,
+          1
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          1,
+          2
+        ]
+      ],
+      "label": "the wave crests",
+      "position": 3,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "the displacement",
+      "masked": true,
+      "position": 4,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          7,
+          4,
+          6
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          1,
+          7
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          6,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          7,
+          1
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "label": "the fading mosaic",
+      "position": 5,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          7
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          1
+        ],
+        [
+          4,
+          4,
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "label": "the gilded silence",
+      "position": 6,
+      "rows": 6
+    }
+  ],
+  "title": "Gentrification"
+}

@@ -1,0 +1,122 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        1,
+        2,
+        2,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "boy",
+      "2": "nettles (crushed)",
+      "3": "nettles (wild)",
+      "6": "sting effect"
+    },
+    "ai_difficulty": 7,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 5,
+    "tags": [
+      "focalization-test",
+      "domain:fable",
+      "spectrum:human-forte",
+      "aesop",
+      "moral-lesson",
+      "value-change"
+    ]
+  },
+  "narrative": "A boy (red=1) reaches toward a patch of nettles (green=3) in a garden. In the first grid, the boy gingerly touches one nettle \u2014 the contact cell shows orange=6 representing the sting. In the masked grid, the boy grasps the nettles firmly (all nettle cells change from 3 to 2, representing them being crushed), and the sting effect disappears (no orange). The moral: grasp nettles boldly and they lose their sting.",
+  "puzzle_id": "narc_focal_012",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Boy approaches nettles",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          6,
+          3,
+          3
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Timid touch \u2014 sting!",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Bold grasp",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    }
+  ],
+  "title": "The Boy and the Nettles"
+}

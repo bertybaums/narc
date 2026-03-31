@@ -1,0 +1,180 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        7,
+        0,
+        0,
+        7
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        7
+      ],
+      [
+        0,
+        7,
+        0,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "2": "goblet",
+      "3": "flowers",
+      "6": "daughter",
+      "7": "Midas / gold",
+      "8": "table"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "7",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:mythology",
+      "spectrum:balanced",
+      "transformation",
+      "curse",
+      "tragedy"
+    ]
+  },
+  "narrative": "King Midas (yellow=7) moves through his palace. Everything he touches turns to gold (also becomes 7). Objects in the grid start as various values: flowers=3, table=8, goblet=2. His daughter (magenta=6) stands in the far corner. In the masked grid, Midas has moved adjacent to more objects, turning them to 7. Critically, his daughter's cell has also changed to 7 \u2014 she has been turned to gold by his touch.",
+  "puzzle_id": "narc_focal_016",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          7,
+          3,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          8,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Midas receives the gift",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          7,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          7,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Flowers and table turn gold",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          7,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          7,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          7,
+          0
+        ]
+      ],
+      "label": "Goblet turns gold",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Midas touches his daughter",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "King Midas and the Golden Touch"
+}

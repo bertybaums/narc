@@ -1,0 +1,192 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        3,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "originator / distorted info (red)",
+      "3": "truth (green)",
+      "6": "recipient (blue)",
+      "7": "spreader (orange)"
+    },
+    "ai_difficulty": 7,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 5,
+    "tags": [
+      "focalization-test",
+      "domain:communication",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "An originator (red=1) whispers information that starts as truth (green=3). The spreader (orange=7) carries it forward but the information mutates: green cells flip to red as the message distorts. By the time it reaches the recipient (blue=6), the message is mostly red (false). The truth is almost entirely lost.",
+  "puzzle_id": "narc_focal_045",
+  "sequence": [
+    {
+      "cols": 14,
+      "grid": [
+        [
+          1,
+          3,
+          3,
+          3,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ]
+      ],
+      "label": "Originator holds truth",
+      "position": 0,
+      "rows": 2
+    },
+    {
+      "cols": 14,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          3,
+          3,
+          3,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ]
+      ],
+      "label": "Spreader carries message, distortion begins",
+      "position": 1,
+      "rows": 2
+    },
+    {
+      "cols": 14,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          3,
+          1,
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          6
+        ]
+      ],
+      "label": "Message heavily distorted",
+      "position": 2,
+      "rows": 2
+    },
+    {
+      "cols": 14,
+      "grid": null,
+      "label": "Recipient gets the garbled message",
+      "masked": true,
+      "position": 3,
+      "rows": 2
+    }
+  ],
+  "title": "The Rumor"
+}

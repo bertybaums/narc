@@ -1,0 +1,298 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        1,
+        1,
+        5,
+        5,
+        5,
+        1,
+        1
+      ],
+      [
+        1,
+        5,
+        5,
+        5,
+        5,
+        3,
+        1
+      ],
+      [
+        1,
+        5,
+        3,
+        3,
+        5,
+        3,
+        1
+      ],
+      [
+        1,
+        3,
+        3,
+        5,
+        5,
+        5,
+        1
+      ],
+      [
+        1,
+        1,
+        3,
+        5,
+        5,
+        1,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:science",
+      "arc:transformation",
+      "clue:exception",
+      "domain:biology",
+      "domain:ecology",
+      "spectrum:human-edge"
+    ]
+  },
+  "narrative": "The one that roots deepest survives when the warmth drives the color from the rest. While its neighbors pale and surrender their tenants, the deep-rooted holdfast keeps its hue in a whitening world.",
+  "puzzle_id": "narc_026",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          1,
+          7,
+          7,
+          6,
+          1,
+          1
+        ],
+        [
+          1,
+          7,
+          7,
+          6,
+          6,
+          3,
+          1
+        ],
+        [
+          1,
+          7,
+          3,
+          3,
+          6,
+          3,
+          1
+        ],
+        [
+          1,
+          3,
+          3,
+          7,
+          7,
+          6,
+          1
+        ],
+        [
+          1,
+          1,
+          3,
+          7,
+          6,
+          1,
+          1
+        ]
+      ],
+      "label": "the living reef",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          1,
+          5,
+          7,
+          6,
+          1,
+          1
+        ],
+        [
+          1,
+          5,
+          7,
+          5,
+          6,
+          3,
+          1
+        ],
+        [
+          1,
+          7,
+          3,
+          3,
+          5,
+          3,
+          1
+        ],
+        [
+          1,
+          3,
+          3,
+          5,
+          7,
+          5,
+          1
+        ],
+        [
+          1,
+          1,
+          3,
+          7,
+          5,
+          1,
+          1
+        ]
+      ],
+      "label": "the stress begins",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "the deep-rooted persist",
+      "masked": true,
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          1,
+          5,
+          5,
+          5,
+          1,
+          1
+        ],
+        [
+          1,
+          5,
+          5,
+          5,
+          5,
+          3,
+          1
+        ],
+        [
+          1,
+          5,
+          3,
+          3,
+          5,
+          3,
+          1
+        ],
+        [
+          1,
+          3,
+          3,
+          5,
+          5,
+          5,
+          1
+        ],
+        [
+          1,
+          1,
+          3,
+          5,
+          5,
+          1,
+          1
+        ]
+      ],
+      "label": "the survivor stands alone",
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          1,
+          5,
+          5,
+          5,
+          1,
+          1
+        ],
+        [
+          1,
+          5,
+          5,
+          5,
+          5,
+          3,
+          1
+        ],
+        [
+          1,
+          5,
+          3,
+          3,
+          5,
+          3,
+          1
+        ],
+        [
+          1,
+          3,
+          3,
+          3,
+          5,
+          5,
+          1
+        ],
+        [
+          1,
+          1,
+          3,
+          3,
+          5,
+          1,
+          1
+        ]
+      ],
+      "label": "partial recovery",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "Coral Bleaching"
+}

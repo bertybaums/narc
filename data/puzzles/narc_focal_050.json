@@ -1,0 +1,263 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        8,
+        8,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        0,
+        0,
+        0,
+        8,
+        0,
+        6
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "speaker (red)",
+      "6": "listener (blue)",
+      "8": "translator (magenta)"
+    },
+    "ai_difficulty": 7,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "8",
+    "human_difficulty": 5,
+    "tags": [
+      "focalization-test",
+      "domain:language",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "A speaker (red=1) produces a message pattern on the left side. A translator (magenta=8) sits in the middle and receives the message. The translator passes a modified version to the listener (blue=6) on the right. The meaning shifts: the pattern the listener receives differs from what the speaker sent. The speaker and listener end with different understandings.",
+  "puzzle_id": "narc_focal_050",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          0,
+          0,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Speaker, translator, and listener positioned",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          1,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Speaker sends message to translator",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "Translator passes modified message",
+      "masked": true,
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          8,
+          0,
+          0,
+          8
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          8,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Listener receives different meaning",
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "The Translation"
+}

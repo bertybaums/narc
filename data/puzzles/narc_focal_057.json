@@ -1,0 +1,183 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        5,
+        6,
+        6,
+        6,
+        6,
+        6,
+        6,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "queue jumper (red)",
+      "5": "bouncer (grey)",
+      "6": "queue (blue)"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "5",
+    "human_difficulty": 2,
+    "tags": [
+      "focalization-test",
+      "domain:social-norms",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "A queue of people (blue=6) forms a line waiting orderly. A bouncer (grey=5) stands at the front controlling entry. A queue jumper (red=1) appears and pushes forward through the line, displacing blues. The bouncer notices and ejects the red jumper from the queue entirely. Order is restored.",
+  "puzzle_id": "narc_focal_057",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Orderly queue, jumper approaches",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          5,
+          6,
+          6,
+          6,
+          6,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Jumper moves toward queue",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          5,
+          6,
+          6,
+          1,
+          6,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Jumper cuts into line, displaces blues",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "Bouncer ejects jumper",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "The Queue Jumper"
+}

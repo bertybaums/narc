@@ -1,0 +1,287 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8,
+        8,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        8,
+        8,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "magenta": "anemone",
+      "orange": "clownfish",
+      "red": "predator"
+    },
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "orange",
+    "human_difficulty": 2,
+    "tags": [
+      "focalization-test",
+      "domain:marine-biology",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "The clownfish darts among stinging tentacles that would paralyze any other fish. A barracuda approaches, sees the anemone's threat, and hesitates. The clownfish is safe precisely where others would die.",
+  "puzzle_id": "narc_focal_024",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "open reef",
+      "position": 0,
+      "rows": 7
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "predator approaches",
+      "position": 1,
+      "rows": 7
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "clownfish hides",
+      "masked": true,
+      "position": 2,
+      "rows": 7
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "predator retreats",
+      "position": 3,
+      "rows": 7
+    }
+  ],
+  "title": "Symbiosis"
+}

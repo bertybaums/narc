@@ -1,0 +1,172 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        1,
+        1,
+        5,
+        4,
+        5,
+        5,
+        6
+      ],
+      [
+        1,
+        5,
+        5,
+        4,
+        5,
+        5,
+        6
+      ],
+      [
+        1,
+        1,
+        5,
+        4,
+        5,
+        6,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "side A (red)",
+      "4": "border (yellow)",
+      "5": "neutral zone (grey)",
+      "6": "side B (blue)"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "5",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:conflict-resolution",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Side A (red=1) and side B (blue=6) occupy opposite halves of a grid separated by a contested border (yellow=4). A neutral zone (grey=5) exists between them. Over time, both sides pull back from the border, the neutral zone widens, and the yellow border solidifies into a stable line. Peace is achieved as both colors retreat symmetrically.",
+  "puzzle_id": "narc_focal_056",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          4,
+          6,
+          6,
+          6
+        ],
+        [
+          1,
+          1,
+          1,
+          4,
+          6,
+          6,
+          6
+        ],
+        [
+          1,
+          1,
+          1,
+          4,
+          6,
+          6,
+          6
+        ]
+      ],
+      "label": "Two sides pressed against border",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          1,
+          5,
+          4,
+          5,
+          6,
+          6
+        ],
+        [
+          1,
+          1,
+          5,
+          4,
+          5,
+          6,
+          6
+        ],
+        [
+          1,
+          1,
+          5,
+          4,
+          5,
+          6,
+          6
+        ]
+      ],
+      "label": "Both sides pull back, neutral zone forms",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "Neutral zone widens",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          5,
+          5,
+          4,
+          5,
+          5,
+          6
+        ],
+        [
+          1,
+          5,
+          5,
+          4,
+          5,
+          5,
+          6
+        ],
+        [
+          1,
+          5,
+          5,
+          4,
+          5,
+          5,
+          6
+        ]
+      ],
+      "label": "Peace achieved, wide buffer zone",
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "The Peace Treaty"
+}

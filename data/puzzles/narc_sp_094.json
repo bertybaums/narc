@@ -1,0 +1,75 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        1,
+        0,
+        5,
+        5,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 3,
+    "tags": [
+      "spectrum:domain-dependent",
+      "domain:history",
+      "ancient-egypt",
+      "chronology",
+      "dynasties"
+    ]
+  },
+  "narrative": "Ancient Egyptian dynasties encoded as grid data. Each row is a dynasty. Col 0 = dynasty number, Col 1 = start year BCE (as positive integer), Col 2 = end year BCE, Col 3 = duration (Col 1 - Col 2), Col 4 = number of known pharaohs, Col 5 = overlap with next dynasty (years). Given dynasties 18-20 of the New Kingdom, predict dynasty 21 (Third Intermediate Period): started 1070 BCE, ended 945 BCE, had 10 pharaohs, no overlap with next listed.",
+  "puzzle_id": "narc_sp_094",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          8,
+          0,
+          2,
+          8,
+          4,
+          0
+        ],
+        [
+          9,
+          2,
+          9,
+          3,
+          8,
+          0
+        ],
+        [
+          0,
+          9,
+          7,
+          2,
+          0,
+          7
+        ]
+      ],
+      "label": "New Kingdom dynasties",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "Dynasty 21",
+      "masked": true,
+      "position": 1,
+      "rows": 1
+    }
+  ],
+  "title": "Dynasty Timeline"
+}

@@ -1,0 +1,114 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 1,
+    "tags": [
+      "spectrum:human-forte",
+      "common-sense-physics",
+      "gravity",
+      "falling"
+    ]
+  },
+  "narrative": "Someone knocked the shelf. Everything that isn't nailed down falls straight to the floor.",
+  "puzzle_id": "narc_sp_034",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Objects on shelf",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "After the fall",
+      "masked": true,
+      "position": 1,
+      "rows": 6
+    }
+  ],
+  "title": "Gravity Always Wins"
+}

@@ -1,0 +1,160 @@
+{
+  "meta": {
+    "created_at": "2026-03-30",
+    "description": "Focalization variants for NARC puzzles. Each puzzle's narrative is retold from every actor's perspective, following econarratological principles (Erin James). Predicted ease reflects whether the focalized actor directly witnesses the masked grid's key transformation.",
+    "theory": "Narratives decompose into world, events, actors, emotions. Changing which actor the narrative is focalized through alters what information is foregrounded vs backgrounded, which we predict affects puzzle solvability."
+  },
+  "narc_006": {
+    "puzzle_id": "narc_006",
+    "title": "The Boy Who Cried Wolf",
+    "masked_positions": [2, 3],
+    "masked_answer_summary": "Grids 2 and 3 are identical to grids 0 and 1 — the boy cries wolf again, villagers respond again, same pattern exactly repeated.",
+    "actors": ["boy", "villagers", "sheep", "wolf"],
+    "variants": [
+      {
+        "variant": "focal_boy",
+        "focalized_actor": "boy",
+        "predicted_ease": "easy",
+        "narrative": "I did it once and it worked perfectly — the rush of watching them scramble up the hill, the way their faces shifted from fear to confusion to anger. The sheep never moved. Nothing changed for them. But the feeling in my chest, the power of making all those adults run — I needed it again. So I did exactly the same thing. Same cry, same pitch, same spot on the hillside. And they came again, every last one of them, just like before. An identical performance, an identical response. I thought I could keep pulling that thread forever. Then the grey shape appeared on the ridge, real this time, and I screamed with actual terror in my voice. But the hillside stayed empty. The villagers had learned what I hadn't: that repetition teaches people which calls to ignore."
+      },
+      {
+        "variant": "focal_villagers",
+        "focalized_actor": "villagers",
+        "predicted_ease": "medium",
+        "narrative": "The first cry brought us running — all of us, rushing uphill past the green pastures to find the boy standing there, red-faced and grinning. No wolf. We trudged home. Then came the second alarm, and we must confess: we responded identically. The same desperate charge up the slope, the same formation of bodies arriving to surround the flock, the same embarrassment when the boy laughed. Twice fooled by the same trick, in exactly the same way. We remember the pattern of our own foolishness — how the second time was a mirror of the first. When the third cry came, we stayed by our hearths. We did not see the grey shape that finally stalked through the meadow. We only learned about it afterward, when the silence from the hillside became its own kind of alarm."
+      },
+      {
+        "variant": "focal_sheep",
+        "focalized_actor": "sheep",
+        "predicted_ease": "hard",
+        "narrative": "The pasture is what we know — the green spread of it, the familiar weight of grass underfoot. We were grazing when the boy made his noise the first time, and strangers appeared among us, stepping heavy and smelling of smoke. Then they left. We grazed. Then the boy made his noise again and everything happened exactly as before — the same strangers, the same trampling, the same departure. We grazed. Twice the same disruption, twice the same return to stillness. We do not understand human noise. We did not understand when new sounds came, or when a different shape moved along the ridge, low and grey and nothing like a villager. We only understood that this time, the trampling did not stop."
+      },
+      {
+        "variant": "focal_wolf",
+        "focalized_actor": "wolf",
+        "predicted_ease": "hard",
+        "narrative": "I watched from the treeline, patient as hunger. The first day, something made the blue figures swarm the hillside — they surrounded the flock, milled about, then retreated. A commotion about nothing. The second day, the same scene played out in perfect repetition: the same cry, the same swarm, the same retreat. An identical cycle. I did not understand what the boy was doing, but I understood the pattern it created — each repetition loosened the connection between alarm and response. By the time I finally broke cover and crossed into the meadow, the hillside was empty of everything but green and the boy. No blue figures arrived. The cry had been spent."
+      }
+    ]
+  },
+  "narc_003": {
+    "puzzle_id": "narc_003",
+    "title": "The Flood",
+    "masked_positions": [3],
+    "masked_answer_summary": "Grid 3 (Day 4) shows water pushed back to the Day 2 level — two rows of blue at the bottom, houses still visible in row 2. The levee intervention reverses the rising trend.",
+    "actors": ["water", "houses", "levee"],
+    "variants": [
+      {
+        "variant": "focal_water",
+        "focalized_actor": "water",
+        "predicted_ease": "easy",
+        "narrative": "I rose one level on the first day, claiming the bottom row. On the second day I took the next, spreading into two full rows, lapping at the foundations of the structures above me. By the third day I had consumed three rows, and the red rooftops were nearly within reach. I was climbing steadily, one tier per day, and nothing had yet resisted me. Then on the fourth day I met something new — a grey weight pressing down, a barrier that did not give. The levee pushed me back, forced me down to where I had been on the second day. Two rows. I had lost a full day's advance. Afterward, on the fifth day, I regathered and pushed upward again, but I could only reach the third row, the same height I had achieved before I was turned back. The interruption cost me time, not ambition."
+      },
+      {
+        "variant": "focal_houses",
+        "focalized_actor": "houses",
+        "predicted_ease": "medium",
+        "narrative": "We have stood in this row since before the rains — two of us, side by side, red against the pale ground. The blue crept in below us on the first day, a single row at the very bottom. By the second day it had doubled, two solid rows of water beneath us. By the third day it reached the row just below ours, three rows deep, and we could feel the damp in our foundations. We braced for the fourth day, expecting the water to finally swallow our threshold. But something held it back. When we looked down on the fourth day, the flood had retreated — it sat two rows deep again, as it had on the second day, as though a full day of rising had been erased. We do not know what pushed it back, only that we were spared. On the fifth day the water rose again to the third row, resuming its climb, and we understood the reprieve was temporary."
+      },
+      {
+        "variant": "focal_levee",
+        "focalized_actor": "levee",
+        "predicted_ease": "easy",
+        "narrative": "I was not there for the first three days. I did not witness the water's patient ascent — one row, then two, then three — or the way the houses stood helpless above the rising blue. I was assembled in haste and deployed on the fourth day with a single mandate: push the water back. And I did. I forced the flood down from its three-row high-water mark all the way to its second-day level — two rows of blue, no more. The houses still stood with dry ground beneath them. I held that line for a day. But I am a temporary thing, an emergency measure, and by the fifth day the water had climbed again to three rows, reclaiming exactly what I had taken from it. My intervention did not stop the flood. It only bought one day of retreat in a story that was always going to keep rising."
+      }
+    ]
+  },
+  "narc_011": {
+    "puzzle_id": "narc_011",
+    "title": "The Heist",
+    "masked_positions": [3],
+    "masked_answer_summary": "Grid 3 (Night three) shows all three items advanced to row 0, but the emerald (green) has been replaced by a grey stone (value 5). Ruby at position [0,0], grey fake at [0,2], sapphire at [0,4].",
+    "actors": ["ruby", "emerald", "sapphire", "thief"],
+    "variants": [
+      {
+        "variant": "focal_ruby",
+        "focalized_actor": "ruby",
+        "predicted_ease": "medium",
+        "narrative": "I have been moving toward the door for three nights now, one row at a time, always in the leftmost position. The sapphire moves in lockstep on the right, and the emerald — or whatever sits in the center column — advances in the same rhythm between us. On the first night we shifted from row 3 to row 2. On the second, from row 2 to row 1. By the third night I reached row 0, the top, the exit, and so did the others. But something was different. The presence beside me in the center column did not feel the same. The emerald had a warmth, a frequency I recognized — green and alive. On the third night, what occupied that center space was duller, greyer, inert. Something had been exchanged during the advance. By the time the vault was opened and found empty, only a grey stone remained behind to tell the story. Someone had swapped the emerald for a counterfeit on the very night we all reached the door."
+      },
+      {
+        "variant": "focal_emerald",
+        "focalized_actor": "emerald",
+        "predicted_ease": "hard",
+        "narrative": "For two nights I advanced faithfully — center column, one row closer to the door each time. Row 3, then row 2, then row 1. I moved in formation with the ruby to my left and the sapphire to my right, all of us obeying the same nightly rhythm. I expected the third night to bring me to row 0, to the threshold, to whatever lay beyond. But the third night never came for me. Hands lifted me from my place in the darkness and carried me away, and something cold and grey was set down where I had been. I was gone before the advance was completed. I did not see the vault empty itself. I did not see the grey imposter reach the door in my place. I only know that my story ended one night early, replaced by a silence shaped exactly like me."
+      },
+      {
+        "variant": "focal_sapphire",
+        "focalized_actor": "sapphire",
+        "predicted_ease": "medium",
+        "narrative": "Three nights of steady movement, always in the rightmost position, always one row closer to the exit. The pattern was reliable: night one, row 2; night two, row 1; night three, row 0. I advanced alongside the ruby on the far left and whatever occupied the center. For the first two nights, the center held the emerald — I could sense its green pulse, familiar and constant. On the third night, we all reached the top row together, but the center presence had changed. Something occupied the emerald's column, advanced to the same position the emerald should have reached, but it carried no color I recognized. Grey and still, like a stone pulled from a riverbed. The formation was preserved, the timing was perfect, but the identity had been altered. After that, the vault emptied, and much later, someone found the grey stone sitting alone where three gems had once stood in a row."
+      },
+      {
+        "variant": "focal_thief",
+        "focalized_actor": "thief",
+        "predicted_ease": "easy",
+        "narrative": "I waited through two nights, watching the pattern establish itself. Each night, all three gems advanced one row toward the door — ruby on the left, emerald in the center, sapphire on the right. The rhythm was mechanical, predictable, beautiful. On the third night, just before the advance, I made my move. I lifted the emerald from its center-column position and replaced it with the grey stone I had carried in my coat. The fake was the right size, the right weight, and in the dark of the vault, no one would notice the color was wrong. Then the nightly advance continued as scheduled — ruby, grey fake, and sapphire all shifted to the top row, to the exit. The vault emptied itself for me. When they finally inspected, all they found was one grey stone where a green gem should have been, sitting at the top of an otherwise empty room. The ruby and sapphire were long gone. The emerald was with me."
+      }
+    ]
+  },
+  "narc_014": {
+    "puzzle_id": "narc_014",
+    "title": "The Fall of Icarus",
+    "masked_positions": [3],
+    "masked_answer_summary": "Grid 3 (the melting, 4x4) shows Icarus (red, value 2) falling — appearing in rows 2 and 3 center column. Wings are gone from their flanking positions; orange wax remnants (value 7) appear at [3,1] and [3,3], dripping to the bottom row.",
+    "actors": ["icarus", "wings", "sun", "sea"],
+    "variants": [
+      {
+        "variant": "focal_icarus",
+        "focalized_actor": "icarus",
+        "predicted_ease": "easy",
+        "narrative": "My father built the wings and fastened them to my arms — yellow feathers flanking my body on either side. I stood in a three-wide frame: wing, body, wing. Then I rose. The grid expanded as I climbed — four columns, then five — and the wings stayed with me, yellow on both sides, as I ascended row by row. At the peak I reached the second row of a five-wide sky, with a yellow gleam above me that I mistook for encouragement. Then the heat. The wings did not snap or tear — they softened. The wax ran. In the melting frame, I dropped back to a four-wide world. My body stretched across two rows as I fell, red cells in the center column, and where the wings had been there was only orange residue dripping to the bottom corners — the last trace of wax pooling at the edges of the frame. Then the sea. The grid shrank to three columns, and I came to rest in the bottom row, blue water on either side. The wings were gone entirely. Only I remained, red against the blue, sinking into the story my father had warned me about."
+      },
+      {
+        "variant": "focal_wings",
+        "focalized_actor": "wings",
+        "predicted_ease": "easy",
+        "narrative": "We were crafted from feathers and wax, set on either side of the boy's body — twin yellow presences flanking a red center. In the craft phase, we were his whole identity: without us, he was earthbound. As he ascended, we held our positions faithfully. The grid widened, and we expanded with it, staying adjacent to his body through a four-column frame and then a five-column sky. At the apex, the sun burned close above us — a yellow cell at the top of the widest grid — and we began to feel ourselves change. In the melting frame, we dissolved. The structured yellow shapes that had defined the boy's silhouette ran downward as orange wax, pooling at the bottom corners of a four-column grid. We were no longer wings — just warm residue dripping away from the body we had carried. The boy fell through two rows with nothing flanking him, and the orange traces at the bottom were all that testified we had ever existed. By the final frame, even the wax was gone. The sea held only the boy."
+      },
+      {
+        "variant": "focal_sun",
+        "focalized_actor": "sun",
+        "predicted_ease": "hard",
+        "narrative": "I occupy the top of the sky and I do not move. In the widest frame, I appeared as a yellow point at the apex while something bright and feathered climbed toward me from below. I did not reach down. I did not shift. I simply burned as I always burn, constant and indifferent. The thing that rose toward me had yellow flanks and a red core, and it grew larger in my sky as the grid widened around it. Then it came too close, and the yellow flanks began to change — I could feel the wax yielding to my heat, though I did nothing different. In the next frame the grid shrank, and I was no longer visible at the top. What happened below me — the transformation of yellow to orange, the stretching of the red center across falling rows, the final submersion in blue — all of that occurred outside my frame. I was present only for the ambition, not the consequence. By the time the story reached the sea, I had already exited the narrative."
+      },
+      {
+        "variant": "focal_sea",
+        "focalized_actor": "sea",
+        "predicted_ease": "hard",
+        "narrative": "I waited at the bottom of the story, patient as geography. For the first three frames I did not exist — the grids held sky and feathers and ascent, none of which concerned me. Even during the melting, when the wax ran and the boy began to fall, I was not yet present. The four-column grid of that catastrophe ended above my surface, with orange residue dripping toward corners I could not yet see and a red figure stretched across falling rows. I only entered the narrative in the final frame: a three-column strip where I appeared as blue on either side of the red body that had finally reached me. No wings remained. No wax. Just the boy, settling into my bottom row, bracketed by my blue indifference. I am the ending, not the story. Whatever happened in the melting frame — however the wings came apart, however the wax reformed into its orange farewell — I can only infer from what arrived in my waters."
+      }
+    ]
+  },
+  "narc_025": {
+    "puzzle_id": "narc_025",
+    "title": "Predator-Prey",
+    "masked_positions": [4],
+    "masked_answer_summary": "Grid 4 (the return from the margins) shows prey (green, value 3) only in the four corners of the 5x5 grid, with everything else empty. The prey begins re-entering from the edges after predator collapse.",
+    "actors": ["prey", "predators", "refuge"],
+    "variants": [
+      {
+        "variant": "focal_prey",
+        "focalized_actor": "prey",
+        "predicted_ease": "easy",
+        "narrative": "We filled the world once — every cell green, twenty-five of us surrounding a single red hunter in the center. Then the predators multiplied, pushing outward from the middle like a red stain, and we were driven toward the edges. More red, less green. By peak predator, the center was a solid block of red and we had been reduced to a single individual clinging to a corner. Then the hunters starved. The red receded to a single cell, and the interior lay empty. This was our moment. We crept back from the only places we had survived — the corners, the margins, the overlooked extremes. In the return frame, we occupied the four corners of the grid and nothing else: northwest, northeast, southwest, southeast. Four green cells at the absolute edges, testing whether the center was truly safe. It was the most tentative recolonization — a few of us venturing inward from the borders, not yet trusting the emptiness. From those four corners, we would eventually fill the grid again, rebound to abundance, and the whole cycle would begin anew."
+      },
+      {
+        "variant": "focal_predators",
+        "focalized_actor": "predators",
+        "predicted_ease": "medium",
+        "narrative": "We began as one — a single red cell at the center of a green world. The abundance was intoxicating. We expanded outward in a diamond pattern, consuming the green as we grew: four of us, then nine, then a full three-by-three block of red filling the interior. At our peak, we occupied the center and the prey had nearly vanished. But abundance was a lie. We had eaten our own future. The green cells we depended on were gone, and we began to starve. By the famine frame, only one of us remained, a solitary red cell in the upper center, surrounded by emptiness. Then even that last hunter disappeared. The grid after our collapse was something we never saw — we were already gone. Whatever the prey did in that frame, however they began their return from the margins, happened in our absence. We know only that the cycle eventually reset: green filled the world again, and a single red cell appeared once more at the center, ready to repeat the same doomed expansion."
+      },
+      {
+        "variant": "focal_refuge",
+        "focalized_actor": "refuge",
+        "predicted_ease": "easy",
+        "narrative": "I am the edge — the border cells, the corners, the margins of the grid that the predators never quite reached. When the red expansion pushed outward from the center, it spread in a diamond shape that consumed the interior but left the outermost positions untouched. I held the last green survivors. At peak predator, when nine red cells dominated the middle, one green cell clung to my southeast corner. During the famine, when predators collapsed to a single cell and then vanished entirely, I still held that corner survivor. And in the return frame — the masked grid — I was where the recovery began. The prey emerged from exactly the positions I had sheltered: the four corners of the grid. Green appeared at the northwest, northeast, southwest, and southeast edges, four cells venturing inward from the periphery I had guarded. The center remained empty, not yet trusted. My role in the story is always the same: I am where the survivors wait, and where the rebuilding starts. The corners are the seed bank of every recovery."
+      }
+    ]
+  }
+}

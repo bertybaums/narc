@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+{% block title %}NARC — Browse Puzzles{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Puzzles <small class="text-muted">({{ puzzles | length }})</small></h2>
+    <div>
+        <input type="text" id="search" class="form-control form-control-sm" placeholder="Search..."
+               style="width: 200px; display: inline-block;" oninput="filterPuzzles()">
+    </div>
+</div>
+
+{% if puzzles %}
+
+<!-- Tag filters -->
+<div class="mb-3" id="tag-filters">
+    <div class="mb-2">
+        <strong class="text-muted me-2">Audience:</strong>
+        {% for tag in audience_tags %}
+        <button class="btn btn-sm btn-outline-info tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
+            {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    <div class="mb-2">
+        <strong class="text-muted me-2">Arc:</strong>
+        {% for tag in arc_tags %}
+        <button class="btn btn-sm btn-outline-warning tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
+            {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    <div class="mb-2">
+        <strong class="text-muted me-2">Clue:</strong>
+        {% for tag in clue_tags %}
+        <button class="btn btn-sm btn-outline-success tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
+            {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    <div class="mb-2">
+        <strong class="text-muted me-2">Domain:</strong>
+        {% for tag in domain_tags %}
+        <button class="btn btn-sm btn-outline-secondary tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
+            {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    <div class="mb-2">
+        <strong class="text-muted me-2">Spectrum:</strong>
+        {% for tag in spectrum_tags %}
+        <button class="btn btn-sm btn-outline-danger tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
+            {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    <div class="mb-2">
+        <strong class="text-muted me-2">Grids:</strong>
+        {% for tag in grid_tags %}
+        <button class="btn btn-sm btn-outline-light tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
+            {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
+        </button>
+        {% endfor %}
+    </div>
+    <button class="btn btn-sm btn-outline-danger mt-1" onclick="clearFilters()">Clear filters</button>
+    <span id="filter-count" class="text-muted ms-2"></span>
+</div>
+
+<!-- Puzzle cards -->
+<div class="row g-3" id="puzzle-grid">
+    {% for p in puzzles %}
+    <div class="col-md-4 puzzle-item" data-tags="{{ p.tags or '' }}"
+         data-title="{{ p.title | lower }}" data-id="{{ p.puzzle_id | lower }}">
+        <div class="card puzzle-card" onclick="location.href='/solve/{{ p.puzzle_id }}'">
+            <div class="card-body">
+                <h5 class="card-title">{{ p.title }}</h5>
+                <p class="text-muted mb-1">
+                    {{ p.sequence | length }} grids &middot;
+                    {% if p.masked_positions | length == 1 %}
+                        masked #{{ p.masked_positions[0] + 1 }}
+                    {% else %}
+                        {{ p.masked_positions | length }} masked
+                    {% endif %}
+                    {% if p.human_difficulty and p.ai_difficulty %}
+                    &middot; <span title="Human {{ p.human_difficulty }}/5, AI {{ p.ai_difficulty }}/5">
+                        H{{ p.human_difficulty }} A{{ p.ai_difficulty }}</span>
+                    {% endif %}
+                </p>
+                <p class="card-text small text-truncate">{{ p.narrative[:80] }}...</p>
+                <div class="d-flex gap-2 mt-2 flex-wrap">
+                    <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc">Solve</a>
+                    <a href="/create?edit={{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <p class="text-muted">No puzzles yet.</p>
+    <a href="/create" class="btn btn-narc">Create your first puzzle</a>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+const activeTags = new Set();
+
+function toggleTag(btn) {
+    const tag = btn.dataset.tag;
+    if (activeTags.has(tag)) {
+        activeTags.delete(tag);
+        btn.classList.remove('active');
+    } else {
+        activeTags.add(tag);
+        btn.classList.add('active');
+    }
+    filterPuzzles();
+}
+
+function clearFilters() {
+    activeTags.clear();
+    document.querySelectorAll('.tag-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('search').value = '';
+    filterPuzzles();
+}
+
+function filterPuzzles() {
+    const search = document.getElementById('search').value.toLowerCase();
+    const items = document.querySelectorAll('.puzzle-item');
+    let shown = 0;
+
+    items.forEach(item => {
+        const tags = item.dataset.tags || '';
+        const title = item.dataset.title || '';
+        const id = item.dataset.id || '';
+
+        // Text search
+        const matchesSearch = !search || title.includes(search) || id.includes(search);
+
+        // Tag filter: item must have ALL active tags
+        let matchesTags = true;
+        for (const tag of activeTags) {
+            if (!tags.includes(tag)) {
+                matchesTags = false;
+                break;
+            }
+        }
+
+        if (matchesSearch && matchesTags) {
+            item.style.display = '';
+            shown++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    const countEl = document.getElementById('filter-count');
+    if (activeTags.size > 0 || search) {
+        countEl.textContent = `Showing ${shown} of ${items.length}`;
+    } else {
+        countEl.textContent = '';
+    }
+}
+</script>
+{% endblock %}

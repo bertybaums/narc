@@ -1,0 +1,128 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        0,
+        1,
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        1,
+        1,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:3",
+      "size:uniform",
+      "mask:single",
+      "difficulty:hard",
+      "audience:science",
+      "arc:transformation",
+      "clue:causation",
+      "domain:physics",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "Looking freezes the dance. Before the eye falls, all is possibility \u2014 shimmering, uncommitted. But the ones near the center are always found still. The edges remain restless a moment longer, but even they must yield to the gaze.",
+  "puzzle_id": "narc_030",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          8,
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8,
+          8
+        ]
+      ],
+      "label": "superposition",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "the measurement",
+      "masked": true,
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ]
+      ],
+      "label": "the collapsed state",
+      "position": 2,
+      "rows": 4
+    }
+  ],
+  "title": "The Observer Effect"
+}

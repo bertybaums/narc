@@ -1,0 +1,94 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        2,
+        1,
+        7
+      ],
+      [
+        2,
+        3,
+        0
+      ],
+      [
+        5,
+        0,
+        4
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 4,
+    "tags": [
+      "spectrum:balanced",
+      "matrix-multiplication",
+      "arithmetic"
+    ]
+  },
+  "narrative": "Grid C is the matrix product of Grid A and Grid B. Each cell C[i][j] = sum of A[i][k]*B[k][j] for all k. Given A and B, produce C.",
+  "puzzle_id": "narc_sp_072",
+  "sequence": [
+    {
+      "cols": 3,
+      "grid": [
+        [
+          2,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          1
+        ],
+        [
+          1,
+          0,
+          2
+        ]
+      ],
+      "label": "Matrix A",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          0,
+          2
+        ],
+        [
+          0,
+          1,
+          3
+        ],
+        [
+          2,
+          0,
+          1
+        ]
+      ],
+      "label": "Matrix B",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 3,
+      "grid": null,
+      "label": "A x B",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    }
+  ],
+  "title": "Matrix Multiplication Trail"
+}

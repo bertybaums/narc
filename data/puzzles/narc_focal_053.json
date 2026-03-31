@@ -1,0 +1,184 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        3,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        1,
+        0,
+        6,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        3
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "competitor A (red)",
+      "3": "audience (green)",
+      "4": "prize (yellow)",
+      "6": "competitor B (blue)"
+    },
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 2,
+    "tags": [
+      "focalization-test",
+      "domain:competition",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "Competitor A (red=1) and competitor B (blue=6) race toward a prize (yellow=4) from opposite ends of a long narrow track. An audience (green=3) watches from the sides. Both advance each frame. In the end, red reaches the prize first by one position, and the audience shifts green toward the winner.",
+  "puzzle_id": "narc_focal_053",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          1,
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "label": "Competitors at starting positions",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          1,
+          0,
+          4,
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "label": "Both advance",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          1,
+          4,
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "label": "Closing in on the prize",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "Winner takes the prize",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "The Rivalry"
+}

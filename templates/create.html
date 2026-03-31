@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block title %}NARC — Create Puzzle{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">{% if puzzle %}Edit{% else %}Create{% endif %} Puzzle</h2>
+
+<div class="row">
+    <div class="col-12">
+        <!-- Metadata -->
+        <div class="d-flex gap-3 mb-3 align-items-end flex-wrap">
+            <div>
+                <label class="form-label">Puzzle ID</label>
+                <input type="text" id="puzzle-id" class="form-control form-control-sm"
+                       value="{{ puzzle.puzzle_id if puzzle else '' }}"
+                       placeholder="narc_001" style="width: 140px;">
+            </div>
+            <div>
+                <label class="form-label">Title</label>
+                <input type="text" id="puzzle-title" class="form-control form-control-sm"
+                       value="{{ puzzle.title if puzzle else '' }}"
+                       placeholder="The Lighthouse" style="width: 250px;">
+            </div>
+            <div>
+                <label class="form-label">Sequence Length</label>
+                <input type="range" id="seq-length" class="form-range" min="3" max="8"
+                       value="{{ puzzle.sequence|length if puzzle else 4 }}" style="width: 120px;">
+                <span id="seq-length-display" class="ms-1">{{ puzzle.sequence|length if puzzle else 4 }}</span>
+            </div>
+            <div>
+                <label class="form-label">Difficulty</label>
+                <select id="puzzle-difficulty" class="form-select form-select-sm" style="width: 120px;">
+                    <option value="">--</option>
+                    <option value="easy" {{ 'selected' if puzzle and puzzle.difficulty == 'easy' }}>Easy</option>
+                    <option value="medium" {{ 'selected' if puzzle and puzzle.difficulty == 'medium' }}>Medium</option>
+                    <option value="hard" {{ 'selected' if puzzle and puzzle.difficulty == 'hard' }}>Hard</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Color picker -->
+        <div class="mb-3">
+            <label class="form-label">Color</label>
+            <div id="color-picker"></div>
+        </div>
+
+        <!-- Grid sequence -->
+        <div class="card mb-3">
+            <div class="card-header">Grid Sequence</div>
+            <div class="card-body">
+                <div id="grid-slots" class="sequence-container"></div>
+            </div>
+        </div>
+
+        <!-- Narrative -->
+        <div class="card mb-3">
+            <div class="card-header">Narrative</div>
+            <div class="card-body">
+                <textarea id="narrative" class="form-control" rows="4"
+                          placeholder="Write the narrative that makes the puzzle solvable...">{{ puzzle.narrative if puzzle else '' }}</textarea>
+                <small class="text-muted"><span id="char-count">0</span> characters</small>
+            </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="d-flex gap-2 mb-4">
+            <button id="btn-save" class="btn btn-narc" onclick="savePuzzle()">Save Puzzle</button>
+            <button id="btn-preview" class="btn btn-outline-secondary" onclick="togglePreview()">Preview</button>
+            <button id="btn-clear" class="btn btn-outline-danger" onclick="clearAll()">Clear All</button>
+        </div>
+
+        <!-- Preview area -->
+        <div id="preview-area" class="card mb-4" style="display: none;">
+            <div class="card-header">Preview (as solver sees it)</div>
+            <div class="card-body">
+                <div id="preview-sequence" class="sequence-container mb-3"></div>
+                <button class="narrative-reveal-btn" onclick="togglePreviewNarrative()">Reveal Narrative</button>
+                <div id="preview-narrative" class="narrative-text"></div>
+            </div>
+        </div>
+
+        <div id="save-status" class="alert" style="display: none;"></div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const EDIT_DATA = {{ puzzle_json | safe if puzzle_json else 'null' }};
+</script>
+<script src="/static/js/create.js"></script>
+{% endblock %}

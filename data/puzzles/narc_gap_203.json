@@ -1,0 +1,227 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        9,
+        0,
+        9,
+        0
+      ],
+      [
+        0,
+        9,
+        0,
+        9
+      ],
+      [
+        9,
+        0,
+        9,
+        0
+      ],
+      [
+        0,
+        9,
+        0,
+        9
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:6",
+      "size:uniform",
+      "mask:single",
+      "strategy:narrative-first",
+      "difficulty:hard",
+      "audience:general",
+      "audience:humanities",
+      "arc:linear",
+      "clue:rule",
+      "clue:timing",
+      "domain:psychology",
+      "spectrum:ai-edge"
+    ]
+  },
+  "narrative": "Six grids represent emotional states encoded as values. Stage 1 (Denial): all cells are 0 \u2014 refusing to see. Stage 2 (Anger): every cell becomes 9 \u2014 maximum intensity. Stage 3 (Bargaining, masked): a checkerboard of 0 and 9 \u2014 alternating between acceptance and rejection, where cell (r,c) is 9 if (r+c) is even, 0 if odd. Stage 4 (Depression): all cells drop to 1 \u2014 barely present. Stage 5 (Acceptance): each cell becomes its row index \u2014 a calm gradient acknowledging position. Stage 6 (Growth): each cell is row + col \u2014 expanding outward.",
+  "puzzle_id": "narc_gap_203",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Denial",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "Anger",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Bargaining",
+      "masked": true,
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "label": "Depression",
+      "position": 3,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "Acceptance",
+      "position": 4,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          1,
+          2,
+          3
+        ],
+        [
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          2,
+          3,
+          4,
+          5
+        ],
+        [
+          3,
+          4,
+          5,
+          6
+        ]
+      ],
+      "label": "Growth",
+      "position": 5,
+      "rows": 4
+    }
+  ],
+  "title": "The Five Stages"
+}

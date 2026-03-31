@@ -1,0 +1,223 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        4,
+        4,
+        4,
+        4
+      ],
+      [
+        4,
+        4,
+        4,
+        1
+      ],
+      [
+        0,
+        0,
+        7,
+        0
+      ],
+      [
+        4,
+        4,
+        1,
+        1
+      ],
+      [
+        4,
+        4,
+        4,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "child / truth",
+      "4": "crowd",
+      "7": "emperor"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:balanced",
+      "social-contagion",
+      "truth-spreading"
+    ]
+  },
+  "narrative": "The emperor (yellow=7) parades down a central avenue. The crowd (blue=4) lines both sides, all showing approval (value=4). A single child (red=1) stands in the crowd. In the masked grid, the child speaks the truth \u2014 the child's cell changes to value 1 (standing out), and the crowd cells nearest the child also begin changing to 1 as the truth spreads, while the emperor remains oblivious at value 7.",
+  "puzzle_id": "narc_focal_005",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "label": "Crowd gathers",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          7,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "label": "Emperor enters parade",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ],
+        [
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          4,
+          4,
+          1,
+          4
+        ],
+        [
+          4,
+          4,
+          4,
+          4
+        ]
+      ],
+      "label": "Child notices",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Child speaks truth",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          4,
+          4,
+          1,
+          1
+        ],
+        [
+          4,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          7
+        ],
+        [
+          4,
+          1,
+          1,
+          1
+        ],
+        [
+          4,
+          4,
+          1,
+          1
+        ]
+      ],
+      "label": "Truth spreads further",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Emperor's New Clothes"
+}

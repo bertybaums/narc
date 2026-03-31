@@ -1,0 +1,231 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        6,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "suspect (red)",
+      "3": "truth signals (green)",
+      "6": "detective (blue)"
+    },
+    "ai_difficulty": 6,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "6",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:psychology",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "A detective (blue=6) interrogates a suspect (red=1) in a small room. Truth indicators (green=3) appear when the suspect tells the truth and vanish when lying. The suspect starts calm, then becomes agitated as lies are detected. The detective closes in as green dots disappear, revealing the pattern of deception.",
+  "puzzle_id": "narc_focal_042",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Detective and suspect face off",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Suspect talks, truth signals appear",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Lies detected, truth signals vanish",
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Detective confronts the liar",
+      "masked": true,
+      "position": 3,
+      "rows": 6
+    }
+  ],
+  "title": "The Lie Detector"
+}

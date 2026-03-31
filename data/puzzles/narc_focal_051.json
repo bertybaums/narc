@@ -1,0 +1,183 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        6,
+        3,
+        6
+      ],
+      [
+        0,
+        1,
+        6,
+        3
+      ],
+      [
+        0,
+        6,
+        3,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "traveler (red)",
+      "3": "customs (green)",
+      "6": "locals (blue)"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:culture",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "A traveler (red=1) arrives in a new land where locals (blue=6) follow custom patterns (green=3). The traveler initially clashes with the patterns, standing where green is not. Over time the traveler learns: red moves to align with the green custom patterns, matching the locals' arrangement. The traveler adapts and integrates.",
+  "puzzle_id": "narc_focal_051",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          3,
+          6
+        ],
+        [
+          0,
+          3,
+          6,
+          3
+        ],
+        [
+          0,
+          6,
+          3,
+          6
+        ]
+      ],
+      "label": "Traveler arrives, locals have customs",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          3,
+          6
+        ],
+        [
+          0,
+          3,
+          6,
+          3
+        ],
+        [
+          0,
+          6,
+          3,
+          6
+        ]
+      ],
+      "label": "Traveler tries to join, misplaced",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          1,
+          6
+        ],
+        [
+          0,
+          3,
+          6,
+          3
+        ],
+        [
+          0,
+          6,
+          3,
+          6
+        ]
+      ],
+      "label": "Traveler moves into custom position",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Full adaptation",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "Culture Shock"
+}

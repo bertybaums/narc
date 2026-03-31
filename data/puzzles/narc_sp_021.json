@@ -1,0 +1,97 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        5
+      ],
+      [
+        5
+      ],
+      [
+        4
+      ],
+      [
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 4,
+    "tags": [
+      "spectrum:ai-forte",
+      "statistical",
+      "mean"
+    ]
+  },
+  "narrative": "Grid 1 (masked) contains the integer mean (floor division) of each row of Grid 0. Each row of Grid 0 produces a single value: Grid1[r][0] = floor(sum(Grid0[r]) / 6).",
+  "puzzle_id": "narc_sp_021",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          2,
+          4,
+          6,
+          8,
+          4,
+          6
+        ],
+        [
+          3,
+          9,
+          1,
+          5,
+          7,
+          5
+        ],
+        [
+          8,
+          2,
+          6,
+          4,
+          0,
+          4
+        ],
+        [
+          1,
+          7,
+          3,
+          9,
+          5,
+          5
+        ]
+      ],
+      "label": "Input (4x6)",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 1,
+      "grid": [
+        [
+          5
+        ],
+        [
+          5
+        ],
+        [
+          4
+        ],
+        [
+          5
+        ]
+      ],
+      "label": "Row means (4x1)",
+      "position": 1,
+      "rows": 4
+    }
+  ],
+  "title": "Row Means"
+}

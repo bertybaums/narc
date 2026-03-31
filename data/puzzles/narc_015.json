@@ -1,0 +1,291 @@
+{
+  "answer_grids": {
+    "4": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        5,
+        5
+      ],
+      [
+        0,
+        0,
+        0,
+        5,
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    4
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:6",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:humanities",
+      "arc:cyclical",
+      "clue:direction",
+      "domain:mythology",
+      "domain:philosophy",
+      "spectrum:human-edge"
+    ]
+  },
+  "narrative": "The summit is not the end. What strains upward through sweat and will must learn that gravity has no memory and no mercy. Again.",
+  "puzzle_id": "narc_015",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          5
+        ]
+      ],
+      "label": "the base",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "the climb",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          5,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "near the top",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          5,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          5,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "the peak",
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "the return",
+      "masked": true,
+      "position": 4,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "once more",
+      "position": 5,
+      "rows": 5
+    }
+  ],
+  "title": "Sisyphus"
+}

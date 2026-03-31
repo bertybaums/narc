@@ -1,0 +1,290 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        5,
+        5,
+        0,
+        0
+      ],
+      [
+        0,
+        5,
+        5,
+        0,
+        7
+      ],
+      [
+        0,
+        0,
+        1,
+        7,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "Jack",
+      "3": "beanstalk",
+      "5": "giant",
+      "7": "golden eggs"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:balanced",
+      "vertical-movement",
+      "theft"
+    ]
+  },
+  "narrative": "Jack (red=1) climbs a beanstalk (green=3) that grows upward through a vertical grid. At the top, a giant (grey=5, occupying multiple cells) guards golden eggs (yellow=7). In the masked grid, Jack has reached the top, grabbed a golden egg, and the giant has awakened \u2014 the giant's cells shift one position toward Jack, and Jack holds the egg (his cell becomes value 1 with a 7 adjacent).",
+  "puzzle_id": "narc_focal_011",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          5,
+          5,
+          0,
+          7
+        ],
+        [
+          0,
+          5,
+          5,
+          0,
+          7
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Jack at the base",
+      "position": 0,
+      "rows": 8
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          5,
+          5,
+          0,
+          7
+        ],
+        [
+          0,
+          5,
+          5,
+          0,
+          7
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Jack climbing",
+      "position": 1,
+      "rows": 8
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Jack grabs egg, giant wakes",
+      "masked": true,
+      "position": 2,
+      "rows": 8
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          7
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Jack flees down",
+      "position": 3,
+      "rows": 8
+    }
+  ],
+  "title": "Jack and the Beanstalk"
+}

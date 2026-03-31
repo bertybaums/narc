@@ -1,0 +1,147 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0
+      ],
+      [
+        0,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "easy",
+    "human_difficulty": 1,
+    "tags": [
+      "grids:4",
+      "size:varying",
+      "mask:single",
+      "difficulty:easy",
+      "audience:general",
+      "arc:convergence",
+      "clue:rule",
+      "domain:astronomy",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Everything you've ever known or loved fits in a single mote of blue, suspended in a sunbeam against the dark. From far enough away, the oceans and the continents and the clouds become one pixel \u2014 and then not even that.",
+  "puzzle_id": "narc_050",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          1,
+          1,
+          3,
+          3,
+          1,
+          1
+        ],
+        [
+          1,
+          3,
+          3,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          3,
+          5,
+          1
+        ],
+        [
+          3,
+          3,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          3,
+          1,
+          1,
+          5,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          3,
+          1,
+          1
+        ]
+      ],
+      "label": "Earth \u2014 oceans, land, clouds",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          3,
+          1
+        ],
+        [
+          1,
+          3,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ]
+      ],
+      "label": "zoomed out \u2014 still recognizable",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 2,
+      "grid": null,
+      "label": "a mote in a sunbeam",
+      "masked": true,
+      "position": 2,
+      "rows": 2
+    },
+    {
+      "cols": 1,
+      "grid": [
+        [
+          0
+        ]
+      ],
+      "label": "lost in the void",
+      "position": 3,
+      "rows": 1
+    }
+  ],
+  "title": "The Pale Blue Dot"
+}

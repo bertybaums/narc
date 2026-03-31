@@ -1,0 +1,162 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        8,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        8,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        8,
+        1
+      ],
+      [
+        1,
+        0,
+        0,
+        8
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:4",
+      "size:uniform",
+      "mask:single",
+      "strategy:ai-native",
+      "difficulty:hard",
+      "audience:ai-native",
+      "arc:linear",
+      "clue:rule",
+      "domain:ml",
+      "domain:mathematics",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "As \u03c4\u21920, the softmax output converges to the one-hot encoding of the argmax. The pre-softmax logits have their maximum along the main diagonal. Each row's probability mass concentrates entirely on the diagonal element.",
+  "puzzle_id": "narc_ai_003",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          3,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          3,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          3,
+          2
+        ],
+        [
+          2,
+          2,
+          2,
+          3
+        ]
+      ],
+      "label": "\u03c4 = 10 (Near Uniform)",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          5,
+          2,
+          1,
+          1
+        ],
+        [
+          1,
+          5,
+          2,
+          1
+        ],
+        [
+          1,
+          1,
+          5,
+          2
+        ],
+        [
+          2,
+          1,
+          1,
+          5
+        ]
+      ],
+      "label": "\u03c4 = 1 (Moderate)",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "\u03c4 \u2192 0 (Argmax)",
+      "masked": true,
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          9,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          9,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          9
+        ]
+      ],
+      "label": "\u03c4 = 0 (Hard One-Hot)",
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "The Softmax Temperature"
+}

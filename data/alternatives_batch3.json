@@ -1,0 +1,274 @@
+{
+  "narc_035": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "The chef chose to slice the single yam rather than let the whole bushel rot. One root vegetable quartered on the board so five others could be served at the table. Whether the knife that chose which ingredient to sacrifice carries guilt — that seasoning never leaves the dish."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "military",
+      "narrative": "The general diverted the column toward the lone outpost, sparing the garrison of five. One sentinel fell so the platoon might march on. The order was given, the path was bent — and the commander's hand never left the map."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "dance",
+      "narrative": "The choreographer redirected the dancer's arc toward the soloist, pulling the ensemble of five from the collision. One body absorbs the impact so the corps de ballet survives. The hand that changed the step still trembles after the curtain falls."
+    }
+  ],
+  "narc_036": [
+    {
+      "variant": "alt_1",
+      "source_domain": "gardening",
+      "narrative": "The gilt ivy crept from the southwest corner, smothering wildflowers row by row, climbing each trellis in turn. What was a tangled garden of many colors became a single gilded hedge. The last wild bloom clings to the far northeast corner, but even it is dimming."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "oceanography",
+      "narrative": "A warm golden current rolled in from the deep west, displacing the cold patchwork of native waters shelf by shelf. The reef's colors bleached from bottom-left to top-right, each tide erasing another species. Soon only two creatures remain in the whole gilded sea."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weaving/textiles",
+      "narrative": "The weaver began replacing threads from the lower-left corner, pulling each colored strand and substituting gold. The pattern marched diagonally upward — first the reds, then the blues, then the greens. What was a tapestry of seven hues became a gilded shroud with only scattered threads of the original weave surviving at the far edge."
+    }
+  ],
+  "narc_037": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "Each old ingredient removed from the stew was not discarded but placed in a second pot below. New seasonings replaced old in the upper vessel while the lower one thickened with castoffs. Halfway through, both pots simmer — the top half renewed, the bottom half assembled from memory."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "Each original note rewritten in the upper score drifted down to a second staff forming beneath. The melody split — fresh harmonies above, a ghost composition assembling below from every discarded phrase. At the midpoint, two songs played where one had been, the upper half recomposed, the lower half born of scraps."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "archaeology",
+      "narrative": "Each original stone pulled from the temple's upper courses was carried down and laid in a new foundation below. New stones filled the gaps above. At this stage of the excavation, the upper structure is half-ancient, half-renewed, while a second temple rises beneath from the salvaged blocks — the bottom rows now bearing what the top once held."
+    }
+  ],
+  "narc_038": [
+    {
+      "variant": "alt_1",
+      "source_domain": "clockwork/mechanics",
+      "narrative": "A single golden gear at the center set a larger mechanism turning — always clockwise, each ring of cogs wider than the last. The warmth of friction never dimmed at the hub. One tooth engaged a thousand, but only because the rotation never reversed."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "cartography",
+      "narrative": "A golden pin was placed at the center of the map, and from it, concentric rings of influence spiraled outward, always curving right. Each ring wider, the territory claimed growing with every turn. The pin never moved, but the borders it drew expanded into a storm of golden ink."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "One golden seed sprouted tendrils that coiled always clockwise, each whorl wider than the last, the golden center always warm. A single root became a vine became a thicket — but only because every tendril spiraled the same way, never once turning back."
+    }
+  ],
+  "narc_039": [
+    {
+      "variant": "alt_1",
+      "source_domain": "theater",
+      "narrative": "The spotlight in the center of the ring went dark, but the actors along the walls held their positions perfectly — each one frozen in place as if the director still watched. The stage is bare at the heart now; the performers discipline themselves, needing no eye to keep their marks."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "clockwork/mechanics",
+      "narrative": "The master spring at the center of the watch was removed, yet every gear along the rim continued its appointed rotation. The hollow center holds no force, but the peripheral cogs — blue, crimson, orange, green — maintain perfect time, each one its own regulator now."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "astronomy",
+      "narrative": "The sun at the center of the orrery went dark, but the planets in their ring continued their orbits — each colored world holding its station as if gravity still pulled from within. The void at the center commands nothing, yet the ring of worlds preserves its perfect arrangement."
+    }
+  ],
+  "narc_040": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "What would the diners choose if they did not know which plate would be set before them? A grey lid covers the table, and beneath it, every portion is made identical — each row dressed with the same three flavors and two empty courses. Fairness is the recipe of those who cannot peek."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "weaving/textiles",
+      "narrative": "A grey curtain of thread divides the loom in two. Above, rich and varied patterns; below, bare warp. But when the weaver does not know which side she will wear, she makes both halves mirror each other — the same three-color sequence in every row, the same empty selvedge at each edge."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "architecture",
+      "narrative": "Behind the grey floor that divides the building, the architect — not knowing whether she will live above or below — designs both halves as twins. Each story receives the same three rooms and two empty chambers. The grey barrier remains, but on either side, the blueprints are identical."
+    }
+  ],
+  "narc_041": [
+    {
+      "variant": "alt_1",
+      "source_domain": "weaving/textiles",
+      "narrative": "The loom feeds red thread methodically from the top-left corner, replacing grey row by row. But one single thread in the very center of the third row refuses the dye, holding its grey against the crimson tide. The cloth turns red around it — above, beside, below — yet that one fiber will not change."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "military",
+      "narrative": "The order marched through the ranks from the front-left, turning each grey uniform red as it passed. Row after methodical row fell in line. But one soldier in the dead center of the third rank held her grey — surrounded on all sides by crimson, refusing the command while the red wave washed past her."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "chemistry",
+      "narrative": "The reagent spread from the upper-left corner, turning each grey cell red in a steady wavefront. At this moment, the reaction has consumed the top rows and begun the third — but one molecule at the exact center of that row refuses to catalyze, holding its grey while the crimson reaction flows around it."
+    }
+  ],
+  "narc_042": [
+    {
+      "variant": "alt_1",
+      "source_domain": "archaeology",
+      "narrative": "The golden sarcophagus was sealed with grey uncertainty within. When the lid was lifted, the grey collapsed — the interior flushed red from rim to rim. The tomb held every possibility until the seal was broken; then only death remained inside the golden walls."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "cooking",
+      "narrative": "The golden crust enclosed a filling that could have been anything — grey and indeterminate. When the pie was cut, the grey resolved to red through and through. The pastry shell held all flavors at once until the knife decided the matter."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "theater",
+      "narrative": "Behind the golden curtain-frame, the stage was lit in neutral grey — the scene undetermined. When the curtains parted, the grey flooded red: the tragedy revealed. The golden proscenium held every possible play until the audience looked, and then only one remained."
+    }
+  ],
+  "narc_043": [
+    {
+      "variant": "alt_1",
+      "source_domain": "music",
+      "narrative": "The melody began with eight bars of silence before the wall of blue chords. Each phrase halved the rest — four bars, then two. At the fifth measure, one bar of silence remains, the red note poised but never sounding. The song shrinks toward its final chord but the last rest cannot be crossed."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "architecture",
+      "narrative": "The hallway to the blue wall was sixteen columns long. The red visitor crossed half, then half again — eight columns, four, two. Now one column of empty space separates them, and the grid shrinks once more, but the threshold is never reached. The corridor narrows forever."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "oceanography",
+      "narrative": "The red vessel sailed toward the blue reef across sixteen leagues of open water. Each tide halved the distance — eight leagues, four, two. At the fifth tide, one league remains but the current will only carry her halfway. The sea between them compresses but never vanishes, the red hull forever approaching the blue wall."
+    }
+  ],
+  "narc_044": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "The red spice and the blue spice competed for dominance in the broth, the green rim of the pot holding them both. The red found a new compound — shifting toward orange — while the blue faltered. But the blue adapted in turn, and when the pot settled, both had transformed: orange where red had been, and purple where blue once sat. The green rim endures, the race for flavor never ending."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "clockwork/mechanics",
+      "narrative": "Two gears — one red, one blue — spin inside a green casing. The red gear found a new tooth, leaping ahead and shifting toward orange. The blue, not to be outpaced, forged its own adaptation. At the moment of the red's advantage, the green housing holds firm, the blue still present but the red already changed — the mechanism's arms race pausing only to begin again."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "Two flowers share a green-bordered bed — one red, one blue. The red bloom mutated, pushing out orange petals, gaining an edge. But the blue is already shifting in response. At this instant the red has become orange while the blue holds — but both will transform again. In this garden, standing still means being uprooted."
+    }
+  ],
+  "narc_045": [
+    {
+      "variant": "alt_1",
+      "source_domain": "oceanography",
+      "narrative": "A billion golden buoys dot the dark sea, each one lit, not one signaling to another. The ocean grew from a single light to a teeming field, yet no current connects them. The waters are vast and full of warmth, but every beacon burns in isolation — the silence between them is the true depth."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "gardening",
+      "narrative": "Golden flowers bloom scattered across the dark soil — first one, then a handful, then a whole field. No root system connects them; no pollen drifts between. The garden is vast and bright with gold, yet each blossom stands utterly alone. Where are the bees?"
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "architecture",
+      "narrative": "Golden towers rise from a dark plain — first one, then a scattered city, then a sprawling civilization of lights. But no road joins them, no bridge spans the dark between. The metropolis grows ever larger, ever brighter, ever more silent. A billion lit windows, and not one voice calling across the gap."
+    }
+  ],
+  "narc_046": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "The dish almost passes for the original — but the garnish is placed one position too wide, and the familiar warmth curdles. Hair-thin details on the plate grew toward perfection: eyes of blue set properly, a nose of orange centered, a smile of red beneath. But at this stage the eyes spread to the edges, the forehead thickens to grey, and what should nourish instead nauseates."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "theater",
+      "narrative": "The mask was sculpted in stages: first a crude sketch with centered eyes and smile, then finer features with a nose added. But at the third fitting, the eyes migrated to the far edges, a grey brow descended heavy across the top, and the mouth widened unnervingly. The audience recoiled — the closer the mask came to a real face, the more it repelled."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "music",
+      "narrative": "The melody was refined note by note toward a human voice — first a simple two-note hum, then a three-tone phrase with a new harmonic. But at the third arrangement, the two main notes drifted to the far edges of the register, a grey drone filled the upper range, and what should have sounded warm instead sounded deeply wrong. Almost human is worse than not human at all."
+    }
+  ],
+  "narc_047": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cartography",
+      "narrative": "The cartographer drew the world at seven scales. At the closest, every red border and brown desert was visible among the blue and green. With each step back, the map shrank and the red lines thinned. At the fifth reduction — three cells across — the borders dissolve entirely: only blue, green, and the faintest brown remain. No hand has drawn a line that survives this distance."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "photography",
+      "narrative": "The lens pulled back frame by frame. At full zoom, nations were sharp — red borders cutting between blue seas and green land. Each wider shot lost resolution: seven columns, six, five, four. At the fifth exposure — just three pixels wide — the red vanishes. Blue and green blur together with a wisp of brown, and no boundary survives the defocus."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weaving/textiles",
+      "narrative": "The tapestry was woven at seven scales, each smaller than the last. Up close, red threads of borders ran between blue ocean and green land. With each reduction, threads were lost — and at the third-to-last weave, just three threads wide, the red disappeared entirely. Only blue, green, and a stitch of brown remain. The loom cannot hold a border at this resolution."
+    }
+  ],
+  "narc_048": [
+    {
+      "variant": "alt_1",
+      "source_domain": "music",
+      "narrative": "The golden instrument slides along the staff from left to right. Behind it, red notes stretch wide — two slow, spaced tones. Ahead, blue notes compress tight — three rapid beats in the same span. At the center of the score, the balance is perfect: two red measures behind, a breath, the golden source, then three blue measures ahead."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "oceanography",
+      "narrative": "The golden vessel cuts through still water. In its wake, red waves stretch long and lazy — two broad crests trailing behind with dark troughs between them. At its bow, blue waves stack tight — three compressed crests pushing forward. At the midpoint of the channel, the pattern is balanced: red stretches aft, blue compresses fore, the golden hull dividing them exactly."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weaving/textiles",
+      "narrative": "The golden shuttle moves across the loom. Behind it, red threads are spaced wide — two strands with gaps between. Before it, blue threads are packed tight — three strands compressed into the remaining warp. At the center of the cloth, the shuttle pauses: two red behind, three blue ahead, the golden point holding the balance between stretch and compression."
+    }
+  ],
+  "narc_049": [
+    {
+      "variant": "alt_1",
+      "source_domain": "archaeology",
+      "narrative": "Among the endless grey ruins — chamber after identical chamber of rubble — one room holds a golden artifact. It rests at the second column of the third row, gleaming where everything else is dust. In a necropolis of infinite repetition, the single treasure is the rarest dig of all."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "astronomy",
+      "narrative": "In a grey nebula of uniform dust — shelf upon shelf of identical particles — one mote glows golden. It sits at the second position of the third band, bright where all else is dim. In an infinite expanse of sameness, the lone signal is the rarest anomaly the telescope has ever found."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "In a vast grey field of identical stones — row upon row, plot upon plot of the same dull gravel — one golden flower pushes through at the second stone of the third row. In an infinite garden of uniformity, this single bloom is the rarest thing that grows."
+    }
+  ],
+  "narc_050": [
+    {
+      "variant": "alt_1",
+      "source_domain": "photography",
+      "narrative": "The lens pulls back in three exposures. First, a full portrait — blue and green and grey and white, every detail sharp across six columns. Then a thumbnail, still recognizable at four pixels across. Then — at two pixels — most of the frame goes dark, but one faint blue pixel survives in the lower right. The final frame: pure black. The subject has vanished."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "cartography",
+      "narrative": "The map was redrawn at four scales. At the largest, continents and oceans sprawled in color. At the next, the world shrank to a small disc. At the third — just two cells across — the land and sea collapsed to darkness, save for one blue mark in the bottom corner. At the last scale, even that mark was gone. Every kingdom ever drawn fits in a single dot of ink."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "theater",
+      "narrative": "The stage shrank act by act. In the first, a sprawling set of blue oceans and green continents filled the boards. In the second, the set compressed to a small disc, still recognizable. In the third, the stage is just two squares — mostly dark, one faint blue light in the lower corner. In the final act, the light goes out entirely. Every drama ever performed fit on that vanishing stage."
+    }
+  ]
+}

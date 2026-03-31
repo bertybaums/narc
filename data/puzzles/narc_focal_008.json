@@ -1,0 +1,163 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        8
+      ],
+      [
+        7,
+        7,
+        7,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "5": "ugly duckling",
+      "7": "ducks",
+      "8": "swan"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "5",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:human-forte",
+      "transformation",
+      "identity"
+    ]
+  },
+  "narrative": "A pond scene. A row of ducks (yellow=7) swim in formation. One duckling (grey=5) trails behind, visually distinct. Over time the other ducks move away from the grey duckling, isolating it. In the masked grid, the transformation occurs: the grey duckling becomes a swan (azure=8), now standing apart from the flock with a new value. The yellow ducks remain unchanged.",
+  "puzzle_id": "narc_focal_008",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          7,
+          7,
+          7,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Duckling among ducks",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          7,
+          7,
+          0,
+          5
+        ],
+        [
+          0,
+          0,
+          7,
+          0
+        ]
+      ],
+      "label": "Ducks distance themselves",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          7,
+          0,
+          0,
+          5
+        ],
+        [
+          0,
+          7,
+          7,
+          0
+        ]
+      ],
+      "label": "Duckling alone",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Transformation",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          7,
+          7,
+          7,
+          0
+        ]
+      ],
+      "label": "Swan soars above",
+      "position": 4,
+      "rows": 3
+    }
+  ],
+  "title": "The Ugly Duckling"
+}

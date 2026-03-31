@@ -1,0 +1,130 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        4
+      ],
+      [
+        0,
+        4,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:3",
+      "size:varying",
+      "mask:single",
+      "difficulty:medium",
+      "audience:humanities",
+      "arc:transformation",
+      "clue:rule",
+      "domain:literature",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "Something small and bright, prepared with love, passed along untouched. The soles never met the ground; the laces never learned a knot.",
+  "puzzle_id": "narc_013",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          4,
+          0
+        ]
+      ],
+      "label": "the pair",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          4,
+          4,
+          0
+        ],
+        [
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          4
+        ]
+      ],
+      "label": "the offering",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 3,
+      "grid": null,
+      "label": "never worn",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    }
+  ],
+  "title": "Baby Shoes"
+}

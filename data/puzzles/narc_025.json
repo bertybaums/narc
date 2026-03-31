@@ -1,0 +1,377 @@
+{
+  "answer_grids": {
+    "4": [
+      [
+        3,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        0,
+        0,
+        3
+      ]
+    ]
+  },
+  "masked_positions": [
+    4
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:8",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:science",
+      "arc:cyclical",
+      "clue:timing",
+      "clue:direction",
+      "domain:ecology",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "The survivors hid where teeth could not follow \u2014 the margins, the edges, the overlooked places. When the hunters starved and the center lay empty, the meek crept back from the borders to fill what was lost.",
+  "puzzle_id": "narc_025",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "abundance",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          0,
+          3,
+          3
+        ],
+        [
+          3,
+          0,
+          2,
+          0,
+          3
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          3,
+          0,
+          2,
+          0,
+          3
+        ],
+        [
+          3,
+          3,
+          0,
+          3,
+          3
+        ]
+      ],
+      "label": "the hunters multiply",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          3,
+          0
+        ]
+      ],
+      "label": "peak predator",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "label": "the famine",
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "the return from the margins",
+      "masked": true,
+      "position": 4,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          0,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          0,
+          3,
+          3
+        ]
+      ],
+      "label": "the rebound",
+      "position": 5,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          2,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "the cycle renews",
+      "position": 6,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          0,
+          3,
+          3
+        ],
+        [
+          3,
+          0,
+          2,
+          0,
+          3
+        ],
+        [
+          0,
+          2,
+          2,
+          2,
+          0
+        ],
+        [
+          3,
+          0,
+          2,
+          0,
+          3
+        ],
+        [
+          3,
+          3,
+          0,
+          3,
+          3
+        ]
+      ],
+      "label": "oscillation",
+      "position": 7,
+      "rows": 5
+    }
+  ],
+  "title": "Predator-Prey"
+}

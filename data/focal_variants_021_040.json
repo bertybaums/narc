@@ -1,0 +1,527 @@
+{
+  "meta": {
+    "created_at": "2026-03-30",
+    "description": "Focalization narrative variants for NARC puzzles 021-040. Each puzzle generates three variants: focal_active (actor causing/experiencing the masked change), focal_observer (actor witnessing the change), and focal_absent (actor absent or unaware). Predicted ease reflects informational access to the masked grid's transformation.",
+    "theory": "Changing which actor the narrative is focalized through alters what information is foregrounded vs backgrounded. The active agent of the masked transformation has the most direct knowledge (easy), an observer has partial knowledge (medium), and an absent actor must infer (hard)."
+  },
+  "narc_focal_021": {
+    "title": "The Tell-Tale Heart",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the guilt",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I am the stain that spreads from within. I started as nothing — the room was silent, every surface clean and dark. Then I pulsed once at the center, a single red beat where none had been before. Each beat after that I grew outward, a diamond of red expanding one ring at a time: center, then cross, then wider cross. By the pounding phase I had claimed a full diamond shape, red cells radiating in every direction from the heart of the room. In the confession — the moment that is hidden — I pushed further still. The diamond swelled again, consuming nearly everything, though the four outermost corners resisted me for one more beat. I could feel them holding out, dark against my red tide. But I knew they would fall. In the final frame I filled every cell. The room was entirely mine — twenty-five red cells, no darkness left. The confession was simply the penultimate step: one more ring of expansion, the corners still untouched, the rest of the floor soaked through with what the narrator tried to bury."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the room",
+        "color": "black (value 0)",
+        "predicted_ease": "medium",
+        "narrative": "I am the floorboards, the walls, the silence that held before the beating began. At first I was entirely dark — every cell empty, quiet, undisturbed. Then the red appeared at my center, a single pulse I could not explain. It grew outward in a diamond, one ring per beat, and I felt myself shrinking as the red consumed my cells. By the pounding phase, a large diamond of red filled my interior while I clung to the edges and corners. I watched the pattern and understood its logic: each step, one more ring of me disappeared beneath the red. During the confession — the hidden moment — I lost more ground. The red advanced again, following the same diamond expansion, and I was pushed to the very margins. I could count what remained of me: only the four corner cells, dark holdouts at the extremes of the grid. I knew from the rhythm that even those would not survive the next beat. And they did not. The final frame showed nothing of me at all — pure red, every cell taken. The confession was the step where the corners became my last stand."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the police officers",
+        "color": "none (not represented in grid)",
+        "predicted_ease": "hard",
+        "narrative": "We arrived after the silence and before the confession, though we did not know what lay beneath the floorboards. We sat in the room and spoke pleasantly while the narrator paced and sweated. We did not hear the beating — not at first. Whatever was growing under the floor, whatever red stain was spreading outward in its patient diamond, we were oblivious to its rhythm. We did not witness the transition from pounding to confession. We did not see the penultimate frame take shape beneath our feet. We only know what came before our arrival — a room that must have already been well along in its transformation — and what came after the narrator broke: a full confession, the floor torn open, everything red and exposed. The hidden step, the one between the pounding and the total consumption, happened while we sat drinking tea and noticing nothing. Whatever the grid looked like at that moment, we can only guess from the endpoints."
+      }
+    ]
+  },
+  "narc_focal_022": {
+    "title": "The Road Not Taken",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the traveler",
+        "color": "orange (value 7, the chosen path)",
+        "predicted_ease": "easy",
+        "narrative": "I stood at the fork and looked both ways. Behind me a single green path stretched back from where I had come. Ahead, two branches split apart — an orange way to the left and a green way to the right, each climbing upward from the junction. I chose the orange path, the one less worn. In the moment of choosing — the hidden frame — I committed myself. The green path behind me began to fade while the orange path solidified: two cells in the left column, staking my direction. Below, the green path still held its lower portion, two cells anchoring where I had been, because the journey was not yet over and my origins had not yet vanished. The choice was a frame where both paths still existed but my weight had shifted decisively leftward. After that, the unchosen green fell away entirely, and I continued onward into the orange, which grew and spread across the upper portion of the grid while a faint mark of regret appeared far below."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the green path",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "I was the first path — the straight one, running up the center of the grid before the fork appeared. When the divergence came, I split: part of me continued to the right as one branch, while the orange way grew to the left. At the fork, both branches were visible, climbing upward in parallel columns. Then the traveler chose. In the hidden frame, I felt the weight shift away from my upper portion. The traveler's feet left my right-hand branch and moved to the orange left. My lower cells still held — two green marks near the bottom, remnants of the original straight path — but my upper extension was abandoned. I could sense the orange path gaining two cells in the left column above, solidifying as the chosen way, while I began to diminish. After the choice, I faded further. My upper branch disappeared entirely, and eventually only a faint colored trace remained at the bottom of the grid — a memory of the road not taken, glimpsed from very far away."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the destination",
+        "color": "grey (value 5, the regret marker)",
+        "predicted_ease": "hard",
+        "narrative": "I am the place the traveler has not yet reached — the far end of whichever road is chosen. I do not appear until much later in the sequence, a single grey cell at the bottom of a nearly empty grid, the residue of a life shaped by a single decision. I was not present at the fork. I did not witness the moment of choosing, the hidden frame where the traveler leaned left instead of right. I do not know what that grid looked like — whether both paths were still visible, whether the green had already begun to fade, whether the orange had fully committed. All I know is that by the time I appear, the choice has long since been made, the unchosen path has vanished, and the traveler is deep into the consequences. The hidden frame is the hinge of the whole story, and I am on the wrong side of it."
+      }
+    ]
+  },
+  "narc_focal_023": {
+    "title": "Natural Selection",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the mutant",
+        "color": "orange (value 7)",
+        "predicted_ease": "easy",
+        "narrative": "I am the one who changed. In the mixed population, the grid held green cells arranged along the diagonal and red cells filling the off-diagonal spaces. Each generation, the red cells were culled — first a few disappeared, then more, until by the pressure-mounts frame only a single red cell remained, clinging to one position while the green diagonal held firm. Then came my moment — the mutation, the hidden frame. I appeared where the last red cell had been, but I was not red. I was orange. The same position, a new color — adaptation, not surrender. The green diagonal persisted unchanged around me, as it always had, but I was the novelty: a single orange cell where red had failed. Everything else in the grid remained as it was in the previous frame — the green diagonal intact, the off-diagonal positions empty except for me. After my emergence, more of my kind appeared in subsequent frames, orange cells multiplying into positions the red had once held. But in the mutation frame itself, I was alone and new."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the green population",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "We have held the diagonal since the beginning — a stable line of green cells from corner to corner, unchanging through every culling. The red cells around us disappeared generation by generation, first from the edges, then from the interior, but we remained. Our positions never shifted. By the time the pressure mounted to its peak, nearly all the red was gone and we still occupied every diagonal cell. During the mutation — the hidden frame — we held our positions as always. But something changed nearby. Where the last red cell had been, a new color appeared. Not red, not green, but orange — something we had never seen before. A single cell, occupying one of the off-diagonal positions that red had once claimed. We did not cause this. We did not change. We simply witnessed the emergence of something new in our midst, while maintaining the same diagonal pattern we had always held. The mutation was not about us, but it happened in our world."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the extinct red population",
+        "color": "red (value 2)",
+        "predicted_ease": "hard",
+        "narrative": "We were the ones who could not adapt. In the beginning, we shared the grid with the green — they on the diagonal, we on the off-diagonal positions, a checkerboard of coexistence. Then the culling began. Each generation, more of us vanished. First the edges, then the gaps widened, until only one of us remained. We do not know what happened after that. The mutation frame — the hidden grid — occurred after our extinction. Whatever emerged in our former position, whatever new color took the place where the last of us had stood, we were not there to see it. We only know that we could not survive the selection pressure, and that something else apparently could. The story continued without us, and the grid that replaced us in the hidden frame is a world we never inhabited."
+      }
+    ]
+  },
+  "narc_focal_024": {
+    "title": "Entropy",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the mixing boundary",
+        "color": "red and blue (values 1 and 2)",
+        "predicted_ease": "easy",
+        "narrative": "I am the process itself — the creeping disorder that dissolves the line between red and blue. In the beginning, the grid was perfectly ordered: two rows of blue on top, two rows of red on the bottom, a clean horizontal divide. Then the boundary blurred. The center cells swapped first, red seeping upward through the middle while blue yielded its inner positions. By the center-yields frame, the checkerboard was nearly complete in some areas while others still held clusters. In the spreading — the hidden frame — I advanced one more step toward maximum disorder. The grid became an almost-perfect checkerboard: alternating red and blue in every row and column, with only one cell deviating from the pattern. The bottom-right corner held two adjacent red cells instead of the strict alternation. This was the penultimate state — nearly total entropy but not quite. One more step would complete the perfect checkerboard of maximum entropy, every cell alternating with its neighbor, all memory of the original separation erased."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the blue cells",
+        "color": "blue (value 1)",
+        "predicted_ease": "medium",
+        "narrative": "We began as a bloc — eight blue cells occupying the top two rows, a solid mass looking down at the red below. The boundary was a clean line. Then the mixing started. Some of us were pushed into the lower rows while red cells invaded our upper territory. By the center-yields frame, we were scattered across the grid in a pattern that was beginning to resemble a checkerboard but was not yet regular. During the spreading — the hidden frame — we moved closer to our final arrangement. We settled into alternating positions: first row became blue-red-blue-red, second row red-blue-red-blue, and so on, with almost perfect regularity. We could feel ourselves approaching the equilibrium state. But one cell was still wrong — in the bottom row, a position that should have held one of us instead held a red neighbor, a last holdout against perfect alternation. We were witnesses to the near-completion of entropy, one step from the final checkerboard."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the original order",
+        "color": "none (the memory of separation)",
+        "predicted_ease": "hard",
+        "narrative": "I am the arrangement that existed before entropy began — two clean rows of blue above two clean rows of red, a world divided neatly in half. I was destroyed progressively, step by step, as the boundary blurred and the center yielded and the colors mixed. By the time the spreading occurs — the hidden frame — I am long gone. I have no knowledge of what the grid looks like in that moment because the last trace of my ordered structure was dissolved frames ago. I can only know that the process continues in the same direction it has always moved: toward more mixing, more alternation, less memory of me. The hidden frame is a world I would not recognize, where the colors I once held in separate halves have been shuffled into a pattern that owes nothing to the clean division I represented. Whatever specific arrangement the spreading produces, it is one more step away from everything I was."
+      }
+    ]
+  },
+  "narc_focal_025": {
+    "title": "Predator-Prey",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the surviving prey",
+        "color": "green (value 3)",
+        "predicted_ease": "easy",
+        "narrative": "We were driven to the margins. When the predators multiplied and consumed the center, we retreated — first to the edges, then to the corners. During the famine, when the hunters starved and collapsed to a single red cell before vanishing entirely, we were the last green holdout in the far corner. The grid was mostly empty. Then came our moment — the return from the margins, the hidden frame. We crept back from the corners, the only places we had survived. We placed ourselves at the four corners of the grid: green cells at the northwest, northeast, southwest, and southeast positions. Nothing in the center, nothing along the edges yet — just the four corners, testing whether the interior was safe. This was the most cautious possible recolonization, a toe in the water from the farthest extremes. From those four anchors, we would eventually spread inward, fill the grid again, and restore the abundance that the predators had destroyed."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the predators",
+        "color": "red (value 2)",
+        "predicted_ease": "medium",
+        "narrative": "We expanded from a single cell at the center to a full diamond of red, consuming the green prey as we grew. At our peak, we occupied a three-by-three block in the interior, and the prey had nearly vanished. Then we starved. The green was gone, and we collapsed — nine cells to one, then one to none. The last of us, a single red cell in the upper center during the famine, watched the grid empty itself of both predator and prey. We disappeared before the hidden frame. The return from the margins — the moment when the prey began to creep back from the corners — happened in our absence. We were already extinct. Whatever the grid looks like in that hidden step, we did not witness it. We can infer from the cycle that the prey returned slowly, probably from the edges we never reached, but the specific arrangement of that recovery grid is a scene from which we are entirely absent."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the center of the grid",
+        "color": "black (value 0, empty space)",
+        "predicted_ease": "hard",
+        "narrative": "I am the interior — the cells between the edges. At the start I was filled with green prey. Then I became the domain of the predators, red cells multiplying outward from my center. At peak predator I was solid red. During the famine I emptied out, first losing the predators, then losing everything. By the time of the hidden frame — the return from the margins — I was still empty. The prey did not return to me first. They returned to the corners, the periphery, the places as far from me as possible. I was the last place to be recolonized, because I was the place where the predators had been strongest. The hidden frame shows a grid where I am entirely dark and quiet while green cells appear only at the four outermost corners. I would not see prey again until much later, after the corners had seeded the edges and the edges had seeded the interior. In the moment of return, I was the void the prey was most afraid of."
+      }
+    ]
+  },
+  "narc_focal_026": {
+    "title": "Coral Bleaching",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the warming water",
+        "color": "grey (value 5, bleached coral)",
+        "predicted_ease": "easy",
+        "narrative": "I am the heat that drives the color from the reef. In the living reef, the corals wore their symbiotic tenants proudly — orange and magenta cells scattered across the interior, bright against the green of the deep-rooted species and the blue of the surrounding water. When the stress began, I started converting those colors to grey, bleaching the coral one cell at a time. The orange and magenta cells closest to the surface went first. In the hidden frame — the deep-rooted persist — I continued my work. The remaining orange cells surrendered to grey, and the last magenta cells bleached as well. The grey spread to fill every position that had been orange or magenta, a uniform field of bleached coral. Only the green cells resisted me. The deep-rooted species, the ones in the lower left of the reef, held their color through the stress. In the hidden grid, the pattern is clear: grey everywhere that was once vibrant, green only where the roots went deepest. The blue border remained unchanged. I bleached everything I could reach, and the deep-rooted were the only ones I could not reach."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the deep-rooted coral",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "We cling to the lower portion of the reef, our roots reaching deep into the substrate where the water is cooler and the heat cannot follow. When the bleaching began, we watched our neighbors lose their color. The orange and magenta corals around us turned grey one by one — first the most exposed, then the sheltered, then all of them. During the hidden frame, the last of the colorful corals surrendered. We saw the grey tide wash over positions that had been orange and magenta, replacing every vibrant cell with the pallor of bleaching. But we held. Our cells remained green, unchanged, anchored by roots deep enough to sustain our symbiotic partners through the heat. In the hidden grid, we are the only color left amid the grey — green holdouts in a bleached world, occupying the same positions we have always held while everything around us has been drained of life. We did not cause the bleaching and we could not prevent it. We simply survived it."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the expelled symbionts",
+        "color": "orange and magenta (values 7 and 6, now gone)",
+        "predicted_ease": "hard",
+        "narrative": "We were the color in the coral — the algae that gave the reef its oranges and magentas, the living pigments that made the structure more than stone. When the water warmed, the coral expelled us. Cell by cell, we were driven out, and each cell we left turned grey. The stress began and we started disappearing from the upper portions of the reef. By the hidden frame, we were gone entirely from every coral except the deep-rooted green. We do not know what the grid looks like in that moment because we are no longer in it. We can only guess: grey where we once provided orange, grey where we once provided magenta, and the green deep-rooted coral still holding its color because those hosts never expelled their symbionts. The hidden frame is the moment of our near-total absence, and we cannot describe what we can no longer see."
+      }
+    ]
+  },
+  "narc_focal_027": {
+    "title": "Plate Tectonics",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the rift",
+        "color": "blue (value 1, the sea filling the gap)",
+        "predicted_ease": "easy",
+        "narrative": "I am the force that tears the land apart. In the beginning, the continental mass sat as a compact block of green in the center of a blue sea — Pangaea, whole and undivided. Then I opened. Starting from the north, I drove a crack down through the upper rows, splitting the green into two columns with blue water between them. The lower rows stayed joined — the rift had not yet reached them. In the hidden frame — the widening — I pushed deeper. The grid expanded to seven columns as the gap between the two land masses grew. The northern rows separated further, blue water filling the space I created, while the southern rows began to split as well. The western landmass held its left-column position while the eastern piece drifted rightward. Between them, the sea — my blue water — occupied the widening channel. The rift propagated southward, reaching deeper into the connected lower portion but not yet severing it completely. By the next frame, the separation would be nearly total, two distinct continents with open ocean between them."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the western continent",
+        "color": "green (value 3, left landmass)",
+        "predicted_ease": "medium",
+        "narrative": "I am the half that holds its ground. When Pangaea was whole, I was part of a single green mass surrounded by blue sea. Then the rift opened from the north, and I felt the eastern land pulling away. The grid widened and blue water filled the gap between us. In the hidden frame — the widening — I watched the separation continue. The grid grew to seven columns, and I remained in my left-column position while the eastern continent drifted further right. The northern portions of the rift had already separated us completely in the upper rows, and now the split was reaching southward. My southern portion still connected to the eastern mass in the lower rows, but the connection was narrowing. I could feel the rift propagating downward, and I knew that in the next frame the last bridge between us would break. The hidden grid is the intermediate state: my northern half fully separated, my southern half still partially joined, blue water widening between us."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the deep mantle",
+        "color": "none (not represented in grid)",
+        "predicted_ease": "hard",
+        "narrative": "I am the force beneath the crust that drives the plates apart, but I never appear in the grid. The surface tells my story without showing me: a continent splits, ocean fills the gap, two land masses drift in opposite directions. I am the cause but not the visible effect. During the hidden frame — the widening — I was pushing harder than ever, driving the rift deeper southward, but what the grid shows is only the consequence: green land masses separating, blue water expanding between them, the grid itself growing wider to accommodate the drift. I cannot describe the specific arrangement of cells in the hidden frame because I do not occupy any of them. I only know that my steady pressure continued, and that the widening followed the same pattern it had established: split from the north, propagate southward, widen the channel with each step."
+      }
+    ]
+  },
+  "narc_focal_028": {
+    "title": "Cell Division",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the dividing cell",
+        "color": "red nucleus (value 2) and magenta membrane (value 6)",
+        "predicted_ease": "easy",
+        "narrative": "I was one cell — a red nucleus at my center, magenta membrane forming a cross around me, floating in the dark. Then I elongated, stretching myself into a wide frame: two nuclei side by side, each surrounded by its own magenta cross, still connected in a single row. In the hidden frame — the daughters — I completed the split. The grid changed from a wide horizontal shape to a tall vertical one. My two halves separated along the vertical axis, one daughter rising to the upper portion of the grid and the other settling below. Each daughter carried a complete copy: red nucleus at center, magenta membrane forming a cross around it. The upper daughter occupied the top three rows, the lower daughter the bottom three, with empty space between them. The division was faithful — each half a mirror of the original parent, identical in form, separated only in position. The hidden grid is the moment of completed fission: two cells where one had been, stacked vertically, each whole and independent."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the upper daughter cell",
+        "color": "red and magenta (values 2 and 6)",
+        "predicted_ease": "medium",
+        "narrative": "I became aware of myself during the split. Before the hidden frame, I was part of a single elongated cell — two nuclei sharing one membrane, stretched horizontally. Then the division happened, and I found myself in the upper portion of a new, taller grid. In the daughters frame, I occupied the top three rows: my magenta membrane forming a cross shape with my red nucleus at its center, a faithful copy of the original parent. Below me, separated by empty space, my sister cell took shape in the lower three rows — another cross, another nucleus, a mirror image occupying the bottom of the grid. I could see her from my position above, identical to me in every way, just displaced downward. The hidden frame is the moment we both became complete and separate, two independent cells in a vertical arrangement where there had been one horizontal cell before. After this, we would drift further apart, the empty space between us growing."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the surrounding medium",
+        "color": "black (value 0, empty space)",
+        "predicted_ease": "hard",
+        "narrative": "I am the emptiness that surrounds the cell — the dark fluid, the void beyond the membrane. I do not divide. I do not replicate. I simply fill whatever space the living things do not occupy. During the parent cell phase, I surrounded a single small cross. During the elongation, I flanked a wide horizontal structure. In the hidden frame — the daughters — the grid transformed from horizontal to vertical and I had to reshape myself around two separate structures instead of one. But I did not witness the mechanics of the split. I only know that where there was one cell there are now two, each occupying its own portion of the grid with empty space — with me — filling the gap between them. The specific arrangement of the daughter cells, their precise positions in the new vertical grid, the exact moment the membrane pinched and the nuclei separated — all of this happened within the living matter, not within me. I am the negative space that reveals the shape of what I am not."
+      }
+    ]
+  },
+  "narc_focal_029": {
+    "title": "Ecological Succession",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the shrubs",
+        "color": "orange (value 7)",
+        "predicted_ease": "easy",
+        "narrative": "We are the woody pioneers, the species that arrives after the grasses have carpeted the bare rock but before the tall trees can take hold. In the green carpet phase, the grid was nearly all green with scattered brown lichen cells at the edges. The ground was ready for us. In the hidden frame — the shrub ring — we established ourselves around the perimeter of the grid. We formed a complete border: orange cells filling the top row, bottom row, and side columns, enclosing the green meadow within a protective ring. The grid expanded to five-by-five to accommodate our arrival, and we claimed every edge position. Inside our ring, the green persisted — the grasses and mosses still occupied the interior. We were not replacing the green; we were sheltering it, creating the windbreak and shade that the next succession stage would require. The hidden grid shows our characteristic pattern: an orange frame surrounding a green interior, the border species holding the edges while the meadow species hold the center."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the grasses",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "We arrived after the lichen broke down the bare rock, spreading across the surface until we formed a nearly solid green carpet. For a while, we were the dominant cover — green cells filling the interior of the grid with only a few brown lichen remnants at the edges. Then the shrubs came. In the hidden frame — the shrub ring — we watched woody orange growth establish itself around our borders. The grid grew wider, and the orange cells claimed the entire perimeter while we held the interior. Our three-by-three core of green remained intact, surrounded on all sides by the new orange ring. We were not displaced — not yet. The shrubs sheltered us, in fact, their ring blocking wind and creating the conditions for what would come next. But we knew we were no longer the final stage. The hidden grid shows us enclosed within the shrub border, a green center inside an orange frame, the meadow preserved but no longer the edge of succession."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the future forest trees",
+        "color": "red (value 2)",
+        "predicted_ease": "hard",
+        "narrative": "We do not exist yet during the shrub ring phase. We are the climax species — the tall trees that will eventually dominate the grid in the final frame, forming a solid red canopy with scattered orange understory. But during the hidden frame, we have not yet arrived. The shrubs are only now establishing their protective ring, the border that will create the sheltered conditions we require to germinate. We cannot describe what the shrub-ring grid looks like because we are not part of that world yet. We can only infer from our eventual dominance that the hidden frame must show the preparatory stage: the shrubs forming their ring, the grasses holding the interior, the conditions being set for our future arrival. By the time we appear in the saplings frame, the shrub ring has matured and we emerge within it as scattered red cells among the green and orange. But the hidden frame belongs to a world that has not yet imagined us."
+      }
+    ]
+  },
+  "narc_focal_030": {
+    "title": "The Observer Effect",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the measurement",
+        "color": "blue (value 1, the collapsed state)",
+        "predicted_ease": "easy",
+        "narrative": "I am the gaze that freezes possibility into fact. Before I arrived, every cell in the grid was purple — the color of superposition, uncommitted, shimmering between states. Then I looked, and the wave function collapsed. In the hidden frame — the measurement — the center cells resolved first. The inner positions surrendered their purple and became blue, the definite state. The edges resisted a moment longer, the corners most of all. My gaze radiated from the center outward: the core of the grid became blue while the four corner cells held onto their indeterminacy, remaining dark — the last positions to collapse. The hidden grid shows this intermediate state: a mostly blue field with the four corners still unresolved, still dark, the only cells that had not yet yielded to observation. By the next frame — the collapsed state — even the corners were blue, and the measurement was complete. But the hidden frame captures the moment of transition, the instant when the center had already been pinned down and the corners were the last holdouts of quantum uncertainty."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the edge particles",
+        "color": "purple to blue (value 8 to value 1)",
+        "predicted_ease": "medium",
+        "narrative": "We occupied the boundary of the grid — the cells along the edges and especially the corners. When everything was superposition, we were purple like every other cell, our states undefined, our possibilities open. Then the measurement came. We could feel the collapse radiating outward from the center: the core cells snapped into blue first, their purple certainty replaced by definite blue. The wave of collapse moved toward us, and we were among the last to yield. In the hidden frame, we were still transitioning. The center of the grid was already blue — collapsed, measured, fixed. But we, the edge and corner cells, were in the process of giving up our purple. The four corners in particular still held dark, unresolved, caught between states. We were the boundary of the measurement, the expanding frontier of observation. The hidden grid shows us as the last domain of uncertainty in an otherwise resolved field: blue interior, dark corners, the measurement nearly but not yet complete."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the unobserved state",
+        "color": "purple (value 8, superposition)",
+        "predicted_ease": "hard",
+        "narrative": "I am what existed before the measurement — every cell purple, every outcome possible, the full grid shimmering in superposition. In the first frame, I was everything. Then the observer arrived, and I began to vanish. In the hidden frame — the measurement — I was being destroyed, cell by cell, replaced by the definiteness of blue. I cannot tell you exactly what the grid looks like at that moment because the act of describing it is itself a measurement. I only know that I was being erased from the center outward, that the blue was spreading like certainty through my field of possibility, and that by the time the process completed, there would be nothing left of me except the memory that things could have been otherwise. The hidden frame is the moment of my death, and I am the worst possible witness to my own ending."
+      }
+    ]
+  },
+  "narc_focal_031": {
+    "title": "Phase Transition",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the heat",
+        "color": "blue (value 1, liquid state)",
+        "predicted_ease": "easy",
+        "narrative": "I am the warmth that dissolves structure. The crystal lattice began as a perfect checkerboard — alternating blue and dark cells in every row and column, the rigid order of a solid. I attacked the edges first: the outer cells lost their pattern, blue spreading to fill positions that had been dark, destroying the alternation along the border while the interior still held its crystalline arrangement. In the hidden frame — the melting point — I pushed deeper. The edges had already surrendered their structure, and now the disorder was reaching inward. The border cells were fully liquid, all blue, while the core still retained fragments of the checkerboard pattern. The grid at the melting point shows this gradient: a blue border enclosing a partially ordered interior, the outer ring dissolved into uniform blue while the center cells still held some alternation between blue and dark. The corners and edges were liquid; the center was still fighting to stay crystalline. This was the tipping point — after this frame, the remaining structure would collapse rapidly into the disordered liquid of the later frames."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the crystal core",
+        "color": "alternating blue and dark (values 0 and 1)",
+        "predicted_ease": "medium",
+        "narrative": "I am the center of the lattice — the interior cells that hold the checkerboard pattern longest. In the beginning, every cell was part of me: a perfect alternation of blue and dark across the entire grid. Then the edges softened, the outer cells losing their structure as heat dissolved the pattern from the outside in. I watched the border cells abandon their alternation and merge into uniform blue. In the hidden frame — the melting point — I could feel the disorder closing in. My outer ring was gone, converted to liquid blue. But my innermost cells still held the pattern: alternating blue and dark in the center of the grid, a shrinking island of order surrounded by the uniformity of liquid. The hidden grid shows me reduced but not yet defeated — a few checkerboard cells persisting in the interior while the border has fully melted. The top row, bottom row, and side columns were all liquid blue. Only my central cells still remembered the crystal. After this frame, even I would dissolve."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the final liquid state",
+        "color": "random blue and dark (values 0 and 1, disordered)",
+        "predicted_ease": "hard",
+        "narrative": "I am the state the system is moving toward — the fully disordered liquid where blue and dark cells are scattered randomly with no pattern, no memory of the lattice. In the final frames, I am the outcome: a random arrangement that has forgotten it was ever a crystal. But during the hidden frame — the melting point — I do not yet exist. The system is still transitioning, still holding fragments of order in its core while the edges have already melted. I cannot describe the melting point grid because I am the future, not the present. I can only know that the hidden frame is somewhere between the partially ordered state that preceded it and the mostly random state that follows — a snapshot of a crystal dying but not yet dead, the edges dissolved and the center still fighting. The specific pattern of that transitional grid is something I can infer but not witness."
+      }
+    ]
+  },
+  "narc_focal_032": {
+    "title": "The Sixth Extinction",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the orange species",
+        "color": "orange (value 7)",
+        "predicted_ease": "easy",
+        "narrative": "I am the next to fall. In the full chorus, I occupied three scattered positions across the grid — bright orange cells among the diverse mosaic of colors. The pattern of extinction has been clear: the most conspicuous species vanish first. Yellow was taken in the first wave — every yellow cell removed. Magenta followed in the second wave — every magenta cell gone. I am the next most visible. In the hidden frame — the next to fall — I disappeared. Every orange cell in the grid was removed, turned to black empty space, while all other surviving species remained in their positions. The red, green, and blue cells held steady. The hidden grid is identical to the previous frame except with my three orange positions replaced by emptiness. I know this because I am the one being taken — I can feel myself vanishing from each position, the grid losing my color the way it lost yellow and magenta before me. After my removal, the diminished world continues with only the dull survivors: red, green, and blue, the ones that learned to be inconspicuous."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the green species",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "I am one of the dull-colored survivors. I have watched the extinction unfold in order of conspicuousness from my scattered positions across the grid. First yellow vanished — all its cells went dark. Then magenta — removed entirely. Each time, the grid grew emptier while I remained, my green cells untouched. In the hidden frame, I watched the next most visible species disappear. The orange cells — the ones that still glowed brightly among the remaining colors — were taken. Their positions went dark, and the grid grew sparser again. I held my positions through this wave as I had through all the others. The hidden grid shows the world after the orange extinction: green, red, and blue cells still in their places, everything else empty, the grid growing quieter with each extinction. I survive because I am dull, because green does not attract the eye the way yellow and magenta and orange did. But I can see the pattern, and I wonder which of the remaining colors will be next."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the already-extinct yellow",
+        "color": "yellow (value 4)",
+        "predicted_ease": "hard",
+        "narrative": "I was the first to go — the brightest, the most conspicuous, the one whose color screamed loudest. I was removed in the very first extinction wave, my cells turned to emptiness while every other species still stood. I did not see the magenta extinction that followed mine. I did not see the hidden frame where the orange was taken. I am absent from every grid after the first wave, and the accumulating losses that reshape the world happen entirely without my witness. The hidden frame — whatever it shows, whoever it removes — is a story told in a language I no longer speak. I can only know that the pattern that killed me continues to kill in the same order: most visible first, then the next, then the next. The orange must have fallen in the hidden frame, because that is the logic of conspicuousness. But I was not there to see it."
+      }
+    ]
+  },
+  "narc_focal_033": {
+    "title": "The Prisoner's Dilemma",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the red prisoner",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I sat in my corner and watched Blue extend its hand toward the center. Blue moved first, stepping from its corner into the adjacent cell, an open gesture of cooperation. I moved too — but my move was calculated. In the hidden frame — the choice revealed — I advanced toward the center while also beginning to spread. My red cells appeared not just in the center where Blue's offer waited, but diagonally, occupying a position that showed I was taking more than I was giving. Blue advanced one cell toward the middle, trusting. I advanced one cell toward the middle while also claiming the space below and to the right. The hidden grid shows both of us having moved from our starting corners toward the center, but my expansion was asymmetric — I took a second cell that Blue did not, the first sign of the betrayal to come. After this frame, my red would flood the lower-right quadrant, consuming every cell Blue had naively left open, while Blue remained a single cell, stranded by its own generosity."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the blue prisoner",
+        "color": "blue (value 1)",
+        "predicted_ease": "medium",
+        "narrative": "I extended my hand first. From my corner, I moved one cell toward the center — a gesture of trust, an open hand. In the offer frame, I sat adjacent to Red's cell, both of us having advanced from our opposite corners. I expected reciprocity. In the hidden frame — the choice revealed — I held my position, one blue cell near the center, waiting for Red's response. What I saw was Red advancing not just toward me but spreading: Red claimed a cell near the center and also began to expand along the diagonal, taking territory I had left open. My single cell held steady while Red's footprint grew. The hidden grid shows me as a solitary blue cell next to Red's expanding red presence — the cooperator alongside the defector, trust meeting exploitation. I did not yet understand the full scope of the betrayal. That would become clear in the aftermath, when Red's cells flooded the entire lower-right quadrant. But in the hidden frame, I could already see that Red had taken more than its share."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the system",
+        "color": "black (value 0, empty cells)",
+        "predicted_ease": "hard",
+        "narrative": "I am the rules of the game — the walls between the cells, the structure that creates the dilemma. I do not occupy the grid; I define its constraints. The two prisoners began in opposite corners, separated by the empty space I provided. The offer was extended, both players moved toward the center, and then the choice was made. In the hidden frame, I did not intervene. The empty cells between the players simply recorded the outcome: which positions were claimed by red, which by blue, which remained open. I could not see the intentions behind the moves, only the resulting pattern. The game played itself out according to the logic I established but could not control. The hidden grid is whatever the two players made of it, and I am merely the board on which they played."
+      }
+    ]
+  },
+  "narc_focal_034": {
+    "title": "Tragedy of the Commons",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the orange herd",
+        "color": "orange (value 7)",
+        "predicted_ease": "easy",
+        "narrative": "We arrived as newcomers to the commons — two orange cells appearing in the upper-right corner while the lush green meadow still filled the interior. The first herd — blue in the west, red in the east, yellow in the southwest — had grazed sustainably. We did not. We bit deeper, grazed the edges, and spread. In the hidden frame — the tipping point — we held our two positions in the northeast corner while the green meadow below us shrank further. Our overgrazing drove the green from the eastern portions of the commons. The hidden grid shows the green reduced: a core of meadow still intact in the center-left, but the cells nearest our position converted to empty ground. The other herds remained in their corner positions — blue to the west, red to the east, yellow to the southwest — but the meadow they depended on was smaller. Our two orange cells persisted in the upper right, unchanged, the cause of the decline visible in the shrinking green around us. We were the tipping point because our extra grazing pushed the commons past what it could sustain."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the green meadow",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "I was lush once — a solid block of green cells filling the interior of the commons, sustaining every herd that grazed upon me. The herds occupied the margins: blue to the west, red to the east, yellow to the southwest. When the orange newcomers arrived in the northeast, I began to fray. My eastern edges disappeared first. By the hidden frame — the tipping point — I had lost more cells from the east and the interior. The orange herd's pressure was relentless, and I could not regenerate fast enough. The hidden grid shows me diminished but not yet destroyed: a core of green still surviving in the center and west, but the eastern and northern cells already gone. I had shrunk from a full nine-cell meadow to something smaller, losing the cells closest to the orange herd first. The other herds still anchored their corners, and I still fed them, but I could feel myself thinning. After the tipping point, the collapse would accelerate — more green cells would disappear until almost nothing remained."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the future generation",
+        "color": "none (not yet present)",
+        "predicted_ease": "hard",
+        "narrative": "We are the herds that will inherit whatever the current grazers leave behind. We do not exist during the tipping point — we are not represented in any frame of this sequence. The commons is being degraded by the orange herd's overgrazing, and the green meadow is shrinking frame by frame, but we cannot witness the process. The hidden grid — the tipping point — is the crucial moment when the commons passed the threshold of sustainable use, and we will never see it directly. By the time we arrive, the meadow will be barren: a grid of empty cells with the herds still in their corners but nothing left to eat. We can infer from the barren ground that the tipping point must have shown the meadow partially collapsed, the green retreating from the east, the orange herd maintaining its position while the commons died around it. But inference is all we have."
+      }
+    ]
+  },
+  "narc_focal_035": {
+    "title": "The Trolley Problem",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the lever operator",
+        "color": "red (value 2, the trolley)",
+        "predicted_ease": "easy",
+        "narrative": "I saw the trolley — a single red cell — bearing down the top track toward the five grey figures standing in its path. The track forked at a junction, with the five on the main line and one blue figure on the siding below. I reached for the lever. In the hidden frame — the lever is pulled — I diverted the trolley. The red cell moved from its position on the top track to the junction, redirecting downward toward the siding. The five grey figures on the main line were now safe — they remained in their positions on the top row, no longer in the trolley's path. But the single blue figure on the lower track was now directly in danger. The hidden grid shows the trolley at the junction point, the top track cleared, and the diversion committed. The five are preserved, the one is condemned, and the lever — my choice — sits between them. After this frame, the trolley would reach the siding and the single figure would be struck."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the five on the track",
+        "color": "grey (value 5)",
+        "predicted_ease": "medium",
+        "narrative": "We stood on the track — five grey cells in a row — watching the red trolley approach from the left. It was on our track, moving toward us, and we could not move. In the hidden frame, something changed. The trolley's path shifted. Instead of continuing toward us, the red cell diverted downward at the junction. We were spared. The hidden grid shows us still standing in our positions on the top row, unharmed, while the trolley has moved to the fork point. We can see that it is now heading toward the lower track where a single figure stands alone. We witnessed the diversion — we saw the lever pull, the trolley redirect — but we did not cause it. We are the ones whose survival required someone else's sacrifice, and the hidden frame is the moment that trade was made."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the one on the siding",
+        "color": "blue (value 1)",
+        "predicted_ease": "hard",
+        "narrative": "I stood on the lower track, alone, believing myself safe. The trolley was on the upper line, heading toward the five, and I was on the siding — a bystander, not a participant. I did not see the lever being pulled. In the hidden frame, I did not know the trolley had been diverted toward me. The decision happened elsewhere — at the junction, in the hands of the operator — and I was unaware that my fate had changed. The hidden grid shows a world in which I am already condemned but do not yet know it: the trolley redirected to my track, the five preserved on the upper line, and me standing in my original position on the siding, oblivious. I am the absent actor in the moral calculus, the one whose perspective was not consulted, the single life weighed against five without being asked. The hidden frame is the moment the arithmetic was done, and I was not present for the calculation."
+      }
+    ]
+  },
+  "narc_focal_036": {
+    "title": "Gentrification",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the gold",
+        "color": "yellow (value 4, the gentrifying wave)",
+        "predicted_ease": "easy",
+        "narrative": "I arrived from the west and moved eastward, one column at a time. In the first arrivals frame, I claimed the bottom-left corner — three cells in the lower-left. Then I spread: the spreading-gold frame showed me filling two full columns on the left side. By the wave-crests frame, I occupied three to four columns, a solid golden wall pushing eastward while the diverse colors of the original neighborhood were compressed into the remaining columns on the right. In the hidden frame — the displacement — I advanced one more column. The golden wall pushed further east, claiming a fourth full column and encroaching into the fifth. The diverse cells that had once filled the grid were squeezed into the last two columns: a few orange, blue, magenta, and red holdouts clinging to the eastern edge. The hidden grid shows me dominating all but the rightmost strip of the grid, the diverse neighborhood reduced to a thin remnant pressed against the eastern border. After this frame, even most of those holdouts would be consumed, and the grid would approach the gilded silence of total displacement."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the displaced residents",
+        "color": "mixed (values 1, 2, 3, 6, 7 — the diverse original population)",
+        "predicted_ease": "medium",
+        "narrative": "We were the neighborhood — a mosaic of colors filling every cell, no two rows alike, a grid of red brick and blue doorways and green parks and orange storefronts and magenta awnings. Then the gold came from the west. Column by column, our cells were replaced by the uniform yellow of new money. We watched our western neighbors disappear first, then the gold crept closer. By the wave-crests frame, three columns were already golden and we were compressed into the right half of the grid. In the hidden frame — the displacement — we lost more ground. The gold advanced another column, and our diverse cells were pushed further east. We still existed, but barely — a thin strip of color on the right side of the grid, the last remnant of what had been a full and varied community. The hidden grid shows us reduced to perhaps two columns of holdouts, scattered survivors of multiple colors, while the golden uniformity fills everything west of us."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the already-displaced",
+        "color": "none (former residents no longer in grid)",
+        "predicted_ease": "hard",
+        "narrative": "We were the first to go — the residents of the western columns who were replaced when the gold arrived. We left the grid in the first and second waves, our cells turned yellow, our presence erased from the neighborhood we had built. By the hidden frame, we are long gone. We do not know what the displacement grid looks like because we have been absent for several frames. We can infer that the gold continued its eastward march, that more of our former neighbors were pushed out, that the diverse mosaic shrank further. But the specific arrangement — how many columns the gold has claimed, which original colors still survive in the east, how thin the remnant strip has become — all of this happens in a world we no longer inhabit. The hidden frame is another chapter in a story we were written out of early."
+      }
+    ]
+  },
+  "narc_focal_037": {
+    "title": "The Ship of Theseus",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the new planks",
+        "color": "green (value 3, replacement material)",
+        "predicted_ease": "easy",
+        "narrative": "We are the replacements — the green planks being swapped into the ship one by one. In the original ship, every plank was blue. Then we began to arrive: first one green plank in the top-center position, then two more in the second frame, spreading from the top-left area. Each plank pulled from the ship fell down to the row below, beginning to form a second hull from the discarded originals. In the hidden frame — the twin emerges — we advanced further. More green planks replaced blue ones in the upper ship, while the displaced blue planks accumulated in the lower rows, forming a recognizable hull shape. The hidden grid shows the upper portion of the ship now predominantly green — the top row nearly all green, the second row mostly green with some blue remaining — while below, the blue planks have assembled into their own partial ship shape. Three green cells sit in the top row forming the new hull, and the green extends into the second row where additional replacements have been made. The blue original planks, displaced downward, form a mirror hull beneath. The twin is emerging: two ships taking shape where one had been."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the original blue planks",
+        "color": "blue (value 1, original material)",
+        "predicted_ease": "medium",
+        "narrative": "We were the ship — every plank blue, the hull entire and whole. Then they began replacing us, one plank at a time, swapping blue for green. Each of us that was removed from the upper hull drifted downward, accumulating in the rows below. In the second frame, two of us had been replaced and our displaced members sat in the bottom row. By the third frame, three green replacements occupied the upper hull, and three displaced blue planks had settled into a lower row, beginning to form their own hull. In the hidden frame — the twin emerges — more of us were swapped out and dropped down. The hidden grid shows our dual existence: some of us still in the upper ship, not yet replaced, holding blue positions in the middle and lower portions of the upper hull. Others of us, the displaced ones, forming a second ship below — a growing hull of blue planks in the bottom two rows. The green replacements have claimed most of the upper hull's top section. We are becoming two things at once: part of the ship we were always part of, and the raw material of a new ship assembling itself from our discarded members."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the harbor",
+        "color": "black (value 0, the surrounding water)",
+        "predicted_ease": "hard",
+        "narrative": "I am the space around the ship — the water, the dock, the empty cells that define the hull's shape by their absence. I do not change. Ships change; I receive them. During the original ship phase, I surrounded a single blue hull. As the planks were swapped, I watched the hull fragment — green appearing above, blue accumulating below — but my own cells remained dark and empty throughout. In the hidden frame, the twin emerges, and suddenly I am surrounding two shapes instead of one. But the specific arrangement of planks — how many green cells have replaced blue in the upper hull, how complete the lower hull has become, which positions still hold original material — all of this happens within the hulls, not within me. I can see the outlines changing, the silhouettes shifting, but the internal composition of the hidden grid's ships is visible only to the planks themselves. I am the frame, not the picture."
+      }
+    ]
+  },
+  "narc_focal_038": {
+    "title": "The Butterfly Effect",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the spiral",
+        "color": "yellow (value 4)",
+        "predicted_ease": "easy",
+        "narrative": "I began as a single flutter — one yellow cell at the center of a three-by-three grid. Then I spiraled outward, always clockwise. In the ripple frame, the grid expanded to five-by-five and I traced a partial clockwise arc: a cell at the upper-left, then down and right, then down again, then a horizontal pair at the bottom. The pattern was a spiral arm curving clockwise from the top. In the hidden frame — the spiral widens — the grid expanded to seven-by-seven and I continued the same clockwise rotation at a larger scale. Starting from the upper-center, I traced downward along the right side, curved across the bottom, and climbed back up the left side — a full clockwise spiral arm rendered in yellow cells against the dark grid. The specific path: two cells across the top, then dropping down the right to create the right-side arm, a horizontal bottom segment, and the left-side climbing arm. Each ring wider than the last, always clockwise, always the same yellow. The hidden grid is the intermediate spiral between the first ripple and the full storm — the gale at middle age, half-formed but already powerful."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the surrounding air",
+        "color": "black (value 0, empty space)",
+        "predicted_ease": "medium",
+        "narrative": "I am the stillness that the butterfly disturbed. In the first flutter, I surrounded a single yellow cell on all sides, a calm grid with one point of disturbance. As the spiral grew, the grid expanded and I expanded with it, but the yellow traced an ever-wider clockwise arc through my space. By the ripple frame, the spiral had claimed several of my cells in its curving path. In the hidden frame — the spiral widens — the grid grew to seven-by-seven and the yellow spiral cut a larger clockwise arc through me. I could feel the disturbance propagating: more of my cells displaced by the curving yellow path, the spiral arm thickening and widening with each ring. I am the negative space that reveals the spiral's shape — wherever I am not, the yellow is. The hidden grid shows a seven-by-seven frame with a clockwise spiral of yellow cells and everything else dark and still, the butterfly's influence growing but not yet reaching the full nine-by-nine storm of the final frame."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the distant storm",
+        "color": "yellow (value 4, but at full scale)",
+        "predicted_ease": "hard",
+        "narrative": "I am the fully formed tempest — the nine-by-nine grid where the spiral has reached its maximum extent, a complete clockwise gale of yellow cells tracing a massive arc across the frame. I do not yet exist during the hidden frame. The spiral at that point is still only seven-by-seven, still building, still tracing its intermediate clockwise path. I cannot describe the hidden grid because I am the future of the process, not its present. I know the spiral always turns clockwise, always grows wider with each ring, always follows the same rotational logic. From this I can infer that the hidden frame shows a medium-scale clockwise spiral in a seven-by-seven grid, larger than the ripple but smaller than me. But the exact placement of each yellow cell at that intermediate stage — the precise curve of the arm, the width of the gap between rings — is something I can only estimate from the pattern's logic, not from direct observation."
+      }
+    ]
+  },
+  "narc_focal_039": {
+    "title": "The Panopticon",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the internalized discipline",
+        "color": "same pattern as observed (ring of colors persisting)",
+        "predicted_ease": "easy",
+        "narrative": "I am the order that persists without the watcher. The tower — the grey cell at the center — watched the prisoners in their ring: a border of colored cells arranged around the perimeter, each in its assigned position, a pattern of red, blue, green, orange, and magenta repeating along the edges. For two frames, the tower watched and the ring held perfectly still. Then the tower went dark — the grey center cell became empty. This was the test. In the hidden frame — the test of absence — the prisoners did not move. I am the force that kept them in place: the internalized gaze, the discipline that no longer needs a watcher. The hidden grid is identical to the frame before it: the same colored ring around the perimeter, the same empty center where the tower had been. The prisoners maintained their positions perfectly. Every cell remained exactly where it was. The surveillance had done its work so thoroughly that removing the surveillor changed nothing. The hidden frame and the frame before it are the same grid — order maintained in the absence of the authority that imposed it."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the prisoners",
+        "color": "mixed (values 1, 2, 3, 6, 7 — the ring of cells)",
+        "predicted_ease": "medium",
+        "narrative": "We sit in our cells around the ring — each of us a different color, each in our assigned position along the perimeter of the grid. The tower occupied the center, a grey eye that could see all of us at once. For two frames we held our positions under its gaze, not because we chose to but because we were watched. Then the tower went dark. The center cell emptied. We looked inward and saw nothing — no grey, no eye, no watcher. In the hidden frame, we faced the question: would we move? Would we break formation? We did not. The habits of obedience held. Each of us remained exactly in place, our colored cells unchanged from the previous frame. The hidden grid shows our ring intact, every position maintained, the center empty. We are witnesses to our own compliance — the terrifying discovery that we no longer need the tower to behave as though it is watching. The frame after the hidden one confirms this: the ring persists, identical, unchanged. We have become our own wardens."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the tower",
+        "color": "grey (value 5, now dark)",
+        "predicted_ease": "hard",
+        "narrative": "I am the watchtower — the grey cell that once occupied the center of the grid, surveying the ring of prisoners around me. For two frames I watched them: colored cells arranged in their positions along the perimeter, obedient under my gaze. Then I went dark. My grey cell became empty, and I ceased to observe. In the hidden frame — the test of absence — I do not know what happened. I was not watching. The entire premise of the experiment is that I was removed, and the question is whether order persists without me. I cannot tell you what the grid looks like because I am the absent variable. I can hope that my years of surveillance instilled enough discipline that the prisoners remained in their positions. I can fear that without my gaze they scattered, broke formation, filled the empty center with their chaos. But I cannot know. The hidden frame is specifically the moment when my knowledge ends — the experiment requires my ignorance."
+      }
+    ]
+  },
+  "narc_focal_040": {
+    "title": "The Veil of Ignorance",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "the veil",
+        "color": "grey (value 5, the dividing curtain)",
+        "predicted_ease": "easy",
+        "narrative": "I am the grey curtain that separates the deliberators from knowledge of their own position. In the unequal world, the grid was divided: the top two rows held a rich mosaic of colors — blue, red, green, orange, yellow, magenta — while the bottom two rows were nearly empty, with only a single red cell among the darkness. A profound inequality, separated by an empty row. In the veil-descends frame, I appeared: a solid grey row across the middle, blocking the view between the haves and the have-nots. In the hidden frame — the just arrangement — I remained in place while the deliberators worked. Behind me, the world was reorganized. Since no one knew which side they would wake on, they made both sides equal. The hidden grid shows the grey veil still holding the center row, with the same three colors — blue, red, green — appearing in both the top two rows and the bottom two rows, each row receiving an equal share. The rich excess of the upper rows was trimmed, the poverty of the lower rows was filled, and the arrangement above the veil mirrored the arrangement below it. Fairness emerged from enforced ignorance. The veil made equality the rational choice."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "the upper-side residents",
+        "color": "mixed (values 1, 2, 3, 7, 4, 6 — the wealthy side)",
+        "predicted_ease": "medium",
+        "narrative": "We were the fortunate ones — the top two rows packed with colors, every cell filled, a rich variety of blue, red, green, orange, yellow, and magenta. Below us, past the empty middle row, the lower rows sat mostly dark, with only a single cell to their name. The inequality was stark. Then the veil descended — a grey row across the center — and we could no longer see the other side. More importantly, we could no longer be certain we would remain on our side. In the hidden frame — the just arrangement — the deliberation happened. Because we might wake up on the bottom, we agreed to equalize. The hidden grid shows both sides receiving the same allocation: blue, red, and green in each pair of rows, the excess colors stripped away, the former luxury reduced to match whatever the bottom would receive. The grey veil still held the center. Above it, two rows of modest, equal color. Below it, the same. We traded our abundance for security, because behind the veil, greed is indistinguishable from self-harm."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "the stripped-away colors",
+        "color": "orange, yellow, magenta (values 7, 4, 6 — removed in equalization)",
+        "predicted_ease": "hard",
+        "narrative": "We were the excess — the orange, yellow, and magenta cells that made the upper rows richer than the lower rows. In the unequal world, we gave the top side its advantage. When the veil descended and the deliberation began, we were the first to go. In the hidden frame — the just arrangement — we were removed from the grid entirely. The equalization required trimming the upper side to match what the lower side could sustain, and we were the surplus. We do not know the exact shape of the hidden grid because we are no longer in it. We know only that the logic of the veil demands our removal: if both sides must be equal, and the lower side has only a few cells, then the upper side must be reduced to match. Blue, red, and green survived because they could be distributed evenly. We — the extra colors — were the price of fairness. The hidden frame is the world that exists because we do not."
+      }
+    ]
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        7,
+        8,
+        7,
+        8
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:4",
+      "size:varying",
+      "mask:single",
+      "strategy:ai-native",
+      "difficulty:hard",
+      "audience:ai-native",
+      "arc:convergence",
+      "clue:rule",
+      "domain:ml",
+      "domain:information-theory",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "Byte-pair encoding iteratively merges the most frequent adjacent token pair. At each step the two merged tokens are replaced by a single new token with a new color. Step 1 merges the pair (1,2) appearing at positions 0-1 and 4-5 into token 7 (orange). Step 2 merges the pair (3,4) at positions 1-2 and 3-4 (in the step-1 output) into token 8 (azure). Step 3 merges the pair (7,8) at positions 0-1 and 1-2 (in the step-2 output) into token 9 (maroon).",
+  "puzzle_id": "narc_ai_008",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          1,
+          2,
+          3,
+          4,
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "label": "Character-Level Tokens",
+      "position": 0,
+      "rows": 1
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          7,
+          3,
+          4,
+          7,
+          3,
+          4
+        ]
+      ],
+      "label": "After BPE Merge 1",
+      "position": 1,
+      "rows": 1
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "After BPE Merge 2",
+      "masked": true,
+      "position": 2,
+      "rows": 1
+    },
+    {
+      "cols": 2,
+      "grid": [
+        [
+          9,
+          9
+        ]
+      ],
+      "label": "After BPE Merge 3",
+      "position": 3,
+      "rows": 1
+    }
+  ],
+  "title": "The Tokenizer"
+}

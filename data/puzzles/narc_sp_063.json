@@ -1,0 +1,79 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        4,
+        2,
+        8,
+        0,
+        6,
+        4,
+        2,
+        8
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 2,
+    "tags": [
+      "spectrum:balanced",
+      "arithmetic",
+      "doubling"
+    ]
+  },
+  "narrative": "A single row of numbers. Each step doubles every value. Given step 0 and step 1, what is step 2?",
+  "puzzle_id": "narc_sp_063",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          1,
+          3,
+          2,
+          5,
+          4,
+          1,
+          3,
+          2
+        ]
+      ],
+      "label": "Step 0",
+      "position": 0,
+      "rows": 1
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          2,
+          6,
+          4,
+          0,
+          8,
+          2,
+          6,
+          4
+        ]
+      ],
+      "label": "Step 1",
+      "position": 1,
+      "rows": 1
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "Step 2",
+      "masked": true,
+      "position": 2,
+      "rows": 1
+    }
+  ],
+  "title": "Doubling Row"
+}

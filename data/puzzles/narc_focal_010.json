@@ -1,0 +1,246 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        3,
+        3,
+        3,
+        3,
+        3,
+        3,
+        3
+      ],
+      [
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3
+      ],
+      [
+        3,
+        0,
+        0,
+        0,
+        0,
+        6,
+        3
+      ],
+      [
+        3,
+        0,
+        0,
+        5,
+        5,
+        5,
+        3
+      ],
+      [
+        3,
+        3,
+        3,
+        3,
+        3,
+        5,
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "actors": {
+      "3": "town walls",
+      "4": "children",
+      "5": "rats",
+      "6": "Pied Piper"
+    },
+    "ai_difficulty": 6,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "6",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:human-forte",
+      "following",
+      "betrayal"
+    ]
+  },
+  "narrative": "A town (green=3 border) is infested with rats (grey=5 scattered inside). The Pied Piper (magenta=6) enters from the left. In the masked grid, the piper has moved to the town exit on the right, and all the rats have followed \u2014 forming a line trailing behind the piper toward the right edge. The town interior is now clear of rats. Later, when the town refuses payment, the piper leads children (blue=4) away instead.",
+  "puzzle_id": "narc_focal_010",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          5,
+          0,
+          5,
+          0,
+          5,
+          3
+        ],
+        [
+          6,
+          0,
+          5,
+          0,
+          5,
+          0,
+          3
+        ],
+        [
+          3,
+          5,
+          0,
+          5,
+          0,
+          5,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "Piper enters rat-infested town",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "Piper leads rats out",
+      "masked": true,
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          4,
+          4,
+          4,
+          4,
+          4,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "Town refuses payment, children appear",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3,
+          6,
+          4
+        ]
+      ],
+      "label": "Piper leads children away",
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "The Pied Piper"
+}

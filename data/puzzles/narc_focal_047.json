@@ -1,0 +1,203 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        4,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      [
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "performer (red)",
+      "4": "spotlight (yellow)",
+      "6": "audience (blue)"
+    },
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:performance",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "A performer (red=1) stands on stage under a spotlight (yellow=4). The audience (blue=6) fills rows below. The performer freezes: red dims to 0 in the spotlight. The spotlight stays. Then the performer recovers, red returns brighter, and the audience reacts with scattered 6s rising (applause).",
+  "puzzle_id": "narc_focal_047",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      ],
+      "label": "Performer takes the stage",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      ],
+      "label": "Performer freezes, vanishes from spotlight",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Performer recovers",
+      "masked": true,
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          6,
+          0
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      ],
+      "label": "Audience erupts in applause",
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "Stage Fright"
+}

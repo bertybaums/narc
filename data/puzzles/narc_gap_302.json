@@ -1,0 +1,258 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        3,
+        3,
+        3,
+        5,
+        5,
+        5
+      ],
+      [
+        3,
+        3,
+        3,
+        5,
+        5,
+        5
+      ],
+      [
+        3,
+        3,
+        3,
+        5,
+        5,
+        5
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:4",
+      "size:uniform",
+      "mask:single",
+      "strategy:remix",
+      "difficulty:hard",
+      "audience:general",
+      "arc:linear",
+      "clue:direction",
+      "clue:timing",
+      "domain:social-science",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "A 6x6 office floor is divided into four quadrants (top-left, top-right, bottom-left, bottom-right), each representing a department. In Q1, Department A (value 3) moves in \u2014 top-left quadrant fills. In Q2 (masked), Department B (value 5) arrives in the top-right quadrant, BUT Department B is on probation \u2014 its top-right cells fill with 5 while everything else stays as before. However, a hiring freeze (represented by 0) prevents the bottom half from being staffed yet. In Q3, Department C (value 7) fills bottom-right. In Q4, Department D (value 1) fills bottom-left, completing the organization.",
+  "puzzle_id": "narc_gap_302",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Q1",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "Q2",
+      "masked": true,
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          7,
+          7,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          7,
+          7,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          7,
+          7,
+          7
+        ]
+      ],
+      "label": "Q3",
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          5
+        ],
+        [
+          1,
+          1,
+          1,
+          7,
+          7,
+          7
+        ],
+        [
+          1,
+          1,
+          1,
+          7,
+          7,
+          7
+        ],
+        [
+          1,
+          1,
+          1,
+          7,
+          7,
+          7
+        ]
+      ],
+      "label": "Q4",
+      "position": 3,
+      "rows": 6
+    }
+  ],
+  "title": "The Corporate Merger"
+}

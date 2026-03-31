@@ -1,0 +1,279 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        6,
+        6,
+        0
+      ],
+      [
+        0,
+        6,
+        5,
+        0
+      ],
+      [
+        0,
+        6,
+        6,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "scapegoat (red)",
+      "5": "actual culprit (grey)",
+      "6": "group (blue)"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:social-dynamics",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "A group (blue=6) clusters together. An actual culprit (grey=5) hides within the group. The scapegoat (red=1) stands nearby but separate. The group pushes the scapegoat outward while the grey culprit remains hidden. By the end, red is isolated at the edge and grey is still safely embedded in blue.",
+  "puzzle_id": "narc_focal_055",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          6,
+          5,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Group with hidden culprit, scapegoat nearby",
+      "position": 0,
+      "rows": 9
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          6,
+          5,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Group pushes scapegoat away",
+      "position": 1,
+      "rows": 9
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Scapegoat pushed further",
+      "masked": true,
+      "position": 2,
+      "rows": 9
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          6,
+          5,
+          0
+        ],
+        [
+          0,
+          6,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ]
+      ],
+      "label": "Scapegoat fully isolated",
+      "position": 3,
+      "rows": 9
+    }
+  ],
+  "title": "The Scapegoat"
+}

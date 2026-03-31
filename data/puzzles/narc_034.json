@@ -1,0 +1,293 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        7,
+        7
+      ],
+      [
+        0,
+        3,
+        3,
+        0,
+        0
+      ],
+      [
+        1,
+        3,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        3,
+        3,
+        0
+      ],
+      [
+        4,
+        0,
+        0,
+        0,
+        2
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:6",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:general",
+      "audience:humanities",
+      "arc:rise-and-fall",
+      "clue:identity",
+      "clue:causation",
+      "domain:social-science",
+      "domain:ecology",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "The meadow fed them all until one grazed twice in the eastern field. That single greedy mouth opened a wound in the land that would not heal. Where the orange herd bit deepest, the green never returned.",
+  "puzzle_id": "narc_034",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          1,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "the lush commons",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          7
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          1,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "the newcomers arrive",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          1,
+          3,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "the edges fray",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "the tipping point",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "the collapse begins",
+      "position": 4,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          4,
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "the barren ground",
+      "position": 5,
+      "rows": 5
+    }
+  ],
+  "title": "Tragedy of the Commons"
+}

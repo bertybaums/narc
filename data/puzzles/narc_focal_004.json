@@ -1,0 +1,199 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        8,
+        8
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        6,
+        6,
+        0,
+        8,
+        6
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        0,
+        8,
+        8
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "straw house",
+      "2": "stick house",
+      "5": "wolf",
+      "6": "pigs",
+      "8": "brick house"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "5",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:human-forte",
+      "destruction",
+      "movement"
+    ]
+  },
+  "narrative": "Three pigs (magenta=6) each build a house: straw (value=1), sticks (value=2), and bricks (value=8). The wolf (grey=5) blows from the left. In the masked grid, the wolf has just destroyed the straw house \u2014 its walls collapse to 0 and that pig flees rightward to the stick house. The stick and brick houses remain intact.",
+  "puzzle_id": "narc_focal_004",
+  "sequence": [
+    {
+      "cols": 9,
+      "grid": [
+        [
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          0,
+          8,
+          8
+        ],
+        [
+          0,
+          1,
+          6,
+          0,
+          2,
+          6,
+          0,
+          8,
+          6
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          0,
+          8,
+          8
+        ]
+      ],
+      "label": "Three houses built",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 9,
+      "grid": [
+        [
+          5,
+          1,
+          1,
+          0,
+          2,
+          2,
+          0,
+          8,
+          8
+        ],
+        [
+          0,
+          1,
+          6,
+          0,
+          2,
+          6,
+          0,
+          8,
+          6
+        ],
+        [
+          0,
+          1,
+          1,
+          0,
+          2,
+          2,
+          0,
+          8,
+          8
+        ]
+      ],
+      "label": "Wolf arrives at straw house",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 9,
+      "grid": null,
+      "label": "Wolf blows down straw house",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 9,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          2,
+          2,
+          0,
+          8,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          6,
+          0,
+          8,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          2,
+          2,
+          0,
+          8,
+          8
+        ]
+      ],
+      "label": "Wolf moves to stick house",
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "The Three Little Pigs"
+}

@@ -1,0 +1,287 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        6,
+        6,
+        3,
+        6,
+        6
+      ],
+      [
+        6,
+        3,
+        3,
+        3,
+        6
+      ],
+      [
+        6,
+        3,
+        1,
+        3,
+        6
+      ],
+      [
+        6,
+        3,
+        3,
+        3,
+        6
+      ],
+      [
+        6,
+        6,
+        3,
+        6,
+        6
+      ],
+      [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      [
+        6,
+        6,
+        6,
+        6,
+        6
+      ],
+      [
+        6,
+        6,
+        6,
+        6,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "green": "algae",
+      "orange": "coral",
+      "red": "heat"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "orange",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:marine-biology",
+      "spectrum:ai-edge"
+    ]
+  },
+  "narrative": "The coral and its algae have lived together for decades. As water warms, the algae's chemistry turns toxic. The coral expels its partner, bleaching white. The heat does not know what it destroys; the algae does not know it became poison.",
+  "puzzle_id": "narc_focal_033",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          6,
+          3,
+          6,
+          6
+        ],
+        [
+          6,
+          3,
+          3,
+          3,
+          6
+        ],
+        [
+          6,
+          3,
+          3,
+          3,
+          6
+        ],
+        [
+          6,
+          3,
+          3,
+          3,
+          6
+        ],
+        [
+          6,
+          6,
+          3,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ]
+      ],
+      "label": "healthy reef",
+      "position": 0,
+      "rows": 8
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          6,
+          3,
+          6,
+          6
+        ],
+        [
+          6,
+          3,
+          3,
+          3,
+          6
+        ],
+        [
+          6,
+          3,
+          3,
+          3,
+          6
+        ],
+        [
+          6,
+          3,
+          3,
+          3,
+          6
+        ],
+        [
+          6,
+          6,
+          3,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "label": "water warms",
+      "position": 1,
+      "rows": 8
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "bleaching begins",
+      "masked": true,
+      "position": 2,
+      "rows": 8
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          6,
+          0,
+          6,
+          6
+        ],
+        [
+          6,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          6,
+          0,
+          1,
+          0,
+          6
+        ],
+        [
+          6,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          6,
+          6,
+          0,
+          6,
+          6
+        ],
+        [
+          6,
+          6,
+          6,
+          6,
+          6
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1,
+          1
+        ]
+      ],
+      "label": "fully bleached",
+      "position": 3,
+      "rows": 8
+    }
+  ],
+  "title": "Coral and Algae"
+}

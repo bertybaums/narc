@@ -1,0 +1,227 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        1,
+        4
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        5,
+        9,
+        9
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "Hansel",
+      "4": "Gretel",
+      "5": "witch",
+      "7": "breadcrumbs",
+      "9": "candy house"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:balanced",
+      "path-erasure",
+      "trap"
+    ]
+  },
+  "narrative": "Hansel (red=1) and Gretel (blue=4) walk through a forest, leaving a trail of breadcrumbs (yellow=7) behind them. A witch (grey=5) lurks near a candy house (value=9). In the masked grid, birds have eaten the breadcrumbs \u2014 all the 7s along the path become 0. The children have reached the witch's house. Without the trail, they cannot find their way back.",
+  "puzzle_id": "narc_focal_018",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          1,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          9,
+          9
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          9,
+          9
+        ]
+      ],
+      "label": "Children enter forest",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          7,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          9,
+          9
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          9,
+          9
+        ]
+      ],
+      "label": "Dropping breadcrumbs",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          7,
+          7,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          7,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          4,
+          0,
+          9
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          5,
+          9,
+          9
+        ]
+      ],
+      "label": "Deeper into forest",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "Breadcrumbs eaten, children at witch's house",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "Hansel and Gretel"
+}

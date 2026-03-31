@@ -1,0 +1,193 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        5,
+        5,
+        5,
+        5
+      ],
+      [
+        1,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        7,
+        0
+      ],
+      [
+        0,
+        2,
+        2,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:general",
+      "arc:rise-and-fall",
+      "clue:identity",
+      "clue:direction",
+      "domain:psychology",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "The smile almost passes for real \u2014 but the eyes are set one cell too far apart, and the warmth drains from the face. What should comfort instead repels, and the closer it gets to human, the less human it feels.",
+  "puzzle_id": "narc_046",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          2,
+          0
+        ]
+      ],
+      "label": "the crude smiley",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          2,
+          2,
+          0
+        ]
+      ],
+      "label": "more detail, still charming",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "almost real, but wrong",
+      "masked": true,
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          1,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "revulsion",
+      "position": 3,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          2,
+          2,
+          0
+        ]
+      ],
+      "label": "fully realized \u2014 appealing again",
+      "position": 4,
+      "rows": 4
+    }
+  ],
+  "title": "The Uncanny Valley"
+}

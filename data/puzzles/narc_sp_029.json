@@ -1,0 +1,146 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        0,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        0,
+        1,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 5,
+    "tags": [
+      "spectrum:ai-forte",
+      "multi-step",
+      "xor",
+      "threshold"
+    ]
+  },
+  "narrative": "Step 1: Compute element-wise XOR of Grid 0 and Grid 1. Step 2: Apply threshold: if XOR result >= 4, output 1; otherwise output 0. Grid 2 (masked) is the final thresholded result.",
+  "puzzle_id": "narc_sp_029",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          7,
+          3,
+          9,
+          2
+        ],
+        [
+          1,
+          8,
+          4,
+          6
+        ],
+        [
+          5,
+          0,
+          7,
+          3
+        ],
+        [
+          9,
+          2,
+          6,
+          1
+        ]
+      ],
+      "label": "Operand A",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          4,
+          6,
+          1,
+          8
+        ],
+        [
+          9,
+          3,
+          7,
+          0
+        ],
+        [
+          2,
+          5,
+          3,
+          9
+        ],
+        [
+          6,
+          1,
+          8,
+          4
+        ]
+      ],
+      "label": "Operand B",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          0,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1,
+          1
+        ]
+      ],
+      "label": "XOR then threshold>=4",
+      "position": 2,
+      "rows": 4
+    }
+  ],
+  "title": "XOR Then Threshold"
+}

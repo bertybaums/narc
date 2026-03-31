@@ -1,0 +1,369 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        2,
+        0,
+        3,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0,
+        2
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        3,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:6",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:science",
+      "arc:linear",
+      "clue:identity",
+      "clue:rule",
+      "domain:ecology",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "The bright-colored ones vanish in order of their conspicuousness \u2014 the most visible fall first. Yellow screams and is silenced. Magenta dazzles and is taken. Orange glows and is next. What remains is what learned to be dull.",
+  "puzzle_id": "narc_032",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          2,
+          0,
+          3,
+          0,
+          1
+        ],
+        [
+          4,
+          0,
+          6,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          7,
+          0,
+          2
+        ],
+        [
+          6,
+          0,
+          4,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          7,
+          0,
+          2,
+          0,
+          4
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          6,
+          0
+        ]
+      ],
+      "label": "the full chorus",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          2,
+          0,
+          3,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          6,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          7,
+          0,
+          2
+        ],
+        [
+          6,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          7,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          6,
+          0
+        ]
+      ],
+      "label": "yellow falls silent",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          2,
+          0,
+          3,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          7,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          7,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          7,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "magenta fades",
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "the next to fall",
+      "masked": true,
+      "position": 3,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          2,
+          0,
+          3,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "the diminished world",
+      "position": 4,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "the quiet remnant",
+      "position": 5,
+      "rows": 6
+    }
+  ],
+  "title": "The Sixth Extinction"
+}

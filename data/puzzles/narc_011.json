@@ -1,0 +1,273 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        2,
+        0,
+        5,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 3,
+    "tags": [
+      "grids:6",
+      "size:uniform",
+      "mask:single",
+      "difficulty:hard",
+      "audience:general",
+      "arc:subversion",
+      "clue:identity",
+      "clue:timing",
+      "domain:literature",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Three gems sit in a vault: ruby left, emerald center, sapphire right. The plan: move each gem one cell toward the door at the top, one per night. But on the third night, the inside man swaps the emerald for a fake \u2014 a grey stone \u2014 before it advances.",
+  "puzzle_id": "narc_011",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          3,
+          0,
+          1,
+          0
+        ]
+      ],
+      "label": "Vault sealed",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          3,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Night one",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          3,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Night two",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "Night three",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Vault empty",
+      "position": 4,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Evidence",
+      "position": 5,
+      "rows": 4
+    }
+  ],
+  "title": "The Heist"
+}

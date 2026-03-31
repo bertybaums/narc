@@ -1,0 +1,201 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        2,
+        1,
+        2,
+        8,
+        1,
+        3
+      ],
+      [
+        3,
+        4,
+        3,
+        5,
+        6,
+        4,
+        9
+      ],
+      [
+        7,
+        6,
+        5,
+        3,
+        7,
+        9,
+        6
+      ],
+      [
+        9,
+        8,
+        7,
+        8,
+        1,
+        2,
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 3,
+    "tags": [
+      "spectrum:balanced",
+      "sorting",
+      "sequential"
+    ]
+  },
+  "narrative": "Each step sorts one more column from left to right (ascending top to bottom). Column 0 was sorted first, then column 1. Predict the state after column 2 is sorted.",
+  "puzzle_id": "narc_sp_070",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          9,
+          4,
+          7,
+          2,
+          8,
+          1,
+          3
+        ],
+        [
+          3,
+          8,
+          1,
+          5,
+          6,
+          4,
+          9
+        ],
+        [
+          1,
+          2,
+          5,
+          3,
+          7,
+          9,
+          6
+        ],
+        [
+          7,
+          6,
+          3,
+          8,
+          1,
+          2,
+          5
+        ]
+      ],
+      "label": "Unsorted",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          4,
+          7,
+          2,
+          8,
+          1,
+          3
+        ],
+        [
+          3,
+          8,
+          1,
+          5,
+          6,
+          4,
+          9
+        ],
+        [
+          7,
+          2,
+          5,
+          3,
+          7,
+          9,
+          6
+        ],
+        [
+          9,
+          6,
+          3,
+          8,
+          1,
+          2,
+          5
+        ]
+      ],
+      "label": "Col 0 sorted",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          2,
+          7,
+          2,
+          8,
+          1,
+          3
+        ],
+        [
+          3,
+          4,
+          1,
+          5,
+          6,
+          4,
+          9
+        ],
+        [
+          7,
+          6,
+          5,
+          3,
+          7,
+          9,
+          6
+        ],
+        [
+          9,
+          8,
+          3,
+          8,
+          1,
+          2,
+          5
+        ]
+      ],
+      "label": "Col 1 sorted",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "Col 2 sorted",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "Column Sorting"
+}

@@ -1,0 +1,243 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        4,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        4,
+        4,
+        4,
+        4,
+        4,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "offender (red)",
+      "4": "gesture/bridge (yellow)",
+      "6": "victim (blue)"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:relationships",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "An offender (red=1) stands apart from a victim (blue=6) with empty space between them. The offender creates a gesture (yellow=4) and pushes it toward the victim. A bridge of yellow builds cell by cell across the gap. The victim accepts, and both move closer to the yellow bridge, meeting in the middle.",
+  "puzzle_id": "narc_focal_046",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Offender and victim apart",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          4,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Offender begins gesture",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          4,
+          4,
+          4,
+          4,
+          0
+        ]
+      ],
+      "label": "Bridge extends across",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "Reconciliation",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "The Apology"
+}

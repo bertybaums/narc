@@ -1,0 +1,227 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1
+      ],
+      [
+        0,
+        9,
+        9,
+        9,
+        0,
+        0
+      ],
+      [
+        1,
+        9,
+        8,
+        9,
+        0,
+        1
+      ],
+      [
+        0,
+        9,
+        9,
+        9,
+        0,
+        0
+      ],
+      [
+        1,
+        0,
+        6,
+        0,
+        1,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "evils",
+      "6": "Pandora",
+      "8": "hope",
+      "9": "box"
+    },
+    "ai_difficulty": 7,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "6",
+    "human_difficulty": 5,
+    "tags": [
+      "focalization-test",
+      "domain:mythology",
+      "spectrum:human-forte",
+      "containment",
+      "release",
+      "hope"
+    ]
+  },
+  "narrative": "Pandora (magenta=6) stands beside a sealed box (value=9 forming a rectangle). The box is closed. In the next grid, Pandora opens it \u2014 the top row of the box changes to 0 (lid open). Evils (red=1) begin escaping, scattering outward. In the masked grid, the evils have spread across the grid, but one cell inside the box still holds hope (azure=8), the last thing remaining. Pandora slams the lid shut, trapping hope inside.",
+  "puzzle_id": "narc_focal_017",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          9,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          9,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          6,
+          0,
+          0
+        ]
+      ],
+      "label": "Box sealed",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          9,
+          9,
+          9,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Pandora opens the lid",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          1,
+          0,
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          9,
+          0,
+          9,
+          0,
+          0
+        ],
+        [
+          1,
+          9,
+          0,
+          9,
+          0,
+          1
+        ],
+        [
+          0,
+          9,
+          9,
+          9,
+          0,
+          0
+        ],
+        [
+          1,
+          0,
+          6,
+          0,
+          1,
+          0
+        ]
+      ],
+      "label": "Evils escape",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "Hope remains",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "Pandora's Box"
+}

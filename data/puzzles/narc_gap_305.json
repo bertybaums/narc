@@ -1,0 +1,162 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        3,
+        0,
+        4,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        3
+      ],
+      [
+        3,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        3
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:4",
+      "size:uniform",
+      "mask:single",
+      "strategy:remix",
+      "difficulty:hard",
+      "audience:general",
+      "arc:linear",
+      "clue:timing",
+      "clue:identity",
+      "domain:biology",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "A 4x4 grid of healthy cells (value 3, on even-parity positions where (r+c) is even) and empty space (value 0, on odd-parity positions). A virus infects one cell per round, turning it from 3 to 2 (infected). After a cell has been infected for exactly two rounds, the immune system activates and converts it to value 4 (antibody). Round 2: cell (0,2) is infected. Round 3: cell (2,2) is infected. Round 4 (masked): cell (1,1) is newly infected, and the cell infected in Round 2 \u2014 (0,2) \u2014 has been sick for two rounds and becomes an antibody (value 4).",
+  "puzzle_id": "narc_gap_305",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3
+        ]
+      ],
+      "label": "Round 1",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          3,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3
+        ]
+      ],
+      "label": "Round 2",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          3,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3
+        ],
+        [
+          3,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          3
+        ]
+      ],
+      "label": "Round 3",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Round 4",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "The Immune Response"
+}

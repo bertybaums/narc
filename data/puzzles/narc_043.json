@@ -1,0 +1,306 @@
+{
+  "answer_grids": {
+    "4": [
+      [
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ],
+      [
+        0,
+        0,
+        2,
+        1
+      ],
+      [
+        0,
+        0,
+        0,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    4
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:8",
+      "size:varying",
+      "mask:single",
+      "difficulty:hard",
+      "audience:humanities",
+      "audience:science",
+      "arc:linear",
+      "clue:rule",
+      "domain:mathematics",
+      "domain:philosophy",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Sixteen steps from the wall became eight, then four, then two. At the fifth moment, one step remains but cannot be taken. The arrow flies forever through halves of halves, and the distance left is always more than nothing.",
+  "puzzle_id": "narc_043",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "sixteen paces away",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "eight paces away",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "four paces away",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "two paces away",
+      "position": 3,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "one pace remains",
+      "masked": true,
+      "position": 4,
+      "rows": 4
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          2,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "half a pace",
+      "position": 5,
+      "rows": 4
+    },
+    {
+      "cols": 2,
+      "grid": [
+        [
+          0,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          0,
+          1
+        ]
+      ],
+      "label": "a quarter pace",
+      "position": 6,
+      "rows": 4
+    },
+    {
+      "cols": 1,
+      "grid": [
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ],
+        [
+          1
+        ]
+      ],
+      "label": "never arrived",
+      "position": 7,
+      "rows": 4
+    }
+  ],
+  "title": "Zeno's Paradox"
+}

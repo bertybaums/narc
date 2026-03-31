@@ -1,0 +1,178 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        6,
+        5,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:5",
+      "size:varying",
+      "mask:single",
+      "strategy:ai-native",
+      "difficulty:hard",
+      "audience:ai-native",
+      "arc:convergence",
+      "clue:rule",
+      "domain:ml",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "The latent representation at the bottleneck is obtained by taking the mean of each column in the encoder output (Grid 2, the 3x3 grid), rounded to the nearest integer. This produces a 1x3 latent vector that captures the compressed representation of the input.",
+  "puzzle_id": "narc_ai_013",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          7,
+          3,
+          5,
+          2,
+          8
+        ],
+        [
+          4,
+          8,
+          3,
+          9,
+          3
+        ],
+        [
+          6,
+          4,
+          9,
+          3,
+          6
+        ],
+        [
+          3,
+          9,
+          3,
+          6,
+          4
+        ],
+        [
+          8,
+          2,
+          6,
+          4,
+          7
+        ]
+      ],
+      "label": "Input",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          8,
+          3,
+          6
+        ],
+        [
+          4,
+          9,
+          3
+        ],
+        [
+          6,
+          3,
+          9
+        ]
+      ],
+      "label": "Encoder Output",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 3,
+      "grid": null,
+      "label": "Bottleneck (latent vector)",
+      "masked": true,
+      "position": 2,
+      "rows": 1
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          7,
+          4,
+          5
+        ],
+        [
+          5,
+          8,
+          4
+        ],
+        [
+          6,
+          4,
+          8
+        ]
+      ],
+      "label": "Decoder Output",
+      "position": 3,
+      "rows": 3
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          4,
+          5,
+          3,
+          7
+        ],
+        [
+          5,
+          7,
+          4,
+          8,
+          4
+        ],
+        [
+          6,
+          5,
+          8,
+          4,
+          6
+        ],
+        [
+          4,
+          8,
+          4,
+          6,
+          5
+        ],
+        [
+          7,
+          3,
+          6,
+          5,
+          6
+        ]
+      ],
+      "label": "Reconstruction",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Autoencoder Bottleneck"
+}

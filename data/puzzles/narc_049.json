@@ -1,0 +1,249 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        4,
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "difficulty:hard",
+      "audience:humanities",
+      "arc:subversion",
+      "clue:exception",
+      "clue:identity",
+      "domain:literature",
+      "domain:information-theory",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "Among the hexagons, one volume holds sense. It sits at the third shelf of the second wall, and its spine is golden where all others are grey. In an infinite library of nonsense, meaning is the rarest anomaly.",
+  "puzzle_id": "narc_049",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      ],
+      "label": "the first hexagon",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      ],
+      "label": "the second hexagon",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      ],
+      "label": "the vast repetition",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "the one that is different",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          4,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ]
+      ],
+      "label": "the book found and marked",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Library of Babel"
+}

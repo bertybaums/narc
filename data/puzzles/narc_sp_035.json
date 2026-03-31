@@ -1,0 +1,186 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 1,
+    "tags": [
+      "spectrum:human-forte",
+      "cultural-narrative",
+      "surprise-party",
+      "lights"
+    ]
+  },
+  "narrative": "The room is dark. Everyone is hiding. The guest of honor turns the doorknob... SURPRISE! What does the room look like now?",
+  "puzzle_id": "narc_sp_035",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Lights off",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Still waiting...",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "Door opens a crack",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "SURPRISE!",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "Surprise!"
+}

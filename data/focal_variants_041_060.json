@@ -1,0 +1,522 @@
+{
+  "narc_focal_041": {
+    "title": "The Surprise Party",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "host",
+        "color": "yellow",
+        "predicted_ease": "easy",
+        "narrative": "I spent the whole afternoon hanging streamers and setting up. I told the guests where to hide and watched from the middle of the room. When the door opened, I flipped on the lights and the guests jumped out from their positions. The look on the guest of honor's face was everything I had planned for."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "hiding guests",
+        "color": "green",
+        "predicted_ease": "medium",
+        "narrative": "We crept in one by one and ducked behind the furniture where the host told us to go. We could see the decorations already in place. Then the door swung open and the guest of honor stepped in. The host called out and we all leapt from our spots, surrounding the stunned newcomer in a burst of celebration."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "guest of honor",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I had no idea anything was happening. I walked up to the door thinking it was just another evening. The moment I stepped inside, the room erupted. People appeared from places I hadn't noticed, the host was beaming from the center, and I was suddenly surrounded by friends I didn't know were there."
+      }
+    ]
+  },
+  "narc_focal_042": {
+    "title": "The Lie Detector",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "detective",
+        "color": "blue",
+        "predicted_ease": "easy",
+        "narrative": "I sat across from the suspect and began my questions. At first the truth signals lit up between us, confirming his story. But as I pressed harder, those signals started winking out one by one. The pattern of vanishing confirmations told me everything. I leaned in and closed the distance between us for the confrontation."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "truth signals",
+        "color": "green",
+        "predicted_ease": "medium",
+        "narrative": "We flickered into existence when the suspect spoke honestly, filling the space between the two figures. But the suspect's words shifted, and we began to disappear. Where there had been many of us, only a scattered few remained. By the end, we were gone entirely, leaving nothing but empty space and the detective closing in."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "suspect",
+        "color": "red",
+        "predicted_ease": "hard",
+        "narrative": "I sat in my chair and tried to hold my composure. I told my story, mixing truth with fabrication, not realizing the room itself was betraying me. I couldn't see what the detective was reading in the space between us. All I knew was that by the end, the detective was right next to me and my denials meant nothing."
+      }
+    ]
+  },
+  "narc_focal_043": {
+    "title": "The Exam",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "teacher",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I handed out the exam and watched from the front of the room as the student filled in answers. I already knew the correct pattern. When the exam came back, I laid the answer key over it. Some matched, some did not. I marked the correct ones and flagged the errors, revealing exactly where the student's understanding fell short."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "student",
+        "color": "blue",
+        "predicted_ease": "medium",
+        "narrative": "I took the exam and filled in my best guesses across the sheet. I thought I had a decent sense of the pattern but couldn't be sure. After the teacher collected it, there was a gap where I waited without knowing. When the graded version came back, I could see which of my marks held up and which had been wrong all along."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "correct answers",
+        "color": "green",
+        "predicted_ease": "hard",
+        "narrative": "We existed as the hidden pattern the whole time, known only to the teacher. The student couldn't see us during the exam. We were revealed only after the student had committed to their choices, appearing where the student had guessed correctly and absent where they had not. Our pattern was always there, waiting to be uncovered."
+      }
+    ]
+  },
+  "narc_focal_044": {
+    "title": "The Job Interview",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "candidate",
+        "color": "blue",
+        "predicted_ease": "easy",
+        "narrative": "I waited in line with the other applicants, then stepped into the interview room to face the interviewer. Behind me, the others shuffled nervously. I answered the questions as best I could. One by one the other candidates left, rejected. In the end, the interviewer gestured me to come closer, and I took the seat beside them. I got the position."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "interviewer",
+        "color": "red",
+        "predicted_ease": "medium",
+        "narrative": "I watched the line of candidates from behind my desk. The blue one stepped forward. I asked my questions while the grey ones waited outside. As I made my decisions, rejected candidates drifted away one by one. When only the blue candidate remained, I made my final call and brought them to my side of the desk."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "other candidates",
+        "color": "grey",
+        "predicted_ease": "hard",
+        "narrative": "We stood in line together, each hoping for a chance. The blue candidate went in first and we waited. We never saw what happened inside the room. One by one we were told to leave. We ended up clustered far from the interview room, with no knowledge of whether the remaining candidate had succeeded or failed."
+      }
+    ]
+  },
+  "narc_focal_045": {
+    "title": "The Rumor",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "originator / distorted info",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I started with a true message and passed it along through the spreader. I watched as the truth I had sent began to twist and corrupt as it traveled. My original green truths turned into red distortions with each relay. By the time the message reached the far end, almost nothing of the original truth survived. The distortion was my legacy."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "spreader",
+        "color": "orange",
+        "predicted_ease": "medium",
+        "narrative": "I carried the message forward from the originator toward the recipient. At first the message I held was mostly intact, with only a small piece changed. But each time I passed it along, more of the truth flipped into something else. I could feel the message warping in transit but couldn't stop it. I delivered what was left."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "recipient",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I stood at the far end waiting to receive the message. I had no idea what the originator had actually said. When the information finally reached me, it was almost entirely distorted. I accepted it at face value, not knowing that the original truth had been nearly obliterated during its journey. Only one small fragment of the original remained."
+      }
+    ]
+  },
+  "narc_focal_046": {
+    "title": "The Apology",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "offender",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I stood on one side, separated from the person I had wronged by a wide gap. I began building a gesture of reconciliation, extending it across the empty space between us. Piece by piece, the bridge grew until it spanned the full distance. Then I stepped down from my position and walked along it, meeting them in the middle."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "gesture/bridge",
+        "color": "yellow",
+        "predicted_ease": "medium",
+        "narrative": "I was created by the offender and laid down across the gap, growing piece by piece from one side toward the other. I stretched across the empty space until I formed a complete connection. Once I was whole, I felt both figures descend and walk along me. They met above me, and I held them together in the place where division had been."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "victim",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I stood apart and watched something being constructed in the space below. I didn't initiate it and I didn't know at first what it was for. But when the bridge was complete, I understood it was an offering. I made my way down and toward it. The person who hurt me was already there. We met in the middle of what they had built."
+      }
+    ]
+  },
+  "narc_focal_047": {
+    "title": "Stage Fright",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "performer",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I stepped onto the stage under the spotlight and looked out at the packed audience. Then the fear hit and I froze completely. I felt myself disappear from the moment, invisible even under the light. But something pulled me back. I reappeared under the spotlight, steadied myself, and began. The audience rose in response."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "audience",
+        "color": "blue",
+        "predicted_ease": "medium",
+        "narrative": "We filled our seats and watched the performer take the stage under the bright light. Then suddenly the performer vanished. The spotlight shone on empty space. We waited, uncertain. Then the performer returned, standing strong under the light once more. We erupted, some of us rising to our feet in applause."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "spotlight",
+        "color": "yellow",
+        "predicted_ease": "hard",
+        "narrative": "I shone down on my mark throughout the entire performance. I did not flicker or shift. Whatever happened beneath me was not mine to control. One moment the performer stood in my beam, then they were gone, then they returned. I illuminated each phase without judgment, a constant presence while everything else changed."
+      }
+    ]
+  },
+  "narc_focal_048": {
+    "title": "The Inheritance",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "heir 2",
+        "color": "blue",
+        "predicted_ease": "easy",
+        "narrative": "I waited on my side while the deceased still occupied the center, surrounded by wealth. When they faded, I watched the wealth begin to move. It split unevenly, and I could see more of it flowing away from me than toward me. By the end, I had received my portion, but it was visibly less than what the other heir had claimed."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "wealth",
+        "color": "yellow",
+        "predicted_ease": "medium",
+        "narrative": "We surrounded the deceased, held in place by their presence. When they faded, we were released. We split and moved outward in two streams, but not equally. More of us flowed toward one heir than the other. We settled into our new positions, divided unevenly, no longer belonging to the one who had gathered us."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "deceased",
+        "color": "grey",
+        "predicted_ease": "hard",
+        "narrative": "I was at the center of everything, surrounded by what I had accumulated, with my heirs waiting on either side. Then I faded. I was no longer present to see how my wealth was divided. Whatever happened next, the distribution, the imbalance, the outcome for my heirs, all of it occurred without me. My absence set it all in motion."
+      }
+    ]
+  },
+  "narc_focal_049": {
+    "title": "The Whistleblower",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "insider/whistleblower",
+        "color": "blue",
+        "predicted_ease": "easy",
+        "narrative": "I worked inside the corporation and found the evidence hidden within its structure. I knew the risk but pushed it outward anyway, moving it past the corporate walls toward where the public could see it. The evidence traveled through the gap between the corporation and the outside. I was expelled for what I did, pushed outside the walls, but the evidence reached its destination."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "public",
+        "color": "green",
+        "predicted_ease": "medium",
+        "narrative": "We waited on the outside, aware of the corporation but unable to see within. Then something emerged from behind those walls, pushed toward us by someone on the inside. The evidence arrived and we could finally see what had been hidden. Meanwhile, the person who sent it was cast out of the structure that had housed them."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "corporation",
+        "color": "red",
+        "predicted_ease": "hard",
+        "narrative": "We operated as a solid structure, our walls intact, our interior business our own. We did not notice the insider extracting something from within us. The evidence moved outward through a gap we did not see opening. By the time we realized what had happened, the insider was outside our walls and the evidence was in the hands of the public. We closed ranks, but it was too late."
+      }
+    ]
+  },
+  "narc_focal_050": {
+    "title": "The Translation",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "translator",
+        "color": "magenta",
+        "predicted_ease": "easy",
+        "narrative": "I sat between the speaker and the listener, receiving the message from one side. The speaker's words arrived in their original pattern. I processed them and passed along my own version, inevitably shaped by my interpretation. What I sent forward was not identical to what I received. I moved the meaning closer to the listener, but the message I delivered was mine as much as the speaker's."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "speaker",
+        "color": "red",
+        "predicted_ease": "medium",
+        "narrative": "I produced my message and sent it toward the translator in the middle. I could see it reach them. But what happened next was beyond my control. The translator passed something onward to the listener, and I could tell even from a distance that the pattern had changed. The listener received a different shape of meaning than what I had originally spoken."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "listener",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I waited on my side to receive the message. I had no direct contact with the speaker and could only receive what the translator chose to pass along. When the translated version arrived, I accepted it as the message. I had no way of knowing how much it had shifted from the original, or what the speaker had actually intended to say."
+      }
+    ]
+  },
+  "narc_focal_051": {
+    "title": "Culture Shock",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "traveler",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I arrived in unfamiliar territory where the locals followed patterns I didn't understand. At first I tried to join them but placed myself in the wrong spot. I watched their arrangement more carefully, learned the rhythm of their customs, and adjusted my position. Step by step I moved into alignment with their pattern until I fit naturally among them."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "locals",
+        "color": "blue",
+        "predicted_ease": "medium",
+        "narrative": "We held our arrangement alongside the customs we had always followed. A stranger arrived and tried to insert themselves among us, but their placement was wrong. We watched as the newcomer studied our pattern, shifted, and gradually found the correct position. By the end, they occupied a spot that fit within our established order."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "customs",
+        "color": "green",
+        "predicted_ease": "hard",
+        "narrative": "We are the pattern that has always been here, woven among the locals. We did not change when the traveler arrived. We did not move to accommodate them. The traveler had to discover us, understand our arrangement, and find where they could fit. We remained constant. Adaptation was the traveler's burden, not ours."
+      }
+    ]
+  },
+  "narc_focal_052": {
+    "title": "The Referendum",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "undecided",
+        "color": "grey",
+        "predicted_ease": "easy",
+        "narrative": "We sat in the middle, pulled from both directions. Both sides pressed their cases, converting those of us on the edges first. The pressure was relentless. Frame by frame our numbers shrank as we were absorbed into one camp or the other. In the end, none of us remained. Every last undecided voter had been claimed, and the final tally showed one side with a slim advantage."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "side B",
+        "color": "blue",
+        "predicted_ease": "medium",
+        "narrative": "We pushed inward from our side, converting the undecided voters nearest to us. We could see the other side doing the same from the opposite direction. It was a race for the middle. The grey zone narrowed frame by frame. When the last undecided voters were claimed, we had managed to capture slightly more territory. The margin was narrow, but victory was ours."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "side A",
+        "color": "red",
+        "predicted_ease": "hard",
+        "narrative": "We campaigned hard from our side, converting undecided voters as fast as we could. We thought we were keeping pace. But the middle was opaque to us; we couldn't see clearly who the other side was winning over. When the results were final, we discovered we had lost. The other side had claimed more of the center than we had. We held our ground but it was not enough."
+      }
+    ]
+  },
+  "narc_focal_053": {
+    "title": "The Rivalry",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "competitor A",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I started at one end of the track with the prize in the middle and my rival at the far side. Each moment I advanced one position closer. I could see my competitor doing the same from the opposite direction. The audience watched from the sidelines. I reached the prize first by a single step, and the audience shifted their attention toward me."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "audience",
+        "color": "green",
+        "predicted_ease": "medium",
+        "narrative": "We lined the edges of the track, watching both competitors close in on the prize from opposite ends. They advanced in parallel, each step bringing them closer. It was nearly even. But in the final stretch, the red competitor arrived one position ahead. We leaned toward the winner, clustering closer to that side to acknowledge the result."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "competitor B",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I raced toward the prize from my end, matching my rival step for step. I was focused on my own pace and couldn't gauge the exact distance the other had covered. When we both converged on the center, my rival was one position ahead. The prize went to them. I remained where I stopped, one step short, while the audience turned away from me."
+      }
+    ]
+  },
+  "narc_focal_054": {
+    "title": "The Mentor",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "mentor/teacher",
+        "color": "blue",
+        "predicted_ease": "easy",
+        "narrative": "I stood near the small, fledgling student and began passing along what I knew. With each exchange, I could see the student growing larger and more capable. As they expanded, I gradually stepped back, giving them room. By the end, the student had grown into a substantial presence, and I had retreated to a single position nearby. My work was done."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "student",
+        "color": "red",
+        "predicted_ease": "medium",
+        "narrative": "I started as a single small presence next to a larger teacher. Knowledge flowed from them to me, and I felt myself growing. My footprint expanded frame by frame. As I grew, the teacher shrank and stepped away, making space. By the end I occupied a large area that I could never have filled alone. The teacher remained nearby, diminished but present."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "student",
+        "color": "red",
+        "predicted_ease": "hard",
+        "narrative": "During the middle phase of my growth, I was changing so rapidly that I couldn't perceive the exact mechanism of the transfer. The teacher was still near me and I was still expanding, but the specific moment of the knowledge handoff was invisible to me. I only knew the before and the after, not the precise transition happening in that intermediate stage."
+      }
+    ]
+  },
+  "narc_focal_055": {
+    "title": "The Scapegoat",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "scapegoat",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I stood near the group, not quite one of them. Then the pressure started. They pushed me away, further and further from the center. Each moment I was displaced another step outward. I could see the group remaining tight and intact behind me while I was driven toward the edge. By the end I was completely alone, isolated at the far margin, with no way back."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "group",
+        "color": "blue",
+        "predicted_ease": "medium",
+        "narrative": "We held our formation tight around the one who was actually responsible. Each frame, we pushed the outsider further away. It was easier than confronting the truth within our own ranks. The grey one stayed hidden among us, safe, while the red one drifted further and further toward the edge. We maintained our cohesion by sacrificing someone who didn't belong."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "actual culprit",
+        "color": "grey",
+        "predicted_ease": "hard",
+        "narrative": "I stayed embedded in the middle of the group, indistinguishable from those around me. I was aware that someone nearby was being pushed away, but it wasn't me. The group's attention was directed outward. No one looked inward. I remained hidden, safe, and untouched while the scapegoat was driven to the far edge. My secret stayed buried."
+      }
+    ]
+  },
+  "narc_focal_056": {
+    "title": "The Peace Treaty",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "neutral zone",
+        "color": "grey",
+        "predicted_ease": "easy",
+        "narrative": "I didn't exist at first. Both sides pressed right up against the border with no room between them. Then, frame by frame, they pulled back and I expanded into the space they vacated. I grew wider on both sides of the border, a buffer created by mutual withdrawal. By the end I was a substantial presence, the physical proof that both sides had chosen restraint."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "border",
+        "color": "yellow",
+        "predicted_ease": "medium",
+        "narrative": "I held the center line throughout, unchanged. At first I was squeezed between the two sides, under pressure from both directions. As they pulled back, the weight lifted. Grey space opened on either side of me. I remained exactly where I had always been, but now I was the stable axis of a widening peace rather than a contested flashpoint."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "side A",
+        "color": "red",
+        "predicted_ease": "hard",
+        "narrative": "We pulled back from the border as the agreement required. We could see the neutral zone growing in front of us but couldn't be certain the other side was retreating at the same rate. We gave up our forward positions one row at a time, trusting the process. By the end, a wide buffer separated us from the other side, and we had to accept the symmetry on faith."
+      }
+    ]
+  },
+  "narc_focal_057": {
+    "title": "The Queue Jumper",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "bouncer",
+        "color": "grey",
+        "predicted_ease": "easy",
+        "narrative": "I stood at the front of the line, keeping order. The queue was neat and proper behind me. Then I noticed someone approaching from outside, working their way up and cutting directly into the line. The queue members were displaced. I stepped in, pulled the intruder out of the line, and sent them away. The queue reformed behind me, whole again."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "queue",
+        "color": "blue",
+        "predicted_ease": "medium",
+        "narrative": "We stood in orderly formation, waiting our turn. Then someone pushed into our line from the side, shoving us apart. We were displaced and jostled. But the bouncer at the front noticed. The intruder was removed from among us and sent elsewhere. We shifted back into place, our line restored to its proper order, one position longer now that the gap was closed."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "queue jumper",
+        "color": "red",
+        "predicted_ease": "hard",
+        "narrative": "I approached the queue from outside, slipped past the others, and inserted myself right into the middle of the line. I thought I'd gotten away with it. But before I knew what was happening, I was pulled from the line and deposited well away from it. I ended up alone, below the queue, watching the others close ranks as if I'd never been there."
+      }
+    ]
+  },
+  "narc_focal_058": {
+    "title": "The Misunderstanding",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "object of confusion",
+        "color": "yellow",
+        "predicted_ease": "easy",
+        "narrative": "I sat between the two people, pulled one direction by the first and the opposite direction by the second. Back and forth I went, dragged left then right, never where both wanted me at once. Finally something shifted in their understanding. They stopped pulling and instead both came toward me. I settled into the center, with both of them beside me at last."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "person A",
+        "color": "red",
+        "predicted_ease": "medium",
+        "narrative": "I pulled the object toward my side, certain of where it belonged. But the other person pulled it back the other way. We went back and forth, each convinced the other was wrong. Then I realized we had both been misreading the situation. I let go of my insistence, moved toward the center, and found the other person doing the same. We placed the object between us where it should have been all along."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "person B",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I thought the object belonged on my side and pulled it toward me. The other person resisted and pulled it away first. I couldn't understand their reasoning. The tug of war continued. Eventually something clicked. I stopped fighting and moved inward. The other person met me in the middle of the space, and the object rested naturally between us. The conflict had been unnecessary."
+      }
+    ]
+  },
+  "narc_focal_059": {
+    "title": "The Sacrifice",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "hero",
+        "color": "red",
+        "predicted_ease": "easy",
+        "narrative": "I stood between my community and the advancing threat. As it drew closer, I moved forward to meet it, placing myself directly in its path. The community was behind me, safe. I closed the distance until the threat and I occupied the same space. We both vanished. The community endured, untouched, because I chose to stand in the way."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "community",
+        "color": "green",
+        "predicted_ease": "medium",
+        "narrative": "We watched the threat approaching from the far side. Our protector stood between us and the danger, then moved forward to confront it. We could only watch as the hero advanced toward the grey mass. They met, and both disappeared. The threat was gone, and so was the one who had saved us. We remained in our place, safe but diminished by the loss."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "threat",
+        "color": "grey",
+        "predicted_ease": "hard",
+        "narrative": "I advanced steadily toward the cluster on the far side. A single figure moved out from the group to meet me. I did not alter my course. We converged in the middle of the space. On contact, I was eliminated, and so was the figure who had intercepted me. I never reached the community. The sacrifice was something I did not anticipate or understand."
+      }
+    ]
+  },
+  "narc_focal_060": {
+    "title": "The Reunion",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "meeting point",
+        "color": "yellow",
+        "predicted_ease": "easy",
+        "narrative": "I glowed in the center of the wide space, a beacon for the two separated parties. Frame by frame I watched them approach from opposite ends, drawn toward my light. They converged directly above me. When they finally stood side by side at my location, I expanded outward in celebration, growing larger around them to mark the moment of their reunion."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "party A",
+        "color": "red",
+        "predicted_ease": "medium",
+        "narrative": "I started on one side of a wide expanse, with the beacon glowing in the center. I couldn't see the other party on the far side. I moved inward toward the light, step by step. As I got closer I saw the other figure approaching from the opposite direction. We met at the beacon. The light expanded around us both, and we were together again."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "party B",
+        "color": "blue",
+        "predicted_ease": "hard",
+        "narrative": "I started on the far side, unable to see who or what was on the other end. I only knew the beacon was pulling me inward. I moved toward it without knowing if anyone was coming to meet me. Each step narrowed the distance. When I finally arrived at the center, the other party was already nearly there. The beacon burst outward around us, and the separation was over."
+      }
+    ]
+  }
+}

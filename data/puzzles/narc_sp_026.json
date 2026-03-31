@@ -1,0 +1,89 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        4,
+        2,
+        5,
+        3,
+        8,
+        7
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 5,
+    "tags": [
+      "spectrum:ai-forte",
+      "encoding",
+      "base-conversion"
+    ]
+  },
+  "narrative": "Grid 0 has two rows: row 0 is the tens digit, row 1 is the ones digit, forming 2-digit decimal numbers column-wise. Grid 1 (shown) contains each number modulo 8. Grid 2 (masked) contains each number integer-divided by 8.",
+  "puzzle_id": "narc_sp_026",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          1,
+          4,
+          2,
+          7,
+          5
+        ],
+        [
+          7,
+          9,
+          2,
+          8,
+          1,
+          6
+        ]
+      ],
+      "label": "Decimal digits (tens, ones)",
+      "position": 0,
+      "rows": 2
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          5,
+          3,
+          2,
+          4,
+          7,
+          0
+        ]
+      ],
+      "label": "Number mod 8",
+      "position": 1,
+      "rows": 1
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          4,
+          2,
+          5,
+          3,
+          8,
+          7
+        ]
+      ],
+      "label": "Number // 8",
+      "position": 2,
+      "rows": 1
+    }
+  ],
+  "title": "Decimal to Octal Decomposition"
+}

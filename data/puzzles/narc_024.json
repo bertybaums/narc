@@ -1,0 +1,193 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        2,
+        1,
+        2
+      ],
+      [
+        2,
+        1,
+        2,
+        1
+      ],
+      [
+        1,
+        2,
+        1,
+        2
+      ],
+      [
+        2,
+        1,
+        2,
+        2
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "difficulty:hard",
+      "audience:science",
+      "arc:linear",
+      "clue:direction",
+      "clue:rule",
+      "domain:physics",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Order dissolves, but not all at once. The blue retreats to the corners as the red seeps through the center first. No hand stirs the pot \u2014 only time, indifferent and thorough.",
+  "puzzle_id": "narc_024",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          2,
+          2,
+          2,
+          2
+        ],
+        [
+          2,
+          2,
+          2,
+          2
+        ]
+      ],
+      "label": "perfect order",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          2,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          1,
+          2
+        ],
+        [
+          2,
+          2,
+          2,
+          2
+        ]
+      ],
+      "label": "the boundary blurs",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          2,
+          2,
+          1
+        ],
+        [
+          2,
+          2,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          2,
+          1
+        ],
+        [
+          2,
+          1,
+          2,
+          2
+        ]
+      ],
+      "label": "the center yields",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "the spreading",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          2,
+          1,
+          2,
+          1
+        ],
+        [
+          1,
+          2,
+          1,
+          2
+        ],
+        [
+          2,
+          1,
+          2,
+          1
+        ],
+        [
+          1,
+          2,
+          1,
+          2
+        ]
+      ],
+      "label": "maximum entropy",
+      "position": 4,
+      "rows": 4
+    }
+  ],
+  "title": "Entropy"
+}

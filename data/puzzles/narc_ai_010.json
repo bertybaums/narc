@@ -1,0 +1,250 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        5,
+        3,
+        1,
+        3,
+        5
+      ],
+      [
+        6,
+        4,
+        2,
+        4,
+        6
+      ],
+      [
+        7,
+        5,
+        3,
+        5,
+        7
+      ],
+      [
+        6,
+        4,
+        2,
+        4,
+        6
+      ],
+      [
+        5,
+        3,
+        1,
+        3,
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "strategy:ai-native",
+      "difficulty:hard",
+      "audience:ai-native",
+      "arc:subversion",
+      "clue:rule",
+      "clue:direction",
+      "domain:ml",
+      "domain:mathematics",
+      "spectrum:ai-edge"
+    ]
+  },
+  "narrative": "The optimizer encounters a saddle point in the loss landscape. The Hessian at the critical point has one negative eigenvalue (along the vertical axis, i.e., columns) and one positive eigenvalue (along the horizontal axis, i.e., rows). The loss decreases in the vertical direction from the center but increases in the horizontal direction, creating a saddle surface. The center column should show values decreasing away from the center row, while the center row should show values increasing away from the center column.",
+  "puzzle_id": "narc_ai_010",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          8,
+          9,
+          7,
+          8,
+          9
+        ],
+        [
+          9,
+          7,
+          8,
+          9,
+          8
+        ],
+        [
+          7,
+          8,
+          9,
+          7,
+          9
+        ],
+        [
+          8,
+          9,
+          8,
+          8,
+          7
+        ],
+        [
+          9,
+          8,
+          7,
+          9,
+          8
+        ]
+      ],
+      "label": "Early Training (random high loss)",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          8,
+          8,
+          7,
+          8,
+          8
+        ],
+        [
+          8,
+          6,
+          5,
+          6,
+          8
+        ],
+        [
+          7,
+          5,
+          4,
+          5,
+          7
+        ],
+        [
+          8,
+          6,
+          5,
+          6,
+          8
+        ],
+        [
+          8,
+          8,
+          7,
+          8,
+          8
+        ]
+      ],
+      "label": "Basin Forming",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          7,
+          7,
+          6,
+          7,
+          7
+        ],
+        [
+          7,
+          4,
+          3,
+          4,
+          7
+        ],
+        [
+          6,
+          3,
+          1,
+          3,
+          6
+        ],
+        [
+          7,
+          4,
+          3,
+          4,
+          7
+        ],
+        [
+          7,
+          7,
+          6,
+          7,
+          7
+        ]
+      ],
+      "label": "Clear Basin (uniform descent)",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Saddle Point",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          6,
+          5,
+          4,
+          5,
+          6
+        ],
+        [
+          5,
+          3,
+          2,
+          3,
+          5
+        ],
+        [
+          4,
+          2,
+          0,
+          2,
+          4
+        ],
+        [
+          5,
+          3,
+          2,
+          3,
+          5
+        ],
+        [
+          6,
+          5,
+          4,
+          5,
+          6
+        ]
+      ],
+      "label": "Escaped Saddle (basin resumes)",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Loss Landscape"
+}

@@ -1,0 +1,243 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        4,
+        6,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "person A (red)",
+      "4": "object of confusion (yellow)",
+      "6": "person B (blue)"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "4",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:communication",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "Person A (red=1) and person B (blue=6) stand on opposite sides of an object (yellow=4). The object is in the wrong position between them, leading to confusion. Person A pushes the yellow one way, person B pushes it the other. They struggle over placement. Finally they realize the misunderstanding and the yellow object moves to the correct neutral position, with both people beside it.",
+  "puzzle_id": "narc_focal_058",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          4,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Object between two people",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          0,
+          1,
+          4,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "A pulls object left",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          0,
+          1,
+          0,
+          0,
+          4,
+          6,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "B pulls object right",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "They realize the misunderstanding",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "The Misunderstanding"
+}

@@ -1,0 +1,202 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        3,
+        3,
+        5,
+        5,
+        7,
+        7
+      ],
+      [
+        3,
+        3,
+        5,
+        5,
+        7,
+        7
+      ],
+      [
+        3,
+        3,
+        5,
+        5,
+        7,
+        7
+      ],
+      [
+        3,
+        3,
+        5,
+        5,
+        7,
+        7
+      ],
+      [
+        3,
+        3,
+        5,
+        5,
+        7,
+        7
+      ],
+      [
+        3,
+        3,
+        5,
+        5,
+        7,
+        7
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:3",
+      "size:uniform",
+      "mask:single",
+      "strategy:narrative-first",
+      "difficulty:hard",
+      "audience:general",
+      "arc:convergence",
+      "clue:rule",
+      "clue:direction",
+      "domain:social-science",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Two speakers are represented by values 3 (Speaker A, entering from the left) and 7 (Speaker B, entering from the right). The background is 0. In Grid 1, Speaker A fills columns 0-1 and Speaker B fills columns 4-5 \u2014 they begin apart. In Grid 2, each advances one column inward: A fills columns 0-2, B fills columns 3-5. In Grid 3 (masked), they find COMMON GROUND: where they overlap (column 2-3), the value becomes 5 (the average of 3 and 7), A keeps columns 0-1, and B keeps columns 4-5. This is the moment of mutual understanding.",
+  "puzzle_id": "narc_gap_205",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          3,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          0,
+          0,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          0,
+          0,
+          7,
+          7
+        ]
+      ],
+      "label": "Opening Positions",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          7,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          3,
+          7,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          3,
+          7,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          3,
+          7,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          3,
+          7,
+          7,
+          7
+        ],
+        [
+          3,
+          3,
+          3,
+          7,
+          7,
+          7
+        ]
+      ],
+      "label": "Approaching",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "Common Ground",
+      "masked": true,
+      "position": 2,
+      "rows": 6
+    }
+  ],
+  "title": "The Conversation"
+}

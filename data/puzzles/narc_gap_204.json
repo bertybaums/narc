@@ -1,0 +1,194 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        7,
+        9,
+        1,
+        3,
+        8,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        3,
+        5,
+        7,
+        0,
+        2
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 4,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "strategy:narrative-first",
+      "difficulty:hard",
+      "audience:general",
+      "arc:subversion",
+      "clue:rule",
+      "clue:timing",
+      "domain:music",
+      "spectrum:ai-edge"
+    ]
+  },
+  "narrative": "A jazz theme is stated in Grid 1: a melody line (row 0) over a bass line (row 2). Grid 2 is the theme with the melody transposed up by 2 (each value +2 mod 10). Grid 3 is the theme with melody transposed up by 4. Grid 4 (masked) is the SURPRISE MODULATION: the melody transposes up by 6, AND the bass line inverts \u2014 each bass value becomes (9 minus original bass value). Grid 5 returns to the original theme (melody +8 mod 10, bass returns to normal). The middle row (row 1) is always 0 (rest between melody and bass).",
+  "puzzle_id": "narc_gap_204",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          1,
+          3,
+          5,
+          7,
+          2,
+          4
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          6,
+          4,
+          2,
+          9,
+          7
+        ]
+      ],
+      "label": "Theme Statement",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          3,
+          5,
+          7,
+          9,
+          4,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          6,
+          4,
+          2,
+          9,
+          7
+        ]
+      ],
+      "label": "First Variation",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          5,
+          7,
+          9,
+          1,
+          6,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          6,
+          4,
+          2,
+          9,
+          7
+        ]
+      ],
+      "label": "Second Variation",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "The Modulation",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          9,
+          1,
+          3,
+          5,
+          0,
+          2
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          6,
+          4,
+          2,
+          9,
+          7
+        ]
+      ],
+      "label": "Return",
+      "position": 4,
+      "rows": 3
+    }
+  ],
+  "title": "Jazz Solo"
+}

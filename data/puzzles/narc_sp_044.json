@@ -1,0 +1,190 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        2,
+        2,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 2,
+    "tags": [
+      "spectrum:human-forte",
+      "common-sense-physics",
+      "shadow",
+      "light-direction"
+    ]
+  },
+  "narrative": "A flashlight shines from the left side. An object sits in the middle. Its shadow stretches out to the right. The bigger the object, the bigger the shadow.",
+  "puzzle_id": "narc_sp_044",
+  "sequence": [
+    {
+      "cols": 9,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Small object",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 9,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Small shadow",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 9,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Bigger object",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 9,
+      "grid": null,
+      "label": "Its shadow",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "Shadow Puppet"
+}

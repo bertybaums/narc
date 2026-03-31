@@ -1,0 +1,242 @@
+{
+  "narc_ai_001": {
+    "original_concept": "Causal masking with uniform attention: each position attends equally to itself and all prior positions, with future positions receiving zero weight. Values are scaled to 0-9 where 9 represents the full attention budget.",
+    "scaffolding_needed": "Understanding that each row represents a person in a queue who can only look at people ahead of them (and themselves), and must split their attention equally among everyone visible. The human needs to compute equal fractions scaled to 9.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Queue Rule: Imagine people standing in a line at a bakery. Each person can only see the people who arrived before them, plus themselves -- they cannot turn around to see who came after. Each person has 9 cookies to hand out equally among everyone they can see (including themselves).\n\nThe recipe for each row:\n1. The row number (starting from 0) tells you which person this is.\n2. That person can see everyone from person 0 up to and including themselves. So person N can see N+1 people total.\n3. Divide 9 by the number of people visible. Round down to the nearest whole number.\n4. Place that value in every column from 0 up to and including the person's own column.\n5. Fill every column after their own position with 0 -- those are people they cannot see.\n\nSo the first person sees only themselves and gives all 9 cookies to that one spot. The second person splits 9 two ways. The third person splits 9 three ways. And so on. Zeros always fill the slots for people who arrived later."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Spotlight Game: You are operating spotlights on a stage with performers standing in a row. A strict rule governs where each spotlight can shine: spotlight N (counting from 0) can illuminate positions 0 through N, and nothing beyond.\n\nEach spotlight has a brightness budget of 9 units, and it must spread its light perfectly evenly across all positions it can reach. Positions outside its reach get zero light.\n\nTo fill each row:\n1. Count how many positions the spotlight covers (that is the row number plus one).\n2. Divide 9 by that count and round down to the nearest whole number.\n3. Write that value in every covered position (from column 0 through the row's own column).\n4. Write 0 in every remaining position to the right.\n\nThe result is a triangular pattern: the first row has one bright cell and the rest dark, the second row has two cells sharing the light, and so on."
+      }
+    ]
+  },
+  "narc_ai_002": {
+    "original_concept": "Learning rate overshoot: a region of a grid has been decreasing in value (converging), but the step size is too large, causing the values to bounce back up before settling down again in the next step.",
+    "scaffolding_needed": "Understanding the pattern of descent (9 -> 7 -> 4) in a 3x3 top-left block, recognizing that 'overshoot' means the values go back UP before resuming descent. The rest of the grid stays at 9.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Hill Runner: Imagine a runner sprinting down a hill toward a valley. The hill is the top-left 3x3 corner of the grid; everything outside that block is flat plateau at the maximum value (9) and never changes.\n\nWatch the runner's altitude in the 3x3 corner across successive snapshots. It has been steadily dropping each step. But the runner is going too fast -- at the missing step, they overshoot the valley floor and bounce partway back UP.\n\nTo find the missing grid:\n1. Look at the values in the 3x3 block at the step before and after the gap. The overshoot value is HIGHER than the step before the gap but also higher than the step after.\n2. The bounce-back value matches an earlier reading from the descent -- specifically the value from the first step of descent.\n3. Fill the entire 3x3 block with that bounce-back value.\n4. Fill every cell outside the 3x3 block with 9.\n\nYou can verify by checking: the sequence of 3x3-block values should go steadily down, then jump back up once, then resume going down."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Thermostat Overcorrection: A room's temperature is shown in the top-left 3x3 area of each grid. The rest of the grid stays at 9 and never changes.\n\nThe AC is trying to cool the room from 9 down to some target. Watch the pattern across the visible steps: the 3x3 block has been steadily decreasing. But at the missing step, the AC overcorrects -- the temperature bounces back UP before settling lower again afterward.\n\nTo fill the missing grid:\n1. Identify the 3x3 block in the top-left corner (rows 0-2, columns 0-2).\n2. Look at the step immediately before the gap and the step immediately after. The overshoot value must be higher than both of those -- it bounces back to the same value that appeared during the first step of descent.\n3. Set every cell in the 3x3 block to that bounce-back value.\n4. Set every cell outside the block to 9.\n\nThink of it this way: the descent went too aggressively, so the temperature temporarily returned to where it was near the start before the system recovered."
+      }
+    ]
+  },
+  "narc_ai_003": {
+    "original_concept": "Softmax temperature approaching zero causes probability mass to concentrate entirely on the maximum value (argmax), producing a near-one-hot encoding. The diagonal holds the maximum in each row.",
+    "scaffolding_needed": "Understanding that as a 'sharpening' process continues, the biggest number in each row swallows almost all the points, and the pattern is heading toward the diagonal getting everything. The human must interpolate between the moderate and fully-concentrated stages.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Talent Show Vote: Four judges each award 9 points across four contestants. In each row, the contestant on the main diagonal (row 0 favors column 0, row 1 favors column 1, etc.) is the favorite.\n\nAs the competition heats up, votes concentrate more and more on each judge's favorite. Look at the first and last visible grids to see the trend: it starts nearly even, and it ends with all 9 points on the diagonal and 0 everywhere else.\n\nTo fill the missing grid, continue the trend toward winner-take-all:\n1. The diagonal cell in each row gets almost all the points -- just one point short of total domination.\n2. One runner-up cell keeps a single point. The runner-up position follows a circular shift pattern: in each row, it sits in the column one step clockwise from the diagonal (row 0's runner-up is column 1, row 1's is column 2, row 2's is column 3, row 3's wraps back to column 0).\n3. Every other cell drops to 0.\n\nSo each row has one large value on the diagonal, one small value at the next-clockwise position, and 0s elsewhere. The row must still sum to 9."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Magnifying Glass: Imagine four rows of candles. In each row, one candle (the one on the main diagonal) burns brightest. You are slowly focusing a magnifying glass that makes bright candles brighter and dim candles dimmer.\n\nThe sequence progresses from nearly uniform brightness toward a state where only the diagonal candle remains lit. The missing grid falls between the moderate stage and the fully concentrated stage.\n\nTo find it:\n1. Look at the trend of the diagonal value across the visible grids -- it has been climbing toward 9. For the missing step, it should be just below 9 (one step short of total concentration).\n2. Look at the trend of the second-brightest value -- it has been shrinking. For the missing step, only one non-diagonal cell per row survives with a minimal value; all others hit 0.\n3. The surviving non-diagonal cell follows a circular pattern: in row N, it sits at column (N+1) mod 4.\n4. Assign values so each row sums to 9: the diagonal gets the large value, the runner-up gets what remains, and everything else is 0."
+      }
+    ]
+  },
+  "narc_ai_004": {
+    "original_concept": "Horizontal Sobel edge detection: a 3x3 weighted comparison kernel that detects left-right brightness changes. Positive results (right brighter than left) map to 1, negative to 2, zero to 0.",
+    "scaffolding_needed": "The human needs to understand a 'weighted neighbor comparison' where for each cell, you look at a 3x3 neighborhood, compare the right side to the left side using specific weights, and color-code the result. Zero-padding at borders is critical.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Left-vs-Right Scale: You have a grid of numbers and you need to detect where brightness changes from left to right. For each cell, you place a balance scale that compares 'what is to the right' versus 'what is to the left' in its 3x3 neighborhood.\n\nHere is the weighing recipe for each cell at position (row, col):\n1. Look at the 3x3 square centered on that cell. If any part falls outside the grid, treat those outside values as 0.\n2. RIGHT side total = (top-right neighbor times 1) + (direct-right neighbor times 2) + (bottom-right neighbor times 1)\n3. LEFT side total = (top-left neighbor times 1) + (direct-left neighbor times 2) + (bottom-left neighbor times 1)\n4. Compare: if RIGHT > LEFT, write 1. If LEFT > RIGHT, write 2. If equal, write 0.\n\nThe center column of any symmetric bright region will have equal amounts on both sides, producing 0. Cells to the left of bright areas sense 'more brightness on the right' and produce 1. Cells to the right of bright areas sense 'more brightness on the left' and produce 2.\n\nWork through each cell in the grid using this recipe."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Wind Direction Game: Imagine each cell in the grid can feel a 'wind' blowing from bright areas. This wind only blows left-to-right or right-to-left.\n\nFor each cell, check its 3x3 neighborhood (if a neighbor is off the edge of the grid, it counts as 0). Use these weights to sense the wind:\n- Right column of neighbors: top-right gets weight 1, middle-right gets weight 2, bottom-right gets weight 1\n- Left column of neighbors: top-left gets weight 1, middle-left gets weight 2, bottom-left gets weight 1\n- The center column of neighbors (the cell itself, plus directly above and below) is ignored -- weight 0\n\nCalculate: Wind = (weighted right-side sum) minus (weighted left-side sum).\n- If wind is positive (more brightness to the right): mark 1\n- If wind is negative (more brightness to the left): mark 2\n- If wind is zero (balanced): mark 0\n\nApply this recipe cell by cell across the entire grid. Cells near the edges of bright regions will feel wind; cells far from any bright area or perfectly centered within one will feel none."
+      }
+    ]
+  },
+  "narc_ai_005": {
+    "original_concept": "Residual/skip connection: the output at layer 3 is the element-wise sum of layer 2's activation and layer 0's input embedding, taken modulo 10. Other layers simply add 2 to each element (mod 10).",
+    "scaffolding_needed": "The human needs to add two grids cell-by-cell and use clock arithmetic (mod 10). They must identify which two grids to add (layer 0 and layer 2) and understand the wrap-around rule.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Odometer Shortcut: Each layer normally adds 2 to every number, like an odometer ticking forward. But the odometer only shows one digit (0 through 9), so after 9 it wraps back to 0.\n\nThe normal rule (applied at most layers): take the previous layer's grid and add 2 to every cell. If any cell hits 10 or above, subtract 10 (keep only the ones digit).\n\nBut one special layer -- the missing one -- uses a SKIP CONNECTION instead. At this layer, instead of adding 2, you go back to the very first layer (Layer 0) and add those original starting values to the current layer's values, cell by cell. The same odometer rule applies: if any sum reaches 10 or more, subtract 10.\n\nThe recipe for the missing layer:\n1. Identify which layer immediately precedes the gap.\n2. For each cell, add the value from that preceding layer to the corresponding value from Layer 0.\n3. If the sum is 10 or more, keep only the ones digit (subtract 10).\n\nYou can verify your answer by checking that the layer AFTER the gap follows the normal +2 rule applied to your answer."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Recipe with a Callback: You are baking in steps. Each step normally adds 2 scoops of sugar to every bowl, and if any bowl passes 9 scoops, you dump out 10 and keep the remainder (clock arithmetic mod 10).\n\nMost layers follow this simple +2 rule. But one special layer -- the missing one -- is the CALLBACK step. Instead of adding 2, you look back at your original Step 0 notes and add THOSE amounts to your current bowls. Same dump-10 rule applies if you go over 9.\n\nTo fill in the missing layer:\n1. Take the grid from the layer immediately before the gap.\n2. Take the grid from Layer 0 (the very first layer).\n3. Add them together cell by cell.\n4. For any cell where the sum is 10 or more, subtract 10.\n\nYou can double-check: the layer right after the gap should equal your answer with 2 added to each cell (mod 10), since it goes back to the normal +2 rule."
+      }
+    ]
+  },
+  "narc_ai_006": {
+    "original_concept": "Element-wise XOR of two binary feature maps: where both inputs are the same (both 0 or both 9), output is 0; where they differ (one is 0 and the other is 9), output is 9.",
+    "scaffolding_needed": "The human needs to understand a simple 'same vs different' comparison between two grids, cell by cell.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Disagreement Detector: You have two grids of light switches -- each switch is either ON (9) or OFF (0). Compare the two grids cell by cell:\n\n- If both switches are in the SAME position (both ON or both OFF), the output stays OFF (0).\n- If the switches DISAGREE (one is ON and the other is OFF), the output turns ON (9).\n\nThe recipe is that simple. Go through every cell in the grid:\n1. Look at the value in Grid A at that position.\n2. Look at the value in Grid B at the same position.\n3. If they match, write 0. If they differ, write 9.\n\nThink of it as: 'It takes a difference to make a light.' Anywhere the two inputs agree, darkness. Anywhere they disagree, brightness."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Dance Partner Mismatch: Two groups of dancers stand on a grid floor. In Group A, some squares are occupied (9) and some are empty (0). Same for Group B.\n\nThe spotlight operator follows one rule: light up any square (write 9) where exactly ONE group has a dancer standing. If both groups occupy the square, or neither group does, leave it dark (write 0).\n\nFor each cell in the output grid:\n1. Check: does Grid A have a 9 or a 0 here?\n2. Check: does Grid B have a 9 or a 0 here?\n3. If exactly one of them is 9, write 9. Otherwise write 0.\n\nThis is the exclusive-or rule: sameness produces 0, difference produces 9."
+      }
+    ]
+  },
+  "narc_ai_007": {
+    "original_concept": "ReLU gate during backpropagation: gradient passes through unchanged where forward-pass activations were positive, but is completely blocked (zeroed) where activations were non-positive. The top 2 rows had negative pre-activations.",
+    "scaffolding_needed": "The human needs to understand a gate/filter concept: the signal (gradient) is either passed through or blocked depending on a separate condition (whether the original activation was positive). Also, the overall signal is fading by 2 each layer.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Hallway of Locked Doors: Imagine a signal traveling backward through rooms (from the output layer toward the input). Each layer reduces the signal strength by 2.\n\nLook at the layers before the gap: the signal has been fading uniformly by 2 at each step. Now the signal hits the missing layer, which has a special gate: some doors are LOCKED. The top two rows of doors are locked (the rooms behind them were inactive during the forward pass). The bottom three rows are open.\n\nTo fill the missing layer:\n1. Take the signal value from the layer immediately before the gap. This is the current signal strength.\n2. For the bottom three rows (rows 2, 3, and 4): the doors are open, so the signal passes through at its current strength. Write that value in every cell of those rows.\n3. For the top two rows (rows 0 and 1): the doors are locked, so the signal is completely blocked. Write 0 in every cell of those rows.\n\nAfter the gate, the pattern continues: each subsequent layer subtracts 2 from the surviving signals, while the blocked rows stay at 0 forever."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Fading Flashlight with Shutters: A flashlight beam starts bright at the output layer and fades by 2 units each room it passes through.\n\nLook at the visible layers before the gap to see the fading pattern. Between the last uniform layer and the missing layer, there is a wall of shutters. The shutters on the top two rows are CLOSED, and the shutters on the bottom three rows are OPEN.\n\nTo fill the missing layer:\n1. Find the signal strength at the layer just before the gap (the value that fills every cell uniformly).\n2. Bottom three rows: light passes through at that current brightness. Fill all cells in rows 2, 3, and 4 with that value.\n3. Top two rows: shutters block ALL light. Fill all cells in rows 0 and 1 with 0.\n\nFor any layers after the gate, the surviving light continues fading by 2 per layer while blocked rows remain dark (0) permanently. You can verify by checking whether the layers after the gap follow this pattern."
+      }
+    ]
+  },
+  "narc_ai_008": {
+    "original_concept": "Byte-pair encoding merge step 2: after the first merge combined token pairs (1,2) into token 7, the sequence [7,3,4,7,3,4] has most-frequent pair (3,4) which merges into token 8.",
+    "scaffolding_needed": "The human needs to understand the 'find the most common pair of neighbors and glue them together' rule, applied to the sequence after the first merge.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Buddy System: You have a line of colored beads (shown in the previous step). The rule is: find the pair of neighboring beads that appears most often, and glue each occurrence of that pair into one single new bead with a new color.\n\nTo fill the missing step:\n1. Look at the sequence from the step before the gap.\n2. Write down every pair of adjacent beads and count how many times each pair appears.\n3. If there is a tie, you need to pick the pair that will set up the NEXT merge correctly. Look at the step after the gap to see what pair gets merged next -- that tells you which pair must have been created by this step.\n4. The new merged bead gets the next available number (one higher than any existing bead color).\n5. Replace every occurrence of the chosen pair with a single bead of the new color. The sequence gets shorter -- two beads become one each time.\n\nThe result is a shorter sequence where each merged pair has been replaced by its new single token."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Word Shortener: Imagine you have a sequence of symbols written on cards (from the previous step). You want to shorten this by combining the most popular pair of adjacent cards into a single new card.\n\nRecipe:\n1. Read the sequence from the step immediately before the gap.\n2. Look at every pair of neighbors and count their frequencies.\n3. Pick the most frequent pair to merge. If there is a tie, choose the pair that makes the NEXT step's merge possible (check the step after the gap -- the pair it merges must exist in your result).\n4. Assign the new merged card the next available number.\n5. Scan through the sequence from left to right, replacing each occurrence of the chosen pair with the new single card.\n\nThe output is a single row that is shorter than the input by the number of merges performed (each merged pair loses one card)."
+      }
+    ]
+  },
+  "narc_ai_009": {
+    "original_concept": "L2 normalization of row vectors: each row is scaled so the largest component maps to 9, with all other components proportionally scaled and rounded.",
+    "scaffolding_needed": "The human needs to understand proportional scaling: find the biggest number in each row, set it to 9, and scale everything else by the same factor. Rounding to nearest integer is required.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Resize-to-Fit Rule: Each row of numbers is like an arrow pointing in some direction. You want to stretch or shrink each arrow so its longest component reaches exactly 9, while keeping the proportions the same.\n\nFor each row:\n1. Find the largest number in the row.\n2. Calculate the scale factor: 9 divided by that largest number.\n3. Multiply every number in the row by that scale factor.\n4. Round each result to the nearest whole number.\n\nApply this independently to each row. A row where the largest value is already 9 stays unchanged. A row where the largest value is smaller than 9 gets stretched up. The key is that the relative proportions within each row are preserved -- small values stay proportionally small, and the biggest value always lands on exactly 9.\n\nZeros remain zero regardless of the scale factor (0 times anything is still 0)."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Volume Knob: Imagine each row is a set of speakers playing at different volumes. You want to turn the master volume knob so the loudest speaker in each row hits exactly 9, and all the others adjust proportionally.\n\nRecipe for each row:\n1. Identify the loudest speaker (the highest number in the row).\n2. Figure out what multiplier turns that number into 9. The multiplier is 9 divided by the loudest value.\n3. Apply that same multiplier to every speaker in the row.\n4. Round each result to the nearest whole number.\n\nDo this row by row, independently. Each row gets its own multiplier based on its own loudest value. After normalization, every row will have at least one 9 (the former maximum), and all other values will be proportionally scaled. Any value that was 0 stays at 0."
+      }
+    ]
+  },
+  "narc_ai_010": {
+    "original_concept": "Saddle point in loss landscape: the grid shows a surface that curves downward along columns (vertical axis) but upward along rows (horizontal axis), creating a saddle shape centered in the grid.",
+    "scaffolding_needed": "The human needs to understand that the center value is the lowest point vertically but the highest point horizontally, and that the grid follows a symmetric pattern based on distance from center in each direction.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Mountain Pass: Imagine you are at a mountain pass -- a point that is simultaneously the LOW point of a ridge (if you walk north-south) and the HIGH point of a valley (if you walk east-west).\n\nThe grid is 5x5. The center cell (row 2, col 2) is the pass. Two rules govern the elevation:\n\nRule 1 -- Walking away from center along any column (vertically): elevation INCREASES as you move away from the center row.\nRule 2 -- Walking away from center along any row (horizontally): elevation DECREASES as you move away from the center column.\n\nTo find the formula, look at the grids before and after the gap. Each grid in the sequence shows the saddle shape becoming more pronounced. The value at any cell follows: center_value + step_size_horizontal * |col - 2| - step_size_vertical * |row - 2|, where the center value and step sizes can be read from the pattern of surrounding grids.\n\nThe grid is symmetric: it mirrors left-to-right around column 2, and top-to-bottom around row 2. Use the visible grids to determine the center value and the per-step offset, then fill every cell with that formula."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Pringles Chip: The missing grid looks like the surface of a Pringles chip (a saddle shape). It curves UP going left-right from center and curves DOWN going top-bottom from center.\n\nHere is how to build it:\n\n1. Start with the center cell (row 2, col 2). Look at the grids before and after the gap to identify the trend in center values. The center value for the missing grid falls between the neighboring grids' center values.\n\n2. For the center row (row 2), values INCREASE as you move away from the middle column. Each step away adds a fixed amount.\n\n3. For the center column (col 2), values DECREASE as you move away from the middle row. Each step away subtracts the same fixed amount.\n\n4. Every other cell combines both effects: value = center + (horizontal step size times distance from center column) - (vertical step size times distance from center row).\n\n5. The grid is doubly symmetric -- it mirrors both left-right and top-bottom around the center. So you only need to compute one quadrant and mirror it.\n\nRead the step sizes from the visible grids (look at how center-row or center-column values change per step from the center)."
+      }
+    ]
+  },
+  "narc_ai_011": {
+    "original_concept": "Checkerboard dropout with 50% rate: neurons at positions where (row+col) is even survive and are doubled; neurons where (row+col) is odd are zeroed out. Values clamped to max 9.",
+    "scaffolding_needed": "The human needs to understand the checkerboard pattern (like a chess board), the doubling rule for survivors, and that dropped cells become 0.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Chessboard Filter: Lay a chessboard pattern over the grid of numbers. White squares are positions where (row number + column number) is even (both counting from 0). Black squares are positions where (row number + column number) is odd.\n\nLabel each position:\nRow 0: W  B  W  B\nRow 1: B  W  B  W\nRow 2: W  B  W  B\nRow 3: B  W  B  W\n\nNow apply two rules:\n- BLACK squares: the number becomes 0 (blocked).\n- WHITE squares: DOUBLE the number (to compensate for losing half the cells). If the doubled value exceeds 9, cap it at 9.\n\nApply this to the input grid cell by cell. Every other cell in a checkerboard pattern gets zeroed out, and the surviving cells get their values doubled (with a ceiling of 9)."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Garden Sprinkler Pattern: Imagine a garden with a grid of plants. A sprinkler with a checkerboard nozzle pattern waters only every other plant (like the white squares on a chess board).\n\nWhich plants get water? Count from the top-left corner (row 0, col 0). A plant gets water if (row number + column number) is even. So (0,0) yes, (0,1) no, (0,2) yes, (1,0) no, (1,1) yes, and so on -- it alternates like a checkerboard.\n\nThe twist: watered plants get DOUBLE the nutrients (multiply their grid value by 2, but never exceed 9). Unwatered plants wither completely (their value becomes 0).\n\nTo fill the output grid:\n1. For each cell, check whether row + column is even or odd.\n2. If even: double the value from the input grid, capping at 9.\n3. If odd: write 0.\n\nAny value of 5 or higher, when doubled, would exceed 9 -- so those all become 9."
+      }
+    ]
+  },
+  "narc_ai_012": {
+    "original_concept": "Cellular automaton on a toroidal 3x3 grid: each cell becomes the sum of itself, its upper neighbor, and its left neighbor (with wrapping), modulo 10.",
+    "scaffolding_needed": "The human needs to understand neighbor-summing with wrap-around edges (top wraps to bottom, left wraps to right) and mod-10 arithmetic. They must apply this rule to go from t=2 to t=3.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Donut-Shaped Adding Game: Your 3x3 grid lives on the surface of a donut -- the top edge connects to the bottom edge, and the left edge connects to the right edge. So if you go 'above' row 0, you wrap to row 2. If you go 'left' of column 0, you wrap to column 2.\n\nTo compute the next state from the current state, each cell adds up THREE values from the CURRENT grid:\n1. Its own value\n2. The value of the cell directly ABOVE it (wrapping around to the bottom row if needed)\n3. The value of the cell directly to its LEFT (wrapping around to the rightmost column if needed)\n\nIf the sum reaches 10 or more, keep only the ones digit (subtract 10, or 20, or however many tens are needed).\n\nIMPORTANT: All cells read from the CURRENT state simultaneously -- you do not update cells one by one. Compute all nine new values from the same snapshot, then write them all at once.\n\nApply this rule to the grid at the step before the gap to produce the missing grid. You can verify by applying the same rule to your answer and checking that it produces the grid at the step after the gap."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Neighborhood Potluck on a Wrapped Grid: Nine houses sit in a 3x3 neighborhood, but the streets wrap around -- the house at the top of a column is neighbors with the house at the bottom, and the leftmost house in a row is neighbors with the rightmost.\n\nEach hour, every house collects food from exactly three sources:\n- Their own pantry\n- Their upstairs neighbor's pantry (the cell one row above, wrapping from row 0 to row 2)\n- Their left-side neighbor's pantry (the cell one column to the left, wrapping from column 0 to column 2)\n\nThey add up the three amounts. If the total reaches 10 or more, they only keep the remainder after dividing by 10.\n\nAll houses collect simultaneously from the CURRENT state -- nobody uses a neighbor's updated value. To fill the missing grid, apply this rule to the grid at the step just before the gap. To verify, apply the rule to your result and see if it matches the grid at the step after the gap."
+      }
+    ]
+  },
+  "narc_ai_013": {
+    "original_concept": "Autoencoder bottleneck: the latent vector is computed by taking the column-wise mean of the encoder output grid, rounded to nearest integer.",
+    "scaffolding_needed": "The human needs to average each column of a 3x3 grid and round the result. This is straightforward arithmetic.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Summary Row: You have a multi-row, multi-column table of numbers (the Encoder Output grid, which appears right before the gap). Your job is to squeeze it down to a single row that best represents each column.\n\nThe rule: for each column, add up all the values in that column and divide by the number of rows. Round to the nearest whole number. This gives you one value per column.\n\nThe result is a single row with as many entries as the Encoder Output has columns. Each entry is the average of the corresponding column from that grid.\n\nThis is straightforward arithmetic: sum each column, divide by the row count, and round."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Funnel: Imagine pouring multiple floors of a building down through a funnel into one floor. Each column of rooms gets combined into a single room.\n\nLook at the grid immediately before the gap (the Encoder Output). To find what comes out of the funnel:\n1. For each column, add up all the values from top to bottom.\n2. Divide each column's total by the number of rows.\n3. Round to the nearest whole number.\n\nThe output is a single row with one value per column -- each value being the rounded average of that column in the Encoder Output grid."
+      }
+    ]
+  },
+  "narc_ai_014": {
+    "original_concept": "Batch normalization: for each column, compute z-scores, then map to [0,9] range using output = round(z * 2 + 5), clamped to [0,9].",
+    "scaffolding_needed": "The human needs to understand ranking within columns and spreading values evenly. The z-score formula requires computing mean and standard deviation per column, then applying a linear transformation.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Fair Grading Curve: Each column of numbers represents test scores from a different subject, and the grading is unfair -- some subjects have high averages, some low. Batch normalization is like applying a curve to make each subject's scores center around 5.\n\nFor each column independently:\n1. Find the average (mean) of all values in that column.\n2. Find how spread out they are: compute the population standard deviation (square root of the average of squared differences from the mean -- divide by the count, not count minus one).\n3. For each value, compute its z-score: (value minus mean) divided by standard deviation.\n4. Convert to the 0-9 scale: multiply the z-score by 2, then add 5, then round to the nearest whole number. If the result falls below 0, use 0; if above 9, use 9.\n\nA helpful shortcut: if a column has three evenly spaced values (like an arithmetic sequence), the z-scores will always be approximately -1.22, 0, and +1.22. Plugging those into the formula gives 3, 5, and 7. So for evenly spaced columns, just assign 3 to the lowest value, 5 to the middle, and 7 to the highest."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Thermometer Recalibration: Imagine each column is a thermometer with several readings. The thermometers use different scales, so you need to recalibrate them all to a common 0-9 scale centered at 5.\n\nFor each column (thermometer):\n1. Find the middle reading (average of all values in the column).\n2. Measure the typical spread (population standard deviation -- divide by N, not N-1).\n3. For each value: new_value = round((value - average) / spread * 2 + 5), clamped to the range 0 through 9.\n\nNotice a shortcut: if a column's values form an evenly spaced sequence (like 2, 5, 8 or 9, 6, 3), the z-scores always work out to approximately -1.22, 0, and +1.22. Plugging into the formula gives 3, 5, and 7 respectively. So for each column, just rank the values: lowest becomes 3, middle becomes 5, highest becomes 7.\n\nApply this column by column to build the output grid."
+      }
+    ]
+  },
+  "narc_ai_015": {
+    "original_concept": "Huffman coding: build a prefix-free binary tree by repeatedly merging the two least-frequent symbols. Encode bits as 0->0, 1->9 in the grid, with 5 for unused/padding positions.",
+    "scaffolding_needed": "The human needs to understand the Huffman tree construction process (repeatedly merge the two smallest frequencies), assign 0/1 to branches, read off the codes, and encode them into the grid format.",
+    "alternatives": [
+      {
+        "variant": "human_1",
+        "source_domain": "everyday",
+        "narrative": "The Tournament Bracket (Backwards): You have several contestants with different popularity scores (shown in the frequency grid). You need to give each contestant a unique binary address. Less popular contestants get longer addresses, more popular ones get shorter addresses.\n\nStep 1 -- Build the bracket by repeatedly pairing the two LEAST popular remaining contestants (or groups). When two contestants/groups are tied in popularity, pick the one that appears earlier. Each pairing creates a new group whose popularity is the sum of its members. Keep pairing until everyone is in one big group.\n\nStep 2 -- Read addresses from the bracket. At each split, the left child gets a 0, the right child gets a 9. Starting from the top of the bracket, trace down to each contestant, collecting 0s and 9s along the way. That sequence is their code.\n\nStep 3 -- Write the grid. Each row corresponds to a contestant (in the order they were listed). Each column is a bit position from left to right. Write 0 for a left-branch bit, 9 for a right-branch bit. If a contestant's code is shorter than the grid's column count, fill the remaining columns with 5 (padding).\n\nThe most popular contestant will have the shortest code (fewest non-5 entries), and the least popular will have the longest."
+      },
+      {
+        "variant": "human_2",
+        "source_domain": "everyday",
+        "narrative": "The Postal Code System: A town needs to assign ZIP codes to its neighborhoods based on their population (given in the frequency grid). Bigger neighborhoods get shorter codes so the mail system is more efficient.\n\nStep 1 -- Build the code tree. Start with all neighborhoods as separate entries. Repeatedly find the two entries with the smallest populations and merge them into one combined entry (adding their populations). Break ties by choosing the entry that comes first. Continue until all neighborhoods are merged into a single entry.\n\nStep 2 -- Assign code digits. At each merge point (split) in the tree, the left branch gets digit 0 and the right branch gets digit 9. To find any neighborhood's code, trace the path from the root of the tree down to that neighborhood, writing down 0 or 9 at each branch.\n\nStep 3 -- Write the grid. Each row is one neighborhood (in the original listed order, top to bottom). Columns represent bit positions from most significant to least significant. Write the code digits (0 or 9) from left to right. If a code is shorter than the total number of columns, pad the remaining positions with 5.\n\nThe result: frequent neighborhoods have short codes (more 5s on the right), rare neighborhoods have long codes (filling more columns with 0s and 9s)."
+      }
+    ]
+  }
+}

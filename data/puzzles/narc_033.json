@@ -1,0 +1,162 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        1,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        2
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:4",
+      "size:uniform",
+      "mask:single",
+      "difficulty:medium",
+      "audience:general",
+      "audience:humanities",
+      "arc:subversion",
+      "clue:identity",
+      "clue:causation",
+      "domain:social-science",
+      "spectrum:human-edge"
+    ]
+  },
+  "narrative": "Two sat in separate rooms, each offered the same bargain. Blue reached through the wall with an open hand. Red reached too \u2014 but closed its fist around everything Blue offered. Trust is a gift; betrayal is a strategy.",
+  "puzzle_id": "narc_033",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2
+        ]
+      ],
+      "label": "separate cells",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "the offer extended",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "the choice revealed",
+      "masked": true,
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          1,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          2,
+          2
+        ],
+        [
+          0,
+          0,
+          2,
+          2
+        ]
+      ],
+      "label": "the aftermath of betrayal",
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "The Prisoner's Dilemma"
+}

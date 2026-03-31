@@ -1,0 +1,207 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        1,
+        6,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        4,
+        4,
+        4,
+        4,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        4,
+        4,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "party A (red)",
+      "4": "meeting point (yellow)",
+      "6": "party B (blue)"
+    },
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "4",
+    "human_difficulty": 2,
+    "tags": [
+      "focalization-test",
+      "domain:reunion",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "Two separated parties (red=1 and blue=6) start on opposite sides of a wide grid, unable to see each other. A meeting point (yellow=4) glows in the center. Both move inward frame by frame, drawn toward the yellow beacon. They converge and meet at the yellow center, and the yellow expands around them in celebration.",
+  "puzzle_id": "narc_focal_060",
+  "sequence": [
+    {
+      "cols": 10,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          4,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Separated parties, beacon in center",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 10,
+      "grid": [
+        [
+          0,
+          0,
+          1,
+          0,
+          0,
+          0,
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          4,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Both move toward center",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 10,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          1,
+          0,
+          0,
+          6,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          4,
+          4,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Getting closer",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 10,
+      "grid": null,
+      "label": "Reunion at the beacon",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "The Reunion"
+}

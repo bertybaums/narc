@@ -1,0 +1,131 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        1,
+        0,
+        7,
+        8,
+        4,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "wife (Della)",
+      "4": "husband (Jim)",
+      "7": "watch / watch chain",
+      "8": "hair / hair comb"
+    },
+    "ai_difficulty": 7,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 6,
+    "tags": [
+      "focalization-test",
+      "domain:literature",
+      "spectrum:human-forte",
+      "irony",
+      "exchange",
+      "sacrifice"
+    ]
+  },
+  "narrative": "A husband (blue=4) and wife (red=1) each possess a treasure: the wife has long hair (value=8 in her row) and the husband has a gold watch (value=7 in his row). They each secretly sell their treasure to buy a gift for the other. In the masked grid, the exchange has occurred: the wife's hair cell changes from 8 to 0 (she sold it), a gift for the husband (new 7) appears near the wife, the husband's watch cell changes from 7 to 0 (he sold it), and a gift for the wife (new 8) appears near the husband. The irony: each gift is useless without the other's sold treasure.",
+  "puzzle_id": "narc_focal_013",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          1,
+          8,
+          0,
+          0,
+          4,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Each with their treasure",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": [
+        [
+          1,
+          8,
+          0,
+          0,
+          4,
+          7
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          2,
+          0,
+          0
+        ]
+      ],
+      "label": "Both planning gifts (secret)",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 6,
+      "grid": null,
+      "label": "The exchange",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    }
+  ],
+  "title": "The Gift of the Magi"
+}

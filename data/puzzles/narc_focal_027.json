@@ -1,0 +1,183 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        3,
+        3,
+        3,
+        9,
+        9,
+        9,
+        9
+      ],
+      [
+        3,
+        3,
+        3,
+        5,
+        5,
+        9,
+        9,
+        9
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "brown": "plate B",
+      "green": "plate A",
+      "grey": "mountains"
+    },
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "grey",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:geology",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "Two tectonic plates drift toward each other at centimeters per year. Neither plate perceives the collision. But at the boundary, rock buckles upward, forming mountains that neither plate intended to create.",
+  "puzzle_id": "narc_focal_027",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          0,
+          0,
+          9,
+          9,
+          9
+        ],
+        [
+          3,
+          3,
+          3,
+          0,
+          0,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "plates apart",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          9,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "plates approach",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "collision begins",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          5,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          5,
+          5,
+          9,
+          9,
+          9
+        ],
+        [
+          3,
+          3,
+          5,
+          5,
+          5,
+          5,
+          9,
+          9
+        ]
+      ],
+      "label": "mountains rise",
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "Plate Collision"
+}

@@ -1,0 +1,291 @@
+{
+  "narc_001": [
+    {
+      "variant": "alt_1",
+      "source_domain": "clockwork",
+      "narrative": "The hour hand traces its patient arc sunwise around the dial, never retreating, each tick advancing it one station from the twelve o'clock mark where it began."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "dance",
+      "narrative": "The ballerina begins facing the audience, then turns deosil in steady quarter-pirouettes, always leading with her right shoulder, one position per measure of the waltz."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "astronomy",
+      "narrative": "A comet orbits its star in the same sense the planets do — prograde, sweeping from north through east — advancing one position along its orbit with each passing epoch."
+    }
+  ],
+  "narc_002": [
+    {
+      "variant": "alt_1",
+      "source_domain": "military",
+      "narrative": "Four regiments occupy the four quadrants of the fortress, each arriving in clockwise order: spring's green battalion, then summer's. But the second regiment mutinied and was stripped of its colors — issued grey uniforms — before taking its post in the upper-right quarter."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "weaving",
+      "narrative": "A weaver fills her loom in four quarters, working sunwise from the top-left. Each season brings its own dye. But the summer thread was bleached by mistake, and that upper-right quarter was woven in pale grey instead of its intended hue."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "cooking",
+      "narrative": "A chef plates four sauces in clockwise quadrants, starting top-left with green pesto. The second sauce should have been vibrant, but the cream curdled in the summer heat, leaving only a dull grey pool in the upper-right quarter of the plate."
+    }
+  ],
+  "narc_003": [
+    {
+      "variant": "alt_1",
+      "source_domain": "medicine",
+      "narrative": "A fever climbs one degree each day, the red flush rising steadily from the patient's feet. On the fourth day, the physician administers a draught so potent it drops the temperature back to where it stood on day two — though the fever resumes climbing after."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "The crescendo builds one bar at a time, each measure louder than the last. But in the fourth bar, the conductor cuts the orchestra back to the volume of bar two before letting the swell resume."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "architecture",
+      "narrative": "A mason lays one course of blue brick each day upon the foundation, building upward past the two pillars. On the fourth day, the foreman tears down to the second-day height, then permits building to continue as before."
+    }
+  ],
+  "narc_004": [
+    {
+      "variant": "alt_1",
+      "source_domain": "mythology",
+      "narrative": "An L-shaped rune drifts rightward through the inscription, one column per age. When it crosses the central pillar of the temple, the gods reverse it — the rune appears as its own mirror image for every step thereafter."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "oceanography",
+      "narrative": "A crooked piece of driftwood floats one current-width eastward each tide. When it passes the reef at mid-channel, the undertow flips it — from that point on, the shape rides horizontally reversed through every remaining stretch of water."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "theater",
+      "narrative": "An actor carrying an L-shaped prop walks one step stage-right each beat. The moment he crosses center stage, the mirror backdrop catches the shape and it appears flipped left-to-right for the remainder of his exit."
+    }
+  ],
+  "narc_005": [
+    {
+      "variant": "alt_1",
+      "source_domain": "gardening",
+      "narrative": "Green herbs grow in a checkerboard pattern across the raised bed. Each round, one herb wilts and turns red. In round 2, the herb at the top row, third column wilts. In round 3, the one at the third row, third column wilts. In round 4, the one at the second row, second column wilts — and any herb that has been red since round 2 ripens golden yellow."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "military",
+      "narrative": "Soldiers in green stand on alternating squares of a parade ground. Each round, one is wounded and marked red. Round 2 takes the soldier at row 0, column 2. Round 3 claims row 2, column 2. Round 4 strikes row 1, column 1 — and any soldier who has borne the red mark for exactly two full rounds earns a gold medal of valor."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "astronomy",
+      "narrative": "Green stars dot a checkerboard nebula. Each epoch, one star goes red giant. Epoch 2 ignites row 0, column 2. Epoch 3 ignites row 2, column 2. Epoch 4 ignites row 1, column 1. Any star that has burned red for two full epochs collapses into a yellow dwarf."
+    }
+  ],
+  "narc_006": [
+    {
+      "variant": "alt_1",
+      "source_domain": "medicine",
+      "narrative": "A patient reports the same symptoms twice — each time the ward mobilizes identically, running the same tests, deploying the same staff. By the third episode, the nurses suspect malingering and no one responds, though this time the illness is real."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "A trumpeter plays the same distress fanfare twice, and both times the full orchestra joins in identical response. On the third sounding, the orchestra sits silent — but this time the battle is real, and no accompaniment comes."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weather",
+      "narrative": "The siren wails the same tornado warning twice, and twice the town shelters in the same pattern. When the siren sounds a third time — with a real storm bearing down — the streets stay empty. The warning and the shelter repeat identically for the first two false alarms."
+    }
+  ],
+  "narc_007": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "A baker layers frosting on a cake, one tier per day, building upward from the base. On the third day she realizes the order was cancelled — the cake must be reduced back to just its original single bottom layer."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "A choir adds one vocal part per verse, stacking harmonies upward. By the third verse the conductor learns the piece was misassigned — they must strip back to the single foundation voice where they began."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "A child fills a planter one row of red tulips at a time, from the bottom up. On the third planting she discovers the bulbs were borrowed — she must return them, leaving only the first row she planted."
+    }
+  ],
+  "narc_008": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "A chef stacks one layer of filling each hour into a narrow mold, rising from the bottom. At the fifth hour she crowns it with a golden glaze across the entire top. But the oven fails — each subsequent hour, one layer spoils and must be scraped away from the top down."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "An orchestra builds its sound one instrument per measure in the center channel, growing from the bass up. On the fifth measure, the brass section blazes a golden fortissimo across the full width. Then the decay begins, one instrument silenced per measure from the top."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "A vine climbs one rung per day up the center of its trellis. On the fifth day it crowns the top rail with golden blossoms spanning the full width. Then frost comes — each night it kills back one rung from the crown downward."
+    }
+  ],
+  "narc_009": [
+    {
+      "variant": "alt_1",
+      "source_domain": "music",
+      "narrative": "A melody walks eastward along the bottom staff, one note per bar. On the fourth bar it strikes the blue river-note — cold and resonant. Then it turns west, climbing to the higher staff, retracing its path one step per bar toward home."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "weaving",
+      "narrative": "The shuttle moves one column right each pass along the bottom row of the loom. On the fourth pass it threads cold blue weft. Then it reverses, heading left along the row above, one column per pass, returning to the starting selvage."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "military",
+      "narrative": "A scout advances eastward along the valley floor, one league per day. On the fourth day she reaches the river and fords its blue current. She then turns west, marching the ridge one row higher, one league per day back to base camp."
+    }
+  ],
+  "narc_010": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "Batter rises one layer each quarter-hour in the pan, filling from the bottom. In the third quarter, a wire rack is placed across the second row — the batter cannot pass through it and instead presses flat against the barrier, a grey crust forming where it meets the wire."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "architecture",
+      "narrative": "Sand fills an hourglass one row per quarter. In the third quarter, a stone shelf is mortared across the second row from the top. The sand cannot pass — it pools against the shelf, which shows as a grey line, while sand continues to accumulate below it."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "Groundwater climbs one terrace per season from the lowest bed. In the third season, the gardener lays a grey stone retaining wall along the second row. The water cannot breach it — it laps against the barrier while the beds below stay flooded."
+    }
+  ],
+  "narc_011": [
+    {
+      "variant": "alt_1",
+      "source_domain": "mythology",
+      "narrative": "Three sacred flames — ruby, emerald, and sapphire — burn in a row at the temple's far end: red on the left, green in the center, blue on the right. Each night a priest carries them one step toward the altar. On the third night, a trickster god replaces the green flame with a grey ember before it advances."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "cooking",
+      "narrative": "Three spices sit at the back of the shelf — paprika left, basil center, blueberry right. Each day the cook moves them one position forward. On the third day, the basil jar is emptied and refilled with grey salt before being advanced."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "music",
+      "narrative": "Three instruments — red drum, green flute, blue harp — begin at the back of the stage, spaced apart: drum stage-left, flute center, harp stage-right. Each act they step one row forward. In the third act, the flute is swapped for a grey muted horn before it takes its step."
+    }
+  ],
+  "narc_012": [
+    {
+      "variant": "alt_1",
+      "source_domain": "medicine",
+      "narrative": "An infection spreads outward from the center of the body, one ring of red cells per day in a diamond pattern. Twice the surgeons excised the outer edges, but it regrew. On the fourth day the immunologist understood: she must destroy the central cell itself — turning it black — to halt the spread. Only then did the body clear the disease."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "mythology",
+      "narrative": "A red curse radiates from the heart of the kingdom, one ring outward per day in a diamond shape. Twice the knights pushed back the borders, but it returned. On the fourth day the oracle revealed the truth: the cursed hearthstone at the very center must be destroyed — struck black — before the land could heal."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "Red mold blooms outward from the center pot, spreading one ring per day in every cardinal direction. Twice the gardener pruned the edges, but it regrew. On the fourth day she realized: uproot the center plant itself — scorch it black — and the mold will die at its source."
+    }
+  ],
+  "narc_013": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "A recipe halved and halved again. What was prepared with such careful measure fit smaller and smaller vessels, until the last dish held only what one tongue would need — but no tongue ever tasted it."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "A lullaby composed for two voices, then arranged for fewer, then for one — though the cradle it was written for never rocked a sleeping child."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weaving",
+      "narrative": "Two tiny garments cut from the same bright cloth, then trimmed to a single offering, then trimmed again to the smallest pattern. The thread was never pulled through buttonholes; the seams never bore any weight."
+    }
+  ],
+  "narc_014": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "A soufflé rises in its dish — small at first, then swelling wider and taller with golden crust flanking the red center. But the oven door opens too soon, and the soufflé collapses, shrinking back. The golden crust turns to grey ruin as it sinks, leaving only a fallen lump settled at the bottom."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "A melody ascends — first a modest three-note phrase, then expanding to four voices with golden harmonics on the wings, then five voices soaring. The crescendo peaks too brightly, and the sound cracks. The golden overtones decay to grey dissonance as the piece contracts, until only a broken chord remains at the lowest register."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "architecture",
+      "narrative": "A spire is built upward — first a small base with golden buttresses flanking a red pillar, then wider and taller with each course. But the architect built too high for the foundation. The golden arches fracture to grey rubble as the structure contracts, until only the shattered base rests on the ground."
+    }
+  ],
+  "narc_015": [
+    {
+      "variant": "alt_1",
+      "source_domain": "oceanography",
+      "narrative": "A grey wave crests diagonally from the deep corner toward the shallows, climbing one position up and left each surge. It reaches the far shore — then the undertow pulls it back the way it came, returning to the depths where it began. The cycle does not end."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "clockwork",
+      "narrative": "A grey gear-weight rides the track diagonally from lower-right to upper-left, one notch per tick. It reaches the highest point — then the escapement releases, and the weight slides back down to the bottom-right corner. The mechanism resets and begins again."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "dance",
+      "narrative": "A grey-clad dancer steps diagonally upstage-left from the downstage-right corner, one mark per beat. She reaches the far corner — then the choreography demands she return to her starting mark at the bottom-right. The music loops, and she begins the ascent once more."
+    }
+  ],
+  "narc_016": [
+    {
+      "variant": "alt_1",
+      "source_domain": "music",
+      "narrative": "First you hear only muffled grey notes through the wall — flat shapes of sound, no depth. Turn to face the source: behind you, fire-orange and amber instruments reveal themselves amid the grey. Step into the open air and the full orchestra unfolds — trees in green, sky in pink and yellow, earth in blue and red — wider, deeper, more vivid than the rehearsal room ever promised. Return inside, and the grey notes resume."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "weaving",
+      "narrative": "The first cloth shows only grey silhouettes — flat patterns with no true hue. Unravel it and find the loom behind: the warp threads glow red and orange against the remaining grey. Step beyond the loom entirely and the full tapestry reveals itself — green canopy, pink-yellow blossoms, blue rivers, red earth — a richer, wider weave than the shadow-cloth imagined. Fold it away, and you are left with grey once more."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "cooking",
+      "narrative": "At first you taste only grey broth — bland impressions, no dimension. Turn from the bowl and discover the hearth: a red flame and amber spices explain the shadows of flavor. Leave the kitchen entirely and a full feast awaits — green herbs, golden crusts, blue cheese, red wine — wider, richer, more vivid than the broth ever suggested. Return to the kitchen, and all you find is grey broth again."
+    }
+  ],
+  "narc_017": [
+    {
+      "variant": "alt_1",
+      "source_domain": "gardening",
+      "narrative": "A great oak grows from pedestal-soil, first a sapling, then a towering canopy of blue-grey bark. It stands proud for a season — then blight strips its branches one by one. In the end, only one low bough clings above the roots, and the golden bed of fallen leaves beneath is all that testifies to former glory."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "A symphony is composed in blue-grey movements, rising from a golden bass line. First a modest theme, then full orchestration, then a towering finale. It holds for one measure of silence. Then the instruments fall away, section by section, until only a lone oboe hovers above the golden pedal tone — the dedication page outlasting the music itself."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "oceanography",
+      "narrative": "A coral reef builds upward from a golden sandbed, growing taller and broader with each tide. It reaches its zenith — a towering formation — then bleaching sets in, dissolving the structure tide by tide. At last only a single polyp clings above the golden sand, the reef's name etched into the bedrock the only proof it ever stood."
+    }
+  ]
+}

@@ -1,0 +1,183 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        1,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        3
+      ],
+      [
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        3
+      ],
+      [
+        0,
+        0,
+        0,
+        3
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "teacher (red)",
+      "3": "correct answers (green)",
+      "6": "student (blue)"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 4,
+    "tags": [
+      "focalization-test",
+      "domain:education",
+      "spectrum:balanced"
+    ]
+  },
+  "narrative": "A student (blue=6) sits at a desk filling in answers on a grid. The teacher (red=1) watches from the front, knowing the correct answers (green=3). The student marks some answers right and some wrong. The teacher collects the exam and marks it, revealing the correct pattern. The student sees the gaps in their knowledge.",
+  "puzzle_id": "narc_focal_043",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          6
+        ]
+      ],
+      "label": "Teacher hands out exam",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          6
+        ],
+        [
+          0,
+          0,
+          6,
+          0
+        ],
+        [
+          0,
+          6,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          6,
+          6
+        ]
+      ],
+      "label": "Student fills in answers",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "Teacher reveals correct answers",
+      "masked": true,
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          1
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          3
+        ]
+      ],
+      "label": "Graded: green=correct, red=wrong",
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "The Exam"
+}

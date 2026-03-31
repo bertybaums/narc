@@ -1,0 +1,223 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        0,
+        0
+      ],
+      [
+        4,
+        4,
+        4
+      ],
+      [
+        0,
+        0,
+        4
+      ],
+      [
+        8,
+        8,
+        8
+      ],
+      [
+        8,
+        8,
+        8
+      ],
+      [
+        8,
+        8,
+        8
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "1": "apprentice",
+      "4": "enchanted brooms",
+      "8": "water"
+    },
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "1",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:ai-forte",
+      "exponential-growth",
+      "loss-of-control"
+    ]
+  },
+  "narrative": "The apprentice (red=1) enchants a broom (blue=4) to carry water (azure=8). The broom works, but the apprentice cannot stop it. In each successive grid, the number of brooms doubles (more 4s appear) and water rises (8s fill from the bottom up). In the masked grid, the brooms have doubled again to four, and water has risen to fill the bottom two rows entirely.",
+  "puzzle_id": "narc_focal_019",
+  "sequence": [
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          8,
+          8
+        ]
+      ],
+      "label": "Apprentice enchants broom",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8
+        ]
+      ],
+      "label": "Water rises",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          4,
+          4
+        ],
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8
+        ]
+      ],
+      "label": "Broom splits, water rises more",
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 3,
+      "grid": null,
+      "label": "Brooms multiply, flooding",
+      "masked": true,
+      "position": 3,
+      "rows": 6
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          0,
+          0
+        ],
+        [
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4
+        ],
+        [
+          4,
+          4,
+          4
+        ],
+        [
+          8,
+          8,
+          8
+        ],
+        [
+          8,
+          8,
+          8
+        ]
+      ],
+      "label": "Total chaos",
+      "position": 4,
+      "rows": 6
+    }
+  ],
+  "title": "The Sorcerer's Apprentice"
+}

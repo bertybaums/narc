@@ -1,0 +1,138 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ],
+      [
+        0,
+        0,
+        1,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 1,
+    "tags": [
+      "spectrum:human-forte",
+      "common-sense-physics",
+      "balloon",
+      "pop"
+    ]
+  },
+  "narrative": "A child holds a balloon on a string. Then -- POP! What does a popped balloon look like? Just the string hanging limp, nothing left up top.",
+  "puzzle_id": "narc_sp_051",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          1,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ],
+        [
+          0,
+          0,
+          1,
+          0
+        ]
+      ],
+      "label": "Balloon on string",
+      "position": 0,
+      "rows": 8
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "POP!",
+      "masked": true,
+      "position": 1,
+      "rows": 8
+    }
+  ],
+  "title": "Popping the Balloon"
+}

@@ -1,0 +1,216 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        3,
+        3,
+        0
+      ],
+      [
+        3,
+        0,
+        3,
+        0,
+        3
+      ],
+      [
+        0,
+        3,
+        0,
+        3,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:5",
+      "size:varying",
+      "mask:single",
+      "difficulty:medium",
+      "audience:humanities",
+      "arc:transformation",
+      "clue:identity",
+      "domain:literature",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "One morning, waking from uneasy dreams, the shape in the bed was no longer the shape that went to sleep. Segmented, low, repulsive to those who once called it family.",
+  "puzzle_id": "narc_019",
+  "sequence": [
+    {
+      "cols": 3,
+      "grid": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0
+        ],
+        [
+          0,
+          2,
+          0
+        ]
+      ],
+      "label": "the man",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "the change begins",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "the vermin",
+      "masked": true,
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          3,
+          0,
+          3,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "alone in the room",
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "gone",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Metamorphosis"
+}

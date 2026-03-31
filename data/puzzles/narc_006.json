@@ -1,0 +1,293 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        2,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        3,
+        3,
+        0
+      ],
+      [
+        0,
+        3,
+        3,
+        3,
+        0
+      ],
+      [
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    ],
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        2,
+        0,
+        1,
+        1
+      ],
+      [
+        0,
+        3,
+        3,
+        3,
+        0
+      ],
+      [
+        0,
+        3,
+        3,
+        3,
+        0
+      ],
+      [
+        3,
+        3,
+        3,
+        3,
+        3
+      ]
+    ]
+  },
+  "masked_positions": [
+    2,
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 3,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "medium",
+    "human_difficulty": 2,
+    "tags": [
+      "grids:6",
+      "size:uniform",
+      "mask:multi",
+      "difficulty:medium",
+      "audience:humanities",
+      "arc:cyclical",
+      "clue:rule",
+      "domain:literature",
+      "spectrum:human-edge"
+    ]
+  },
+  "narrative": "A shepherd boy tends his flock on a hillside. Twice he raises a false alarm, and both times the villagers rush to help only to find no danger. The third time, a real wolf appears \u2014 but having been fooled twice, no one comes. The cycle repeats identically both times the boy lies: the same alarm, the same full response, the same disappointment.",
+  "puzzle_id": "narc_006",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "Cry 1",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          1,
+          2,
+          0,
+          1,
+          1
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "Response 1",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Cry 2",
+      "masked": true,
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Response 2",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "Real wolf",
+      "position": 4,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          2,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          0,
+          3,
+          3,
+          3,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3,
+          3
+        ]
+      ],
+      "label": "No help",
+      "position": 5,
+      "rows": 5
+    }
+  ],
+  "title": "The Boy Who Cried Wolf"
+}

@@ -1,0 +1,176 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        5,
+        4,
+        3,
+        2,
+        1,
+        0,
+        9
+      ],
+      [
+        8,
+        7,
+        6,
+        5,
+        4,
+        3,
+        2
+      ],
+      [
+        1,
+        0,
+        9,
+        8,
+        7,
+        6,
+        5
+      ],
+      [
+        4,
+        3,
+        2,
+        1,
+        0,
+        9,
+        8
+      ],
+      [
+        7,
+        6,
+        5,
+        4,
+        3,
+        2,
+        1
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 4,
+    "tags": [
+      "spectrum:ai-forte",
+      "matrix-operations",
+      "rotation-180"
+    ]
+  },
+  "narrative": "Grid 1 (masked) is Grid 0 rotated 180 degrees. Grid1[r][c] = Grid0[rows-1-r][cols-1-c], where rows=5, cols=7.",
+  "puzzle_id": "narc_sp_011",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        [
+          8,
+          9,
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        [
+          5,
+          6,
+          7,
+          8,
+          9,
+          0,
+          1
+        ],
+        [
+          2,
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        [
+          9,
+          0,
+          1,
+          2,
+          3,
+          4,
+          5
+        ]
+      ],
+      "label": "Original",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          5,
+          4,
+          3,
+          2,
+          1,
+          0,
+          9
+        ],
+        [
+          8,
+          7,
+          6,
+          5,
+          4,
+          3,
+          2
+        ],
+        [
+          1,
+          0,
+          9,
+          8,
+          7,
+          6,
+          5
+        ],
+        [
+          4,
+          3,
+          2,
+          1,
+          0,
+          9,
+          8
+        ],
+        [
+          7,
+          6,
+          5,
+          4,
+          3,
+          2,
+          1
+        ]
+      ],
+      "label": "Rotated 180",
+      "position": 1,
+      "rows": 5
+    }
+  ],
+  "title": "Half Turn"
+}

@@ -1,0 +1,157 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        2,
+        7,
+        9,
+        2,
+        7,
+        9,
+        4
+      ],
+      [
+        7,
+        2,
+        4,
+        7,
+        9,
+        7,
+        2
+      ],
+      [
+        4,
+        9,
+        2,
+        7,
+        4,
+        2,
+        7
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 5,
+    "tags": [
+      "spectrum:ai-forte",
+      "modular-arithmetic",
+      "quadratic"
+    ]
+  },
+  "narrative": "Each cell updates per step: new_value = (old_value^2 + 3) mod 10. Grid 0 is t=0, Grid 1 is t=1, Grid 2 (masked) is t=2.",
+  "puzzle_id": "narc_sp_006",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          2,
+          5,
+          1,
+          8,
+          3,
+          9,
+          4
+        ],
+        [
+          7,
+          0,
+          6,
+          3,
+          1,
+          5,
+          8
+        ],
+        [
+          4,
+          9,
+          2,
+          7,
+          6,
+          0,
+          3
+        ]
+      ],
+      "label": "t=0",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          7,
+          8,
+          4,
+          7,
+          2,
+          4,
+          9
+        ],
+        [
+          2,
+          3,
+          9,
+          2,
+          4,
+          8,
+          7
+        ],
+        [
+          9,
+          4,
+          7,
+          2,
+          9,
+          3,
+          2
+        ]
+      ],
+      "label": "t=1",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          2,
+          7,
+          9,
+          2,
+          7,
+          9,
+          4
+        ],
+        [
+          7,
+          2,
+          4,
+          7,
+          9,
+          7,
+          2
+        ],
+        [
+          4,
+          9,
+          2,
+          7,
+          4,
+          2,
+          7
+        ]
+      ],
+      "label": "t=2",
+      "position": 2,
+      "rows": 3
+    }
+  ],
+  "title": "Quadratic Modular Iteration"
+}

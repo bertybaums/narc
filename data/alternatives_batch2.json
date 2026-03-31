@@ -1,0 +1,291 @@
+{
+  "narc_018": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cooking",
+      "narrative": "A spice sits unopened in the pantry through the appetizer and the soup. If it was placed on the shelf before the meal began and never removed, by dessert its flavor must bloom in the dish \u2014 the 2 dissolves from the top-left, the 7 emerges in the last row, and the 5s along row two hold fast throughout."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "clockwork/mechanics",
+      "narrative": "A gear set in motion at the start turns silently for two cycles. The element introduced at the top left in act one vanishes by act three, while the mechanism planted in the lower row mid-sequence continues to accumulate. What was wound must unwind: the 2 migrates from top-left to the fourth row, the 7 holds its post, and the persistent 5s never skip a beat."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "A seed buried in the upper-left corner in spring shows no bloom through summer. By autumn, the plant has shed that first mark and pushed new growth downward \u2014 the original 2 reappears one row lower, the 7 beside it bears fruit, and the full bed of 5s in the second row remains unbroken season after season."
+    }
+  ],
+  "narc_019": [
+    {
+      "variant": "alt_1",
+      "source_domain": "mythology",
+      "narrative": "The figure begins small and upright \u2014 a narrow 3x3 form with a spine of red running vertically through its center. As the curse takes hold, the grid widens and the red spine breaks apart. By the third frame, the body has spread to 5x5: a segmented green shell across the middle row, legs of green reaching out in alternating cells below, and the red has been wholly consumed by the new form."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "weaving/textiles",
+      "narrative": "The loom begins with a simple red thread on a 3x3 frame. As the pattern is rewoven, the fabric widens to 5x5 and the red thread is entirely replaced by green \u2014 a horizontal band of three green across the center, with pairs of green stitches reaching diagonally outward below, and a mirrored row of green spots beneath that. The original color is gone; only the new weave remains."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "chemistry",
+      "narrative": "A simple compound of two red atoms stacked vertically in a 3x3 vessel begins to react. The solution expands to 5x5 as the transformation completes: green precipitate forms a horizontal bar of three across the center row, with green crystals appearing at alternating positions in the rows below \u2014 positions (3,0), (3,2), (3,4) and (4,1), (4,3). The red dissolves entirely, leaving only the new green substance."
+    }
+  ],
+  "narc_020": [
+    {
+      "variant": "alt_1",
+      "source_domain": "architecture",
+      "narrative": "A sealed vault of yellow walls encloses empty darkness. When the keystone is pulled, the top of the box cracks open \u2014 a purple stain appears at the crown, a red mark bleeds into the center of the top edge. The walls remain standing but the interior shifts: the center cell awakens to grey, while the original hollow becomes something new. The yellow frame holds, but what was sealed inside is no longer nothing."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "astronomy",
+      "narrative": "A closed nebula \u2014 yellow borders forming a hollow square \u2014 ruptures at its northern pole. Where the shell breaks, a purple flare escapes upward to position (0,2), and a red spark ignites at (0,2) just beside it. Inside the shell, the once-empty core at (2,2) now glows grey. The yellow frame persists on the sides, but the top wall has given way to the escaping light."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "theater",
+      "narrative": "The stage is set with yellow curtains forming a closed box. When the curtain rises, the top panel splits: a purple spotlight appears at top-center, and a red actor steps forward from (1,2). Deep within the box at center-stage (2,2), a grey presence stirs that was not there in the sealed configuration. The side curtains hold their posts while chaos escapes through the opened top."
+    }
+  ],
+  "narc_021": [
+    {
+      "variant": "alt_1",
+      "source_domain": "music",
+      "narrative": "A single note sounds at the center of silence \u2014 a red tone at (2,2). It swells into a cross: three cells wide, three cells tall. Then a diamond shape, reaching edge to edge. By the confession, the sound has nearly filled every seat in the 5x5 hall with red \u2014 all occupied except the four corners, which remain silent. Only the bottom center holds its note while the corners stay bare."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "military",
+      "narrative": "The invasion expands from the center outward in concentric waves of red. After the diamond formation fills every row and column, the next advance claims the remaining territory: the full grid turns red except for the four corners at (0,0), (0,4), (4,0), and (4,4). The bottom-center garrison at (4,2) is taken while the four corner strongholds are the last to resist before total occupation."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weather",
+      "narrative": "The red storm has been expanding from the center, each frame pushing its edge one cell further. The diamond of pounding rain has reached the borders. In the confession, the deluge covers the full 5x5 field except the four corner cells \u2014 positions (0,0), (0,4), (4,0), (4,4) remain dry while the bottom center cell (4,2) floods. This is the penultimate frame before the entire grid is consumed."
+    }
+  ],
+  "narc_022": [
+    {
+      "variant": "alt_1",
+      "source_domain": "cartography",
+      "narrative": "Two rivers diverge from a central channel. At the fork, one branch flows left (orange, column 1) and one flows right (green, column 3). The mapmaker traces only the left branch forward: in the next chart, the right-hand green stream fades below the fork while the orange channel continues upward. The chosen path keeps its orange marks at (0,1) and (1,1), and the green extends downward at (3,2) and (4,2) as a memory of the trunk."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "dance",
+      "narrative": "Two dancers separate at the crossroads. The orange dancer moves to the left column, stepping at rows 0 and 1. The green dancer descends through the center at rows 3 and 4. The right-hand partner from the fork has exited the stage entirely \u2014 no green remains in column 3. The choice is made: left ascends, the trunk below persists, and the unchosen path disappears."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "archaeology",
+      "narrative": "At the dig site, two ancient roads branch from a single path. The excavation reveals that in this layer, only the left fork (column 1) shows orange paving stones at rows 0 and 1, while the central trunk still shows green cobbles at rows 3 and 4. The right fork at column 3 has been buried and erased \u2014 its green stones are gone. One road was traveled; the other was reclaimed by earth."
+    }
+  ],
+  "narc_023": [
+    {
+      "variant": "alt_1",
+      "source_domain": "military",
+      "narrative": "The red soldiers fall one by one across the campaigns while the green diagonal holds its positions. In this battle, the last red holdout at position (2,4) finally falls. But in its place, a new color appears \u2014 orange at (2,4), a defector who switched allegiance to survive. The green diagonal from corner to corner stands unbroken; only the mutant in the eastern flank distinguishes this frame from the one before."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "cooking",
+      "narrative": "The recipe calls for removing the red peppercorns one harvest at a time while the green herbs on the diagonal persist. By this stage, every red spice has been plucked from the board. But at position (2,4), where the last red once sat, a new orange zest has appeared \u2014 not red, not green, but something adapted from what came before. The diagonal of green from (0,0)/(0,4) through center to corners remains untouched."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "astronomy",
+      "narrative": "Red stars have been going supernova across the grid while the green constellation along the diagonal endures. In this epoch, the final red star at (2,4) has transformed \u2014 not extinguished but reborn as an orange dwarf. The green stars hold their ancient positions on the diagonal. Every other cell that was once red is now dark. Only the mutant star at (2,4) found a way to burn in a new spectrum."
+    }
+  ],
+  "narc_024": [
+    {
+      "variant": "alt_1",
+      "source_domain": "weaving/textiles",
+      "narrative": "The loom once held blue threads on top, red threads on bottom, neatly separated. The weave has been scrambling toward a checkerboard. In this frame, the pattern is nearly a perfect alternation of blue and red \u2014 a 4x4 checkerboard starting with blue at (0,0) \u2014 except at position (3,3), where red appears instead of the expected blue. One stitch shy of perfect disorder."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "dance",
+      "narrative": "Blue and red dancers have been shuffling toward a perfect alternating formation. In this figure, they have nearly achieved a checkerboard \u2014 blue-red-blue-red across each row, offset by one each row down \u2014 but one dancer is out of place: position (3,3) holds red where blue should stand. The final arrangement at maximum entropy will correct this last deviation."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "music",
+      "narrative": "Two tones \u2014 blue and red \u2014 once played in separate registers, top and bottom. They have been interleaving toward a perfect alternating rhythm. In this measure, the score reads almost as a checkerboard: blue at (0,0), red at (0,1), blue at (0,2), and so on \u2014 but the note at (3,3) plays red instead of the expected blue. One beat remains offkey before total entropy."
+    }
+  ],
+  "narc_025": [
+    {
+      "variant": "alt_1",
+      "source_domain": "mythology",
+      "narrative": "The green people once filled the land, but the red titans devoured them from the center outward until famine struck the titans themselves. Now the field lies barren, the last titan clings to the center, and the survivors emerge from the only places teeth never reached: the four corners. Green returns at (0,0), (0,4), (4,0), and (4,4) \u2014 the margins the predators overlooked."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "oceanography",
+      "narrative": "The green plankton bloom was consumed by red predatory fish radiating from the center. Now the predators have nearly starved \u2014 only one red remains at (1,2). The surviving plankton reappear at the four corners of the grid: (0,0), (0,4), (4,0), and (4,4). The center and interior remain empty. Recovery begins from the edges inward, as it always does after a crash."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "military",
+      "narrative": "The green garrison was overrun by red invaders who struck from the center. But the invaders outran their supply lines and collapsed. Now, with the interior stripped bare and only a single red scout at (1,2), green partisans emerge from the four corner outposts \u2014 (0,0), (0,4), (4,0), (4,4) \u2014 the positions too remote for the invasion to reach. The reconquest begins from the borders."
+    }
+  ],
+  "narc_026": [
+    {
+      "variant": "alt_1",
+      "source_domain": "photography",
+      "narrative": "The reef photograph is losing its color as the warm water bleaches every living thing to grey. In this exposure, the orange and purple corals from the first frame have all faded to grey (value 5), but the green corals \u2014 the deep-rooted ones \u2014 still hold their hue at the same positions they have always occupied. The blue water border at value 1 remains unchanged. Where orange or purple once lived, grey now sits."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "theater",
+      "narrative": "The actors are leaving the stage one troupe at a time. In this scene, the orange company and the purple company have been replaced by grey understudies (5) at every position they once held. Only the green company keeps performing in their original spots. The blue backdrop (1) frames the scene unchanged. The deep-rooted green refuses to yield its role while all others have gone pale."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "A blight sweeps through the garden, turning every shallow-rooted flower to grey. The orange blooms and purple blooms have all wilted to 5, leaving only the deep-rooted green plants intact in their original positions. The garden border of blue stone (1) stands unmoved. The survivors are only those green specimens whose roots went deepest \u2014 every other color has been bleached to grey."
+    }
+  ],
+  "narc_027": [
+    {
+      "variant": "alt_1",
+      "source_domain": "calligraphy",
+      "narrative": "A single stroke of green ink on parchment is being torn in two. The split begins at the top and widens as it descends. In this frame on a 7-column page, the left fragment sits in column 1 and the right fragment in column 4, with blue parchment filling the gap between them at columns 2 and 3. The bottom two rows remain joined \u2014 columns 1 through 4 still touch at rows 3 and 4. The rift is deeper at the top than the bottom."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "clockwork/mechanics",
+      "narrative": "A single green gear plate is cracking apart on a 7-column chassis. The fracture opens from the north: at rows 0 and 1, the left half sits at column 1 and the right half at column 4 with empty space between. At row 2, the left piece is at column 1 but the right piece has shifted to touch at columns 3-4. At row 3, the halves are still mostly joined at columns 1-4. Row 4 is all blue housing. The widening only reaches halfway down."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "oceanography",
+      "narrative": "A green island is splitting as a rift valley fills with blue sea from the north. On the 7-column chart, the western landmass holds at column 1 through all rows, while the eastern mass has drifted to column 4 in the upper rows. In rows 2-3, the eastern piece bridges columns 3-4, still partially connected to the west. The sea (blue, value 1) fills every cell not occupied by green land. The southern shore at row 4 is all ocean."
+    }
+  ],
+  "narc_028": [
+    {
+      "variant": "alt_1",
+      "source_domain": "astronomy",
+      "narrative": "A star divides not side-by-side but one above the other. The parent cell \u2014 a red nucleus ringed by four purple satellites in a cross \u2014 splits along the horizontal axis. The upper daughter occupies the top three rows, centered at column 2 with its red core at (1,2) and purple arms at (0,2), (1,1), (1,3), (2,2). The lower daughter sits in the bottom three rows, offset one column right: red core at (4,3), purple arms at (3,3), (4,2), (4,4), (5,3). Between them, empty space."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "music",
+      "narrative": "The original chord \u2014 a red root note surrounded by four purple harmonics in a cross shape \u2014 is transposed into two voices on a 6x6 staff. The upper voice places its red root at row 1, column 2, with purple notes forming the cross around it. The lower voice places its red root at row 4, column 3, with its own purple cross. Each daughter chord is a faithful copy of the parent, split above and below with silence between."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "cartography",
+      "narrative": "The original settlement \u2014 a red town square at the center with purple roads extending in four cardinal directions \u2014 has been replicated on the map. On the 6-row, 6-column chart, the northern colony sits with its red center at (1,2) and purple roads at (0,2), (1,1), (1,3), (2,2). The southern colony places its red center at (4,3) with purple roads at (3,3), (4,2), (4,4), (5,3). The two towns are separated by empty terrain, one shifted slightly east of the other."
+    }
+  ],
+  "narc_029": [
+    {
+      "variant": "alt_1",
+      "source_domain": "architecture",
+      "narrative": "Before the tall towers can rise, a ring of sturdy walls must be built at the perimeter. On the 5x5 foundation, orange woody material (7) forms a complete border \u2014 filling the entire top row, bottom row, left column, and right column. Inside this protective frame, a 3x3 courtyard of green meadow (3) fills the interior nine cells. The shrubs are not the climax \u2014 they are the scaffold."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "military",
+      "narrative": "The 5x5 battlefield requires a defensive perimeter before the main force can establish camp. Orange fortifications (7) line every cell of the outer ring \u2014 all of row 0, row 4, column 0, and column 4. Within this protected square, the green infantry (3) occupies the entire 3x3 interior from (1,1) to (3,3). Without the border garrison, nothing inside could hold."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "weaving/textiles",
+      "narrative": "The tapestry requires a border of orange yarn (7) framing the entire 5x5 panel before the green pattern (3) can be woven inside. The orange border occupies every cell on the four outer edges. The 3x3 interior is filled entirely with green. The frame comes before the picture \u2014 the shrub ring before the canopy."
+    }
+  ],
+  "narc_030": [
+    {
+      "variant": "alt_1",
+      "source_domain": "photography",
+      "narrative": "The shutter clicks and the blurred exposure sharpens. The grey haze (8) of superposition resolves into a blue image (1) that forms a rounded rectangle: the full interior is blue, but the four corners at (0,0), (0,3), (3,0), and (3,3) remain dark (0). The center collapses first and fully; only the corners resist the fixing process, staying unexposed in this intermediate frame."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "mythology",
+      "narrative": "The oracle's grey mist (8) fills every cell of the 4x4 vision pool. When the seer gazes in, the mist crystallizes into blue truth (1) everywhere \u2014 except the four corners, which remain void (0). Positions (0,0), (0,3), (3,0), and (3,3) resist the revelation. The center and edges yield immediately; the corners are the last places where uncertainty might linger."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "chemistry",
+      "narrative": "A supersaturated grey solution (8) fills the 4x4 vessel. When the catalyst is introduced, blue crystals (1) precipitate everywhere except the four corners, which remain clear (0). The crystal forms a rounded rectangle: solid blue across all interior cells and all edge-center cells, with (0,0), (0,3), (3,0), and (3,3) staying empty. The reaction proceeds from center outward, the corners crystallizing last."
+    }
+  ],
+  "narc_031": [
+    {
+      "variant": "alt_1",
+      "source_domain": "clockwork/mechanics",
+      "narrative": "The alternating checkerboard of gears \u2014 blue (1) and empty (0) \u2014 is being shaken loose. Heat dissolves the precise lattice from the outside in. In this frame, the entire outer border has melted to blue (1) \u2014 all of row 0, row 4, column 0, and column 4 are solid blue. Inside, the 3x3 core still retains fragments of the checkerboard: an alternating pattern persists at the interior cells, but with some positions already shifted to blue. The edges have surrendered while the core remembers its crystalline form."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "oceanography",
+      "narrative": "An ice lattice \u2014 alternating blue and empty in a checkerboard \u2014 is melting. The outer ring has liquefied first: the top and bottom rows are solid blue (1), as are the left and right columns. The interior 3x3 still shows remnants of order with some alternation, but disorder is creeping inward. The checkerboard that once held at the edges is now only visible in the sheltered core."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "A frost lattice in alternating blue-and-bare checkerboard is thawing from the borders inward. The outermost cells have all become solid blue (1) \u2014 every position on the perimeter. The inner 3x3 patch still holds some of its crystalline checkerboard pattern, with scattered empty gaps (0) at interior positions where the structure persists. The thaw has claimed the shell; only the heart still shows the old order."
+    }
+  ],
+  "narc_032": [
+    {
+      "variant": "alt_1",
+      "source_domain": "music",
+      "narrative": "The orchestra is losing its voices in order of their brightness. Yellow instruments (4) were silenced first. Magenta (6) followed. Now the orange section (7) goes mute: every cell that held a 7 in the previous frame becomes 0. The red (2), green (3), and blue (1) performers remain exactly where they were. The next most conspicuous voice has been taken from the score."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "astronomy",
+      "narrative": "Stars are winking out from brightest to dimmest. The yellow supergiants (4) burned out first, then the magenta giants (6). Now the orange stars (7) go dark: positions (1,4), (2,3), and (4,1) that held orange in the previous frame become empty (0). The dimmer red (2), green (3), and blue (1) stars persist in their exact locations. Conspicuousness is a death sentence."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "The blight takes the showiest flowers first. The yellow blossoms (4) wilted in the first wave, the magenta (6) in the second. Now the orange blooms (7) are taken: every position that was orange in the prior frame turns bare (0). The subtle red (2), green (3), and blue (1) plants keep their places unchanged. What draws the eye draws the reaper."
+    }
+  ],
+  "narc_033": [
+    {
+      "variant": "alt_1",
+      "source_domain": "mythology",
+      "narrative": "Two gods face each other across a temple grid. Blue extends an offering, stepping toward the center from (1,1). Red accepts \u2014 and advances greedily, sliding from (2,2) to claim both (1,2) and (2,2), while also reaching toward (3,3). Blue remains where it offered its hand at (1,1), gaining nothing. Red's territory expands along the diagonal and rightward; the open hand gets nothing, the closed fist takes the board."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "sports",
+      "narrative": "Two players meet at the center of a 4x4 court. Blue plays fair, holding position at (1,1). Red exploits the opening: from their meeting point, red occupies (1,2), (2,2), and pushes to (3,3). Blue cooperated and stays frozen at a single square while red sprawls across the diagonal. The scoreboard reads: blue \u2014 one cell; red \u2014 three cells. Trust was punished."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "gardening",
+      "narrative": "Two plants share a 4x4 plot. Blue put down one modest root at (1,1), offering space to share. Red took everything it could reach: spreading to (1,2), (2,2), and (3,3), claiming a diagonal swath while blue stays small. The cooperative vine was overtaken by the aggressive creeper. One gave; the other grabbed."
+    }
+  ],
+  "narc_034": [
+    {
+      "variant": "alt_1",
+      "source_domain": "theater",
+      "narrative": "The green stage was shared by four actors \u2014 blue at (0,0) corner, red at (4,4), yellow at (4,0), and orange at the northeast. Orange took a second spotlight in the upper-right, and where its shadow fell the green set began to crumble. At the tipping point, the green has retreated from the eastern half: the right two columns of the meadow lose their green, row 2's green pulls back from columns 2-3, and the green at (1,3) and (2,3) vanishes. Orange holds two cells in the top-right, and the green survives only in the western half of the grid."
+    },
+    {
+      "variant": "alt_2",
+      "source_domain": "medicine",
+      "narrative": "A healthy green tissue shared by four organs \u2014 blue (1) at bottom-left (2,0), red (2) at bottom-right (4,4), yellow (4) at (4,0), and orange (7) at the top-right. The orange infection spread to a second cell in the northeast corner, and now the tissue necrotizes from the east: the green at (2,3) is lost, row 1 column 3 goes bare, and the meadow of green shrinks to only the western columns. The four corner organs remain but the living tissue between them is dying from the side where orange grazed twice."
+    },
+    {
+      "variant": "alt_3",
+      "source_domain": "cartography",
+      "narrative": "A green territory is shared among four settlements \u2014 blue (1) at the west of row 2, red (2) at the southeast corner, yellow (4) at the southwest, and orange (7) claiming two plots in the northeast at (0,3) and (0,4). The map shows desertification spreading from where orange overgrazed: green land at (2,3), (2,4), and (1,3) has turned barren. The meadow now extends only through the center-west columns, while the eastern fields lie empty. The borders hold their posts but the commons between them is halved."
+    }
+  ]
+}

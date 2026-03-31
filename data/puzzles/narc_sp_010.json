@@ -1,0 +1,126 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        5,
+        0
+      ],
+      [
+        5,
+        5,
+        5
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 5,
+    "tags": [
+      "spectrum:ai-forte",
+      "matrix-operations",
+      "addition",
+      "transpose"
+    ]
+  },
+  "narrative": "First compute the element-wise sum of Grid 0 and Grid 1 (no modular reduction). Then transpose the result. Grid 2 (masked) is the transposed sum. Grid2[c][r] = Grid0[r][c] + Grid1[r][c].",
+  "puzzle_id": "narc_sp_010",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          1,
+          3,
+          5,
+          7
+        ],
+        [
+          2,
+          4,
+          6,
+          8
+        ],
+        [
+          9,
+          7,
+          5,
+          3
+        ]
+      ],
+      "label": "Matrix A",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          4,
+          2,
+          0,
+          8
+        ],
+        [
+          3,
+          1,
+          9,
+          7
+        ],
+        [
+          6,
+          8,
+          5,
+          2
+        ]
+      ],
+      "label": "Matrix B",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          5,
+          0
+        ],
+        [
+          5,
+          5,
+          5
+        ]
+      ],
+      "label": "Transpose of (A+B)",
+      "position": 2,
+      "rows": 4
+    }
+  ],
+  "title": "Add Then Transpose"
+}

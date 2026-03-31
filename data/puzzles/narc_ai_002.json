@@ -1,0 +1,249 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        7,
+        7,
+        7,
+        9,
+        9
+      ],
+      [
+        7,
+        7,
+        7,
+        9,
+        9
+      ],
+      [
+        7,
+        7,
+        7,
+        9,
+        9
+      ],
+      [
+        9,
+        9,
+        9,
+        9,
+        9
+      ],
+      [
+        9,
+        9,
+        9,
+        9,
+        9
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 2,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "difficulty": "hard",
+    "human_difficulty": 5,
+    "tags": [
+      "grids:5",
+      "size:uniform",
+      "mask:single",
+      "strategy:ai-native",
+      "difficulty:hard",
+      "audience:ai-native",
+      "arc:subversion",
+      "clue:rule",
+      "clue:timing",
+      "domain:ml",
+      "spectrum:ai-forte"
+    ]
+  },
+  "narrative": "The step size exceeds twice the inverse of the Lipschitz constant. The parameters that were approaching the minimum overshoot, and the loss in the converging region temporarily increases before the learning rate is annealed. The converging region is the top-left 3x3 block where loss had been decreasing. All values outside that block remain unchanged from the previous step.",
+  "puzzle_id": "narc_ai_002",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "Epoch 0: Random Init",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          7,
+          7,
+          7,
+          9,
+          9
+        ],
+        [
+          7,
+          7,
+          7,
+          9,
+          9
+        ],
+        [
+          7,
+          7,
+          7,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "Epoch 1: Descent Begins",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          4,
+          4,
+          4,
+          9,
+          9
+        ],
+        [
+          4,
+          4,
+          4,
+          9,
+          9
+        ],
+        [
+          4,
+          4,
+          4,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "Epoch 2: Converging",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Epoch 3: Overshoot",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          3,
+          3,
+          3,
+          9,
+          9
+        ],
+        [
+          3,
+          3,
+          3,
+          9,
+          9
+        ],
+        [
+          3,
+          3,
+          3,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ],
+        [
+          9,
+          9,
+          9,
+          9,
+          9
+        ]
+      ],
+      "label": "Epoch 4: LR Annealed, Recovery",
+      "position": 4,
+      "rows": 5
+    }
+  ],
+  "title": "The Gradient"
+}

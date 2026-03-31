@@ -1,0 +1,174 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        6,
+        0,
+        0,
+        0,
+        0,
+        1,
+        1
+      ],
+      [
+        8,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "actors": {
+      "1": "stepsisters",
+      "5": "Cinderella (before)",
+      "6": "fairy godmother",
+      "8": "Cinderella (transformed)"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "5",
+    "human_difficulty": 2,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:human-forte",
+      "transformation",
+      "identity-change"
+    ]
+  },
+  "narrative": "Cinderella (grey=5) toils while stepsisters (red=1, appearing as a pair) attend the ball. The fairy godmother (magenta=6) appears. In the masked grid, the transformation occurs: Cinderella's value changes from grey=5 to azure=8 (her ball gown), and the fairy godmother's wand effect radiates outward. The stepsisters remain at the ball (right side), unaware that Cinderella is about to arrive transformed.",
+  "puzzle_id": "narc_focal_020",
+  "sequence": [
+    {
+      "cols": 7,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Cinderella left behind",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          6,
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        [
+          5,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Fairy godmother appears",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": null,
+      "label": "Transformation",
+      "masked": true,
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 7,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          8,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Cinderella arrives at ball",
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "Cinderella"
+}

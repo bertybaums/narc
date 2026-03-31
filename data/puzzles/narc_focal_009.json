@@ -1,0 +1,178 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        8,
+        0,
+        7,
+        0,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        9,
+        9,
+        9,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "3": "porridge",
+      "7": "Goldilocks",
+      "8": "chairs",
+      "9": "three bears"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "9",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:fairy-tale",
+      "spectrum:human-forte",
+      "intrusion",
+      "discovery"
+    ]
+  },
+  "narrative": "The bears' cottage is shown as a 4x5 grid. Three bears (brown=9) leave the cottage \u2014 their cells go to 0. Then Goldilocks (yellow=7) enters and disturbs items: she sits in chairs (changes some furniture cells from 8 to 0), eats porridge (changes 3 to 0), and sleeps in a bed. In the masked grid, the bears return home to find Goldilocks asleep \u2014 all three bears reappear at the entrance while Goldilocks (7) is in the bed position.",
+  "puzzle_id": "narc_focal_009",
+  "sequence": [
+    {
+      "cols": 5,
+      "grid": [
+        [
+          8,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          9,
+          9,
+          9,
+          0,
+          0
+        ]
+      ],
+      "label": "Bears at home",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          8,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          9,
+          9
+        ]
+      ],
+      "label": "Bears go for a walk",
+      "position": 1,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          0,
+          7,
+          0,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Goldilocks disrupts",
+      "position": 2,
+      "rows": 4
+    },
+    {
+      "cols": 5,
+      "grid": null,
+      "label": "Bears return",
+      "masked": true,
+      "position": 3,
+      "rows": 4
+    }
+  ],
+  "title": "Goldilocks and the Three Bears"
+}

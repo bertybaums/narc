@@ -1,0 +1,98 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        0,
+        4,
+        8,
+        9
+      ],
+      [
+        2,
+        3,
+        5,
+        7
+      ],
+      [
+        1,
+        5,
+        6,
+        9
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 5,
+    "tags": [
+      "spectrum:ai-forte",
+      "multi-step",
+      "transpose",
+      "sort"
+    ]
+  },
+  "narrative": "Step 1: Transpose Grid 0 (4x3 becomes 3x4). Step 2: Sort each row of the transposed grid in ascending order. Grid 1 (masked) is the final result after both steps.",
+  "puzzle_id": "narc_sp_028",
+  "sequence": [
+    {
+      "cols": 3,
+      "grid": [
+        [
+          9,
+          2,
+          5
+        ],
+        [
+          4,
+          7,
+          1
+        ],
+        [
+          8,
+          3,
+          6
+        ],
+        [
+          0,
+          5,
+          9
+        ]
+      ],
+      "label": "Input (4x3)",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          4,
+          8,
+          9
+        ],
+        [
+          2,
+          3,
+          5,
+          7
+        ],
+        [
+          1,
+          5,
+          6,
+          9
+        ]
+      ],
+      "label": "Transposed then row-sorted (3x4)",
+      "position": 1,
+      "rows": 3
+    }
+  ],
+  "title": "Transpose Then Sort"
+}

@@ -1,0 +1,207 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        5,
+        5,
+        0
+      ],
+      [
+        0,
+        5,
+        5,
+        0
+      ],
+      [
+        0,
+        5,
+        5,
+        0
+      ],
+      [
+        0,
+        5,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "actors": {
+      "green": "caterpillar",
+      "grey": "cocoon",
+      "magenta": "butterfly"
+    },
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "grey",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:biology",
+      "spectrum:human-edge"
+    ]
+  },
+  "narrative": "The caterpillar stops eating, hangs upside-down, and wraps itself in silk. Inside the cocoon, the body dissolves entirely. What emerges is unrecognizable. The cocoon witnesses the whole transformation but cannot tell what it holds.",
+  "puzzle_id": "narc_focal_025",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          3,
+          3,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "caterpillar feeding",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": null,
+      "label": "cocoon forms",
+      "masked": true,
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          5,
+          8,
+          0
+        ],
+        [
+          0,
+          5,
+          8,
+          0
+        ],
+        [
+          0,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "transformation inside",
+      "position": 2,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          0,
+          8,
+          8,
+          0
+        ],
+        [
+          8,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          8,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "butterfly emerges",
+      "position": 3,
+      "rows": 6
+    }
+  ],
+  "title": "Metamorphosis"
+}

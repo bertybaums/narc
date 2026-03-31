@@ -1,0 +1,183 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        4,
+        4,
+        3,
+        0,
+        3,
+        0,
+        0,
+        0
+      ],
+      [
+        3,
+        0,
+        4,
+        6,
+        4,
+        3,
+        4,
+        0
+      ],
+      [
+        0,
+        3,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "actors": {
+      "3": "hiding guests (green)",
+      "4": "host (yellow)",
+      "6": "guest of honor (blue)"
+    },
+    "ai_difficulty": 5,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "focal_primary": "4",
+    "human_difficulty": 3,
+    "tags": [
+      "focalization-test",
+      "domain:social",
+      "spectrum:human-forte"
+    ]
+  },
+  "narrative": "A host (yellow=4) decorates a room, placing party items across the space. Guests (green=3) sneak in and hide behind furniture. The guest of honor (blue=6) approaches the door unknowing. When blue enters, all greens pop out from hiding and yellow lights up the center. Blue is surrounded by the revealed celebration.",
+  "puzzle_id": "narc_focal_041",
+  "sequence": [
+    {
+      "cols": 8,
+      "grid": [
+        [
+          4,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0,
+          0,
+          4,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "label": "Host sets up decorations",
+      "position": 0,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          4,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          4,
+          0,
+          0,
+          3,
+          4,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "label": "Guests sneak in and hide",
+      "position": 1,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": [
+        [
+          4,
+          4,
+          0,
+          0,
+          0,
+          0,
+          0,
+          6
+        ],
+        [
+          3,
+          0,
+          4,
+          0,
+          0,
+          3,
+          4,
+          0
+        ],
+        [
+          0,
+          3,
+          0,
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "label": "Guest of honor arrives at door",
+      "position": 2,
+      "rows": 3
+    },
+    {
+      "cols": 8,
+      "grid": null,
+      "label": "Surprise! Everyone revealed",
+      "masked": true,
+      "position": 3,
+      "rows": 3
+    }
+  ],
+  "title": "The Surprise Party"
+}

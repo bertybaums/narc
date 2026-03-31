@@ -1,0 +1,592 @@
+{
+  "meta": {
+    "created_at": "2026-03-30",
+    "description": "Three focalization narrative variants per NARC puzzle (narc_001 through narc_020). Each variant retells the puzzle from a different actor's perspective, manipulating information access to test whether narrative focalization affects puzzle solvability.",
+    "variant_types": {
+      "focal_active": "Narrative from the actor who CAUSES or DIRECTLY EXPERIENCES the change in the masked grid. Predicted ease: easy.",
+      "focal_observer": "Narrative from an actor who WITNESSES the change but does not cause it. Predicted ease: medium.",
+      "focal_absent": "Narrative from an actor who is ABSENT or UNAWARE during the masked grid's key moment. Predicted ease: hard."
+    },
+    "theory": "Focalization determines what information is foregrounded. The active agent has direct causal knowledge of the masked transformation; the observer has partial perceptual access; the absent actor must reconstruct the event from indirect evidence or prior pattern knowledge."
+  },
+  "narc_focal_001": {
+    "title": "The Lighthouse",
+    "puzzle_id": "narc_001",
+    "masked_position": 2,
+    "masked_label": "East",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "beam",
+        "color": "white (value 1)",
+        "predicted_ease": "easy",
+        "narrative": "I am the beam, and I have never stopped turning. The mechanism in the tower rotates me clockwise, one position each hour, steady as breathing. I began pointing due north, illuminating a single spot at the very top of my sweep. The next hour I swung to the northeast, catching a point slightly lower and to the right. Now, on the third hour, I have reached due east — I am shining directly to the right side, halfway down. I feel the glass warm where I pass through it, and I know exactly where my light falls: the midpoint of the eastern edge. One more hour and I will be pointing southeast, lower and further right still. The rotation never wavers. Each position follows from the last with the certainty of a clock hand. I am always where the geometry says I must be."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "keeper",
+        "color": "none (background)",
+        "predicted_ease": "medium",
+        "narrative": "I tend the lamp and I watch it turn. Every hour the beam advances one position clockwise around the compass. At the start of my shift it was pointing north — a bright cell at the top center. An hour later it had moved to the northeast, one step down and to the right. I logged both positions dutifully. Then I was called below to mend a fuel line, and by the time I climbed back up, the beam had already passed through its eastern phase and moved on to the southeast — shining now from a point in the lower right. I missed the exact moment when the beam pointed east, but I know the rule that governs it. The clockwise rotation has never faltered in twenty years. Whatever the beam illuminated at the eastern position must sit precisely between where I saw it at northeast and where I found it at southeast."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "ship",
+        "color": "none (external)",
+        "predicted_ease": "hard",
+        "narrative": "We see the lighthouse from far out at sea, a bright pinprick that appears and disappears as the beam sweeps around. Early in the evening we caught the flash when it pointed north — brief and distant, high in its arc. An hour later the beam swung northeast, and we saw a slightly different angle of light. Then our captain ordered us below the swell to ride out a squall, and for the next hour we could see nothing at all through the rain and spray. By the time we surfaced into calmer water, the beam was pointing southeast, low and sharp. We never saw the eastern pass. We know only that the lighthouse turns clockwise, one step at a time, and that there was a moment in the storm when the light must have been pointing directly east — a moment that existed whether we witnessed it or not. From where we are, we can only trust the pattern and reconstruct what the third hour must have looked like."
+      }
+    ]
+  },
+  "narc_focal_002": {
+    "title": "The Garden Seasons",
+    "puzzle_id": "narc_002",
+    "masked_position": 1,
+    "masked_label": "Summer",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "drought",
+        "color": "grey (value 5)",
+        "predicted_ease": "easy",
+        "narrative": "I arrived in summer and I changed everything. The garden had been filling clockwise — spring brought green to the upper-left quadrant, and I knew the cycle expected summer to paint the upper-right quadrant in its own vibrant color. But I am drought, and I devour color. When summer came, I claimed that upper-right quadrant and turned it grey instead of letting it bloom. The spring green in the upper-left still held — I had no quarrel with the past — but the new growth I was supposed to allow? I replaced it with ash and dryness. Grey cells where life should have been. The garden continued after me: autumn arrived in the lower-right, and winter filled the lower-left with blue. But my mark is on the summer quadrant. Where there should be a second color, there is only the dull pallor of what I took."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "garden",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "I remember spring clearly — my upper-left quadrant filled with green, a full block of color against the empty grey of the rest of me. The cycle was supposed to continue clockwise: summer would bring life to my upper-right quadrant. And something did fill that space. But it did not feel like growth. Where I expected warmth and color, I received something parched and grey — the upper-right quadrant filled, yes, but with the dull tone of drought rather than the vibrancy of a living season. My spring green persisted in the upper left, untouched, but the new quadrant was wrong. By autumn I had a third quadrant — lower-right, painted in orange — and by winter my lower-left was blue. Four quadrants, four seasons, but one of them carries the scar of what summer should have been. I felt the drought settle into my cells like a weight. I knew the shape of what was supposed to grow there, and I knew the shape of what actually did."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "winter",
+        "color": "blue (value 1)",
+        "predicted_ease": "hard",
+        "narrative": "I come last. By the time I arrive to fill the lower-left quadrant, the other three seasons have already left their marks on the garden. I can see spring's green in the upper left, autumn's orange in the lower right, and in the upper-right quadrant — summer's contribution — something that does not match what the cycle would predict. I was not present for summer. I do not know what happened in those months, only that the garden's upper-right quadrant is not the color I would have expected from a healthy season. It is grey, muted, the color of something interrupted. I know the rule — each season fills one quadrant clockwise — but I cannot say from my own experience what force altered the summer quadrant. I can only observe the residue: green, then grey, then orange, and finally my own blue. Whatever befell the garden in summer, I arrived too late to witness it. I only see its aftermath in the pattern of colors that surrounds me."
+      }
+    ]
+  },
+  "narc_focal_003": {
+    "title": "The Flood",
+    "puzzle_id": "narc_003",
+    "masked_position": 3,
+    "masked_label": "Day 4",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "levee",
+        "color": "grey/barrier",
+        "predicted_ease": "easy",
+        "narrative": "I was built in a single frantic night and deployed on the fourth day with one purpose: push the water back. For three days I did not exist, and the flood rose unchecked — one row on the first day, two on the second, three on the third, climbing steadily toward the houses that sit partway up the bank. On the fourth day, I was set in place, and I shoved the water down from its three-row peak all the way back to its second-day level. Two rows of blue at the bottom. The houses still visible, the ground still dry beneath them. I know exactly what the fourth day looks like because I made it happen: the same water level as day two, a full row of retreat forced by my weight. But I am a temporary thing. By the fifth day the water had resumed its climb and reached three rows again, exactly where it had been before I intervened. My contribution was one day of reversal — a single step backward in a story of relentless advance."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "houses",
+        "color": "red (value 2)",
+        "predicted_ease": "medium",
+        "narrative": "We have watched the water climb toward us for three days. On the first day, a single row of blue at the very bottom. On the second, two rows. On the third, three rows — the water lapping just below the ledge where we stand, our red walls reflected in the rising surface. We braced for the fourth day, expecting the flood to finally reach us. But when the fourth morning came, the water had retreated. It sat at two rows again, the same level as the second day, as though someone had peeled back a full day of rising. We could see something holding the water down — a barrier, grey and heavy, wedged into the bank below us. We did not build it. We do not know who did. But we felt the relief of dry ground beneath our foundations for one more day. By the fifth day the water had climbed back to three rows, and the barrier seemed to have spent its strength. The reprieve was real but temporary. We saw the fourth day's retreat clearly from our perch, even if we did not cause it."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "upstream_source",
+        "color": "none (offscreen)",
+        "predicted_ease": "hard",
+        "narrative": "I am the rain in the hills, and I only know what I send downward. Each day I release the same steady volume, and each day the water in the valley should rise by one row. That is the physics of it. Day one: one row. Day two: two rows. Day three: three rows. I sent the same rain on the fourth day — the same clouds, the same tonnage of water pouring into the same watershed. From my vantage in the mountains, nothing changed. But when I checked the valley on the fifth day, the water stood at three rows, not four. Something had interrupted the accumulation. I was not there to see it. I do not know what happened on the fourth day — whether the water was pushed back, diverted, or absorbed — only that my steady input did not produce the steady output I expected. The pattern broke for exactly one day. By the fifth, the water was at three rows, which means the fourth day must have seen a retreat to a lower level before the climb resumed. I can infer the disruption, but I never witnessed it. I was busy making rain."
+      }
+    ]
+  },
+  "narc_focal_004": {
+    "title": "The Mirror",
+    "puzzle_id": "narc_004",
+    "masked_position": 3,
+    "masked_label": "Frame 4",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "shape",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I am the L-shaped piece sliding rightward across the grid, one column per frame. For the first three frames I moved in my original orientation — my vertical bar on the left, my horizontal foot extending to the right. I crossed the center column on frame three, and I felt it happen: the invisible mirror caught me and flipped me horizontally. Suddenly my vertical bar was on the right side and my foot extended to the left. In frame four I continued my rightward march in this new, mirrored form. My top cell sat one column further right than in frame three, and my L-shape was now reversed — a mirror image of what I had been. I know exactly what I look like in frame four because I am living inside this body: flipped, still advancing, one step closer to the right edge. By frame five I will be pressed against the far wall, still reversed, still moving as though the mirror never happened — except that everything about my shape tells the story of the crossing."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "mirror",
+        "color": "invisible (center column)",
+        "predicted_ease": "medium",
+        "narrative": "I am the mirror, invisible and fixed at the center column. I watch everything that passes through me. For three frames the L-shape slid toward me from the left, growing closer with each step — original orientation intact, its vertical bar leading, its foot trailing behind. On frame three it touched my edge, and on frame four it passed through me. I did what I always do: I reversed it horizontally. The shape that emerged on my right side was the mirror image of the shape that entered from the left. I could see the transformation clearly — the vertical bar that had been on the left was now on the right, the foot that extended rightward now pointed left. The shape continued its rightward journey in this flipped state, and by frame five it reached the far edge of the grid, fully reversed. I saw frame four happen. I was the cause of the change. But I did not move — the shape moved through me, and I simply did what geometry demands of any reflective surface."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "grid_border",
+        "color": "grey (value 0, background)",
+        "predicted_ease": "hard",
+        "narrative": "I am the empty space that surrounds the action. I see the shape enter from the left in frame one, a small L-piece with its vertical bar on the left side and a foot extending right. Each frame it slides one column further across my surface. By frame three it has reached the middle of the grid, still in its original orientation. Then there is a gap — frame four — during which something happens that I cannot directly perceive. I am background. I do not register the forces that act upon moving pieces; I only register their presence or absence in my cells. When I next see the shape clearly, in frame five, it has reached the far right edge, but it looks different. The L is reversed — vertical bar on the right, foot extending left. Something flipped it between frame three and frame five. I was present for every frame, but I do not understand transformation. I can only compare what I held before and after, and note that the shape I knew became a stranger somewhere in the crossing."
+      }
+    ]
+  },
+  "narc_focal_005": {
+    "title": "The Checkerboard Tournament",
+    "puzzle_id": "narc_005",
+    "masked_position": 3,
+    "masked_label": "Round 4",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "captured_piece",
+        "color": "red (value 2), promoted to yellow (value 4)",
+        "predicted_ease": "easy",
+        "narrative": "I was green once, sitting on the checkerboard at the intersection of the first row and third column. In round two, an opponent's move captured me, and I turned red. I stayed red through round three while a second piece — the one at the third row, third column — was also captured and turned red beside me. Then came round four, and two things happened simultaneously: the piece at the second row, second column was captured and turned red, and I — having been red for exactly two rounds — was promoted to yellow. I know what the board looks like in round four because I lived through every change: the newly captured piece at row one, column one is now red. The piece captured in round three at row two, column two is still red, only one round old. And I have changed from red to yellow at my position in the first row, third column. The remaining green pieces sit undisturbed in their checkerboard positions, and the empty black squares hold steady between us. I am the proof that time changes things: green to red to yellow, each stage exactly two rounds apart."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "surviving_green_piece",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "I am a green piece on this checkerboard, and I have watched my companions fall one by one. In round one the board was pristine — green pieces on every light square, dark squares empty between us. In round two, the piece diagonally across from me in the upper region turned red: captured. In round three, another fell to red in the center of the board. I can see the pattern — each round, one of us is taken. By round four, I know a third piece will be captured and turn red, and I know the rule about promotion: any piece that has been red for two full rounds transforms to yellow. The piece captured in round two has now endured two rounds of redness, so it must change. I witness all of this from my safe square — the new capture, the promotion — but I do not cause any of it. I simply remain green and watch the colors shift around me, hoping my own square is not next."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "empty_square",
+        "color": "black (value 0)",
+        "predicted_ease": "hard",
+        "narrative": "I am one of the dark squares on the checkerboard. No piece has ever stood on me; I exist in the gaps between the action. I know there is a tournament happening — I can feel the weight shift as pieces around me change their nature — but the logic of capture and promotion is something I must infer from what little I can sense at my borders. I know that green pieces occupy the light squares in a diagonal pattern. I have felt some of them change, growing heavier or warmer as they shift from green to red. There is a rule about time, something about two rounds, something about a further change to yellow. But I was never part of the game. I do not know which piece was captured in which round, or which one has been red long enough to transform. The board's state in round four is a puzzle I can only guess at from the edges — the vibrations of change reaching me secondhand through the pieces that surround my emptiness."
+      }
+    ]
+  },
+  "narc_focal_006": {
+    "title": "The Boy Who Cried Wolf",
+    "puzzle_id": "narc_006",
+    "masked_position": [2, 3],
+    "masked_label": "Cry 2 / Response 2",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "boy",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I did it before and I am doing it again — the exact same trick. The first time, I cried wolf from my spot on the hillside and the villagers came running, blue figures swarming into the row beside me. No wolf. They left. Now, for the second cry, I am performing an identical repetition. Same spot, same voice, same false alarm. And the villagers respond identically too — they rush up the hill in the same pattern as before, filling the same positions they occupied during the first response. I know what these two hidden moments look like because I am orchestrating them: Cry Two is the same as Cry One — me alone on the hillside with the sheep below, green and undisturbed. Response Two is the same as Response One — the blue villagers clustered in the row beside me, the sheep still calm below. It is a perfect copy of the first cycle, which is exactly what I intended. I want the repetition. I need them to come twice so that when the real wolf appears, they will have exhausted their willingness to believe."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "villagers",
+        "color": "blue (value 1)",
+        "predicted_ease": "medium",
+        "narrative": "We came the first time. The boy cried out and we charged up the hill — blue bodies rushing into position around the flock. No wolf. We went home humiliated. Then it happened again. The second cry was indistinguishable from the first — the same pitch, the same urgency, the same boy standing in the same spot above the same green hillside. And we responded the same way. We cannot explain why, except that alarm overrides experience for exactly one repetition. We swarmed the hill in the same pattern, took the same positions, found the same absence of danger. The second cycle was a mirror of the first: the boy alone before the cry, then us crowding in afterward. We saw both moments of the second round because we lived through them — but we did not understand until later that our identical response was the boy's entire plan. When the grey shape finally came, we stayed home. But the hidden moments — those two frames we cannot show you — they looked exactly like the first pair. We were there for all of it."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "wolf",
+        "color": "grey (value 5)",
+        "predicted_ease": "hard",
+        "narrative": "I was still in the forest during the crying and the running. The boy's false alarms and the villagers' responses — two full cycles of deception — happened while I was miles away, hunting smaller prey in the deep wood. I knew nothing of the game being played on the hillside. I did not see the boy cry out the second time. I did not see the villagers swarm up the hill again. I did not see them leave again, angrier than before. By the time I emerged from the treeline and saw the flock unguarded on the green slope, the drama of repetition was already over. All I know is the result: when I appeared for real, no one came. The hill was silent. Whatever happened during those hidden moments — the second false alarm, the second futile response — it was effective enough to empty the hillside of every defender. I benefited from a pattern I never witnessed. The boy's repetitions were invisible to me, but their consequence was the open meadow I walked through unchallenged."
+      }
+    ]
+  },
+  "narc_focal_007": {
+    "title": "The Gift",
+    "puzzle_id": "narc_007",
+    "masked_position": 2,
+    "masked_label": "Returned",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "child",
+        "color": "red (value 2, the blocks)",
+        "predicted_ease": "easy",
+        "narrative": "I stacked one layer of bright red blocks along the bottom on the first day. On the second day I added another layer above it — two full rows of red at the base. I was building something, and it felt like mine. Then I opened the box and read the note inside: these blocks are not a gift. They must be sent back the way they came. So I began undoing my work. The returned state — the hidden moment — is the reversal: I removed the top layer and went back to a single row of red blocks along the bottom, exactly as it was on the first day. It is not destruction; it is retracing. The same pattern I built up, I now take apart. One layer remains because that is where I started, and starting is the only thing that cannot be returned."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "blocks",
+        "color": "red (value 2)",
+        "predicted_ease": "medium",
+        "narrative": "We were placed in a single row along the bottom — a neat line of red, bright and orderly. The next day, more of us were stacked on top, a second row, and we felt the weight of doubling. We were being built into something. Then the child's mood changed. We could feel the shift — the hands that had placed us so carefully now moved with reluctance. We were being disassembled. The return means going backward: from two rows to one, from growth to retreat. We know we are being sent back because we can feel ourselves being lifted and boxed. The hidden moment is the moment of un-building, and we are the material being undone. We end up as a single row at the bottom again — the same configuration as the first day — but the meaning is different. The first time we were a beginning. Now we are an ending."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "sender",
+        "color": "none (offscreen)",
+        "predicted_ease": "hard",
+        "narrative": "I sent the blocks and I sent the note. I was never in the room when the child stacked them, never present for the building or the discovery that they had to come back. I only know what I intended: the blocks would arrive, the child would arrange them, and eventually the note would be found. After that, the blocks would return. But what the returned state actually looks like — whether the child removed one layer or both, whether the blocks were neatly restacked or simply dumped back in the box — I cannot say from direct experience. I know the rule I set in motion: what was built must be unbuilt. I know the child started with one layer, added a second, and then read my instructions. The logical conclusion is a return to some earlier state. But I am the absent author of this story, and the hidden moment belongs to the child, not to me. I will only learn what happened when the box arrives back at my door."
+      }
+    ]
+  },
+  "narc_focal_008": {
+    "title": "The Tower",
+    "puzzle_id": "narc_008",
+    "masked_position": 4,
+    "masked_label": "Crowned peak",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "builders",
+        "color": "blue (value 1, the tower); yellow (value 4, the crown)",
+        "predicted_ease": "easy",
+        "narrative": "We laid the foundation first — a single blue cell at the very bottom center. Each day we added another floor above it, stacking upward: two floors, three, four. On the fifth day, the tower reached its full height of five floors, a single column of blue stretching from the bottom row all the way to the top. And then we placed the crown — a golden row of yellow cells across the very top, spanning the full width. That is the hidden moment: the tower at its peak, five floors of blue rising from the base, capped by a row of yellow at the summit. We built every cell of it. We placed the crown with our own hands. We know exactly what it looks like because we are the ones who made it so. The storms that followed took it all away, but we were there for the moment of completion, and the crowned peak is our work."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "tower",
+        "color": "blue (value 1)",
+        "predicted_ease": "medium",
+        "narrative": "I grew one floor each day, my blue cells stacking upward from the foundation. One floor, two, three, four — and on the fifth day I reached my full height and something new was placed upon my head. A golden crown, a row of yellow stretching across my peak. I felt its weight — heavier than my own cells, brighter, a different substance entirely. I did not ask for the crown, but I received it. The hidden moment is my moment of greatest height and greatest adornment: five floors of blue with yellow on top. I know what I look like because I am the structure itself. But I also know what comes next — the storms began the very next morning, and each day stripped a floor from me. The crowned peak is the last moment before my decline. I wear the yellow like a memory of what pride felt like before gravity and wind had their say."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "storms",
+        "color": "none (destructive force)",
+        "predicted_ease": "hard",
+        "narrative": "I had not yet arrived when the tower reached its peak. I was gathering in the east, building pressure, thickening the clouds. The builders worked for five days, adding floor after floor, and on the fifth day they placed something at the top — a crown, I am told, golden and wide. I did not see it. By the time I struck on the sixth day, the crown was already gone and the tower had begun to shrink. I found it at three floors, and I took another. Then I found it at two floors and prepared to take more. The hidden moment — the crowned peak, the tower's zenith — belongs to the time before me. I know only that the tower was taller when I arrived than it should have been if it had merely grown, and that something golden had been placed and then removed before my winds could touch it. The peak is the one frame of this story I cannot claim. Everything after it is mine."
+      }
+    ]
+  },
+  "narc_focal_009": {
+    "title": "The Journey",
+    "puzzle_id": "narc_009",
+    "masked_position": 3,
+    "masked_label": "The river",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "traveler",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I have been walking east, one step per day, across the bottom row of the valley. On the first day I stood at the far left. On the second, one step right. On the third, another step right, approaching the middle. On the fourth day I reached the river — the rightmost column of the valley floor — and waded in. The water is cold and blue beneath my feet. At this moment, I stand in the bottom row at the fourth position from the left, with the valley's green earth stretching in every direction except beneath me, where the river runs blue. But the river is also my turning point: I have gone as far east as I can go. The next morning I will begin my return westward, climbing to a higher path along the ridge. I know exactly what the river moment looks like because I am standing in it — my red marker on the valley floor, the blue water at my feet, the green terrain filling the bottom row around me."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "valley",
+        "color": "green (value 3)",
+        "predicted_ease": "medium",
+        "narrative": "I am the green floor of the valley, stretching across the bottom row. I have felt the traveler's footsteps moving eastward — one cell per day, a red pressure point shifting across my surface. Day one at the far left, day two one step right, day three another step right. I could feel her approaching the river at my eastern edge. On the fourth day, her weight landed on a cell near the right side of my bottom row, and the coldness of the river seeped up around her feet. I felt the blue. The traveler reached the spot where my green earth meets the water, and I held her there for one day. I witnessed the river moment because it happened on my body — the red mark of the traveler, the blue line of the water, both pressing into my easternmost reaches. The next day she began climbing, stepping up to the ridge above me, and I felt her weight leave the bottom row entirely. But the hidden moment is mine to report: the traveler at the river, my green all around her, the blue at the eastern edge."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "home",
+        "color": "none (destination)",
+        "predicted_ease": "hard",
+        "narrative": "I am the place the traveler left behind and will return to. I sit at the western edge, waiting. I know she departed heading east, and each day I feel her grow farther away — one step, two steps, three. On the fourth day she must have reached the river, because on the fifth day the direction of her footsteps reversed and she began returning along the ridge, a row above the valley floor. I did not see the river. I did not see her wade in, or feel the cold, or witness the moment of turning. I only know it happened because the traveler who left me heading east came back heading west, and the only explanation is a boundary she reached and could not cross. The river moment is the fulcrum of the journey, and I am on the wrong end of the lever to observe it. I will see her again when she arrives, but the hidden moment — the fourth day, the water, the decision to turn back — that belongs to the far side of the valley, beyond my knowledge."
+      }
+    ]
+  },
+  "narc_focal_010": {
+    "title": "The Tide",
+    "puzzle_id": "narc_010",
+    "masked_position": 2,
+    "masked_label": "Seawall blocks",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "seawall",
+        "color": "grey (value 5)",
+        "predicted_ease": "easy",
+        "narrative": "I was placed on the third quarter, a solid grey line stretching across the full width of the grid at the third row from the bottom. Below me, the tide had been rising — one row in the first quarter, two rows by the second. It would have risen to three rows in the third quarter if I were not here. But I am here. My grey cells form an impassable barrier, and the water pools behind me instead of advancing. The hidden moment — the third quarter — looks like this: the bottom two rows are still blue with seawater, exactly as they were in the second quarter. Above the water sits my grey line, the seawall, spanning the full width. And above me, the top two rows remain dry and empty. The tide did not pass. I held it at its second-quarter level. On the fourth quarter the water somehow reached the same height as me — three rows from the bottom — but during my moment, the hidden frame, I stood firm and the water stayed put."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "tide",
+        "color": "blue (value 1)",
+        "predicted_ease": "medium",
+        "narrative": "I have been rising steadily — one row in the first quarter, two in the second — filling from the bottom up as I always do. In the third quarter I expected to claim a third row, but something stopped me. A grey barrier appeared across the full width of the row I wanted, pressing down on me, holding me at two rows. I could feel the resistance — hard and unyielding, unlike anything I had encountered before. The hidden moment is my frustration: I sit at two rows, the same as the second quarter, pooled behind a seawall I cannot breach. My blue fills the bottom two rows, the grey line sits above me, and the upper rows remain dry. I was there. I felt the barrier. I know exactly what the third quarter looks like because I am the water that was blocked. By the fourth quarter I managed to push up alongside the wall, reaching three rows, but during the hidden frame I was held in check."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "shore_beyond",
+        "color": "none (dry upper rows)",
+        "predicted_ease": "hard",
+        "narrative": "I am the dry land above the tideline — the upper rows that the water has not yet reached. In the first quarter I could see blue filling the bottom row far below me. In the second quarter it rose to two rows, creeping closer. I braced for the third quarter, expecting the tide to claim a third row and bring itself to my doorstep. But the water never came. Something happened below me — a grey intervention, a barrier of some kind — that held the tide in check. I did not see the seawall being built. I did not witness the water pooling behind it. All I know is that by the fourth quarter, the tide stood at three rows with a grey line among them, and during the third quarter — the hidden moment — something must have kept the water lower than expected. I remain dry, I remain above, and the event that protected me is something I must reconstruct from the evidence rather than recall from experience."
+      }
+    ]
+  },
+  "narc_focal_011": {
+    "title": "The Heist",
+    "puzzle_id": "narc_011",
+    "masked_position": 3,
+    "masked_label": "Night three",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "thief",
+        "color": "grey (value 5, the fake stone)",
+        "predicted_ease": "easy",
+        "narrative": "I have been waiting for the third night. The plan was simple: the three gems advance one row toward the door each night, moving in lockstep from the bottom of the vault toward the top. Ruby on the left, emerald in the center, sapphire on the right. Night one they moved from row three to row two. Night two, from row two to row one. On night three, all three would reach row zero — the exit row — and that is when I made my move. Before the emerald advanced to its final position, I pulled it from its column and replaced it with a grey stone. Then the grey stone, not the emerald, took its place in the top row. The hidden moment shows all three items at row zero: the ruby in its usual left position, the sapphire on the right, and my grey counterfeit sitting in the center where the emerald should be. The real emerald is already in my pocket. When the vault was later opened and found empty, only the grey stone left behind at the exit told the story of what I had done."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "ruby",
+        "color": "red (value 2)",
+        "predicted_ease": "medium",
+        "narrative": "I advance one row each night, always in the leftmost column, always toward the door at the top of the vault. The emerald moves beside me in the center, the sapphire on the right. We have been in lockstep for two nights — row three to row two on night one, row two to row one on night two. On night three, I reached row zero, the exit, and I sensed the others arriving beside me. The sapphire was there, cool and blue, in its rightful position on the right. But the presence in the center was wrong. It did not have the emerald's warmth. Something duller, greyer, had taken its place. I could not see what happened during the transition — I was focused on my own advance — but by the time we all sat in the top row, the center position held a fake. I witnessed the aftermath of the swap but not the act itself. The hidden moment is all three of us at the top, but the 'emerald' between us is grey and lifeless."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "sapphire",
+        "color": "blue (value 1)",
+        "predicted_ease": "hard",
+        "narrative": "I am the rightmost gem, and I have been focused on my own column for the entire heist. Each night I advance one row toward the door, and I trust the others are doing the same. Night one: row three to row two. Night two: row two to row one. Night three should bring all of us to row zero. I made my move in the darkness, sliding upward as I always do, and arrived at the top row on schedule. But I never look sideways during the advance. I do not check on the ruby or the emerald; I attend to my own path. By the time the vault was opened and found empty, I was already gone, and I only learned later that the emerald had been replaced with a forgery. The hidden moment — all three items at the top row — includes a substitution I did not perceive. I was there in body but absent in awareness. Whatever the center column held on night three, I cannot testify to its identity. I was busy escaping."
+      }
+    ]
+  },
+  "narc_focal_012": {
+    "title": "The Remedy",
+    "puzzle_id": "narc_012",
+    "masked_position": 3,
+    "masked_label": "Root scorched",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "healer",
+        "color": "black (value 0, the scorched center)",
+        "predicted_ease": "easy",
+        "narrative": "I watched the blight spread for three days — a red diamond growing outward from the center of the field, one cell wider in each direction with every passing day. On the first day, a single red cell in the very middle. By the second day, a cross of red: the center and its four cardinal neighbors. By the third day, a full diamond reaching the edges, two cells out in every direction. They tried cutting the edges twice, and twice the blight regrew from the center. I understood what they did not: the root was in the center cell, and the only way to stop the spread was to kill it there. On the fourth day — the hidden moment — I scorched the center cell black. The blight still filled the diamond shape around it, red cells stretching out in every direction, but the center was dead. Burned. Black instead of red. The diamond remained fully expanded, but the root was gone. By the fifth day, without its source, the blight collapsed entirely and the field recovered to empty green. The hidden frame shows the full blight diamond with a single black hole at its heart where I applied the fire."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "blight",
+        "color": "red (value 2)",
+        "predicted_ease": "medium",
+        "narrative": "I spread from the center as I was meant to — one cell per day in each direction, a diamond of red expanding across the field. The first day I was a single point. The second day I was a cross. The third day I was a full diamond, touching the borders of the grid. They tried cutting me back at the edges, but I always regrew from my root at the center. On the fourth day, something reached my core. I felt the burn — a searing point of destruction right at the cell where I had begun. My outer cells still held their red positions, the diamond shape intact, but the center was gone. Blackened. Dead. I felt the disconnection instantly: without the root, my cells could not sustain themselves. The hidden moment is my body at full spread with a wound at its heart — the same diamond of red that filled the third frame, but with the center cell scorched to black. I was there for my own death. The fifth frame, the empty field, was just the time it took for the rest of me to realize the root was gone."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "field_edge",
+        "color": "green (value 0, background)",
+        "predicted_ease": "hard",
+        "narrative": "I am the margin of the field, the outermost cells that the blight has not yet reached. For three days I watched the red diamond grow closer — a point, a cross, then a full shape reaching toward my borders. Twice someone tried cutting the blight's edges, and twice it regrew. I braced for the fourth day, expecting the red to finally spill into my cells. But it never came. Something happened at the center of the field — far from me, deep inside the blight's territory — that changed everything. I could not see the intervention. The blight's body blocked my view, a wall of red cells between me and whatever was happening at the core. All I know is that on the fifth day, the entire blight was gone. The field was empty, clean, as though the red had never existed. Whatever the healer did on the fourth day — the hidden moment — she did it at the center, far from my vantage at the periphery. I can only infer that the root was destroyed, because the consequence was total: a field full of blight one day, an empty field the next."
+      }
+    ]
+  },
+  "narc_focal_013": {
+    "title": "Baby Shoes",
+    "puzzle_id": "narc_013",
+    "masked_position": 2,
+    "masked_label": "never worn",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "shoes",
+        "color": "yellow (value 4)",
+        "predicted_ease": "easy",
+        "narrative": "We started as a pair — two small yellow L-shapes, side by side on a wide grid, mirror images of each other. The left shoe and the right shoe, prepared with love, bright and perfect. Then we were wrapped as an offering: the grid shrank slightly, a red bow appeared at the top corner, and we sat nestled together, ready to be given. But we were never worn. The hidden moment is our final state: the grid has shrunk again, down to its smallest size, and only one of us remains visible — a single small yellow L-shape, alone, the other shoe already gone or hidden. The soles never met the ground. We grew smaller with each frame because the story is about diminishment — from a full pair to a wrapped gift to a single unworn remnant. We know what the hidden frame looks like because we are the subject of it: one small yellow shape in a smaller grid, the trace of something that was made for a life that did not happen."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "bow",
+        "color": "red (value 2)",
+        "predicted_ease": "medium",
+        "narrative": "I was tied onto the package in the second frame — a red mark at the top of a slightly smaller grid, sitting above the yellow shapes of the shoes. I was the decoration that made them a gift. I saw the pair arranged beneath me: bright yellow L-shapes, perfectly formed, waiting for tiny feet that would never come. The grid was already shrinking from the first frame to the second, and I knew the trajectory: things were getting smaller, not larger. The hidden moment — the third frame — continues the reduction. The grid shrinks again, and I am no longer present. I was removed or discarded when the gift went unclaimed. I can infer what the final state looks like from the pattern of diminishment, but I was not there to see it. I adorned the offering, I made it beautiful, and then I was cut away. Whatever remains in the smallest grid — one shoe, perhaps, or the ghost of a pair — exists without me."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "child_who_never_was",
+        "color": "none (absent)",
+        "predicted_ease": "hard",
+        "narrative": "I am the absence this story is about. The shoes were made for me — tiny yellow things, bright and hopeful, shaped like an L on each side. They were wrapped as a gift, tied with a red bow, and offered to a world that expected me. But I never arrived. I never wore them. I never pressed my feet against the soles or tangled the laces. The hidden moment — the final frame — is the moment when my absence becomes undeniable: the grid shrinks to its smallest, the shoes reduce to a fragment of their original pair, and the story of diminishment reaches its conclusion. I did not witness any of this because I do not exist. The shoes know their own fate. The bow saw part of the story. But the hidden frame is defined by my absence from it — the smallest version of a gift that was never received, never used, the yellow remnant of preparation for a life that the world prepared for and then mourned."
+      }
+    ]
+  },
+  "narc_focal_014": {
+    "title": "The Fall of Icarus",
+    "puzzle_id": "narc_014",
+    "masked_position": 3,
+    "masked_label": "the melting",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "sun",
+        "color": "implicit (heat source)",
+        "predicted_ease": "easy",
+        "narrative": "I watched him rise toward me and I did not flinch. The boy and his yellow wings — two bright cells flanking a red body — ascended steadily, the grid growing with each frame to accommodate his ambition. In the first frame, a small craft: wings and body in a tight row. In the second, higher and wider, with a tail of red trailing below. In the third, he came too close — I could feel the wax softening, the yellow wings beginning to droop, a single feather already drifting above. Then came the melting, the hidden moment, and I am the one who caused it. The grid shrank as he fell, the wings dissolving, the yellow turning to brown where the wax failed. What remains in the fourth frame is a diminished shape: the body still red, falling, but the wings reduced — orange-brown remnants where golden feathers used to be, the structure collapsing as the wax gives way. I know what the melting looks like because my heat is the instrument of it. Below, the sea waits in blue. I do not look away."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "icarus",
+        "color": "red (value 2, body)",
+        "predicted_ease": "medium",
+        "narrative": "I felt the wings my father built — yellow cells on either side of my body, wax and feathers holding me aloft. The craft was small at first, then the grid widened as I climbed: wings spread, a red tail growing beneath me, the air thinning and warming. By the third frame I was at my highest, the grid at its largest, and I could feel something golden shimmering above me — the heat, the closeness of the sun. Then came the melting. I felt it in my shoulders first — the wax losing its grip, the yellow wings shrinking, changing color as they failed. The hidden moment is my transformation from flier to faller: the grid contracts as I descend, the wings reduced to stumps of dulled color flanking my red body, the structure that held me aloft collapsing into something smaller and sadder. I am still in the frame — I am always in the frame — but I am no longer ascending. The next stop is the sea, where blue waves wait to receive what the sky has rejected."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "daedalus",
+        "color": "none (offscreen, below)",
+        "predicted_ease": "hard",
+        "narrative": "I told him not to fly too high. I built the wings — yellow wax and feathers, one set for him, one for me — and I warned him about the sun. Then he rose above me, and I lost sight of him. I was flying at a safe altitude, my own wings steady, watching the grid above me grow as my son climbed higher and higher. I saw the third frame from below: Icarus at his peak, the grid at its widest, golden warmth radiating from the top. Then came the frame I did not witness — the melting, the hidden moment. I was too far below to see the wax failing, the wings shrinking, the transformation from ascent to descent. I only knew something was wrong when I saw the grid contracting above me, and then the splash. A small body, red and wingless, striking the blue sea. Whatever the melting looked like — the exact configuration of failing wings, the moment the yellow gave way to brown — I must imagine it from the father's remove: present in the story but absent from the crucial frame, the one where ambition became gravity."
+      }
+    ]
+  },
+  "narc_focal_015": {
+    "title": "Sisyphus",
+    "puzzle_id": "narc_015",
+    "masked_position": 4,
+    "masked_label": "the return",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "boulder",
+        "color": "grey (value 5)",
+        "predicted_ease": "easy",
+        "narrative": "I am the weight that always rolls back. For four frames I was pushed uphill — starting at the lower right, moving diagonally up and to the left with each step. Base, climb, near the top, the peak. At the peak I sat in the upper-left corner of the grid, a square of grey cells as high as I have ever been. And then the return began. The hidden moment is the first step of my descent: I rolled back from the peak toward the lower right, retracing the diagonal. After reaching the upper-left at the peak, I slid down one step to the position I had occupied two frames before — back to the lower-right area of the grid, a square of grey in the same spot where I sat during the climb. I know exactly where I land because I have done this countless times. The return is always symmetrical with the ascent: one step back down the hill, gravity reclaiming what effort had gained. And after the hidden frame, I continue falling — the next visible frame shows me further down, and eventually I will be at the base again, waiting for Sisyphus to begin the next push."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "sisyphus",
+        "color": "none (implied pusher)",
+        "predicted_ease": "medium",
+        "narrative": "I have pushed this grey stone up the hill four times now: from the base in the lower right, up through the climb and near the top, all the way to the peak in the upper left. Each step moves the boulder one diagonal position upward. My muscles remember every frame of the ascent. Then the peak — that terrible moment when the stone pauses at the highest point and I know what comes next. The return. The hidden frame is the moment the boulder begins its descent, sliding one step back down the diagonal from the upper-left peak toward the lower right. I am still here, still watching, still feeling the stone pull away from my hands. I see it settle into a position I recognize — the same spot it occupied during the climb, now a waypoint on the descent. I witness the return because I am condemned to witness everything about this cycle. But I do not cause the stone to fall. Gravity does that. My role is only to push it back up again, and again, and again."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "summit",
+        "color": "none (location)",
+        "predicted_ease": "hard",
+        "narrative": "I am the peak, the upper-left corner of the grid, and I held the boulder for exactly one frame. It arrived after a long climb — four frames of steady ascent, the grey square moving diagonally up toward me. When it reached me, I felt its full weight. Then it left. The hidden moment — the return — is the frame after the boulder departed from me, and I was not part of it. The stone rolled downward, away from my position, back toward the lower reaches of the hill. I do not know exactly where it landed on its first step of descent because I am fixed at the top and the boulder moves away from me into territory I cannot observe. I know the descent mirrors the ascent, and I know the boulder will pass through the same positions it occupied on the way up. But the specific frame of the return — where the grey square sits after its first downward step — belongs to the middle of the hill, far from my vantage. I only know the boulder will come back to me eventually, pushed by hands that never tire and never stop."
+      }
+    ]
+  },
+  "narc_focal_016": {
+    "title": "Plato's Cave",
+    "puzzle_id": "narc_016",
+    "masked_position": 2,
+    "masked_label": "the world outside",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "freed_prisoner",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I spent my life watching grey shadows dance on the cave wall — flat shapes, meaningless patterns, the only reality I knew. Then I turned around and saw two forms by the fire: a red shape and an orange one, casting the shadows I had mistaken for truth. That was the second frame. Now comes the third: I have stepped outside the cave entirely, and the world is staggering. The hidden moment is the world outside — a vast grid, wider and taller than anything inside the cave. At the top, a sky of pink stretching across the full width. Below it, a landscape of green forms, trees and hills, with depth and complexity the cave never hinted at. I stand somewhere in this scene, a red mark among the living colors, seeing for the first time that reality has dimension, variety, and a richness that shadows cannot convey. The grid itself is larger than the cave frames — seven columns instead of five, five rows instead of three — because the outside world literally contains more than the inside. I know what this frame looks like because I walked through the mouth of the cave and saw it with my own newly opened eyes."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "fire",
+        "color": "orange (value 7)",
+        "predicted_ease": "medium",
+        "narrative": "I am the fire inside the cave, and I have always known what the shadows are. I cast the objects' silhouettes onto the wall — grey shapes flickering in patterns that the prisoners took for reality. When the freed prisoner turned around, he saw me and the objects I illuminate: a red form and my own orange glow. That was the second frame. But the third frame — the world outside — is beyond my reach. I burn inside the cave. I have never seen the sun, the sky, the green landscape that the prisoner is now discovering. The hidden moment belongs to the outside, and I am an inside thing. I can infer that the world is larger than the cave, richer in color, fuller in form, because every prisoner who leaves comes back blinking and confused, unable to readjust to my flickering light. But the specific contents of the outside grid — its colors, its arrangement, its expansion beyond the cave's dimensions — I must guess at from the reactions of those who return. The freed prisoner sees the world. I only see his shadow on the wall when he comes back."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "remaining_prisoners",
+        "color": "grey (value 5, shadows)",
+        "predicted_ease": "hard",
+        "narrative": "We are still facing the wall. We have always faced the wall. The grey shapes that dance before us are the only world we know — flat, flickering, two-dimensional truths that we have never questioned. One of us was freed, we heard. He turned around — an unthinkable act — and then he left the cave entirely. We did not see him go. We did not see what he saw. The hidden moment, the world outside, is a concept we cannot form. We know only the shadows: grey patterns on a small wall, three rows by five columns of familiar shapes. The idea that there is a larger grid beyond the cave mouth, wider and taller, filled with colors we have no names for — this is not information we possess. Whatever the freed prisoner is experiencing in the hidden frame, it is as inaccessible to us as a dimension we cannot rotate into. We remain fixed, facing forward, seeing the same shadows we have always seen. The world outside exists without our knowledge or consent."
+      }
+    ]
+  },
+  "narc_focal_017": {
+    "title": "Ozymandias",
+    "puzzle_id": "narc_017",
+    "masked_position": 5,
+    "masked_label": "the inscription remains",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "time",
+        "color": "none (erosive force)",
+        "predicted_ease": "easy",
+        "narrative": "I have been working on this statue since the day it was built. The builders raised it floor by floor — foundation, body, head, crown — until it stood at its full height, a colossus of blue cells with a face and arms, all mounted on a yellow pedestal. Then I began my work. Each frame after the peak, I stripped away more: first the crown and upper features, then the torso, then the limbs. By the crumbling frame, the statue was a ruin — scattered fragments where a body once stood. Now comes the hidden moment, and I know exactly what I leave behind: nearly everything is gone. The blue cells that formed the mighty figure have been reduced to a single small remnant near the bottom — a fragment of leg or pedestal base, one lonely blue cell standing above the yellow inscription line. The yellow pedestal endures at the very bottom, stubbornly solid, its boastful message still legible even as the sculpture above it crumbles to nothing. The next frame will show lone and level sands — just the pedestal and empty desert. But in the hidden frame, one last piece of the colossus still stands, a mocking remnant beside the inscription that claims eternal glory."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "pedestal",
+        "color": "yellow (value 4)",
+        "predicted_ease": "medium",
+        "narrative": "I am the base, the yellow row at the bottom of every frame, and I bear the inscription: Look on my Works, ye Mighty, and despair. I held the colossus for its entire life. I felt it rise — one floor, then three, then six — blue cells stacking upon me until the statue loomed against the sky. I felt the peak, the proud moment when head and crown and arms were all in place. And then I felt the crumbling — pieces falling away frame by frame, the weight on my surface growing lighter with each passing age. The hidden moment is late in the erosion. I can feel that almost nothing remains above me — the great body is gone, the head is gone, the arms dissolved into sand. Perhaps one last blue fragment clings to the space just above my surface, a final piece of the king's mighty image. But I endure. I always endure. My yellow cells stretch across the full width, and the inscription is still readable. I have witnessed the entire arc from grandeur to ruin, and the hidden frame is the penultimate step: the statue nearly vanished, the pedestal intact, the boast still echoing across an emptying grid."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "traveler",
+        "color": "none (arrives after)",
+        "predicted_ease": "hard",
+        "narrative": "I came upon the ruin in the desert, and by then it was already too late to see what had once stood here. The final frame shows nothing but a yellow pedestal and empty sand — lone and level sands stretching far away. I can read the inscription and I can imagine the colossus it once supported, but the hidden frame — the one just before this final emptiness — is a mystery I must piece together from fragments. I know the statue was once vast. I can see in earlier frames how it grew, floor by floor, blue cells assembling into a figure of immense pride. I know it crumbled, because the frame before the hidden one shows a ruin — scattered blue fragments, a broken form. But the exact state of the statue in the hidden moment, the precise degree of erosion between crumbling ruin and total disappearance, is something I arrived too late to see. I am a traveler from an antique land, and the hidden frame belongs to the long centuries between the fall and my arrival. The inscription speaks of despair, but it does not tell me what the penultimate ruin looked like."
+      }
+    ]
+  },
+  "narc_focal_018": {
+    "title": "Chekhov's Gun",
+    "puzzle_id": "narc_018",
+    "masked_position": 2,
+    "masked_label": "act three -- it fires",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "gun",
+        "color": "red (value 2)",
+        "predicted_ease": "easy",
+        "narrative": "I hung on the wall through the first act — a red mark above the mantle, visible but untouched, while the grey shelf stretched below me and the grey furniture sat in the lower corner. In the second act, life continued around me: an orange figure appeared downstairs, moving through the scene, but I remained on the wall, unchanged, watching. Then came the third act — the hidden moment — and I finally spoke. I left the wall. I moved from my position at the top to a position in the lower part of the scene, near the orange figure. The hidden frame shows the mantle still stretching across its row, the furniture still in the corner, but I am no longer on the wall. I have descended. My red mark now sits among the action — next to the orange figure, near the grey furniture — because in the third act, the gun must fire. I know exactly what the hidden frame looks like because I am the instrument of its transformation: the wall is bare where I once hung, and I am below, in the thick of the drama, having fulfilled the promise that my presence in act one made inevitable."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "mantle",
+        "color": "grey (value 5)",
+        "predicted_ease": "medium",
+        "narrative": "I am the shelf that runs across the second row — a solid grey line, present in every frame, the fixed architecture of the room. In the first act, the gun hung on the wall above me, a red mark at the top of the grid. The furniture sat below and to the right. Life was still. In the second act, an orange figure appeared in the lower portion of the room, and the gun remained above me, still waiting. I could feel its weight, its potential. The third act — the hidden moment — is when everything changed. I am still here, still stretching across my row, but the gun is gone from above me. The wall is bare. I felt the removal — the sudden lightness where the red mark had been — and I know the gun moved downward, toward the action happening below. The orange figure and the gun are now in the same region of the grid, and the furniture still sits in the lower corner. I witnessed the departure but not the arrival. I am too high up to see where the gun landed. I only know that my shelf is lighter in the hidden frame, and the room below me holds something terrible."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "audience_outside",
+        "color": "none (offstage)",
+        "predicted_ease": "hard",
+        "narrative": "I was not in the theater for the third act. I saw the first act — the room with its mantle, the gun on the wall, the furniture in the corner — and I noted the red mark above the shelf with the certainty that Chekhov's rule demands: if it is shown, it will be used. I saw the second act — the orange figure arriving, the gun still on the wall, the tension building. Then I was called away, and the third act happened without me. The hidden moment is the moment of firing, and I missed it. I can reconstruct what must have happened from the rule I know — the gun must leave the wall and enter the action — and from the aftermath in the fourth frame, where the wall is bare, the gun has moved, and the red mark sits among the figures below. But the exact configuration of the hidden frame — where the gun is at the moment of firing, where the orange figure stands when it speaks — that belongs to the audience that stayed. I left early and must infer the climax from the denouement."
+      }
+    ]
+  },
+  "narc_focal_019": {
+    "title": "The Metamorphosis",
+    "puzzle_id": "narc_019",
+    "masked_position": 2,
+    "masked_label": "the vermin",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "gregor",
+        "color": "red to green (value 2 to value 3)",
+        "predicted_ease": "easy",
+        "narrative": "I went to sleep as a man — a simple shape, two red cells stacked vertically in a small grid. When I woke, the change had begun: my body was widening, green cells appearing alongside the red, the grid growing to accommodate what I was becoming. That was the second frame — the transition, human and insect mingled in the same form. Now comes the hidden moment, and I know what it looks like because I am living inside it: the transformation is nearly complete. The grid has expanded to its full size, five rows by five columns, and my body is entirely green — a segmented insect form, a central body with legs extending to either side. The red is gone. The human shape is gone. Where I once stood upright in two cells, I now sprawl across the grid in the low, wide, many-legged configuration of vermin. I can feel every segment of my new body. The hidden frame shows the fully formed insect — green cells arranged in a pattern of body and legs — before the family's final rejection empties the room entirely."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "grete",
+        "color": "none (family, offscreen but implied)",
+        "predicted_ease": "medium",
+        "narrative": "I opened the door to my brother's room each day to bring him food. In the first frame he was still a man — small, upright, two red cells in a narrow grid. The second time I looked, the change had begun: the grid was wider, and his body was splitting between red and green, human features distorting into something segmented and flat. I closed the door quickly. The hidden moment — the third frame — is what I saw when I opened the door again. The grid had grown to its full size, and my brother was gone. In his place was a green insect shape: a body in the center with legs radiating outward, low to the ground, filling the wider grid with its repulsive symmetry. No red remained. The transformation was complete. I witnessed it because I was the one who kept opening the door, who kept looking when the others could not bear to. The insect in the hidden frame is my brother, and it is not my brother, and it fills the room the way a nightmare fills a mind — completely, leaving no space for anything else."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "office_manager",
+        "color": "none (outside the apartment)",
+        "predicted_ease": "hard",
+        "narrative": "I came to the apartment because Gregor had missed work. I stood at the front door and I never entered the bedroom. Whatever was happening inside that room — the change, the hidden frame, the thing his family kept behind a closed door — I was not permitted to see. I heard noises: a skittering, a low scraping, sounds that did not match a man lying sick in bed. I heard the sister cry out. But the hidden moment — the fully transformed body, the green insect shape filling the expanded grid — that was behind a wall I never crossed. I only know that Gregor did not come to work, that his family grew increasingly agitated, and that something in the bedroom was wrong in a way that went beyond illness. The specific configuration of the hidden frame — the size of the grid, the arrangement of green cells into a body with legs, the complete absence of the human red — is a secret the family kept from the outside world. I stood in the hallway and heard the future collapsing, but I never saw the vermin."
+      }
+    ]
+  },
+  "narc_focal_020": {
+    "title": "Pandora's Box",
+    "puzzle_id": "narc_020",
+    "masked_position": 1,
+    "masked_label": "the opening",
+    "variants": [
+      {
+        "variant": "focal_active",
+        "actor": "pandora",
+        "color": "red (value 2, appears as scattered evil) / pink (value 8, hope)",
+        "predicted_ease": "easy",
+        "narrative": "The box sat sealed before me — yellow walls forming a rectangle in the center of the grid, a dark space inside, everything else empty. I should not have opened it. But I did. The hidden moment is the instant of opening: the lid lifts, and the first wave of suffering begins to escape. The yellow walls of the box crack open at the top — a gap appears where the lid was — and through that gap, the evils begin to emerge. A colored mark appears above the opening, the first plague escaping into the world, while inside the box, the remaining contents stir. The yellow structure is still mostly intact but visibly breached, the top broken, and in the very center of the box — at its deepest point — a small pinkish light sits undisturbed. Hope. It does not leave. Everything else is rushing outward, but hope clings to the bottom. I know what the opening looks like because my hands are on the lid: the box cracked open at the top, a first evil escaping upward through a gap marked by color, the yellow walls still holding their shape below, and hope glowing quietly in the center where it will remain even after everything else has scattered to the corners of the world."
+      },
+      {
+        "variant": "focal_observer",
+        "actor": "hope",
+        "color": "pink (value 8)",
+        "predicted_ease": "medium",
+        "narrative": "I was at the bottom of the box, beneath everything else — beneath the plagues, the sorrows, the cruelties that were packed in above me. When the box was sealed, I could see the yellow walls around me and feel the weight of the evils pressing down. Then the lid opened. I felt the pressure change instantly — the sufferings above me surged upward, rushing through the gap, scattering into the world. The hidden moment is the opening from my perspective at the bottom: the yellow walls of the box still surrounding me, but the top now breached. Above me, the contents are in motion — the first evil has already escaped through the gap, and the others are churning, rising. But I do not move. I cling to the center of the box, to the deepest point, as everything above me evacuates. The hidden frame shows the box mid-opening: cracked at the top, one or two evils already free, the yellow structure partially broken, and me — a small point of light at the center, the only thing that stays. I witnessed the opening because I was inside it, but I am not part of the exodus."
+      },
+      {
+        "variant": "focal_absent",
+        "actor": "world_outside",
+        "color": "none (empty margins)",
+        "predicted_ease": "hard",
+        "narrative": "Before the box opened, I was empty — the margin around the sealed yellow rectangle, blank cells stretching in every direction. I knew the box existed because it sat in my center, a closed structure with yellow walls, but I had no knowledge of its contents. The hidden moment — the opening — is the instant when everything changes for me, but I am the last to understand it. I know the box was sealed in the first frame and I know that by the third frame, colored marks have scattered across my entire surface — red, green, orange, cyan, pink, filling the corners and edges where nothing had been. But the exact moment of the breach, the hidden second frame, is a transition I experience only as the beginning of contamination. Something cracked the lid. Something escaped. I felt the first mark arrive — a colored cell in a spot that had been empty — but I did not see the lid lift or the walls break. The opening is Pandora's act, and the box's interior is hope's domain. I am the world that receives the consequences without witnessing the cause."
+      }
+    ]
+  }
+}

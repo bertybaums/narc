@@ -1,0 +1,193 @@
+{
+  "answer_grids": {
+    "2": [
+      [
+        6,
+        5,
+        9,
+        1
+      ],
+      [
+        9,
+        7,
+        7,
+        9
+      ],
+      [
+        5,
+        6,
+        1,
+        5
+      ],
+      [
+        9,
+        1,
+        7,
+        9
+      ],
+      [
+        7,
+        9,
+        7,
+        7
+      ],
+      [
+        5,
+        7,
+        9,
+        9
+      ]
+    ]
+  },
+  "masked_positions": [
+    2
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 5,
+    "tags": [
+      "spectrum:ai-forte",
+      "bitwise",
+      "or"
+    ]
+  },
+  "narrative": "Grid 2 (masked) is the element-wise bitwise OR of Grid 0 and Grid 1. Each cell: Grid2[r][c] = Grid0[r][c] OR Grid1[r][c], operating on binary representations.",
+  "puzzle_id": "narc_sp_014",
+  "sequence": [
+    {
+      "cols": 4,
+      "grid": [
+        [
+          2,
+          5,
+          1,
+          8
+        ],
+        [
+          9,
+          3,
+          7,
+          0
+        ],
+        [
+          4,
+          6,
+          2,
+          5
+        ],
+        [
+          1,
+          8,
+          3,
+          9
+        ],
+        [
+          7,
+          0,
+          6,
+          4
+        ],
+        [
+          5,
+          2,
+          9,
+          1
+        ]
+      ],
+      "label": "Operand A",
+      "position": 0,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          6,
+          1,
+          8,
+          3
+        ],
+        [
+          0,
+          7,
+          4,
+          9
+        ],
+        [
+          5,
+          2,
+          9,
+          1
+        ],
+        [
+          8,
+          3,
+          6,
+          0
+        ],
+        [
+          2,
+          9,
+          1,
+          7
+        ],
+        [
+          4,
+          5,
+          0,
+          8
+        ]
+      ],
+      "label": "Operand B",
+      "position": 1,
+      "rows": 6
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          6,
+          5,
+          9,
+          1
+        ],
+        [
+          9,
+          7,
+          7,
+          9
+        ],
+        [
+          5,
+          6,
+          1,
+          5
+        ],
+        [
+          9,
+          1,
+          7,
+          9
+        ],
+        [
+          7,
+          9,
+          7,
+          7
+        ],
+        [
+          5,
+          7,
+          9,
+          9
+        ]
+      ],
+      "label": "A OR B",
+      "position": 2,
+      "rows": 6
+    }
+  ],
+  "title": "Bitwise OR Grid"
+}

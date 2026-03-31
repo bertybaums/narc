@@ -1,0 +1,159 @@
+{
+  "batch": 2,
+  "created_at": "2026-03-30",
+  "description": "Focalization variants — same puzzle narrated from different actors' perspectives. Predicted ease reflects whether the focalizing actor IS the changing element (easy), observes it (medium), or is absent/unaware (hard).",
+  "puzzles": [
+    {
+      "puzzle_id": "narc_012",
+      "title": "The Remedy",
+      "masked_positions": [3],
+      "grid_count": 5,
+      "original_narrative": "A red blight spreads from the center of the field, growing one cell in each direction per day. Twice they tried cutting back the edges, but it regrew. On the fourth day the healer understood: she must scorch the center black to kill the root. Only then did the field recover.",
+      "actors": ["the_blight", "the_field", "the_healer", "the_root"],
+      "variants": [
+        {
+          "actor": "the_blight",
+          "predicted_ease": "easy",
+          "rationale": "The blight IS the red that changes in the masked grid — its diamond shrinks because the center is scorched. Focalizing through the blight foregrounds its own spatial extent and its sudden loss of the center cell.",
+          "narrative": "I grew outward from the heart of the field, one ring per day, a perfect diamond of red. They cut my edges twice but I fed from the center and always returned. On the fourth day something changed — the ground beneath my root turned black and cold. I felt myself pulling inward, my outermost ring dissolving, the diamond collapsing back one step. The center that had been mine was gone."
+        },
+        {
+          "actor": "the_field",
+          "predicted_ease": "medium",
+          "rationale": "The field (black background) observes the change — it watches both spread and remedy — but the masked grid's key content is the blight's shape, not the field itself.",
+          "narrative": "I was all black once, every cell quiet. Then the center turned red and a diamond grew outward across me, ring by ring. They trimmed the edges twice but the red always came back. On the fourth day the healer burned my center cell — scorched it black again. The diamond still covered me but its heart was gone, and without it the red had lost one ring of reach."
+        },
+        {
+          "actor": "the_healer",
+          "predicted_ease": "medium",
+          "rationale": "The healer is the agent of the critical action but is not spatially represented in the grid. She knows what she did (scorched the center) which directly constrains the answer, but the visual pattern must be inferred from that knowledge.",
+          "narrative": "Twice I tried cutting back the outer ring of red and twice it grew back larger, a diamond swelling one step wider each day. On the fourth day I stopped trimming edges. I walked to the center cell — the very origin — and scorched it black. The blight was still there when I stepped back, the same diamond shape, but with a black hole where its root had been, and one ring thinner than the day before."
+        },
+        {
+          "actor": "the_root",
+          "predicted_ease": "hard",
+          "rationale": "The root is the center cell. It is destroyed in the masked grid (turned from red to black). Focalizing through it means its own experience ends at the critical moment — it cannot report what the grid looks like after it dies.",
+          "narrative": "I am the center cell. From me the red spread outward, ring after ring, a diamond growing wider each day. They trimmed the edges but I kept feeding the growth. On the fourth day a heat came from above. Everything I was turned black. I cannot tell you what the field looked like after that. I only know that I stopped, and whatever shape the red still held, it held it without me."
+        }
+      ]
+    },
+    {
+      "puzzle_id": "narc_033",
+      "title": "The Prisoner's Dilemma",
+      "masked_positions": [2],
+      "grid_count": 4,
+      "original_narrative": "Two sat in separate rooms, each offered the same bargain. Blue reached through the wall with an open hand. Red reached too — but closed its fist around everything Blue offered. Trust is a gift; betrayal is a strategy.",
+      "actors": ["blue_prisoner", "red_prisoner", "the_system"],
+      "variants": [
+        {
+          "actor": "blue_prisoner",
+          "predicted_ease": "medium",
+          "rationale": "Blue cooperates and is betrayed. Blue knows its own action (move toward center) but can only infer Red's fist-closing from the aftermath. The masked grid shows both players' positions after the choice is made — Blue's perspective partially constrains it.",
+          "narrative": "We started in opposite corners, me in the top-left, Red in the bottom-right. When the wall thinned I moved one step inward and extended an open hand — you can see me there at row two, column two. I felt something reach back. But when the wall dropped I saw that Red had not just met me — Red had pushed one step past our meeting point, occupying my offered space. The choice was revealed: I cooperated, Red defected."
+        },
+        {
+          "actor": "red_prisoner",
+          "predicted_ease": "easy",
+          "rationale": "Red is the actor whose defection IS the key change in the masked grid. Red knows exactly what it did — moved to take Blue's space. Focalizing through Red foregrounds the precise spatial information needed.",
+          "narrative": "I sat in the bottom-right corner and watched Blue move first — one diagonal step inward to the center. Trusting fool. When my turn came I moved inward too, but I did not stop at the meeting point. I took the cell next to Blue and kept my claim on the column below. In the choice grid you can see it plainly: Blue at row two column two, me at row two column three and trailing down that third column. I closed my fist around everything offered."
+        },
+        {
+          "actor": "the_system",
+          "predicted_ease": "hard",
+          "rationale": "The system/game is implicit — it sets the rules but does not appear in the grid. It knows the structure (corners, movement, payoffs) but describes the outcome abstractly, making spatial reconstruction harder.",
+          "narrative": "I am the game. I placed one in the top-left corner and one in the bottom-right and thinned the wall between them. The rules are simple: move inward, meet or betray. In the second frame they each took one step toward the center. In the third frame the choices locked in — one kept an open hand, one closed a fist. By the final frame the defector's color had swallowed most of the board. The cooperator held only its original step."
+        }
+      ]
+    },
+    {
+      "puzzle_id": "narc_034",
+      "title": "Tragedy of the Commons",
+      "masked_positions": [3],
+      "grid_count": 6,
+      "original_narrative": "The meadow fed them all until one grazed twice in the eastern field. That single greedy mouth opened a wound in the land that would not heal. Where the orange herd bit deepest, the green never returned.",
+      "actors": ["the_commons", "the_greedy_user", "the_community"],
+      "variants": [
+        {
+          "actor": "the_commons",
+          "predicted_ease": "easy",
+          "rationale": "The commons (green cells) IS what changes in the masked grid — green cells disappear. Focalizing through the commons foregrounds exactly which cells are lost and which remain, directly encoding the answer.",
+          "narrative": "I was nine green cells in a solid block, feeding the blue in my west column, the red in my southeast corner, and every creature that grazed my edges. Then orange appeared in the northeast and began to eat. First the corner, then a second cell beside it. By the third frame I had already lost one cell from my eastern edge — I could feel the gap at row three, column four. In the tipping-point frame I lost one more: row two column four went black, and my block shrank to six cells in an L-shape hugging the west. After that the collapse accelerated and I was nearly gone."
+        },
+        {
+          "actor": "the_greedy_user",
+          "predicted_ease": "medium",
+          "rationale": "Orange is the agent causing the change. It knows where it grazes (northeast expansion) but the masked grid's content is defined by the commons' retreat, not orange's position (which stays at two cells in the masked frame). Partially constraining.",
+          "narrative": "I arrived in the northeast corner — one orange cell at first, then two. The green was lush and no one stopped me. By the second frame I had already pushed into two cells in the top row. By the third I held the same ground and watched the green start to fray beside me. At the tipping point I did not need to expand further — the damage was already done. The green retreated on its own, losing another cell from its eastern face, pulling back toward the west while I held my two cells in the corner."
+        },
+        {
+          "actor": "the_community",
+          "predicted_ease": "hard",
+          "rationale": "The community (blue at west edge, red at southeast, yellow at southwest) are bystanders — their positions never change across any frame. They observe the collapse but have no direct knowledge of the precise tipping-point geometry.",
+          "narrative": "We have been here since the beginning — blue on the western edge, red in the far southeast, yellow in the southwest. The green commons fed us all. We watched orange arrive in the northeast and thought little of it. By the third frame we noticed the green had begun to thin on its eastern side, but our own cells were unchanged. Something shifted in the fourth frame — the green lost more ground, though we could not say exactly where from our fixed positions at the margins. By the end the meadow was nearly bare and we sat in our corners, untouched but starving."
+        }
+      ]
+    },
+    {
+      "puzzle_id": "narc_044",
+      "title": "The Red Queen",
+      "masked_positions": [3],
+      "grid_count": 5,
+      "original_narrative": "The crimson queen found new legs while the sapphire one stumbled — but only for a moment, for the race never ends. In this country, it takes all the running you can do to stay in the same place.",
+      "actors": ["the_red_queen", "the_blue_queen", "the_landscape"],
+      "variants": [
+        {
+          "actor": "the_red_queen",
+          "predicted_ease": "easy",
+          "rationale": "The red queen (color 2, evolving to 6/magenta) IS the actor that changes in the masked grid — she adapts, shifting from red(2) to magenta(6). Focalizing through her foregrounds her own transformation.",
+          "narrative": "I began as red in the left-center of the arena, one cell at row three column two, with my blue rival mirrored across from me. The green landscape hemmed us both in — a solid border of green cells around the edges, though it kept shifting and breaking as we ran. In the adaptation frame I changed. I felt myself become something new — no longer red but magenta, still in my same cell at row three column two, but evolved. The landscape had closed back to a full green border around us. My rival was still blue beside me. But by the final frame she too had changed — to cyan — and the border was whole again. We had both evolved and ended up exactly where we started."
+        },
+        {
+          "actor": "the_blue_queen",
+          "predicted_ease": "medium",
+          "rationale": "The blue queen (color 1) does NOT change in the masked grid — she remains blue(1) at her position. She observes the red queen's adaptation but her own transformation comes later (grid 5). Partial constraint — she knows her own position but must infer Red's change.",
+          "narrative": "I held my position at row three column four through every frame, watching the green landscape ripple and reform around us. My red rival sat across from me, steady as I was. The border kept shifting — gaps opened at the corners, then the top and bottom centers, never the same pattern twice. In the fourth frame I sensed something different about Red. She was still in her cell but she had changed color — become magenta somehow, adapted in a way I had not yet managed. The border closed back to a full ring of green. I had not moved, had not changed, was still blue. My own evolution would come one frame later."
+        },
+        {
+          "actor": "the_landscape",
+          "predicted_ease": "hard",
+          "rationale": "The landscape (green border, color 3) is a treadmill — it shifts pattern each frame but is not the key informational change. Focalizing through it foregrounds border geometry rather than the queen's color change, which is the critical masked-grid feature.",
+          "narrative": "I am the green border, the arena, the treadmill. Each frame I shift my shape — first a complete ring, then two corners fall away, then the top and bottom centers open instead. I do not watch the queens; I only know my own geometry. In the fourth frame I reformed into a complete ring again, every edge cell green, the interior black except for two occupied cells in the middle row. I could feel something had changed about one of those interior occupants — its weight was different, its color no longer what it had been — but that is not my concern. I am the ground they run on. I shift, they adapt, and we all end up in the same place."
+        }
+      ]
+    },
+    {
+      "puzzle_id": "narc_041",
+      "title": "The Banality of Evil",
+      "masked_positions": [3],
+      "grid_count": 5,
+      "original_narrative": "The machine runs smoothly because each part turns as it is told — grey cogs in grey rows, each clicking into red as the order passes through. All but one small cog that refuses its rotation, holding its grey against the tide in the very center of the third row.",
+      "actors": ["the_red_tide", "the_resisting_cog", "the_machine", "the_observer"],
+      "variants": [
+        {
+          "actor": "the_red_tide",
+          "predicted_ease": "easy",
+          "rationale": "The red tide (color 2) IS the element advancing in the masked grid. It knows exactly how far it has spread — row by row, left to right, reading-order. Focalizing through the tide directly encodes the wavefront position.",
+          "narrative": "I am the order, the red. I started at the top-left cell and swept across the grid row by row, left to right, turning every grey cog to my color. By the second frame I held only that first cell. By the third I had claimed the entire top row and the first two cells of the second row. In the fourth frame I continued my sweep — I took the rest of the second row and pushed into the third row, consuming cells from the left. I reached the middle of row three, cells one and two, turning them red. But the third cell — row three, column three, the very center — refused me. I washed around it and kept going, filling cells four and five of that row and all of rows four and five below. I held twelve cells; seven remained grey; and that one center cell held fast."
+        },
+        {
+          "actor": "the_resisting_cog",
+          "predicted_ease": "medium",
+          "rationale": "The resisting cog (grey cell at center, row 3 col 3) holds its position but does not change — it is grey throughout. It knows its own state (unchanged) and feels the tide approaching, which partially constrains the grid, but it cannot see the full wavefront geometry from its fixed position.",
+          "narrative": "I sit at the center of the grid — row three, column three — and I am grey. I have always been grey. In the first frame every cell around me was grey too. Then the red began in the top-left corner and swept across like reading a page. By the third frame it had taken the whole first row and was creeping into the second. I felt it approaching through the fourth frame — the second row turned red completely, then cells to my left in my own row fell. The red reached my neighbors on both sides and above and below, filling in rows four and five beneath me. But when it came to my cell, I held. I stayed grey. The tide washed past me and I remained, one grey point in a field that was almost entirely red."
+        },
+        {
+          "actor": "the_machine",
+          "predicted_ease": "medium",
+          "rationale": "The machine/system is the pattern itself — the reading-order sweep. It knows the rule (sequential conversion, left-to-right, top-to-bottom) which strongly constrains the wavefront position, but it must account for the exception it did not plan for.",
+          "narrative": "I am the system, the pattern: convert each grey cog to red in sequence, left to right, top to bottom, one sweep through the entire grid. By frame three my process had reached the seventh cell — first row done, two cells into the second row. In the next frame I continued exactly as designed, converting the rest of row two and pushing into row three. My count advanced methodically: cells one and two of row three turned red, then I reached cell three — the center — and the mechanism jammed. The cog would not turn. I routed around it, took cells four and five, and continued through all of rows four and five. My sweep filled twelve cells with red, left the center grey, and the remaining cells below the wavefront converted as expected."
+        },
+        {
+          "actor": "the_observer",
+          "predicted_ease": "hard",
+          "rationale": "The observer is implicit — not in the grid at all. They watch from outside and describe what they see in general terms, without the spatial precision of an actor who is part of the pattern.",
+          "narrative": "I watched the machine from above, detached. At first it was a uniform field of grey — orderly, undifferentiated, twenty-five identical cogs. Then the conversion began in one corner and spread steadily, red replacing grey in what looked like a methodical sweep. By the third frame roughly a quarter of the grid had turned. The fourth frame was when I noticed the anomaly — the red had advanced considerably further, covering most of the upper portion and spilling into the middle rows, but somewhere near the center of the grid a single cell had not converted. It was hard to tell from my vantage exactly how far the red had reached in that frame, but the holdout was unmistakable. By the final frame only that one grey cell remained."
+        }
+      ]
+    }
+  ]
+}

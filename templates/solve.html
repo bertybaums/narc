@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}NARC — Solve: {{ puzzle.title }}{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <h2>{{ puzzle.title }}</h2>
+    <p class="text-muted">{{ puzzle.sequence | length }} grids &middot;
+    {% if puzzle.masked_positions | length == 1 %}
+        reconstruct grid #{{ puzzle.masked_positions[0] + 1 }}
+    {% else %}
+        reconstruct {{ puzzle.masked_positions | length }} grids
+    {% endif %}
+    </p>
+</div>
+
+<!-- Grid sequence -->
+<div class="card mb-3">
+    <div class="card-header">Grid Sequence</div>
+    <div class="card-body">
+        <div id="puzzle-sequence" class="sequence-container"></div>
+    </div>
+</div>
+
+<!-- Narrative -->
+<div class="narrative-container">
+    <button id="btn-reveal" class="narrative-reveal-btn" onclick="revealNarrative()">
+        Reveal Clue
+    </button>
+    <div id="narrative-text" class="narrative-text">{{ puzzle.narrative }}</div>
+</div>
+
+<!-- Answer editor -->
+<div class="card mb-3">
+    <div class="card-header">Your Answer</div>
+    <div class="card-body">
+        <div id="answer-picker" class="mb-3"></div>
+        <div id="answer-editors"></div>
+        <div class="mt-3">
+            <button id="btn-submit" class="btn btn-narc" onclick="submitAnswer()">Submit Answer</button>
+            <button class="btn btn-outline-secondary ms-2" onclick="clearAnswer()">Clear All</button>
+        </div>
+    </div>
+</div>
+
+<!-- Feedback -->
+<div id="feedback" class="card mb-4" style="display: none;">
+    <div class="card-header">Result</div>
+    <div class="card-body">
+        <div id="feedback-banner" class="alert mb-3"></div>
+        <div class="row">
+            <div class="col-md-4 text-center">
+                <h6>Your Answer</h6>
+                <div id="feedback-submitted"></div>
+            </div>
+            <div class="col-md-4 text-center">
+                <h6>Diff</h6>
+                <div id="feedback-diff"></div>
+            </div>
+            <div class="col-md-4 text-center">
+                <h6>Expected</h6>
+                <div id="feedback-expected"></div>
+            </div>
+        </div>
+        <div id="phase1-continue" class="mt-3" style="display:none;">
+            <button class="btn btn-narc" onclick="revealNarrative()">Reveal Narrative &amp; Try Again</button>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const PUZZLE = {{ puzzle_json | safe }};
+const SESSION_ID = crypto.randomUUID();
+let startTime = Date.now();
+</script>
+<script src="/static/js/solve.js"></script>
+{% endblock %}

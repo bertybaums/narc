@@ -1,0 +1,158 @@
+{
+  "answer_grids": {
+    "3": [
+      [
+        1,
+        2,
+        3
+      ],
+      [
+        2,
+        1,
+        2
+      ],
+      [
+        1,
+        2,
+        1
+      ],
+      [
+        2,
+        3,
+        2
+      ],
+      [
+        1,
+        1,
+        2
+      ]
+    ]
+  },
+  "masked_positions": [
+    3
+  ],
+  "metadata": {
+    "ai_difficulty": 4,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 4,
+    "tags": [
+      "spectrum:balanced",
+      "fibonacci",
+      "element-wise",
+      "recurrence"
+    ]
+  },
+  "narrative": "Each cell at position (i,j) in Grid N equals the sum of the cell at (i,j) in Grid N-1 and Grid N-2, following the Fibonacci recurrence. Given Grids 0, 1, and 2, predict Grid 3.",
+  "puzzle_id": "narc_sp_075",
+  "sequence": [
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          0
+        ]
+      ],
+      "label": "F(0)",
+      "position": 0,
+      "rows": 5
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          0,
+          1,
+          1
+        ],
+        [
+          1,
+          0,
+          1
+        ],
+        [
+          0,
+          1,
+          0
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          0,
+          0,
+          1
+        ]
+      ],
+      "label": "F(1)",
+      "position": 1,
+      "rows": 5
+    },
+    {
+      "cols": 3,
+      "grid": [
+        [
+          1,
+          1,
+          2
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          2,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ],
+      "label": "F(2)",
+      "position": 2,
+      "rows": 5
+    },
+    {
+      "cols": 3,
+      "grid": null,
+      "label": "F(3)",
+      "masked": true,
+      "position": 3,
+      "rows": 5
+    }
+  ],
+  "title": "Fibonacci Lattice"
+}

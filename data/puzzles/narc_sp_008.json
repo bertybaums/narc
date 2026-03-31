@@ -1,0 +1,145 @@
+{
+  "answer_grids": {
+    "1": [
+      [
+        9,
+        3,
+        7,
+        1
+      ],
+      [
+        0,
+        4,
+        8,
+        2
+      ],
+      [
+        1,
+        5,
+        9,
+        3
+      ],
+      [
+        2,
+        6,
+        0,
+        4
+      ],
+      [
+        3,
+        7,
+        1,
+        5
+      ],
+      [
+        4,
+        8,
+        2,
+        6
+      ]
+    ]
+  },
+  "masked_positions": [
+    1
+  ],
+  "metadata": {
+    "ai_difficulty": 1,
+    "created_at": "2026-03-30",
+    "creator": "claude",
+    "human_difficulty": 4,
+    "tags": [
+      "spectrum:ai-forte",
+      "matrix-operations",
+      "rotation"
+    ]
+  },
+  "narrative": "Grid 1 (masked) is Grid 0 rotated 90 degrees clockwise. The transformation is: Grid1[c][rows-1-r] = Grid0[r][c], where rows=4 is the number of rows in Grid 0.",
+  "puzzle_id": "narc_sp_008",
+  "sequence": [
+    {
+      "cols": 6,
+      "grid": [
+        [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        [
+          7,
+          8,
+          9,
+          0,
+          1,
+          2
+        ],
+        [
+          3,
+          4,
+          5,
+          6,
+          7,
+          8
+        ],
+        [
+          9,
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      ],
+      "label": "Original (4x6)",
+      "position": 0,
+      "rows": 4
+    },
+    {
+      "cols": 4,
+      "grid": [
+        [
+          9,
+          3,
+          7,
+          1
+        ],
+        [
+          0,
+          4,
+          8,
+          2
+        ],
+        [
+          1,
+          5,
+          9,
+          3
+        ],
+        [
+          2,
+          6,
+          0,
+          4
+        ],
+        [
+          3,
+          7,
+          1,
+          5
+        ],
+        [
+          4,
+          8,
+          2,
+          6
+        ]
+      ],
+      "label": "Rotated 90 CW (6x4)",
+      "position": 1,
+      "rows": 6
+    }
+  ],
+  "title": "Clockwise Rotation"
+}

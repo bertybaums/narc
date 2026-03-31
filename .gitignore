@@ -1,0 +1,22 @@
+# Database
+narc.db
+narc.db-wal
+narc.db-shm
+
+# Generated reports (regenerate with inspector.py / analyze.py)
+inspect.html
+analysis_*.html
+focal_analysis_*.html
+focal_results_*.json
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+*.egg-info/
+
+# OS
+.DS_Store
+
+# API keys
+.env
