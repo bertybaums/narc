@@ -258,7 +258,7 @@ and more. Each is rated on both <strong>human difficulty</strong> and <strong>AI
 </ul>
 </div></div>
 
-<div class="text-center text-muted mb-4"><small>University of Idaho &middot; 2026</small></div>
+<div class="text-center text-muted mb-4"><small>Bert Baumgaertner &middot; University of Idaho &middot; 2026</small></div>
 </div></div>
 </div>
 
