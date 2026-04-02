@@ -152,12 +152,84 @@ This deserves further investigation. If true, it would mean:
 
 ---
 
+## Open Questions: Narrative as Compression
+
+The B2 result — clinical descriptions outperforming rich ones for AI — opens a set of connected questions about the relationship between narrative, compression, and reasoning. These are preliminary framings for further investigation and discussion.
+
+### 1. Narrative as lossy compression
+
+When we write "the river swallowed the fields," we have compressed "water level increases by one row per grid frame" into a felt experience. The compression is *lossy* — the figurative language adds connotation (violence, inevitability, scale) while slightly obscuring the precise rule (how many rows? which direction?).
+
+A human reader decompresses this intuitively: "swallowed" maps to rising, "fields" maps to the bottom rows, the emotional register conveys inexorability (one row per step, not random). The decompression draws on embodied experience with water, with loss, with gradual processes.
+
+An LLM processes the tokens literally. "Swallowed" activates associations with eating, destruction, Jonah-and-the-whale — a cloud of semantic neighbors that may or may not include "increments by one row." The decompression is noisier, less reliable.
+
+**Question for discussion:** Is there a formal way to characterize the "compression ratio" of a NARC narrative? Could we measure how many bits of grid-transformation information are encoded per token of narrative, and does this ratio predict solvability?
+
+### 2. The explicitness gradient
+
+Between fully explicit ("water rises one row per day; on day 4 a barrier appears at row 2, pushing water back to the day-2 level") and fully compressed ("the river swallowed everything in its path until someone built a wall"), there is a spectrum:
+
+| Level | Example | Explicitness |
+|---|---|---|
+| **Clinical** | "Row of value 1 advances upward by 1 each step. At step 4, row 2 becomes value 5 and rows below reset to step-2 state." | 100% — every grid operation named |
+| **Precise natural language** | "Water rises one level per day. On day 4 a levee pushes it back to the day-2 level." | ~80% — rule is stated but in domain terms |
+| **Narrative with actors** | "The Patel family watched the river rise one level each day. On day 4 the Army Corps built a levee." | ~60% — rule present but embedded in character experience |
+| **Figurative/compressed** | "The river swallowed the valley until someone pushed back." | ~30% — rule implied, must be inferred |
+| **Pure metaphor** | "Hunger consumes from the bottom up; only a wall of will reverses the tide." | ~10% — rule deeply encoded in figurative mapping |
+
+Our B2 results suggest AI performs best at the "precise natural language" level (~80%), not at clinical (too abstract?) or rich narrative (~60%, too much noise). But we haven't tested the full gradient systematically.
+
+**Question for discussion:** Where on this gradient do human solvers perform best? If humans peak at ~60% (narrative with actors) while AI peaks at ~80% (precise natural language), this would empirically locate the human-AI divergence in narrative processing.
+
+### 3. Signal vs. noise in narrative tokens
+
+Rich narratives add tokens. Some carry **signal** — they foreground information that helps identify the grid transformation:
+- "She watched the beam sweep *clockwise*" — "clockwise" is a signal token
+- "The child who speaks the truth" — "truth" signals a binary (correct/incorrect) mapping
+
+Others carry **noise** — atmospheric detail that doesn't map to any grid element:
+- "The fog was thick tonight" — fog has no grid correlate
+- "His hands hung at his sides" — emotional but informationally inert for grid-solving
+
+The Story Prism works when the facet choice *increases the signal-to-noise ratio*. A Teller-forward narrative forces commitment to a perspective, which naturally foregrounds certain grid elements (signal). But it also invites sensory and emotional detail (noise). The net effect depends on the ratio.
+
+This explains why the earlier Story Prism results showed strong effects (the facet choice added signal) while the B2 stripping experiment also showed strong effects (removing noise helped). Both are true because they operate on different token populations.
+
+**Question for discussion:** Can we design a "signal audit" for NARC narratives — tag each clause as signal-carrying or noise, and test whether signal density predicts solvability better than either ABT structure or Story Prism facet?
+
+### 4. Why figurative language helped in MARC but not here
+
+In the sibling project MARC2, figurative language (metaphors) *improved* AI performance on ARC puzzle tasks. A metaphor like "the blue river flows downward and pools at the bottom" helped models solve abstract grid transformations better than no clue at all. Why would compression help there but potentially hurt here?
+
+A possible resolution: **MARC metaphors are one-to-one mappings; NARC narratives are multi-sentence stories.**
+
+In MARC, the metaphor IS the rule: "the river flows downward" maps directly to "blue cells move down." The compression ratio is nearly 1:1 — every figurative token encodes a grid operation. There's minimal noise.
+
+In NARC, the narrative embeds the rule in a larger context: characters, setting, emotional arc, temporal progression. The rule might occupy 20% of the narrative tokens while the other 80% are context/atmosphere. The model must identify *which part* of the story encodes the grid transformation — a selection problem that doesn't exist in MARC's one-sentence metaphors.
+
+**Question for discussion:** Does this suggest a "narrative complexity threshold" beyond which compression stops helping? Short figurative clues (MARC-style, one sentence) compress well because the mapping is direct. Longer narratives (NARC-style, multi-sentence) compress less efficiently because the rule is diluted in context. If so, the optimal NARC narrative might be closer to a MARC-style metaphor with minimal surrounding context — which is essentially what the clinical B2 variants achieved.
+
+### 5. Implications for econarratology
+
+These findings connect to a core question in Erin James's econarratology: how do narratives construct "storyworlds" that organize understanding? The NARC results suggest that for AI systems, storyworld construction can be *counterproductive* — the richer the storyworld, the more the model must navigate to find the operationally relevant information.
+
+For humans, storyworld construction may be the *mechanism* of comprehension — we understand the grid transformation *by* inhabiting the narrative world, not despite it. The characters and sensory detail aren't noise; they're the scaffolding our cognition uses to build a spatial-temporal model.
+
+If this is right, then NARC puzzles sit at a fascinating intersection: the same narrative that helps a human (by constructing a rich storyworld) can hinder an AI (by burying the rule in context). The NARC property itself — "narrative + grids together uniquely determine the answer" — may manifest through different cognitive paths for humans and machines.
+
+**Question for discussion:** Can we design NARC puzzles that exploit this divergence? A narrative that constructs a rich storyworld (helping humans) while simultaneously burying the rule (hindering AI) would be maximally "human-forte." Conversely, a clinical specification that names the rule directly would be "AI-forte." The Story Prism could be used to systematically dial the storyworld richness up or down to find where each solver type thrives.
+
+---
+
 ## Next Steps
 
 1. **Cross-model testing** of all 20 variants on gpt-oss-20b, qwen3.5-122b, and nemotron-3-super
 2. **Human solver comparison** — do humans show the opposite pattern (rich > clinical)?
-3. **Deeper investigation of the compression hypothesis** — systematically vary explicitness while holding information constant
-4. **Larger sample** — extend to 10+ puzzles per condition for statistical power
+3. **Explicitness gradient experiment** — for 5 puzzles, generate narratives at all 5 levels of the gradient and test both humans and AI
+4. **Signal audit** — tag narrative tokens as signal vs. noise, correlate with solvability
+5. **Larger sample** — extend to 10+ puzzles per condition for statistical power
+6. **MARC comparison** — test whether MARC-style one-sentence metaphors work better for NARC than multi-sentence stories
 
 ---
 
