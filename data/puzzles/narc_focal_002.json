@@ -41,7 +41,8 @@
       "focalization-test",
       "domain:fable",
       "spectrum:balanced",
-      "aesop"
+      "aesop",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "A race unfolds on a long track. The hare (red=1) sprints far ahead of the tortoise (green=3), then stops to nap. The finish line sits at the far right (yellow=7). While the hare sleeps, the tortoise steadily advances. In the masked grid, the tortoise has just passed the sleeping hare, who remains stationary.",

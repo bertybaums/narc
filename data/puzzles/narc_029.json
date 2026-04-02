@@ -56,7 +56,8 @@
       "arc:linear",
       "clue:timing",
       "domain:ecology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The woody pioneers claim the borders first, sheltering the meadow within. They are not the tallest, not the final form \u2014 but without their ring of shelter, nothing taller could take root.",

@@ -59,7 +59,8 @@
       "domain:fable",
       "spectrum:balanced",
       "betrayal",
-      "nature"
+      "nature",
+      "abt:aaa"
     ]
   },
   "narrative": "A river (blue=4) spans the middle rows of the grid. A frog (green=3) sits on the left bank, a scorpion (red=1) beside it. The frog agrees to carry the scorpion across. They move together through the river. In the masked grid, halfway across, the scorpion stings the frog \u2014 the frog's value changes from 3 to 6 (injured), and both begin to sink (move down one row). It is the scorpion's nature.",

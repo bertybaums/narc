@@ -27,7 +27,8 @@
       "arc:convergence",
       "clue:rule",
       "domain:ml",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "The latent representation at the bottleneck is obtained by taking the mean of each column in the encoder output (Grid 2, the 3x3 grid), rounded to the nearest integer. This produces a 1x3 latent vector that captures the compressed representation of the input.",

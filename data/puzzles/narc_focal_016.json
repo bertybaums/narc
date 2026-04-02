@@ -53,7 +53,8 @@
       "spectrum:balanced",
       "transformation",
       "curse",
-      "tragedy"
+      "tragedy",
+      "abt:aaa"
     ]
   },
   "narrative": "King Midas (yellow=7) moves through his palace. Everything he touches turns to gold (also becomes 7). Objects in the grid start as various values: flowers=3, table=8, goblet=2. His daughter (magenta=6) stands in the far corner. In the masked grid, Midas has moved adjacent to more objects, turning them to 7. Critically, his daughter's cell has also changed to 7 \u2014 she has been turned to gold by his touch.",

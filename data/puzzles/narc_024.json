@@ -46,7 +46,8 @@
       "clue:direction",
       "clue:rule",
       "domain:physics",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Order dissolves, but not all at once. The blue retreats to the corners as the red seeps through the center first. No hand stirs the pot \u2014 only time, indifferent and thorough.",

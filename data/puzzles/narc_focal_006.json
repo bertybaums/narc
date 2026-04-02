@@ -64,7 +64,8 @@
       "domain:drama",
       "spectrum:human-forte",
       "barrier",
-      "romance"
+      "romance",
+      "abt:aaa"
     ]
   },
   "narrative": "Two families are separated by a wall (grey=5) running down the center of the grid. Romeo (blue=4) is on the left side, Juliet (red=1) on the right. Each step they move closer to the wall. In the masked grid, they have both reached the wall \u2014 Romeo and Juliet are in adjacent cells on either side of the barrier. The wall between them at their meeting point cracks, changing from 5 to 2.",

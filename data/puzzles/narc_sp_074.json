@@ -75,7 +75,8 @@
       "spectrum:balanced",
       "bitwise",
       "XOR",
-      "binary"
+      "binary",
+      "abt:aaa"
     ]
   },
   "narrative": "Three grids form a sequence where Grid 2 is the bitwise XOR of Grid 0 and Grid 1. Given Grids 0 and 1, produce Grid 2. A cell is 1 if exactly one of the corresponding source cells is 1; otherwise 0.",

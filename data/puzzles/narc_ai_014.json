@@ -41,7 +41,8 @@
       "clue:rule",
       "domain:ml",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Apply batch normalization along the sample axis (rows). For each feature column in Grid 1, compute the z-score: z = (x - column_mean) / column_std (population std). Then map to [0,9] with mean 5 using the formula: output = round(z * 2 + 5), clamped to [0,9]. Each column independently normalized.",

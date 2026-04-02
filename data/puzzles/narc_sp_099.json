@@ -71,7 +71,8 @@
       "spectrum:domain-dependent",
       "domain:visual-art",
       "golden-ratio",
-      "composition"
+      "composition",
+      "abt:aaa"
     ]
   },
   "narrative": "A canvas is divided using the golden ratio (approx 1.618). For a grid of width W, the golden section falls at position round(W/1.618). The rule of thirds divides at W/3 and 2W/3. Each grid shows focal points (marked 1) placed at golden ratio intersections. Row position = golden cut of height, Col position = golden cut of width. Given one composition and its dimensions, predict the focal point placement for a differently-sized canvas.",

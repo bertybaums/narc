@@ -71,7 +71,8 @@
       "spectrum:balanced",
       "gravity",
       "simulation",
-      "physics-inspired"
+      "physics-inspired",
+      "abt:aaa"
     ]
   },
   "narrative": "Gravity pulls all non-zero values downward in each column. At each step, any non-zero cell with a 0 below it swaps with that 0 (falls one row). All columns update simultaneously. Given three snapshots, predict the next.",

@@ -45,7 +45,8 @@
       "arc:transformation",
       "clue:causation",
       "domain:physics",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The mercy of probability was not granted. The atom decayed, the vial shattered, and what was neither alive nor dead became only one of those things. The box held every possibility \u2014 until it didn't.",

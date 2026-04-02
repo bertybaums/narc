@@ -62,7 +62,8 @@
     "tags": [
       "focalization-test",
       "domain:psychology",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "A detective (blue=6) interrogates a suspect (red=1) in a small room. Truth indicators (green=3) appear when the suspect tells the truth and vanish when lying. The suspect starts calm, then becomes agitated as lies are detected. The detective closes in as green dots disappear, revealing the pattern of deception.",

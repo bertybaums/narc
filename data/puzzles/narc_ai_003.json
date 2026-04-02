@@ -49,7 +49,8 @@
       "domain:mathematics",
       "spectrum:ai-forte",
       "prism:actors",
-      "prism:world"
+      "prism:world",
+      "abt:aaa"
     ]
   },
   "narrative": "Dr. Liang turned the temperature dial slowly toward zero and watched the display change. At high \u03c4, the softmax probabilities were nearly uniform \u2014 every row's values barely distinguishable. As \u03c4 dropped, the diagonal elements grew brighter, pulling probability mass toward themselves while the margins dimmed. She knew what was coming: as \u03c4\u21920, each row would collapse entirely onto its diagonal element, converging to a one-hot encoding of the argmax. The pre-softmax logits had their maximum along the main diagonal. She reached for the dial again.",

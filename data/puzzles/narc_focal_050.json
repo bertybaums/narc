@@ -70,7 +70,8 @@
     "tags": [
       "focalization-test",
       "domain:language",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A speaker (red=1) produces a message pattern on the left side. A translator (magenta=8) sits in the middle and receives the message. The translator passes a modified version to the listener (blue=6) on the right. The meaning shifts: the pattern the listener receives differs from what the speaker sent. The speaker and listener end with different understandings.",

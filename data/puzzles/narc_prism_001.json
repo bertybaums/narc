@@ -238,7 +238,8 @@
       "domain:literature",
       "grids:5",
       "size:uniform",
-      "mask:single"
+      "mask:single",
+      "abt:abt-explicit"
     ]
   }
 }

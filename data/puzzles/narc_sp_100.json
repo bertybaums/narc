@@ -51,7 +51,8 @@
       "domain:visual-art",
       "gradient",
       "value-scale",
-      "shading"
+      "shading",
+      "abt:aaa"
     ]
   },
   "narrative": "In visual art, a value scale runs from 0 (pure black) to 9 (pure white). A smooth gradient distributes values evenly across the grid. Each step changes the gradient direction: horizontal, then vertical, then diagonal. The gradient maps linearly: cell value = round(9 * position / max_position) along the gradient axis. Given a horizontal gradient on a 3x10 grid and a vertical gradient on a 6x3 grid, predict a diagonal gradient on a 5x5 grid (value based on distance from top-left corner).",

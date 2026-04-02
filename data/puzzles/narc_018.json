@@ -54,7 +54,8 @@
       "clue:timing",
       "clue:identity",
       "domain:literature",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "What hangs on the wall in the first act is not decoration. If it appears early and persists quietly, by the third act it must speak.",

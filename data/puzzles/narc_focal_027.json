@@ -50,7 +50,8 @@
     "tags": [
       "focalization-test",
       "domain:geology",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Two tectonic plates drift toward each other at centimeters per year. Neither plate perceives the collision. But at the boundary, rock buckles upward, forming mountains that neither plate intended to create.",

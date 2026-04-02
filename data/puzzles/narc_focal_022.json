@@ -85,7 +85,8 @@
     "tags": [
       "focalization-test",
       "domain:biology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Light streams down. Inside the leaf, chloroplasts capture photons and split water, weaving carbon dioxide into sugar while releasing oxygen as exhaust. The chloroplast sees only energy in and product out.",

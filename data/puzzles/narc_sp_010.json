@@ -37,7 +37,8 @@
       "addition",
       "transpose",
       "prism:actors",
-      "prism:teller"
+      "prism:teller",
+      "abt:aaa"
     ]
   },
   "narrative": "The architect spread two blueprints side by side \u2014 Floor A and Floor B \u2014 and traced her finger across the grids. 'We stack them,' she said. 'Add every cell of A to the matching cell of B, no wrapping, no reduction. Then rotate the result \u2014 swap rows and columns.' The transposed sum is what gets built: Grid2[c][r] = Grid0[r][c] + Grid1[r][c].",

@@ -48,7 +48,8 @@
       "spectrum:human-forte",
       "common-sense-physics",
       "shadow",
-      "light-direction"
+      "light-direction",
+      "abt:aaa"
     ]
   },
   "narrative": "A flashlight shines from the left side. An object sits in the middle. Its shadow stretches out to the right. The bigger the object, the bigger the shadow.",

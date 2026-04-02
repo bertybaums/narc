@@ -108,7 +108,8 @@
     "tags": [
       "focalization-test",
       "domain:astronomy",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "From Earth, the sun vanishes behind the moon's silhouette. The moon knows nothing of the shadow it casts. The sun cannot see that it is being blocked. Only those on Earth's surface experience the eclipse.",

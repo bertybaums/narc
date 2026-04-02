@@ -71,7 +71,8 @@
       "clue:direction",
       "clue:timing",
       "domain:social-science",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:dhy"
     ]
   },
   "narrative": "A 6x6 office floor is divided into four quadrants (top-left, top-right, bottom-left, bottom-right), each representing a department. In Q1, Department A (value 3) moves in \u2014 top-left quadrant fills. In Q2 (masked), Department B (value 5) arrives in the top-right quadrant, BUT Department B is on probation \u2014 its top-right cells fill with 5 while everything else stays as before. However, a hiring freeze (represented by 0) prevents the bottom half from being staffed yet. In Q3, Department C (value 7) fills bottom-right. In Q4, Department D (value 1) fills bottom-left, completing the organization.",

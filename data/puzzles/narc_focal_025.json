@@ -56,7 +56,8 @@
     "tags": [
       "focalization-test",
       "domain:biology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The caterpillar stops eating, hangs upside-down, and wraps itself in silk. Inside the cocoon, the body dissolves entirely. What emerges is unrecognizable. The cocoon witnesses the whole transformation but cannot tell what it holds.",

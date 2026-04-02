@@ -47,7 +47,8 @@
       "arc:cyclical",
       "clue:rule",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Each grid has 5 rows and 3 columns. Row 0 is always [1, 2, 3]. Each subsequent row is a circular left-shift of row 0. In Grid 1, row k is shifted left by k positions. In Grid 2, row k is shifted left by 2k positions. In general, Grid n shifts row k left by (n*k) mod 3 positions. Grid 3 (position 2) is masked, where the shift for row k is (3*k) mod 3 = 0, meaning every row equals [1, 2, 3].",

@@ -47,7 +47,8 @@
       "clue:rule",
       "clue:timing",
       "domain:music",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "A jazz theme is stated in Grid 1: a melody line (row 0) over a bass line (row 2). Grid 2 is the theme with the melody transposed up by 2 (each value +2 mod 10). Grid 3 is the theme with melody transposed up by 4. Grid 4 (masked) is the SURPRISE MODULATION: the melody transposes up by 6, AND the bass line inverts \u2014 each bass value becomes (9 minus original bass value). Grid 5 returns to the original theme (melody +8 mod 10, bass returns to normal). The middle row (row 1) is always 0 (rest between melody and bass).",

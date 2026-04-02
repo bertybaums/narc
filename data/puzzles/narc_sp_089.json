@@ -28,7 +28,8 @@
       "domain:physics",
       "interference",
       "optics",
-      "wave"
+      "wave",
+      "abt:aaa"
     ]
   },
   "narrative": "Two coherent sources produce an interference pattern on a detector screen. The intensity at each position is proportional to cos^2 of the phase difference. Positions are indexed 0-9 along the screen. The phase difference at position p from center (position 5) is proportional to (p-5). Intensity = round(9 * cos^2(pi*(p-5)/5)). Given a wavelength-1 pattern, predict wavelength-2 where the fringe spacing doubles: Intensity = round(9 * cos^2(pi*(p-5)/10)).",

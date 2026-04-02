@@ -101,7 +101,8 @@
     "tags": [
       "focalization-test",
       "domain:paleontology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "The creature dies and falls to the lake bottom. Sediment drifts down, layer upon layer, year after year. Minerals seep into bone, atom by atom, replacing life with stone. The sediment records everything but understands nothing. Millions of years later, the fossil is the only proof the creature existed.",

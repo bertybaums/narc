@@ -59,7 +59,8 @@
     "tags": [
       "spectrum:ai-forte",
       "matrix-operations",
-      "rotation-180"
+      "rotation-180",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is Grid 0 rotated 180 degrees. Grid1[r][c] = Grid0[rows-1-r][cols-1-c], where rows=5, cols=7.",

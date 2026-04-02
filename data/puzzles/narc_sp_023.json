@@ -26,7 +26,8 @@
     "tags": [
       "spectrum:ai-forte",
       "statistical",
-      "extremes"
+      "extremes",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) has two columns: column 0 is the maximum of each row of Grid 0, column 1 is the minimum. Grid1[r][0] = max(Grid0[r]), Grid1[r][1] = min(Grid0[r]).",

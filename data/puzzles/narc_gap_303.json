@@ -65,7 +65,8 @@
       "clue:timing",
       "clue:causation",
       "domain:earth-science",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "An archaeological site (6 rows x 5 cols) is being excavated layer by layer from the bottom. Dirt is value 0, exposed artifacts are value 2, and bedrock is value 1. Each day, one more row of dirt is cleared from the bottom up, revealing bedrock (1) underneath. Two pillars (value 2) stand at fixed positions (row 2, cols 1 and 3). On Day 4 (masked), a cave-in occurs! The excavation depth resets back to what it was on Day 2 \u2014 only the bottom two rows show bedrock. The pillars remain visible. After the cave-in, digging resumes normally on Day 5.",

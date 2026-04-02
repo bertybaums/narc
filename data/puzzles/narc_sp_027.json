@@ -26,7 +26,8 @@
     "tags": [
       "spectrum:ai-forte",
       "encoding",
-      "run-length"
+      "run-length",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 0 is a single row. Grid 1 (masked) is its run-length encoding as a 2-row grid: row 0 contains the values of consecutive runs (left to right), row 1 contains the length of each run. Consecutive identical values form one run.",

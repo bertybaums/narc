@@ -56,7 +56,8 @@
       "arc:transformation",
       "clue:direction",
       "domain:physics",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "The thaw begins where warmth touches first \u2014 the outer shell surrenders while the core holds its shape a little longer. The crystal remembers its form even as the edges weep into formlessness.",

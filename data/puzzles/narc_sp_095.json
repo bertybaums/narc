@@ -35,7 +35,8 @@
       "spectrum:domain-dependent",
       "domain:programming",
       "stack-machine",
-      "execution-trace"
+      "execution-trace",
+      "abt:aaa"
     ]
   },
   "narrative": "A stack-based virtual machine executes opcodes. Each row is a time step. Col 0 = opcode (1=PUSH, 2=POP, 3=ADD, 4=MUL, 5=DUP), Col 1 = operand (for PUSH; 0 otherwise), Cols 2-7 = stack contents (bottom to top, 0=empty). The machine starts empty. PUSH adds operand to top. ADD pops two, pushes sum. MUL pops two, pushes product. DUP duplicates top. Given three steps, predict the state after two more instructions: DUP then MUL.",

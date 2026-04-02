@@ -50,7 +50,8 @@
     "tags": [
       "spectrum:ai-forte",
       "bitwise",
-      "or"
+      "or",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 2 (masked) is the element-wise bitwise OR of Grid 0 and Grid 1. Each cell: Grid2[r][c] = Grid0[r][c] OR Grid1[r][c], operating on binary representations.",

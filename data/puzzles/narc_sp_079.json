@@ -50,7 +50,8 @@
       "spectrum:balanced",
       "convolution",
       "image-processing",
-      "kernel"
+      "kernel",
+      "abt:aaa"
     ]
   },
   "narrative": "A 3x3 averaging kernel slides across Grid A to produce Grid B. Each cell in the output is the sum of the 3x3 neighborhood centered on the corresponding cell in the input (using 0 for out-of-bounds). Given the input 5x5 grid and a partially shown process, complete the 5x5 output.",

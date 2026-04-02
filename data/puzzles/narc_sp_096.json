@@ -36,7 +36,8 @@
       "domain:programming",
       "event-loop",
       "javascript",
-      "async"
+      "async",
+      "abt:aaa"
     ]
   },
   "narrative": "JavaScript's event loop processes tasks in order: synchronous code first, then microtasks (promises), then macrotasks (setTimeout). Each cell is a log statement ID. Row 0 = execution order. Row 1 = task type (0=sync, 1=microtask, 2=macrotask). Row 2 = the log ID that actually prints at that position. Given a scenario with 8 statements, determine the print order. Sync statements: IDs 1,4,7. Promise.then callbacks: IDs 2,5. setTimeout callbacks: IDs 3,6,8.",

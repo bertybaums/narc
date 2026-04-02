@@ -64,7 +64,8 @@
       "spectrum:human-forte",
       "containment",
       "release",
-      "hope"
+      "hope",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Pandora (magenta=6) stands beside a sealed box (value=9 forming a rectangle). The box is closed. In the next grid, Pandora opens it \u2014 the top row of the box changes to 0 (lid open). Evils (red=1) begin escaping, scattering outward. In the masked grid, the evils have spread across the grid, but one cell inside the box still holds hope (azure=8), the last thing remaining. Pandora slams the lid shut, trapping hope inside.",

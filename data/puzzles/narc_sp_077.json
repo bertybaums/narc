@@ -31,7 +31,8 @@
       "spectrum:balanced",
       "transpose",
       "arithmetic",
-      "dimension-change"
+      "dimension-change",
+      "abt:aaa"
     ]
   },
   "narrative": "Each step applies two operations: first transpose the grid (swap rows and columns), then add 1 to every cell. Given two steps, predict the result after one more application.",

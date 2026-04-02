@@ -57,7 +57,8 @@
       "clue:identity",
       "clue:causation",
       "domain:biology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A red blight spreads from the center of the field, growing one cell in each direction per day. Twice they tried cutting back the edges, but it regrew. On the fourth day the healer understood: she must scorch the center black to kill the root. Only then did the field recover.",

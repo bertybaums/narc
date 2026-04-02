@@ -57,7 +57,8 @@
       "clue:rule",
       "domain:literature",
       "domain:psychology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Beneath the floorboards, something pulses. Faint at first, then steady, then deafening. It will not stop until the room is stained with what you tried to hide.",

@@ -64,7 +64,8 @@
       "domain:fairy-tale",
       "spectrum:balanced",
       "path-erasure",
-      "trap"
+      "trap",
+      "abt:aaa"
     ]
   },
   "narrative": "Hansel (red=1) and Gretel (blue=4) walk through a forest, leaving a trail of breadcrumbs (yellow=7) behind them. A witch (grey=5) lurks near a candy house (value=9). In the masked grid, birds have eaten the breadcrumbs \u2014 all the 7s along the path become 0. The children have reached the witch's house. Without the trail, they cannot find their way back.",

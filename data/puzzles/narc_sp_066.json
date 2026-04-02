@@ -32,7 +32,8 @@
     "tags": [
       "spectrum:balanced",
       "arithmetic",
-      "growing-grid"
+      "growing-grid",
+      "abt:aaa"
     ]
   },
   "narrative": "Each step adds a new column on the right containing the row sums of the previous grid. The original columns remain. Given the first two states, predict the third.",

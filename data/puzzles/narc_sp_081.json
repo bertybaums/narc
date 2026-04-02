@@ -50,7 +50,8 @@
       "spectrum:domain-dependent",
       "domain:biology",
       "genetics",
-      "punnett-square"
+      "punnett-square",
+      "abt:aaa"
     ]
   },
   "narrative": "A dihybrid cross between two heterozygotes (AaBb x AaBb). Each allele pair is encoded: AA=3, Aa=2, aa=1 for the first locus, and BB=30, Bb=20, bb=10 for the second. Each cell is the sum of its two locus values. The grid shows the 4x4 Punnett square. Given the parental gametes and partial offspring grid, complete the cross.",

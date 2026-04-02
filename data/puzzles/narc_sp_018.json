@@ -28,7 +28,8 @@
     "tags": [
       "spectrum:ai-forte",
       "algorithmic",
-      "cellular-automaton"
+      "cellular-automaton",
+      "abt:aaa"
     ]
   },
   "narrative": "A 1D cellular automaton with 12 cells and wrap-around boundaries. The update rule is: new[i] = left XOR (center OR right), where left=cell[i-1], center=cell[i], right=cell[i+1], with indices wrapping. Grid 0 is generation 0, Grid 1 is generation 1, Grid 2 is generation 2, Grid 3 (masked) is generation 3.",

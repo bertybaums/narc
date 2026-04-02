@@ -41,7 +41,8 @@
     "tags": [
       "spectrum:ai-forte",
       "modular-arithmetic",
-      "quadratic"
+      "quadratic",
+      "abt:aaa"
     ]
   },
   "narrative": "Each cell updates per step: new_value = (old_value^2 + 3) mod 10. Grid 0 is t=0, Grid 1 is t=1, Grid 2 (masked) is t=2.",

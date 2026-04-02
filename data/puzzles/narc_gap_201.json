@@ -58,7 +58,8 @@
       "clue:identity",
       "clue:causation",
       "domain:ecology",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A flock of starlings (value 7) moves across a sky (value 0). The flock is a tight cluster that drifts one column right per frame. In Frame 4, a hawk (value 9) appears at row 0, col 4. The starlings scatter: every bird within Manhattan distance 2 of the hawk flees by moving to the symmetric opposite position relative to the hawk (reflected through the hawk's position, clamped to the grid). Birds outside that radius continue drifting right normally. Frame 4 is masked.",

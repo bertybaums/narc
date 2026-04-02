@@ -25,7 +25,8 @@
       "spectrum:balanced",
       "permutation",
       "composition",
-      "algebra"
+      "algebra",
+      "abt:aaa"
     ]
   },
   "narrative": "Each row is a permutation of the numbers 1-8. Grid B is the result of applying permutation A to itself (composing A with A). If A maps position i to A[i], then B maps position i to A[A[i]]. Given A and its square B, predict the cube C = A composed with B.",

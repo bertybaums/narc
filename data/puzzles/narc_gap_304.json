@@ -47,7 +47,8 @@
       "clue:direction",
       "clue:timing",
       "domain:astronomy",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "A comet (value 2) streaks across a 3x6 sky (value 0), moving one column right per frame. The comet is an L-shaped cluster: a vertical bar in one column plus a horizontal extension one row below. When the comet crosses the midpoint of the sky (between columns 2 and 3), solar wind reverses its tail \u2014 the L-shape flips horizontally. Before the midpoint, the horizontal part extends to the right; after, it extends to the left. Frame 4 (masked) is the first frame after crossing, so the L-shape has flipped.",

@@ -38,7 +38,8 @@
     "tags": [
       "spectrum:ai-forte",
       "algorithmic",
-      "reversal"
+      "reversal",
+      "abt:aaa"
     ]
   },
   "narrative": "Two-step algorithm: Step 1: reverse each row of Grid 0. Step 2: reverse each column of the result from Step 1. Grid 1 (masked) is the final output after both steps.",

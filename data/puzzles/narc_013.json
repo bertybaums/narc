@@ -36,7 +36,8 @@
       "arc:transformation",
       "clue:rule",
       "domain:literature",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Something small and bright, prepared with love, passed along untouched. The soles never met the ground; the laces never learned a knot.",

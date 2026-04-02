@@ -33,7 +33,8 @@
       "spectrum:ai-forte",
       "multi-step",
       "transpose",
-      "sort"
+      "sort",
+      "abt:aaa"
     ]
   },
   "narrative": "Step 1: Transpose Grid 0 (4x3 becomes 3x4). Step 2: Sort each row of the transposed grid in ascending order. Grid 1 (masked) is the final result after both steps.",

@@ -26,7 +26,8 @@
       "spectrum:domain-dependent",
       "domain:history",
       "roman-numerals",
-      "arithmetic"
+      "arithmetic",
+      "abt:aaa"
     ]
   },
   "narrative": "Roman numerals encoded as digit sequences (I=1, V=5, X=10, L=50, C=100, D=500, M=1000). Each row in the grid represents a Roman numeral: the values of its constituent symbols from left to right, padded with 0s. The sequence shows addition: Grid 0 + Grid 1 = Grid 2. Given two addends, predict the sum in the same encoding.",

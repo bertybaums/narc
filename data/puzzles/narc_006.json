@@ -94,7 +94,8 @@
       "arc:cyclical",
       "clue:rule",
       "domain:literature",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A shepherd boy tends his flock on a hillside. Twice he raises a false alarm, and both times the villagers rush to help only to find no danger. The third time, a real wolf appears \u2014 but having been fooled twice, no one comes. The cycle repeats identically both times the boy lies: the same alarm, the same full response, the same disappointment.",

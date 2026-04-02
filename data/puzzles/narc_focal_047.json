@@ -55,7 +55,8 @@
     "tags": [
       "focalization-test",
       "domain:performance",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "A performer (red=1) stands on stage under a spotlight (yellow=4). The audience (blue=6) fills rows below. The performer freezes: red dims to 0 in the spotlight. The spotlight stays. Then the performer recovers, red returns brighter, and the audience reacts with scattered 6s rising (applause).",

@@ -24,7 +24,8 @@
     "tags": [
       "spectrum:balanced",
       "arithmetic",
-      "doubling"
+      "doubling",
+      "abt:aaa"
     ]
   },
   "narrative": "A single row of numbers. Each step doubles every value. Given step 0 and step 1, what is step 2?",

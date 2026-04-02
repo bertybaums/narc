@@ -46,7 +46,8 @@
     "tags": [
       "spectrum:balanced",
       "movement",
-      "diagonal"
+      "diagonal",
+      "abt:aaa"
     ]
   },
   "narrative": "A single 1 marches diagonally down-right across the grid, one step at a time. All other cells are 0. Given three frames, predict the fourth.",

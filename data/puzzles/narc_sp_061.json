@@ -26,7 +26,8 @@
     "tags": [
       "spectrum:balanced",
       "arithmetic",
-      "linear-progression"
+      "linear-progression",
+      "abt:aaa"
     ]
   },
   "narrative": "Each grid shows a running count. Every cell increases by 1 from one step to the next. Given step 0 and step 1, produce step 2.",

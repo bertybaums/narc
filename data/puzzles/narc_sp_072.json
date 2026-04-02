@@ -29,7 +29,8 @@
     "tags": [
       "spectrum:balanced",
       "matrix-multiplication",
-      "arithmetic"
+      "arithmetic",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid C is the matrix product of Grid A and Grid B. Each cell C[i][j] = sum of A[i][k]*B[k][j] for all k. Given A and B, produce C.",

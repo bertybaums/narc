@@ -50,7 +50,8 @@
     "tags": [
       "focalization-test",
       "domain:social",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A host (yellow=4) decorates a room, placing party items across the space. Guests (green=3) sneak in and hide behind furniture. The guest of honor (blue=6) approaches the door unknowing. When blue enters, all greens pop out from hiding and yellow lights up the center. Blue is surrounded by the revealed celebration.",

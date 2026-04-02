@@ -65,7 +65,8 @@
     "tags": [
       "focalization-test",
       "domain:communication",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Person A (red=1) and person B (blue=6) stand on opposite sides of an object (yellow=4). The object is in the wrong position between them, leading to confusion. Person A pushes the yellow one way, person B pushes it the other. They struggle over placement. Finally they realize the misunderstanding and the yellow object moves to the correct neutral position, with both people beside it.",

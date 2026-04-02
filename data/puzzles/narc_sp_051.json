@@ -63,7 +63,8 @@
       "spectrum:human-forte",
       "common-sense-physics",
       "balloon",
-      "pop"
+      "pop",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "A child holds a balloon on a string. Then -- POP! What does a popped balloon look like? Just the string hanging limp, nothing left up top.",

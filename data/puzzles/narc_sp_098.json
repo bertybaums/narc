@@ -30,7 +30,8 @@
       "spectrum:domain-dependent",
       "domain:visual-art",
       "color-theory",
-      "color-wheel"
+      "color-wheel",
+      "abt:aaa"
     ]
   },
   "narrative": "Colors on a 12-step color wheel (0=Red, 1=Red-Orange, 2=Orange, 3=Yellow-Orange, 4=Yellow, 5=Yellow-Green, 6=Green, 7=Blue-Green, 8=Blue, 9=Blue-Violet, 10=Violet, 11=Red-Violet). A complementary color is +6 on the wheel (mod 12). An analogous palette uses the two adjacent colors (+1, -1). Given a triadic color scheme (spaced by 4) and its complements, predict the analogous palette for a new set of colors.",

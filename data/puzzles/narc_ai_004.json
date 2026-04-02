@@ -58,7 +58,8 @@
       "clue:rule",
       "domain:ml",
       "domain:computer-science",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Apply a 3x3 horizontal Sobel operator to the input. The kernel weights are [[-1,0,1],[-2,0,2],[-1,0,1]]. Map positive responses to blue (1), negative responses to red (2), and zero responses to black (0). The input is zero-padded at all borders before convolution.",

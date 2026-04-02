@@ -50,7 +50,8 @@
     "tags": [
       "focalization-test",
       "domain:culture",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "A traveler (red=1) arrives in a new land where locals (blue=6) follow custom patterns (green=3). The traveler initially clashes with the patterns, standing where green is not. Over time the traveler learns: red moves to align with the green custom patterns, matching the locals' arrangement. The traveler adapts and integrates.",

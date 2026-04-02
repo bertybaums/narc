@@ -41,7 +41,8 @@
     "tags": [
       "spectrum:ai-forte",
       "algorithmic",
-      "sorting"
+      "sorting",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is Grid 0 with each column independently sorted in descending order (top to bottom, largest to smallest).",

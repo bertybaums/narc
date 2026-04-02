@@ -34,7 +34,8 @@
     "tags": [
       "spectrum:ai-forte",
       "encoding",
-      "caesar-cipher"
+      "caesar-cipher",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is Grid 0 with a Caesar cipher applied: each value is shifted by +3 modulo 10. Grid1[r][c] = (Grid0[r][c] + 3) mod 10.",

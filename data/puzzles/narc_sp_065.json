@@ -38,7 +38,8 @@
     "tags": [
       "spectrum:balanced",
       "shift",
-      "column"
+      "column",
+      "abt:aaa"
     ]
   },
   "narrative": "A tall column of numbers shifts down by one row each step. The top fills with 0. Given two frames, predict the third.",

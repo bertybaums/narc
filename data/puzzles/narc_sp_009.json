@@ -46,7 +46,8 @@
     "tags": [
       "spectrum:ai-forte",
       "matrix-operations",
-      "flip"
+      "flip",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is Grid 0 flipped horizontally (left-right mirror). Each row is reversed: Grid1[r][c] = Grid0[r][cols-1-c].",

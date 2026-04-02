@@ -50,7 +50,8 @@
     "tags": [
       "spectrum:ai-forte",
       "matrix-operations",
-      "rotation"
+      "rotation",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is Grid 0 rotated 90 degrees clockwise. The transformation is: Grid1[c][rows-1-r] = Grid0[r][c], where rows=4 is the number of rows in Grid 0.",

@@ -46,7 +46,8 @@
       "arc:transformation",
       "clue:rule",
       "domain:ml",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "During training with dropout rate p=0.5, the binary mask retains neurons where (row + col) is even (0-indexed). Dropped neurons are zeroed. Surviving neurons are scaled by 1/(1-p) = 2 to compensate, clamped to [0,9]. Apply this dropout mask to the activation pattern in Grid 1.",

@@ -71,7 +71,8 @@
       "clue:rule",
       "clue:direction",
       "domain:social-science",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "Two speakers are represented by values 3 (Speaker A, entering from the left) and 7 (Speaker B, entering from the right). The background is 0. In Grid 1, Speaker A fills columns 0-1 and Speaker B fills columns 4-5 \u2014 they begin apart. In Grid 2, each advances one column inward: A fills columns 0-2, B fills columns 3-5. In Grid 3 (masked), they find COMMON GROUND: where they overlap (column 2-3), the value becomes 5 (the average of 3 and 7), A keeps columns 0-1, and B keeps columns 4-5. This is the moment of mutual understanding.",

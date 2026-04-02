@@ -100,7 +100,8 @@
     "tags": [
       "focalization-test",
       "domain:geology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Magma pushes upward through weakening rock for centuries. The crust cracks under pressure it cannot resist. The surface world above has no warning until the eruption breaks through, reshaping everything.",

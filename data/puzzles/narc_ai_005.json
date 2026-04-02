@@ -39,7 +39,8 @@
       "clue:timing",
       "domain:ml",
       "domain:computer-science",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "At layer 3, the forward pass adds a skip connection from the input embedding (layer 0). The output is the element-wise sum of the current activation and the layer-0 activation, reduced modulo 10. All other layers apply a constant additive bias of +2 per element (mod 10).",

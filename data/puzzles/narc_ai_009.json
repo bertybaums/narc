@@ -44,7 +44,8 @@
       "clue:rule",
       "domain:ml",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Normalize each row vector to L2 unit length. Approximate each component to the nearest integer on [0,9], preserving the direction. Scale each row so that the dominant dimension (largest component of the unit vector) maps to 9, and all other components are scaled proportionally and rounded to the nearest integer, clamped to [0,9].",

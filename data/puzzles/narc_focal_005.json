@@ -52,7 +52,8 @@
       "domain:fairy-tale",
       "spectrum:balanced",
       "social-contagion",
-      "truth-spreading"
+      "truth-spreading",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "The emperor (yellow=7) parades down a central avenue. The crowd (blue=4) lines both sides, all showing approval (value=4). A single child (red=1) stands in the crowd. In the masked grid, the child speaks the truth \u2014 the child's cell changes to value 1 (standing out), and the crowd cells nearest the child also begin changing to 1 as the truth spreads, while the emperor remains oblivious at value 7.",

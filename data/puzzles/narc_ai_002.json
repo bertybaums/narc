@@ -58,7 +58,8 @@
       "clue:rule",
       "clue:timing",
       "domain:ml",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "The step size exceeds twice the inverse of the Lipschitz constant. The parameters that were approaching the minimum overshoot, and the loss in the converging region temporarily increases before the learning rate is annealed. The converging region is the top-left 3x3 block where loss had been decreasing. All values outside that block remain unchanged from the previous step.",

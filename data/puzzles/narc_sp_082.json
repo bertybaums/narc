@@ -22,7 +22,8 @@
       "domain:biology",
       "genetics",
       "codon",
-      "translation"
+      "translation",
+      "abt:aaa"
     ]
   },
   "narrative": "The ribosome reads mRNA codons and outputs amino acid codes. Each triplet of values in the input row maps to a single output value via the genetic code: codons 1-1-1=Phe(1), 1-1-2=Leu(2), 2-1-1=Ser(3), 2-2-1=Pro(4), 1-2-1=Tyr(5). The reading frame shifts by 3 each time. Given the mRNA sequence and one translated protein, predict the next.",

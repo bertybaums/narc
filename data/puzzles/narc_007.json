@@ -45,7 +45,8 @@
       "arc:subversion",
       "clue:causation",
       "domain:psychology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "A child stacks bright blocks each day, one layer higher than the last. On the third day she opens the box and finds it is not a gift to keep \u2014 it must be sent back the way it came.",

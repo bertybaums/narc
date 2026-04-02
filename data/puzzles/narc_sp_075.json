@@ -40,7 +40,8 @@
       "spectrum:balanced",
       "fibonacci",
       "element-wise",
-      "recurrence"
+      "recurrence",
+      "abt:aaa"
     ]
   },
   "narrative": "Each cell at position (i,j) in Grid N equals the sum of the cell at (i,j) in Grid N-1 and Grid N-2, following the Fibonacci recurrence. Given Grids 0, 1, and 2, predict Grid 3.",

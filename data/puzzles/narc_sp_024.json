@@ -18,7 +18,8 @@
     "tags": [
       "spectrum:ai-forte",
       "statistical",
-      "sum"
+      "sum",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is a single-row grid containing the sum of each column of Grid 0. Grid1[0][c] = sum of Grid0[0..7][c].",

@@ -52,7 +52,8 @@
       "sorting",
       "sequential",
       "prism:actors",
-      "prism:world"
+      "prism:world",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The librarian worked left to right through the stacks, one shelf at a time. Each step she sorted one more column ascending from top to bottom, leaving the rest untouched. Column 0 was done, column 1 was done. The next shelf \u2014 column 2 \u2014 waited, its books still in their original jumble.",

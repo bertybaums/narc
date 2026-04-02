@@ -51,7 +51,8 @@
       "domain:fairy-tale",
       "spectrum:human-forte",
       "intrusion",
-      "discovery"
+      "discovery",
+      "abt:aaa"
     ]
   },
   "narrative": "The bears' cottage is shown as a 4x5 grid. Three bears (brown=9) leave the cottage \u2014 their cells go to 0. Then Goldilocks (yellow=7) enters and disturbs items: she sits in chairs (changes some furniture cells from 8 to 0), eats porridge (changes 3 to 0), and sleeps in a bed. In the masked grid, the bears return home to find Goldilocks asleep \u2014 all three bears reappear at the entrance while Goldilocks (7) is in the bed position.",

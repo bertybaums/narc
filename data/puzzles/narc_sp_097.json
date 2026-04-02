@@ -34,7 +34,8 @@
       "domain:programming",
       "binary-tree",
       "traversal",
-      "data-structures"
+      "data-structures",
+      "abt:aaa"
     ]
   },
   "narrative": "A binary tree with 7 nodes (values 1-7) stored in array form: index i has children at 2i+1 and 2i+2. The array is [4, 2, 6, 1, 3, 5, 7] (a BST). Row 0 = array storage. Row 1 = in-order traversal. Row 2 = pre-order traversal. Row 3 = post-order traversal. Given the array and in-order, predict pre-order and post-order.",

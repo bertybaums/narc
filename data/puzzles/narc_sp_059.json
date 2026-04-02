@@ -63,7 +63,8 @@
       "spectrum:human-forte",
       "cultural-narrative",
       "theater",
-      "curtain"
+      "curtain",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The play is over. The curtain falls from top to bottom, slowly covering the stage. First the top is hidden, then the middle, until the whole stage is curtained off.",

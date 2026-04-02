@@ -50,7 +50,8 @@
     "tags": [
       "focalization-test",
       "domain:education",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "A student (blue=6) sits at a desk filling in answers on a grid. The teacher (red=1) watches from the front, knowing the correct answers (green=3). The student marks some answers right and some wrong. The teacher collects the exam and marks it, revealing the correct pattern. The student sees the gaps in their knowledge.",

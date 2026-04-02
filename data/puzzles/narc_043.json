@@ -47,7 +47,8 @@
       "clue:rule",
       "domain:mathematics",
       "domain:philosophy",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Sixteen steps from the wall became eight, then four, then two. At the fifth moment, one step remains but cannot be taken. The arrow flies forever through halves of halves, and the distance left is always more than nothing.",

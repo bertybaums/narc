@@ -38,7 +38,8 @@
     "tags": [
       "spectrum:balanced",
       "flood-fill",
-      "spatial"
+      "spatial",
+      "abt:aaa"
     ]
   },
   "narrative": "A shape is being filled from the top-left corner. Each step, the fill expands one cell in each cardinal direction from all currently filled cells (marked 1). Walls (marked 9) block the fill. 0 is empty space. Show the next fill step.",

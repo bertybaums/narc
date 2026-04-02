@@ -20,7 +20,8 @@
       "spectrum:domain-dependent",
       "domain:music",
       "circle-of-fifths",
-      "chord-progression"
+      "chord-progression",
+      "abt:aaa"
     ]
   },
   "narrative": "The circle of fifths encoded as semitones from C: C=0, G=7, D=2, A=9, E=4, B=11, F#=6, Db=1, Ab=8, Eb=3, Bb=10, F=5. Each step moves one position clockwise around the circle (up a fifth = +7 mod 12). Given three chords in a sequence moving around the circle, predict the fourth.",

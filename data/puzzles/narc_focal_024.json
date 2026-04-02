@@ -76,7 +76,8 @@
     "tags": [
       "focalization-test",
       "domain:marine-biology",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "The clownfish darts among stinging tentacles that would paralyze any other fish. A barracuda approaches, sees the anemone's threat, and hesitates. The clownfish is safe precisely where others would die.",

@@ -56,7 +56,8 @@
       "arc:cyclical",
       "clue:identity",
       "domain:biology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The crimson queen found new legs while the sapphire one stumbled \u2014 but only for a moment, for the race never ends. In this country, it takes all the running you can do to stay in the same place.",

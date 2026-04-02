@@ -20,7 +20,8 @@
       "spectrum:domain-dependent",
       "domain:physics",
       "circuits",
-      "resistor-network"
+      "resistor-network",
+      "abt:aaa"
     ]
   },
   "narrative": "A resistor network simplifies step by step. Series resistors add: R_total = R1 + R2. Parallel resistors combine as: 1/R_total = 1/R1 + 1/R2, or R_total = R1*R2/(R1+R2). Each grid shows the network state. Row 0 = resistor values, row 1 = connection type (1=series with next, 2=parallel with next, 0=terminal). The network reduces from right to left. Given two reduction steps, predict the final equivalent resistance.",

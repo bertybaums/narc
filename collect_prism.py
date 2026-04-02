@@ -45,8 +45,14 @@ def main(model, concurrency, dry_run, tier):
 
     conn = db.init_db()
 
-    # Get prism variants
-    pattern = f"prism_{tier}_%" if tier != "all" else "prism_%"
+    # Get variants by tier
+    if tier == "all":
+        pattern = "prism_%"
+    elif tier.startswith("abt"):
+        # Support abt tiers: abt_aaa_to_abt, abt_abt_to_aaa, abt_thin_to_rich, abt_rich_to_thin, or just "abt" for all
+        pattern = f"abt_{tier[4:]}_%" if len(tier) > 3 else "abt_%"
+    else:
+        pattern = f"prism_{tier}_%"
     variants = conn.execute(
         """SELECT v.variant_id, v.puzzle_id, v.variant, v.narrative
            FROM narrative_variants v

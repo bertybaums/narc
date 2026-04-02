@@ -55,7 +55,8 @@
       "spectrum:human-forte",
       "common-sense-physics",
       "candle",
-      "melting"
+      "melting",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A candle sits on the table, burning through the evening. Each hour it melts a little shorter, but the flame stays on top.",

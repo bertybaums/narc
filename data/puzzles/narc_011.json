@@ -54,7 +54,8 @@
       "clue:identity",
       "clue:timing",
       "domain:literature",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Three gems sit in a vault: ruby left, emerald center, sapphire right. The plan: move each gem one cell toward the door at the top, one per night. But on the third night, the inside man swaps the emerald for a fake \u2014 a grey stone \u2014 before it advances.",

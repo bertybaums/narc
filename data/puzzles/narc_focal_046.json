@@ -65,7 +65,8 @@
     "tags": [
       "focalization-test",
       "domain:relationships",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "An offender (red=1) stands apart from a victim (blue=6) with empty space between them. The offender creates a gesture (yellow=4) and pushes it toward the victim. A bridge of yellow builds cell by cell across the gap. The victim accepts, and both move closer to the yellow bridge, meeting in the middle.",

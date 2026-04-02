@@ -63,7 +63,8 @@
       "domain:fairy-tale",
       "spectrum:human-forte",
       "deception",
-      "substitution"
+      "substitution",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A cottage sits in the woods. Grandmother (magenta=6) rests in bed at the top-right. The wolf (grey=5) approaches the cottage from the left while Little Red Riding Hood (red=1) is still far away on the path. In the masked grid, the wolf has entered the cottage and replaced grandmother in the bed \u2014 grandmother's cell now shows the wolf's value, while grandmother has vanished. Red Riding Hood continues approaching, unaware.",

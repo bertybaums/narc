@@ -38,7 +38,8 @@
     "tags": [
       "spectrum:balanced",
       "binary-toggle",
-      "pattern"
+      "pattern",
+      "abt:aaa"
     ]
   },
   "narrative": "A checkerboard pattern toggles: 0 becomes 1 and 1 becomes 0 at each step. Given two steps, predict the third.",

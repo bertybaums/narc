@@ -97,7 +97,8 @@
     "tags": [
       "focalization-test",
       "domain:biology",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The invader slips between host cells, invisible to distant sentinels. But one white blood cell detects the foreign signature and closes in, engulfing the virus at the site of infection.",

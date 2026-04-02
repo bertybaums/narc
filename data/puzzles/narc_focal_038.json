@@ -83,7 +83,8 @@
     "tags": [
       "focalization-test",
       "domain:parasitology",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The parasite disguises itself in the host's own proteins. The immune system patrols everywhere but cannot distinguish friend from foe. The host feels nothing while the parasite feeds. The immune system's blindness is the parasite's survival.",

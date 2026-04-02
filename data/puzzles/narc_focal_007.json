@@ -77,7 +77,8 @@
       "domain:mythology",
       "spectrum:ai-forte",
       "deception",
-      "hidden-information"
+      "hidden-information",
+      "abt:aaa"
     ]
   },
   "narrative": "A walled city: grey=5 forms the city walls, blue=4 defenders patrol inside, and a wooden horse (brown=9) sits outside the gate. Hidden soldiers (red=1) are concealed inside the horse (not visible). In the masked grid, the horse has been brought inside the walls by the defenders. Then in the final grid, the soldiers emerge from the horse \u2014 1s appear around the 9 inside the city while defenders are displaced.",

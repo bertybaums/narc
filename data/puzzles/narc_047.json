@@ -37,7 +37,8 @@
       "clue:rule",
       "clue:direction",
       "domain:astronomy",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "At the moment the lines drawn by human hands dissolve, what was many becomes one \u2014 blue and green with no red seams. The higher you rise, the less the borders matter, until they vanish entirely.",

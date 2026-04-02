@@ -55,7 +55,8 @@
       "spectrum:balanced",
       "rotation",
       "spiral",
-      "dimension-change"
+      "dimension-change",
+      "abt:aaa"
     ]
   },
   "narrative": "A spiral pattern is drawn on a wide grid. Each step rotates the entire pattern 90 degrees clockwise, which also changes the grid dimensions. Given the original and one rotation, predict the next rotation.",

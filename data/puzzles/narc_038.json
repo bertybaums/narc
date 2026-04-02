@@ -85,7 +85,8 @@
       "clue:direction",
       "clue:rule",
       "domain:mathematics",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The flutter spiraled always clockwise, each ring wider than the last, the warmth at the center never dimming. A single wing-beat became a gale \u2014 but only because it turned the same way every time.",

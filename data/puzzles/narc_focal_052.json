@@ -47,7 +47,8 @@
     "tags": [
       "focalization-test",
       "domain:politics",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "Two sides (red=1 and blue=6) campaign across a grid. Undecided voters (grey=5) sit in the middle. Each side converts nearby greys to their color. The sides push toward the center. In the final frame, one color dominates: blue wins by a narrow margin, converting the last grey voters.",

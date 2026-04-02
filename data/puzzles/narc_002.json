@@ -70,7 +70,8 @@
       "clue:exception",
       "clue:direction",
       "domain:ecology",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A garden fills each quadrant clockwise through the seasons. But a severe drought strikes in summer, turning that season's quadrant grey instead of its usual vibrant color.",

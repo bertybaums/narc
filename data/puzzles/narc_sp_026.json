@@ -22,7 +22,8 @@
     "tags": [
       "spectrum:ai-forte",
       "encoding",
-      "base-conversion"
+      "base-conversion",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 0 has two rows: row 0 is the tens digit, row 1 is the ones digit, forming 2-digit decimal numbers column-wise. Grid 1 (shown) contains each number modulo 8. Grid 2 (masked) contains each number integer-divided by 8.",

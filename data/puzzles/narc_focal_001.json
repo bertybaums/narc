@@ -66,7 +66,8 @@
       "focalization-test",
       "domain:fable",
       "spectrum:human-forte",
-      "aesop"
+      "aesop",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A fox (red=1) stands beneath a tall vine (brown=9) from which grapes (green=3) hang high. The fox leaps upward toward the grapes across three attempts, each time reaching higher but never high enough. After the third failed leap, the fox walks away from the vine entirely, leaving the scene. The grapes remain untouched on the vine.",

@@ -40,7 +40,8 @@
       "domain:fairy-tale",
       "spectrum:human-forte",
       "transformation",
-      "identity"
+      "identity",
+      "abt:aaa"
     ]
   },
   "narrative": "A pond scene. A row of ducks (yellow=7) swim in formation. One duckling (grey=5) trails behind, visually distinct. Over time the other ducks move away from the grey duckling, isolating it. In the masked grid, the transformation occurs: the grey duckling becomes a swan (azure=8), now standing apart from the flock with a new value. The yellow ducks remain unchanged.",

@@ -50,7 +50,8 @@
     "tags": [
       "focalization-test",
       "domain:social-norms",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A queue of people (blue=6) forms a line waiting orderly. A bouncer (grey=5) stands at the front controlling entry. A queue jumper (red=1) appears and pushes forward through the line, displacing blues. The bouncer notices and ejects the red jumper from the queue entirely. Order is restored.",

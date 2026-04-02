@@ -48,7 +48,8 @@
       "clue:rule",
       "clue:timing",
       "domain:psychology",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "Six grids represent emotional states encoded as values. Stage 1 (Denial): all cells are 0 \u2014 refusing to see. Stage 2 (Anger): every cell becomes 9 \u2014 maximum intensity. Stage 3 (Bargaining, masked): a checkerboard of 0 and 9 \u2014 alternating between acceptance and rejection, where cell (r,c) is 9 if (r+c) is even, 0 if odd. Stage 4 (Depression): all cells drop to 1 \u2014 barely present. Stage 5 (Acceptance): each cell becomes its row index \u2014 a calm gradient acknowledging position. Stage 6 (Growth): each cell is row + col \u2014 expanding outward.",

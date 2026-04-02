@@ -52,7 +52,8 @@
       "domain:fairy-tale",
       "spectrum:ai-forte",
       "exponential-growth",
-      "loss-of-control"
+      "loss-of-control",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The apprentice (red=1) enchants a broom (blue=4) to carry water (azure=8). The broom works, but the apprentice cannot stop it. In each successive grid, the number of brooms doubles (more 4s appear) and water rises (8s fill from the bottom up). In the masked grid, the brooms have doubled again to four, and water has risen to fill the bottom two rows entirely.",

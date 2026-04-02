@@ -49,7 +49,8 @@
       "clue:direction",
       "clue:timing",
       "domain:physics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "At the moment of balance \u2014 standing at the center \u2014 the waves ahead compress to three while those behind stretch to two. Blue before and red after. The source sings one note, but the universe hears two.",

@@ -38,7 +38,8 @@
       "clue:rule",
       "domain:mathematics",
       "domain:computer-science",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "The system evolves as a discrete dynamical system on a 3x3 toroidal grid. The transition function at each timestep is: cell(i,j)(t+1) = (cell(i,j)(t) + cell(i-1,j)(t) + cell(i,j-1)(t)) mod 10, where indices wrap toroidally (i.e., row -1 wraps to row 2, column -1 wraps to column 2). Compute the state at timestep 4 given the preceding states.",

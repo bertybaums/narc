@@ -27,7 +27,8 @@
     "tags": [
       "spectrum:balanced",
       "cellular-automaton",
-      "rule-30"
+      "rule-30",
+      "abt:aaa"
     ]
   },
   "narrative": "A 1D cellular automaton evolves according to Rule 30: each cell's next state depends on its current state and its two neighbors. The rule is 00011110 in binary (right neighbor, self, left neighbor -> new state). Rows show successive generations. Given the first three generations, predict the fourth.",

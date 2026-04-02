@@ -58,7 +58,8 @@
       "clue:rule",
       "clue:direction",
       "domain:mathematics",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 2 is the 90-degree clockwise rotation of Grid 1. Grid 3 is the TRANSPOSE (not the 180-degree rotation) of Grid 1. The transpose swaps rows and columns: cell (r,c) becomes cell (c,r).",

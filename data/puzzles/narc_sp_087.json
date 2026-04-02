@@ -40,7 +40,8 @@
       "domain:music",
       "rhythm",
       "time-signature",
-      "rebarring"
+      "rebarring",
+      "abt:aaa"
     ]
   },
   "narrative": "A melody is rebarred from one time signature to another. Each cell represents a rhythmic value (1=sixteenth, 2=eighth, 4=quarter, 8=half, 16=whole). Row 0 is beat values, row 1 marks barlines (1=barline after this beat, 0=no barline). Rebarring from 4/4 to 3/4 means barlines every 16 units become every 12 units. Given the 4/4 version, produce the 3/4 version.",

@@ -21,7 +21,8 @@
       "spectrum:domain-dependent",
       "domain:biology",
       "population-genetics",
-      "hardy-weinberg"
+      "hardy-weinberg",
+      "abt:aaa"
     ]
   },
   "narrative": "In a population at Hardy-Weinberg equilibrium, allele frequencies p and q (p+q=1) determine genotype frequencies: p^2, 2pq, q^2. Each row represents a different gene. Column 0 = p*10 (rounded), Column 1 = p^2*100, Column 2 = 2pq*100, Column 3 = q^2*100. Given three genes, predict the fourth row where p=0.3.",

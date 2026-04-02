@@ -70,7 +70,8 @@
     "tags": [
       "focalization-test",
       "domain:heroism",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "A hero (red=1) stands in front of a community (green=3). A threat (grey=5) approaches from the opposite side. The hero moves toward the threat, placing themselves between danger and community. In the final frame, the hero and threat overlap and both vanish, while the community remains safe.",

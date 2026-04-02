@@ -29,7 +29,8 @@
     "tags": [
       "spectrum:balanced",
       "spatial-transform",
-      "mirror"
+      "mirror",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Each step flips the grid horizontally (left-right mirror). Given the original and one flip, predict the next state.",

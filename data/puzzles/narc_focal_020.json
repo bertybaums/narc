@@ -50,7 +50,8 @@
       "domain:fairy-tale",
       "spectrum:human-forte",
       "transformation",
-      "identity-change"
+      "identity-change",
+      "abt:aaa"
     ]
   },
   "narrative": "Cinderella (grey=5) toils while stepsisters (red=1, appearing as a pair) attend the ball. The fairy godmother (magenta=6) appears. In the masked grid, the transformation occurs: Cinderella's value changes from grey=5 to azure=8 (her ball gown), and the fairy godmother's wand effect radiates outward. The stepsisters remain at the ball (right side), unaware that Cinderella is about to arrive transformed.",

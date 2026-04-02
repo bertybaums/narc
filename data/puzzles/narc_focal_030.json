@@ -93,7 +93,8 @@
     "tags": [
       "focalization-test",
       "domain:entomology",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:aaa"
     ]
   },
   "narrative": "A worker ant finds food and lays a chemical trail back to the colony. Other workers follow the scent. The queen never leaves; she knows only that food arrives. The food does not know it has been found.",

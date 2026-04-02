@@ -57,7 +57,8 @@
       "domain:fairy-tale",
       "spectrum:human-forte",
       "destruction",
-      "movement"
+      "movement",
+      "abt:aaa"
     ]
   },
   "narrative": "Three pigs (magenta=6) each build a house: straw (value=1), sticks (value=2), and bricks (value=8). The wolf (grey=5) blows from the left. In the masked grid, the wolf has just destroyed the straw house \u2014 its walls collapse to 0 and that pig flees rightward to the stick house. The stick and brick houses remain intact.",

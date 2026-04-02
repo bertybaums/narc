@@ -85,7 +85,8 @@
       "clue:rule",
       "domain:astronomy",
       "spectrum:human-edge",
-      "draft:consecutive-duplicate"
+      "draft:consecutive-duplicate",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A silence answers back from a billion fires. Each one burns alone, none calling to another. The universe is vast and full of light, yet no voice carries across the dark between the stars.",

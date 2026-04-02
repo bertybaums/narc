@@ -59,7 +59,8 @@
       "clue:direction",
       "domain:ml",
       "domain:mathematics",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The optimizer encounters a saddle point in the loss landscape. The Hessian at the critical point has one negative eigenvalue (along the vertical axis, i.e., columns) and one positive eigenvalue (along the horizontal axis, i.e., rows). The loss decreases in the vertical direction from the center but increases in the horizontal direction, creating a saddle surface. The center column should show values decreasing away from the center row, while the center row should show values increasing away from the center column.",

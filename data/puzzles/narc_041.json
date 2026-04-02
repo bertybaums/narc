@@ -58,7 +58,8 @@
       "clue:identity",
       "domain:ethics",
       "domain:philosophy",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "The machine runs smoothly because each part turns as it is told \u2014 grey cogs in grey rows, each clicking into red as the order passes through. All but one small cog that refuses its rotation, holding its grey against the tide in the very center of the third row.",

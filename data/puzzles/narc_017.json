@@ -70,7 +70,8 @@
       "arc:rise-and-fall",
       "clue:timing",
       "domain:poetry",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Look upon works meant to outlast time. Stone forgets its sculptor; sand reclaims all grandeur. Only the pedestal's boast survives to mock the empty desert.",

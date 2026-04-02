@@ -48,7 +48,8 @@
     "tags": [
       "focalization-test",
       "domain:conflict-resolution",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "Side A (red=1) and side B (blue=6) occupy opposite halves of a grid separated by a contested border (yellow=4). A neutral zone (grey=5) exists between them. Over time, both sides pull back from the border, the neutral zone widens, and the yellow border solidifies into a stable line. Peace is achieved as both colors retreat symmetrically.",

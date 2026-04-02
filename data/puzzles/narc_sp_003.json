@@ -49,7 +49,8 @@
     "tags": [
       "spectrum:ai-forte",
       "modular-arithmetic",
-      "position-dependent"
+      "position-dependent",
+      "abt:aaa"
     ]
   },
   "narrative": "Each cell updates per step: new_value = (old_value + row_index + col_index) mod 10, where indices are zero-based. Grid 0 is t=0, Grid 1 is t=1, Grid 2 (masked) is t=2.",

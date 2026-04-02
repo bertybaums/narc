@@ -26,7 +26,8 @@
     "tags": [
       "spectrum:ai-forte",
       "statistical",
-      "mean"
+      "mean",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) contains the integer mean (floor division) of each row of Grid 0. Each row of Grid 0 produces a single value: Grid1[r][0] = floor(sum(Grid0[r]) / 6).",

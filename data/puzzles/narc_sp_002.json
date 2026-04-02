@@ -34,7 +34,8 @@
     "tags": [
       "spectrum:ai-forte",
       "modular-arithmetic",
-      "iterative"
+      "iterative",
+      "abt:aaa"
     ]
   },
   "narrative": "Each grid is a time step. At each step, every cell updates: new_value = (old_value * 7 + 3) mod 10. Grid 0 is t=0, Grid 1 is t=1, Grid 2 (masked) is t=2.",

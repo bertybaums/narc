@@ -48,7 +48,8 @@
       "clue:rule",
       "clue:identity",
       "domain:ml",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Backpropagation through the ReLU at layer 3 zeros the gradient for all neurons whose forward-pass pre-activation was non-positive. In this layer, the pre-activations in the top two rows were negative, so their gradient contributions are exactly zero. The bottom three rows retain their gradient magnitudes from the previous layer unchanged.",

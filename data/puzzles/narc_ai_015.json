@@ -59,7 +59,8 @@
       "clue:rule",
       "domain:information-theory",
       "domain:computer-science",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Construct the optimal prefix-free binary code (Huffman coding) for six symbols with the given frequencies. At each step, merge the two least-frequent symbols (breaking ties by taking the earlier symbol). Assign 0 to the left branch and 1 to the right branch. Encode bit 0 as grid value 0, bit 1 as grid value 9, and unused (padding) positions as grid value 5. Each row of the code grid corresponds to a symbol (A through F in order), and columns represent bit positions from MSB to LSB. The most frequent symbol gets the shortest code.",

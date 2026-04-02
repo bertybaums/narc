@@ -49,7 +49,8 @@
     "tags": [
       "spectrum:ai-forte",
       "matrix-operations",
-      "transpose"
+      "transpose",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is the transpose of Grid 0. Rows of Grid 0 become columns of Grid 1. Formally: Grid1[c][r] = Grid0[r][c].",

@@ -1,13 +1,35 @@
 {
   "answer_grids": {
     "3": [
-      [5, 5, 5, 5],
-      [5, 6, 6, 5],
-      [5, 6, 6, 5],
-      [5, 5, 5, 5]
+      [
+        5,
+        5,
+        5,
+        5
+      ],
+      [
+        5,
+        6,
+        6,
+        5
+      ],
+      [
+        5,
+        6,
+        6,
+        5
+      ],
+      [
+        5,
+        5,
+        5,
+        5
+      ]
     ]
   },
-  "masked_positions": [3],
+  "masked_positions": [
+    3
+  ],
   "metadata": {
     "ai_difficulty": 4,
     "created_at": "2026-03-31",
@@ -20,7 +42,8 @@
       "prism:actors",
       "arc:subversion",
       "audience:humanities",
-      "domain:literature"
+      "domain:literature",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Opening night at the Imperial Theatre. The lead performs in red while the understudy waits offstage in magenta. The grey curtain borders frame the stage. Between scenes, the two rehearse together, their colors mixing in the spotlight. But at the start of Act Two, the lead collapses and is carried off. The understudy steps into the role completely \u2014 no trace of red remains on the stage. She fills the same two-by-two center blocking, alone. For the curtain call, the stage lights dim to just the top half while the lower curtain drops to black.",
@@ -29,10 +52,30 @@
     {
       "cols": 4,
       "grid": [
-        [5, 5, 5, 5],
-        [5, 2, 2, 5],
-        [5, 2, 2, 5],
-        [5, 5, 5, 5]
+        [
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          2,
+          2,
+          5
+        ],
+        [
+          5,
+          2,
+          2,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5
+        ]
       ],
       "label": "Act One opens",
       "position": 0,
@@ -41,10 +84,30 @@
     {
       "cols": 4,
       "grid": [
-        [5, 5, 5, 5],
-        [5, 2, 6, 5],
-        [5, 6, 2, 5],
-        [5, 5, 5, 5]
+        [
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          2,
+          6,
+          5
+        ],
+        [
+          5,
+          6,
+          2,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5
+        ]
       ],
       "label": "Between scenes",
       "position": 1,
@@ -53,10 +116,30 @@
     {
       "cols": 4,
       "grid": [
-        [5, 5, 5, 5],
-        [5, 6, 2, 5],
-        [5, 2, 6, 5],
-        [5, 5, 5, 5]
+        [
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          5,
+          6,
+          2,
+          5
+        ],
+        [
+          5,
+          2,
+          6,
+          5
+        ],
+        [
+          5,
+          5,
+          5,
+          5
+        ]
       ],
       "label": "Intermission",
       "position": 2,
@@ -73,10 +156,30 @@
     {
       "cols": 4,
       "grid": [
-        [5, 6, 6, 5],
-        [5, 6, 6, 5],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [
+          5,
+          6,
+          6,
+          5
+        ],
+        [
+          5,
+          6,
+          6,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0
+        ]
       ],
       "label": "Curtain call",
       "position": 4,

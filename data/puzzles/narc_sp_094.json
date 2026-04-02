@@ -24,7 +24,8 @@
       "domain:history",
       "ancient-egypt",
       "chronology",
-      "dynasties"
+      "dynasties",
+      "abt:aaa"
     ]
   },
   "narrative": "Ancient Egyptian dynasties encoded as grid data. Each row is a dynasty. Col 0 = dynasty number, Col 1 = start year BCE (as positive integer), Col 2 = end year BCE, Col 3 = duration (Col 1 - Col 2), Col 4 = number of known pharaohs, Col 5 = overlap with next dynasty (years). Given dynasties 18-20 of the New Kingdom, predict dynasty 21 (Third Intermediate Period): started 1070 BCE, ended 945 BCE, had 10 pharaohs, no overlap with next listed.",

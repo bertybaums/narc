@@ -46,7 +46,8 @@
     "tags": [
       "spectrum:ai-forte",
       "algorithmic",
-      "cumulative-sum"
+      "cumulative-sum",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is the cumulative sum of Grid 0 along each row (left to right). Grid1[r][c] = sum of Grid0[r][0..c]. That is, column 0 is unchanged, column 1 = Grid0[r][0] + Grid0[r][1].",

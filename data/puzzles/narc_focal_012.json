@@ -45,7 +45,8 @@
       "spectrum:human-forte",
       "aesop",
       "moral-lesson",
-      "value-change"
+      "value-change",
+      "abt:aaa"
     ]
   },
   "narrative": "A boy (red=1) reaches toward a patch of nettles (green=3) in a garden. In the first grid, the boy gingerly touches one nettle \u2014 the contact cell shows orange=6 representing the sting. In the masked grid, the boy grasps the nettles firmly (all nettle cells change from 3 to 2, representing them being crushed), and the sting effect disappears (no orange). The moral: grasp nettles boldly and they lose their sting.",

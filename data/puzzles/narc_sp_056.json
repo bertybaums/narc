@@ -50,7 +50,8 @@
       "spectrum:human-forte",
       "common-sense-physics",
       "domino-effect",
-      "chain-reaction"
+      "chain-reaction",
+      "abt:aaa"
     ]
   },
   "narrative": "Dominoes are lined up in a row. The first one tips and hits the second, which hits the third. Each domino goes from standing (tall) to fallen (flat). The wave of falling moves left to right.",

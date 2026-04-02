@@ -57,7 +57,8 @@
       "clue:timing",
       "clue:direction",
       "domain:ecology",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "The survivors hid where teeth could not follow \u2014 the margins, the edges, the overlooked places. When the hunters starved and the center lay empty, the meek crept back from the borders to fill what was lost.",

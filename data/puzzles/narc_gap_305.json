@@ -47,7 +47,8 @@
       "clue:timing",
       "clue:identity",
       "domain:biology",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A 4x4 grid of healthy cells (value 3, on even-parity positions where (r+c) is even) and empty space (value 0, on odd-parity positions). A virus infects one cell per round, turning it from 3 to 2 (infected). After a cell has been infected for exactly two rounds, the immune system activates and converts it to value 4 (antibody). Round 2: cell (0,2) is infected. Round 3: cell (2,2) is infected. Round 4 (masked): cell (1,1) is newly infected, and the cell infected in Round 2 \u2014 (0,2) \u2014 has been sick for two rounds and becomes an antibody (value 4).",

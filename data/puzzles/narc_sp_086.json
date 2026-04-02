@@ -22,7 +22,8 @@
       "domain:music",
       "voice-leading",
       "harmony",
-      "resolution"
+      "resolution",
+      "abt:aaa"
     ]
   },
   "narrative": "A dominant seventh chord resolves to a tonic triad following classical voice-leading rules. The tritone (interval of 6 semitones between the 3rd and 7th of V7) resolves inward: the leading tone rises by semitone, the seventh falls by semitone. The root falls a fifth, the fifth falls a step. Pitches encoded as MIDI-like numbers. Given V7 and its resolution in two keys, predict the resolution in a third key.",

@@ -34,7 +34,8 @@
     "tags": [
       "spectrum:ai-forte",
       "bitwise",
-      "and"
+      "and",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 2 (masked) is the element-wise bitwise AND of Grid 0 and Grid 1. Each cell: Grid2[r][c] = Grid0[r][c] AND Grid1[r][c], operating on binary representations of single-digit integers.",

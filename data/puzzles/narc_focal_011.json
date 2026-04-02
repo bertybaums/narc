@@ -79,7 +79,8 @@
       "domain:fairy-tale",
       "spectrum:balanced",
       "vertical-movement",
-      "theft"
+      "theft",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Jack (red=1) climbs a beanstalk (green=3) that grows upward through a vertical grid. At the top, a giant (grey=5, occupying multiple cells) guards golden eggs (yellow=7). In the masked grid, Jack has reached the top, grabbed a golden egg, and the giant has awakened \u2014 the giant's cells shift one position toward Jack, and Jack holds the egg (his cell becomes value 1 with a 7 adjacent).",

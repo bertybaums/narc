@@ -50,7 +50,8 @@
       "clue:identity",
       "clue:rule",
       "domain:philosophy",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "Each plank pulled free did not vanish \u2014 it drifted down to a second hull taking shape below. What was mended became new; what was discarded became a twin. When the last board was swapped, two ships floated where one had sailed.",

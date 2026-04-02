@@ -62,7 +62,8 @@
     "tags": [
       "spectrum:balanced",
       "growing-grid",
-      "border"
+      "border",
+      "abt:aaa"
     ]
   },
   "narrative": "Each step adds a border of 1s around the previous grid, growing it by 2 in each dimension. Given the seed and one expansion, predict the next.",

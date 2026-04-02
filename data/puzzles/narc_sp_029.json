@@ -39,7 +39,8 @@
       "spectrum:ai-forte",
       "multi-step",
       "xor",
-      "threshold"
+      "threshold",
+      "abt:aaa"
     ]
   },
   "narrative": "Step 1: Compute element-wise XOR of Grid 0 and Grid 1. Step 2: Apply threshold: if XOR result >= 4, output 1; otherwise output 0. Grid 2 (masked) is the final thresholded result.",

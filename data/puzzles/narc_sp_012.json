@@ -46,7 +46,8 @@
     "tags": [
       "spectrum:ai-forte",
       "bitwise",
-      "xor"
+      "xor",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 2 (masked) is the element-wise bitwise XOR of Grid 0 and Grid 1. Each cell: Grid2[r][c] = Grid0[r][c] XOR Grid1[r][c]. All values are single-digit integers (0-9); XOR operates on their binary representations.",

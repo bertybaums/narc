@@ -31,7 +31,8 @@
       "latin",
       "declension",
       "morphology",
-      "draft:consecutive-duplicate"
+      "draft:consecutive-duplicate",
+      "abt:aaa"
     ]
   },
   "narrative": "Latin noun declension follows regular patterns. Each cell encodes a morphological feature as a number. Columns represent cases (1=Nom, 2=Gen, 3=Dat, 4=Acc, 5=Abl). Rows represent number (row 0=singular, row 1=plural). Values encode endings for first declension (-a stems): Nom.sg=1, Gen.sg=2, Dat.sg=3, Acc.sg=4, Abl.sg=5, Nom.pl=6, Gen.pl=7, Dat.pl=8, Acc.pl=9, Abl.pl=10. Given the first declension paradigm, predict the second declension (-us stems) where the pattern shifts: all values += 10.",

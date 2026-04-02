@@ -69,7 +69,8 @@
       "arc:divergence",
       "clue:direction",
       "domain:biology",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "The division runs along the vertical axis \u2014 one daughter rises above, the other settles below. Each is a mirror of its parent, faithful in form, split only in station.",

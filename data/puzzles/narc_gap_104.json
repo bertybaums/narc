@@ -47,7 +47,8 @@
       "clue:timing",
       "clue:rule",
       "domain:mathematics",
-      "spectrum:ai-edge"
+      "spectrum:ai-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A value spreads from the top-left corner. Each step, every cell adds 1 to its value (mod 10) \u2014 this is the additive phase (steps 1-3). At step 4, the pattern REVERSES: every cell subtracts 1 (mod 10) instead. From step 5 onward, it subtracts again. Grid 4 (position 3) is masked \u2014 it is the first subtraction step, so its values equal those of step 3 minus 1 (mod 10).",

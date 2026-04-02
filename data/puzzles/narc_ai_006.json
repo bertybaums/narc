@@ -47,7 +47,8 @@
       "clue:rule",
       "domain:ml",
       "domain:computer-science",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "The output is the element-wise exclusive disjunction of the two input feature maps. Where both inputs share the same activation level, the output neuron is suppressed to zero. Where they disagree, the output takes the nonzero value. This is the canonical nonlinearly-separable binary classification that a single-layer perceptron cannot learn.",

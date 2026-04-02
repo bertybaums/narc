@@ -61,7 +61,8 @@
     "tags": [
       "focalization-test",
       "domain:ethics",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "An insider (blue=6) works within a corporation (red=1 block). The insider discovers evidence (yellow=4) hidden inside the red structure. The insider extracts the evidence and pushes it outward toward the public (green=3). The corporation tries to close ranks, but the evidence reaches the public. The insider is expelled from the red block.",

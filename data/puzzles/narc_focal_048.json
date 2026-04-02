@@ -39,7 +39,8 @@
     "tags": [
       "focalization-test",
       "domain:family",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A deceased person (grey=5) fades from the center of a grid. Their wealth (yellow=4) surrounds them. Two heirs, red=1 and blue=6, wait on opposite sides. As grey fades, the yellow wealth splits and flows toward the two heirs unevenly: red gets more than blue, creating asymmetric information about fairness.",

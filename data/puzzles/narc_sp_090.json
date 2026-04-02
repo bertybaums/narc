@@ -31,7 +31,8 @@
       "domain:physics",
       "kinematics",
       "projectile",
-      "gravity"
+      "gravity",
+      "abt:aaa"
     ]
   },
   "narrative": "A projectile is launched with initial velocity. Each column is a time step (t=0,1,2,...). Row 0 = horizontal position (constant velocity, +3 per step). Row 1 = vertical position (initial upward velocity 8, gravity -2 per step: v(t) = 8-2t, y(t) = y(0) + sum of velocities). Row 2 = speed squared (vx^2 + vy^2). Given three time steps, predict the fourth and fifth.",

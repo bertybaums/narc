@@ -46,7 +46,8 @@
     "tags": [
       "spectrum:ai-forte",
       "algorithmic",
-      "sorting"
+      "sorting",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is Grid 0 with each row independently sorted in ascending order (left to right, smallest to largest).",

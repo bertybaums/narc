@@ -37,7 +37,8 @@
       "arc:linear",
       "clue:rule",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Each cell counts by its own stride \u2014 the stride equals the cell's value in the first grid. Formally, cell (r,c) at time t has value (first_grid[r][c] * t) mod 10. Grid 3 (position 2) is masked. The first grid is t=0, so its values are the strides themselves (stride * 0 = 0 wouldn't work, so we define t=1 for the first grid, t=2 for second, etc.).",

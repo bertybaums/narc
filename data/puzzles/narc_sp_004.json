@@ -34,7 +34,8 @@
     "tags": [
       "spectrum:ai-forte",
       "modular-arithmetic",
-      "element-wise"
+      "element-wise",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 2 (masked) is computed as (Grid 0 + Grid 1) mod 10, element-wise. Each cell in the output equals the sum of the corresponding cells in Grid 0 and Grid 1, taken modulo 10.",

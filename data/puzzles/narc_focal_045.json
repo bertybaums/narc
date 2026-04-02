@@ -53,7 +53,8 @@
     "tags": [
       "focalization-test",
       "domain:communication",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "An originator (red=1) whispers information that starts as truth (green=3). The spreader (orange=7) carries it forward but the information mutates: green cells flip to red as the message distorts. By the time it reaches the recipient (blue=6), the message is mostly red (false). The truth is almost entirely lost.",

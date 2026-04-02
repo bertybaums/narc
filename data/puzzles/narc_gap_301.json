@@ -57,7 +57,8 @@
       "arc:cyclical",
       "clue:direction",
       "domain:physics",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:aaa"
     ]
   },
   "narrative": "An electron (value 1) orbits a nucleus at the center of a 5x5 atom. It occupies energy shells at increasing distance from the center. Starting at the top (row 0, col 2), it moves clockwise through discrete positions on each shell boundary. At each time step it advances one position clockwise along the perimeter of its current shell. Position 2 (masked) corresponds to the electron at the 'East' position: row 2, col 4.",

@@ -46,7 +46,8 @@
       "clue:identity",
       "clue:direction",
       "domain:psychology",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The smile almost passes for real \u2014 but the eyes are set one cell too far apart, and the warmth drains from the face. What should comfort instead repels, and the closer it gets to human, the less human it feels.",

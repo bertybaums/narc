@@ -77,7 +77,8 @@
     "tags": [
       "spectrum:balanced",
       "game-of-life",
-      "cellular-automaton"
+      "cellular-automaton",
+      "abt:aaa"
     ]
   },
   "narrative": "A Game-of-Life-like rule applies: a cell becomes 1 if exactly 2 or 3 of its 8 neighbors (including diagonals) are 1; otherwise it becomes 0. Cells currently alive stay alive with 2-3 neighbors, die otherwise. Given two generations, predict the third.",

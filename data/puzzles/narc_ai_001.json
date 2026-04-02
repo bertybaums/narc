@@ -46,7 +46,8 @@
       "arc:linear",
       "clue:rule",
       "domain:ml",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Apply causal masking with uniform attention over the visible context. Each query position distributes weight equally across all key positions at or before it in the sequence. Future positions receive zero weight.",

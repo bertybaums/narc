@@ -90,7 +90,8 @@
     "tags": [
       "focalization-test",
       "domain:arachnology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "The spider sits at the web's edge, feeling vibrations through silk threads. The fly sees nothing until it strikes the invisible strands. The web transmits the struggle to the spider, who reads the vibrations like a map.",

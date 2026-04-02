@@ -32,7 +32,8 @@
       "domain:music",
       "inversion",
       "intervals",
-      "melody"
+      "melody",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "In music, inverting an interval means subtracting each semitone count from 12. A melody's intervals are inverted to create its mirror. Row 0 is the original pitch sequence (semitones from C), row 1 is the interval between consecutive notes. The inversion keeps the starting note but flips each interval's direction. Given original and intervals, produce the inversion.",

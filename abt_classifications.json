@@ -1,0 +1,1698 @@
+{
+  "narc_001": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_002": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But",
+      "instead"
+    ],
+    "implicit_signals": []
+  },
+  "narc_003": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_004": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_005": {
+    "classification": "dhy",
+    "confidence": "high",
+    "explicit_connectors": [
+      "except",
+      "But",
+      "still"
+    ],
+    "implicit_signals": [
+      "fell"
+    ]
+  },
+  "narc_006": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "only to find",
+      "but"
+    ],
+    "implicit_signals": [
+      "The third time"
+    ]
+  },
+  "narc_007": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_008": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_009": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "turns back"
+    ]
+  },
+  "narc_010": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_011": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_012": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_013": {
+    "classification": "abt-implicit",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_014": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_015": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_016": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_017": {
+    "classification": "abt-implicit",
+    "confidence": "low",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_018": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_019": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_020": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": [
+      "refused"
+    ]
+  },
+  "narc_021": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_022": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_023": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": [
+      "fell"
+    ]
+  },
+  "narc_024": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_025": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "what was lost"
+    ]
+  },
+  "narc_026": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_027": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_028": {
+    "classification": "abt-implicit",
+    "confidence": "low",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_029": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_030": {
+    "classification": "dhy",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But",
+      "still",
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_031": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_032": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "vanish",
+      "What remains"
+    ]
+  },
+  "narc_033": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_034": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_035": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_036": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_037": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "vanish"
+    ]
+  },
+  "narc_038": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_039": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_040": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_041": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_042": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_043": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_044": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_045": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "yet"
+    ],
+    "implicit_signals": []
+  },
+  "narc_046": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but",
+      "instead"
+    ],
+    "implicit_signals": []
+  },
+  "narc_047": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": [
+      "vanish"
+    ]
+  },
+  "narc_048": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_049": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_050": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_001": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_002": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_003": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_004": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_005": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_006": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_007": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_008": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_009": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_010": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_ai_011": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_012": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_013": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_014": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_ai_015": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_001": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": [
+      "failed"
+    ]
+  },
+  "narc_focal_002": {
+    "classification": "abt-implicit",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_003": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "still"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_004": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_005": {
+    "classification": "abt-implicit",
+    "confidence": "low",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_006": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_007": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_008": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_009": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_010": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "instead"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_011": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "shift"
+    ]
+  },
+  "narc_focal_012": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_013": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_014": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_015": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_016": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_017": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but",
+      "still"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_018": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_019": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_020": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_021": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_022": {
+    "classification": "abt-implicit",
+    "confidence": "low",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_023": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "still"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_024": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_025": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_026": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_027": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_028": {
+    "classification": "abt-implicit",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_029": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_030": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_031": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_032": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_033": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_034": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_035": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "yet"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_036": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_037": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_038": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_039": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "still"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_040": {
+    "classification": "abt-implicit",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_041": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_042": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "vanish",
+      "disappear"
+    ]
+  },
+  "narc_focal_043": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_044": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_045": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": [
+      "flip"
+    ]
+  },
+  "narc_focal_046": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_047": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_048": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_049": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_050": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_051": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_052": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_053": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_054": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_055": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but",
+      "still"
+    ],
+    "implicit_signals": []
+  },
+  "narc_focal_056": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_057": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_058": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_focal_059": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "vanish"
+    ]
+  },
+  "narc_focal_060": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_101": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_102": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_103": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_104": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "instead"
+    ],
+    "implicit_signals": []
+  },
+  "narc_gap_105": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "shift",
+      "shift"
+    ]
+  },
+  "narc_gap_201": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_202": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_203": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_204": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_205": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_301": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_302": {
+    "classification": "dhy",
+    "confidence": "high",
+    "explicit_connectors": [
+      "BUT",
+      "However",
+      "yet"
+    ],
+    "implicit_signals": []
+  },
+  "narc_gap_303": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_304": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_gap_305": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_prism_001": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "except"
+    ],
+    "implicit_signals": []
+  },
+  "narc_prism_002": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_prism_003": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but",
+      "except"
+    ],
+    "implicit_signals": []
+  },
+  "narc_prism_004": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_prism_005": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_prism_006": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_prism_007": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_prism_008": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_prism_009": {
+    "classification": "dhy",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but",
+      "still",
+      "still"
+    ],
+    "implicit_signals": [
+      "unexpected"
+    ]
+  },
+  "narc_prism_010": {
+    "classification": "dhy",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but",
+      "But",
+      "but",
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_prism_011": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": [
+      "vanish"
+    ]
+  },
+  "narc_prism_012": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_001": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_002": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_003": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_004": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_005": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_006": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_007": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_008": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_009": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_010": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_011": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_012": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_013": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_014": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_015": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_016": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_017": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_018": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_019": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_020": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_021": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_022": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_023": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_024": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_025": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_026": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_027": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_028": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_029": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_030": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_031": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_032": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_033": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_034": {
+    "classification": "aaa",
+    "confidence": "high",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_035": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_036": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_037": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_038": {
+    "classification": "aaa",
+    "confidence": "high",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_039": {
+    "classification": "aaa",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_040": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "Then one"
+    ]
+  },
+  "narc_sp_041": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_042": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_043": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_044": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_045": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_046": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_047": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_048": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_049": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_050": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_051": {
+    "classification": "abt-implicit",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_052": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_053": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_054": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_055": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_056": {
+    "classification": "aaa",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_057": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "But"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_058": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_059": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "until"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_060": {
+    "classification": "abt-implicit",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_061": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_062": {
+    "classification": "abt-implicit",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": [
+      "flip"
+    ]
+  },
+  "narc_sp_063": {
+    "classification": "aaa",
+    "confidence": "high",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_064": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_065": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_066": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_067": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_068": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_069": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_070": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "still"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_071": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_072": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_073": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_074": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_075": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_076": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_077": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_078": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_079": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_080": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_081": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_082": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_083": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_084": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_085": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_086": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_087": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_088": {
+    "classification": "abt-explicit",
+    "confidence": "high",
+    "explicit_connectors": [
+      "but"
+    ],
+    "implicit_signals": []
+  },
+  "narc_sp_089": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_090": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_091": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_092": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_093": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_094": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_095": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_096": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_097": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_098": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_099": {
+    "classification": "aaa",
+    "confidence": "medium",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  },
+  "narc_sp_100": {
+    "classification": "aaa",
+    "confidence": "llm-assisted",
+    "explicit_connectors": [],
+    "implicit_signals": []
+  }
+}

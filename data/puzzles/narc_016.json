@@ -66,7 +66,8 @@
       "arc:transformation",
       "clue:causation",
       "domain:philosophy",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "The wall showed flat shapes all your life. Turn around: the fire explains the shadows. Step outside: the world is wider, deeper, and more vivid than the cave ever promised.",

@@ -30,7 +30,8 @@
       "spectrum:human-forte",
       "cultural-narrative",
       "traffic-light",
-      "convention"
+      "convention",
+      "abt:aaa"
     ]
   },
   "narrative": "You're driving. The light is green, so you go. Then yellow -- slow down. Then red. Every driver knows: red means the road ahead is clear of your car. You stop.",

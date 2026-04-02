@@ -74,7 +74,8 @@
     "tags": [
       "focalization-test",
       "domain:social-dynamics",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A group (blue=6) clusters together. An actual culprit (grey=5) hides within the group. The scapegoat (red=1) stands nearby but separate. The group pushes the scapegoat outward while the grey culprit remains hidden. By the end, red is isolated at the edge and grey is still safely embedded in blue.",

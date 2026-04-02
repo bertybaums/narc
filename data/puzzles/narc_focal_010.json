@@ -68,7 +68,8 @@
       "domain:fairy-tale",
       "spectrum:human-forte",
       "following",
-      "betrayal"
+      "betrayal",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "A town (green=3 border) is infested with rats (grey=5 scattered inside). The Pied Piper (magenta=6) enters from the left. In the masked grid, the piper has moved to the town exit on the right, and all the rats have followed \u2014 forming a line trailing behind the piper toward the right edge. The town interior is now clear of rats. Later, when the town refuses payment, the piper leads children (blue=4) away instead.",

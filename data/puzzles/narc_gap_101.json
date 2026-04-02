@@ -46,7 +46,8 @@
       "arc:cyclical",
       "clue:rule",
       "domain:mathematics",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Each grid is produced from the previous one by flipping every cell whose Manhattan distance from the top-left corner (row 0, col 0) is odd. Flipping means: if the value is below 5, add 5; if 5 or above, subtract 5. The first grid is given. Grid 3 is masked.",

@@ -47,7 +47,8 @@
       "domain:literature",
       "spectrum:human-forte",
       "transformation",
-      "redemption"
+      "redemption",
+      "abt:aaa"
     ]
   },
   "narrative": "Scrooge (grey=5) sits alone in his counting house. Ghosts (azure=8) visit him one by one across the sequence. Bob Cratchit (blue=4) appears small and distant. In the masked grid, Scrooge undergoes his transformation \u2014 his value changes from grey=5 to red=1, representing his newfound warmth and generosity. The ghost departs (8 disappears), and Scrooge moves toward Cratchit.",

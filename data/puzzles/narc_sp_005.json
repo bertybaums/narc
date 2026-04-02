@@ -26,7 +26,8 @@
     "tags": [
       "spectrum:ai-forte",
       "modular-arithmetic",
-      "multiplication"
+      "multiplication",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 2 (masked) is the element-wise product of Grid 0 and Grid 1, modulo 10. Each cell: output[r][c] = (Grid0[r][c] * Grid1[r][c]) mod 10.",

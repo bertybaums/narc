@@ -48,7 +48,8 @@
       "spectrum:human-forte",
       "irony",
       "exchange",
-      "sacrifice"
+      "sacrifice",
+      "abt:aaa"
     ]
   },
   "narrative": "A husband (blue=4) and wife (red=1) each possess a treasure: the wife has long hair (value=8 in her row) and the husband has a gold watch (value=7 in his row). They each secretly sell their treasure to buy a gift for the other. In the masked grid, the exchange has occurred: the wife's hair cell changes from 8 to 0 (she sold it), a gift for the husband (new 7) appears near the wife, the husband's watch cell changes from 7 to 0 (he sold it), and a gift for the wife (new 8) appears near the husband. The irony: each gift is useless without the other's sold treasure.",

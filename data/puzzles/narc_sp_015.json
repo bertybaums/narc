@@ -68,7 +68,8 @@
     "tags": [
       "spectrum:ai-forte",
       "logical",
-      "threshold"
+      "threshold",
+      "abt:aaa"
     ]
   },
   "narrative": "Grid 1 (masked) is a binarized version of Grid 0. Each cell: Grid1[r][c] = 1 if Grid0[r][c] >= 5, else 0.",

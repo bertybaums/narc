@@ -51,7 +51,8 @@
     "tags": [
       "focalization-test",
       "domain:competition",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Competitor A (red=1) and competitor B (blue=6) race toward a prize (yellow=4) from opposite ends of a long narrow track. An audience (green=3) watches from the sides. Both advance each frame. In the end, red reaches the prize first by one position, and the audience shifts green toward the winner.",

@@ -30,7 +30,8 @@
       "arc:convergence",
       "clue:rule",
       "domain:astronomy",
-      "spectrum:ai-forte"
+      "spectrum:ai-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "We zoom out from a scene in four stages. Each grid is half the size of the previous: 6x6, then 3x3, then the masked grid, then 1x1. The downsampling rule: each cell in the smaller grid is the MAXIMUM value of the corresponding 2x2 block in the larger grid. Grid 3 (the second zoom-out, position 2) is masked. It should be a 2x2 grid derived by taking max of each 2x2 block from grid at position 1 (the 3x3 grid, padded with 0 in the missing row/column to make it even). Since 3x3 can't evenly divide, we pad it to 4x4 with zeros, then take 2x2 blocks.",

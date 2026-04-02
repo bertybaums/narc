@@ -57,7 +57,8 @@
       "clue:direction",
       "clue:timing",
       "domain:earth-science",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-implicit"
     ]
   },
   "narrative": "A traveler crosses the valley heading east, one step each day. On the fourth day she reaches the river and wades in \u2014 the water is cold and blue beneath her feet. She turns back west, retracing a higher path along the ridge, one step each day home.",

@@ -109,7 +109,8 @@
     "tags": [
       "focalization-test",
       "domain:earth-science",
-      "spectrum:balanced"
+      "spectrum:balanced",
+      "abt:abt-explicit"
     ]
   },
   "narrative": "Water rises invisibly from the ocean surface, gathering as vapor. High above, it cools and condenses into cloud. The cloud thickens until it can hold no more, and rain falls into rivers that return to the sea.",

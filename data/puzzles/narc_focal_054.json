@@ -68,7 +68,8 @@
     "tags": [
       "focalization-test",
       "domain:education",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A teacher (blue=6) stands near a student who starts dim (red=1, single cell). The teacher passes knowledge: blue cells appear near the student, and the student's red presence grows each frame. By the end, the student has grown into a larger red shape while the teacher steps back, their work done.",

@@ -56,7 +56,8 @@
     "tags": [
       "focalization-test",
       "domain:reunion",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "Two separated parties (red=1 and blue=6) start on opposite sides of a wide grid, unable to see each other. A meeting point (yellow=4) glows in the center. Both move inward frame by frame, drawn toward the yellow beacon. They converge and meet at the yellow center, and the yellow expands around them in celebration.",

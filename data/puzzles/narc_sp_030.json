@@ -35,7 +35,8 @@
       "spectrum:ai-forte",
       "multi-step",
       "modular-arithmetic",
-      "rotation"
+      "rotation",
+      "abt:aaa"
     ]
   },
   "narrative": "Step 1: Compute (Grid 0 + Grid 1) mod 10 element-wise. Step 2: Rotate the result 90 degrees clockwise. The sum grid is 3x4; the rotated output is 4x3. Grid 2 (masked) is the final rotated result.",

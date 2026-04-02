@@ -21,7 +21,8 @@
       "spectrum:domain-dependent",
       "domain:biology",
       "cell-division",
-      "mitosis"
+      "mitosis",
+      "abt:aaa"
     ]
   },
   "narrative": "A cell's chromosome count changes through the cell cycle. Each grid shows a cell at a different phase. Values represent: row 0 = chromosome copies (diploid=2, tetraploid=4), row 1 = nuclear envelope (1=intact, 0=dissolved), row 2 = spindle fibers (0=absent, 1=forming, 2=attached, 3=pulling), row 3 = chromatid alignment (0=scattered, 1=condensing, 2=aligned at plate, 3=separating, 4=at poles). Interphase -> Prophase -> Metaphase -> Anaphase -> Telophase.",

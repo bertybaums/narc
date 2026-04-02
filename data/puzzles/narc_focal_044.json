@@ -101,7 +101,8 @@
     "tags": [
       "focalization-test",
       "domain:career",
-      "spectrum:human-forte"
+      "spectrum:human-forte",
+      "abt:aaa"
     ]
   },
   "narrative": "A candidate (blue=6) enters an interview room where the interviewer (red=1) sits behind a desk. Other candidates (grey=5) wait in a line outside. The interviewer asks questions; the candidate responds. One by one, grey candidates leave as they are rejected. Finally, blue either gets the position (moves to interviewer's side) or joins the rejected greys.",
