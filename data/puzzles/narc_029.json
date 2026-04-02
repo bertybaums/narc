@@ -81,7 +81,7 @@
           5
         ]
       ],
-      "label": "bare rock",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -107,7 +107,7 @@
           5
         ]
       ],
-      "label": "lichen colonizes",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -139,7 +139,7 @@
           5
         ]
       ],
-      "label": "moss and grass arrive",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     },
@@ -175,14 +175,14 @@
           9
         ]
       ],
-      "label": "the green carpet",
+      "label": "Grid 4",
       "position": 3,
       "rows": 4
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the shrub ring",
+      "label": "Grid 5",
       "masked": true,
       "position": 4,
       "rows": 5
@@ -231,7 +231,7 @@
           7
         ]
       ],
-      "label": "saplings emerge",
+      "label": "Grid 6",
       "position": 5,
       "rows": 5
     },
@@ -287,7 +287,7 @@
           2
         ]
       ],
-      "label": "the climax forest",
+      "label": "Grid 7",
       "position": 6,
       "rows": 6
     }

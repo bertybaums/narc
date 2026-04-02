@@ -95,7 +95,7 @@
           1
         ]
       ],
-      "label": "Caged",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -138,14 +138,14 @@
           1
         ]
       ],
-      "label": "Door opens",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Freedom",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5

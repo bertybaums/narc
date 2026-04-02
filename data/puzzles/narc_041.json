@@ -103,7 +103,7 @@
           5
         ]
       ],
-      "label": "the orderly machine",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -146,7 +146,7 @@
           5
         ]
       ],
-      "label": "the order begins",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -189,14 +189,14 @@
           5
         ]
       ],
-      "label": "the red spreads methodically",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the refusal",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5
@@ -240,7 +240,7 @@
           2
         ]
       ],
-      "label": "the lone grey cog",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     }

@@ -170,7 +170,7 @@
           0
         ]
       ],
-      "label": "web built",
+      "label": "Grid 1",
       "position": 0,
       "rows": 7
     },
@@ -248,7 +248,7 @@
           0
         ]
       ],
-      "label": "spider waits",
+      "label": "Grid 2",
       "position": 1,
       "rows": 7
     },
@@ -326,14 +326,14 @@
           0
         ]
       ],
-      "label": "fly approaches",
+      "label": "Grid 3",
       "position": 2,
       "rows": 7
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "fly caught",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 7
@@ -412,7 +412,7 @@
           0
         ]
       ],
-      "label": "spider approaches prey",
+      "label": "Grid 5",
       "position": 4,
       "rows": 7
     }

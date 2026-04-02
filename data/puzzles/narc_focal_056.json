@@ -85,7 +85,7 @@
           6
         ]
       ],
-      "label": "Two sides pressed against border",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -120,14 +120,14 @@
           6
         ]
       ],
-      "label": "Both sides pull back, neutral zone forms",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Neutral zone widens",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3
@@ -163,7 +163,7 @@
           6
         ]
       ],
-      "label": "Peace achieved, wide buffer zone",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

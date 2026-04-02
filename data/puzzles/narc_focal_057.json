@@ -90,7 +90,7 @@
           0
         ]
       ],
-      "label": "Orderly queue, jumper approaches",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -128,7 +128,7 @@
           0
         ]
       ],
-      "label": "Jumper moves toward queue",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -166,14 +166,14 @@
           0
         ]
       ],
-      "label": "Jumper cuts into line, displaces blues",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "Bouncer ejects jumper",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 3

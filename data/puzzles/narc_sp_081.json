@@ -95,14 +95,14 @@
           0
         ]
       ],
-      "label": "Punnett frame (row/col 0 = gametes)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Completed cross",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 5

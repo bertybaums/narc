@@ -80,7 +80,7 @@
           9
         ]
       ],
-      "label": "Self-Attention (Identity)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -112,14 +112,14 @@
           0
         ]
       ],
-      "label": "Attend-to-Next (Circular Shift)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Causal Uniform Attention",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 4
@@ -152,7 +152,7 @@
           2
         ]
       ],
-      "label": "Full Bidirectional Uniform",
+      "label": "Grid 4",
       "position": 3,
       "rows": 4
     }

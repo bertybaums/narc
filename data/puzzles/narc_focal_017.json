@@ -114,7 +114,7 @@
           0
         ]
       ],
-      "label": "Box sealed",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -162,7 +162,7 @@
           0
         ]
       ],
-      "label": "Pandora opens the lid",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -210,14 +210,14 @@
           0
         ]
       ],
-      "label": "Evils escape",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "Hope remains",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5

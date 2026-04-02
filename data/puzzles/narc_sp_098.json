@@ -50,7 +50,7 @@
           2
         ]
       ],
-      "label": "Triadic scheme: colors (row 0) and complements (row 1)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 2
     },
@@ -63,14 +63,14 @@
           1
         ]
       ],
-      "label": "New triadic set",
+      "label": "Grid 2",
       "position": 1,
       "rows": 1
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "Complements, left-analogous, right-analogous",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3

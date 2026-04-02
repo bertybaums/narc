@@ -95,7 +95,7 @@
           0
         ]
       ],
-      "label": "Input (diamond)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -118,14 +118,14 @@
           1
         ]
       ],
-      "label": "Kernel (sum)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Output",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5

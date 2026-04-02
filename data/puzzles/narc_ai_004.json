@@ -103,14 +103,14 @@
           0
         ]
       ],
-      "label": "Input Image",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Horizontal Sobel (sign)",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 5
@@ -154,7 +154,7 @@
           0
         ]
       ],
-      "label": "Vertical Sobel (sign)",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     }

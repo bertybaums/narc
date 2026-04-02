@@ -96,7 +96,7 @@
           0
         ]
       ],
-      "label": "Vault sealed",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -136,7 +136,7 @@
           0
         ]
       ],
-      "label": "Night one",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
@@ -176,14 +176,14 @@
           0
         ]
       ],
-      "label": "Night two",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "Night three",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 4
@@ -224,7 +224,7 @@
           0
         ]
       ],
-      "label": "Vault empty",
+      "label": "Grid 5",
       "position": 4,
       "rows": 4
     },
@@ -264,7 +264,7 @@
           0
         ]
       ],
-      "label": "Evidence",
+      "label": "Grid 6",
       "position": 5,
       "rows": 4
     }

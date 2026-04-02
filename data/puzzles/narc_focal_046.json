@@ -120,7 +120,7 @@
           0
         ]
       ],
-      "label": "Offender and victim apart",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -173,7 +173,7 @@
           0
         ]
       ],
-      "label": "Offender begins gesture",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -226,14 +226,14 @@
           0
         ]
       ],
-      "label": "Bridge extends across",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Reconciliation",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5

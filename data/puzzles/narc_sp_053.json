@@ -115,7 +115,7 @@
           0
         ]
       ],
-      "label": "Ice cube",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -168,14 +168,14 @@
           0
         ]
       ],
-      "label": "Melting",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Melted",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5

@@ -113,7 +113,7 @@
           0
         ]
       ],
-      "label": "Wolf approaches cottage",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -161,14 +161,14 @@
           0
         ]
       ],
-      "label": "Wolf at the door",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "Wolf replaces grandmother",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -217,7 +217,7 @@
           0
         ]
       ],
-      "label": "Red arrives at cottage",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     }

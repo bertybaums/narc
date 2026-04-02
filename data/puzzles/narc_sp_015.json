@@ -132,7 +132,7 @@
           5
         ]
       ],
-      "label": "Input values",
+      "label": "Grid 1",
       "position": 0,
       "rows": 9
     },
@@ -194,7 +194,7 @@
           1
         ]
       ],
-      "label": "Thresholded",
+      "label": "Grid 2",
       "position": 1,
       "rows": 9
     }

@@ -192,7 +192,7 @@
           0
         ]
       ],
-      "label": "Candidates line up outside",
+      "label": "Grid 1",
       "position": 0,
       "rows": 9
     },
@@ -281,7 +281,7 @@
           0
         ]
       ],
-      "label": "Blue enters interview room",
+      "label": "Grid 2",
       "position": 1,
       "rows": 9
     },
@@ -370,14 +370,14 @@
           0
         ]
       ],
-      "label": "Others rejected, leave",
+      "label": "Grid 3",
       "position": 2,
       "rows": 9
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Final decision",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 9

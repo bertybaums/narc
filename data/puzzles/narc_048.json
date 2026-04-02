@@ -86,7 +86,7 @@
           1
         ]
       ],
-      "label": "source at the left edge",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -121,7 +121,7 @@
           1
         ]
       ],
-      "label": "moving right \u2014 red trail forms",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -156,14 +156,14 @@
           1
         ]
       ],
-      "label": "red stretches behind",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "the center \u2014 perfect balance",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 3
@@ -199,7 +199,7 @@
           1
         ]
       ],
-      "label": "approaching the far wall",
+      "label": "Grid 5",
       "position": 4,
       "rows": 3
     },
@@ -234,7 +234,7 @@
           4
         ]
       ],
-      "label": "source at the right edge",
+      "label": "Grid 6",
       "position": 5,
       "rows": 3
     }

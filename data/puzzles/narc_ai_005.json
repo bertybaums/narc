@@ -64,7 +64,7 @@
           9
         ]
       ],
-      "label": "Layer 0: Input Embedding",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -87,7 +87,7 @@
           1
         ]
       ],
-      "label": "Layer 1: +2 Bias",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -110,14 +110,14 @@
           3
         ]
       ],
-      "label": "Layer 2: +2 Bias",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "Layer 3: Skip Connection",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 3
@@ -141,7 +141,7 @@
           4
         ]
       ],
-      "label": "Layer 4: +2 Bias",
+      "label": "Grid 5",
       "position": 4,
       "rows": 3
     }

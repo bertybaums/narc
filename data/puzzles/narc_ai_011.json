@@ -80,14 +80,14 @@
           1
         ]
       ],
-      "label": "Full Activations",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Dropout Applied (training)",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 4
@@ -120,7 +120,7 @@
           0
         ]
       ],
-      "label": "Inference Mode (scaled by 1-p=0.5)",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     }

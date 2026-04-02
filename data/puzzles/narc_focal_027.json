@@ -90,7 +90,7 @@
           9
         ]
       ],
-      "label": "plates apart",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -128,14 +128,14 @@
           9
         ]
       ],
-      "label": "plates approach",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "collision begins",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3
@@ -174,7 +174,7 @@
           9
         ]
       ],
-      "label": "mountains rise",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

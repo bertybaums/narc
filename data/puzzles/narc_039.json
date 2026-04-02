@@ -57,7 +57,8 @@
       "clue:causation",
       "domain:philosophy",
       "domain:social-science",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "draft:consecutive-duplicate"
     ]
   },
   "narrative": "The gaze need not be present to be felt. Those who have been watched long enough watch themselves. The tower went dark, but the cells stayed lit \u2014 each prisoner their own warden now.",

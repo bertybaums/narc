@@ -116,7 +116,7 @@
           0
         ]
       ],
-      "label": "Families divided",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
@@ -166,14 +166,14 @@
           0
         ]
       ],
-      "label": "They approach",
+      "label": "Grid 2",
       "position": 1,
       "rows": 6
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Meeting at the wall",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 6

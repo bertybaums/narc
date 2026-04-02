@@ -45,14 +45,14 @@
           2
         ]
       ],
-      "label": "The room",
+      "label": "Grid 1",
       "position": 0,
       "rows": 1
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "Detective points",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 1

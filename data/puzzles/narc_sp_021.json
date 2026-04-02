@@ -68,7 +68,7 @@
           5
         ]
       ],
-      "label": "Input (4x6)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -88,7 +88,7 @@
           5
         ]
       ],
-      "label": "Row means (4x1)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     }

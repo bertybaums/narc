@@ -92,7 +92,7 @@
           4
         ]
       ],
-      "label": "Crowd gathers",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -130,7 +130,7 @@
           4
         ]
       ],
-      "label": "Emperor enters parade",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -168,14 +168,14 @@
           4
         ]
       ],
-      "label": "Child notices",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Child speaks truth",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5
@@ -214,7 +214,7 @@
           1
         ]
       ],
-      "label": "Truth spreads further",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     }

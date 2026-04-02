@@ -67,7 +67,7 @@
           6
         ]
       ],
-      "label": "Deceased surrounded by wealth, heirs wait",
+      "label": "Grid 1",
       "position": 0,
       "rows": 2
     },
@@ -93,14 +93,14 @@
           6
         ]
       ],
-      "label": "Deceased fades",
+      "label": "Grid 2",
       "position": 1,
       "rows": 2
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Wealth begins to split",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 2
@@ -127,7 +127,7 @@
           6
         ]
       ],
-      "label": "Uneven distribution complete",
+      "label": "Grid 4",
       "position": 3,
       "rows": 2
     }

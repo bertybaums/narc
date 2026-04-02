@@ -47,7 +47,8 @@
       "spectrum:human-forte",
       "cultural-narrative",
       "surprise-party",
-      "lights"
+      "lights",
+      "draft:consecutive-duplicate"
     ]
   },
   "narrative": "The room is dark. Everyone is hiding. The guest of honor turns the doorknob... SURPRISE! What does the room look like now?",
@@ -89,7 +90,7 @@
           0
         ]
       ],
-      "label": "Lights off",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -129,7 +130,7 @@
           0
         ]
       ],
-      "label": "Still waiting...",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
@@ -169,14 +170,14 @@
           1
         ]
       ],
-      "label": "Door opens a crack",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "SURPRISE!",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 4

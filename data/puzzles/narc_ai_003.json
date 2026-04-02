@@ -83,7 +83,7 @@
           3
         ]
       ],
-      "label": "\u03c4 = 10 (Near Uniform)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -115,14 +115,14 @@
           5
         ]
       ],
-      "label": "\u03c4 = 1 (Moderate)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "\u03c4 \u2192 0 (Argmax)",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 4
@@ -155,7 +155,7 @@
           9
         ]
       ],
-      "label": "\u03c4 = 0 (Hard One-Hot)",
+      "label": "Grid 4",
       "position": 3,
       "rows": 4
     }

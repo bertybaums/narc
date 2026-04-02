@@ -81,7 +81,7 @@
           0
         ]
       ],
-      "label": "Input A",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -113,14 +113,14 @@
           9
         ]
       ],
-      "label": "Input B",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Output",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 4

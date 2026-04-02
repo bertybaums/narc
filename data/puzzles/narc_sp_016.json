@@ -88,7 +88,7 @@
           5
         ]
       ],
-      "label": "Unsorted",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -128,7 +128,7 @@
           7
         ]
       ],
-      "label": "Row-sorted",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     }

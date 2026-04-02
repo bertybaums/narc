@@ -81,7 +81,7 @@
           0
         ]
       ],
-      "label": "Foundation",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -114,7 +114,7 @@
           0
         ]
       ],
-      "label": "Two floors",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -147,7 +147,7 @@
           0
         ]
       ],
-      "label": "Three floors",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
@@ -180,14 +180,14 @@
           0
         ]
       ],
-      "label": "Four floors",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "Crowned peak",
+      "label": "Grid 5",
       "masked": true,
       "position": 4,
       "rows": 5
@@ -221,7 +221,7 @@
           0
         ]
       ],
-      "label": "First storm",
+      "label": "Grid 6",
       "position": 5,
       "rows": 5
     },
@@ -254,7 +254,7 @@
           0
         ]
       ],
-      "label": "Second storm",
+      "label": "Grid 7",
       "position": 6,
       "rows": 5
     }

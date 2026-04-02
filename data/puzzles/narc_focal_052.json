@@ -84,7 +84,7 @@
           6
         ]
       ],
-      "label": "Two sides with undecided middle",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -119,14 +119,14 @@
           6
         ]
       ],
-      "label": "Both sides convert edge voters",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Final campaigning push",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3
@@ -162,7 +162,7 @@
           6
         ]
       ],
-      "label": "Blue wins the referendum",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

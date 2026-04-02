@@ -102,14 +102,14 @@
           0
         ]
       ],
-      "label": "the sealed box",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the opening",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 5
@@ -153,7 +153,7 @@
           3
         ]
       ],
-      "label": "the scatter",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
@@ -196,7 +196,7 @@
           3
         ]
       ],
-      "label": "hope remains",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     }

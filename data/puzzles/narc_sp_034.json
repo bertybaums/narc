@@ -97,14 +97,14 @@
           0
         ]
       ],
-      "label": "Objects on shelf",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "After the fall",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 6

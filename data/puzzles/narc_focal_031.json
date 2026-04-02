@@ -184,7 +184,7 @@
           7
         ]
       ],
-      "label": "summer home",
+      "label": "Grid 1",
       "position": 0,
       "rows": 7
     },
@@ -269,14 +269,14 @@
           7
         ]
       ],
-      "label": "flock departs",
+      "label": "Grid 2",
       "position": 1,
       "rows": 7
     },
     {
       "cols": 9,
       "grid": null,
-      "label": "mid-flight",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 7
@@ -362,7 +362,7 @@
           7
         ]
       ],
-      "label": "flock arrives",
+      "label": "Grid 4",
       "position": 3,
       "rows": 7
     },
@@ -447,7 +447,7 @@
           7
         ]
       ],
-      "label": "winter home",
+      "label": "Grid 5",
       "position": 4,
       "rows": 7
     }

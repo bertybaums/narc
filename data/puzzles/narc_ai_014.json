@@ -69,14 +69,14 @@
           3
         ]
       ],
-      "label": "Raw Activations",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "After Batch Normalization",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 3
@@ -103,7 +103,7 @@
           4
         ]
       ],
-      "label": "After Affine Transform (shift per column: +2, 0, -1, +1)",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     },
@@ -129,7 +129,7 @@
           0
         ]
       ],
-      "label": "After ReLU (values < 5 clipped to 0)",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

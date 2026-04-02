@@ -98,7 +98,7 @@
           5
         ]
       ],
-      "label": "Unsorted",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -142,7 +142,7 @@
           5
         ]
       ],
-      "label": "Col 0 sorted",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
@@ -186,14 +186,14 @@
           5
         ]
       ],
-      "label": "Col 1 sorted",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Col 2 sorted",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 4

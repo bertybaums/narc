@@ -80,7 +80,7 @@
           7
         ]
       ],
-      "label": "Seed",
+      "label": "Grid 1",
       "position": 0,
       "rows": 2
     },
@@ -112,14 +112,14 @@
           1
         ]
       ],
-      "label": "First border",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "Second border",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 6

@@ -60,7 +60,7 @@
           9
         ]
       ],
-      "label": "Input (8x2)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -72,7 +72,7 @@
           4
         ]
       ],
-      "label": "Column sums (1x2)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 1
     }

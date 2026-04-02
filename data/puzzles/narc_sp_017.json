@@ -78,7 +78,7 @@
           4
         ]
       ],
-      "label": "Unsorted",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -113,7 +113,7 @@
           2
         ]
       ],
-      "label": "Column-sorted descending",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     }

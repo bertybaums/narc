@@ -95,7 +95,7 @@
           6
         ]
       ],
-      "label": "Originator holds truth",
+      "label": "Grid 1",
       "position": 0,
       "rows": 2
     },
@@ -135,7 +135,7 @@
           6
         ]
       ],
-      "label": "Spreader carries message, distortion begins",
+      "label": "Grid 2",
       "position": 1,
       "rows": 2
     },
@@ -175,14 +175,14 @@
           6
         ]
       ],
-      "label": "Message heavily distorted",
+      "label": "Grid 3",
       "position": 2,
       "rows": 2
     },
     {
       "cols": 14,
       "grid": null,
-      "label": "Recipient gets the garbled message",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 2

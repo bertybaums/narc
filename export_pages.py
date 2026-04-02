@@ -70,9 +70,11 @@ def main(output_dir):
             model_results[m] = {"status": status, "results": results}
         pdata["variants"] = variants
         pdata["model_results"] = model_results
-        # Flag as draft if unsolvable on ALL tested models (both condition)
+        # Flag as draft if: unsolvable on ALL models, OR has a draft: tag
         statuses = [model_results[m]["status"] for m in MODELS if model_results[m]["results"]]
-        pdata["is_draft"] = all(s == "unsolvable" for s in statuses) if statuses else True
+        has_draft_tag = any(t.startswith("draft:") for t in (pdata.get("tags") or "").split(","))
+        unsolvable = all(s == "unsolvable" for s in statuses) if statuses else True
+        pdata["is_draft"] = unsolvable or has_draft_tag
         all_puzzles.append(pdata)
 
     conn.close()

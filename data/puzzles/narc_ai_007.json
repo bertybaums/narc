@@ -83,7 +83,7 @@
           8
         ]
       ],
-      "label": "Layer 5 (Output): Full Gradient",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -116,7 +116,7 @@
           6
         ]
       ],
-      "label": "Layer 4: Gradient Attenuated",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -149,14 +149,14 @@
           4
         ]
       ],
-      "label": "Layer 3: Further Attenuated",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "Layer 2: ReLU Gate",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5
@@ -190,7 +190,7 @@
           2
         ]
       ],
-      "label": "Layer 1: Post-ReLU Gradient",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     },
@@ -223,7 +223,7 @@
           1
         ]
       ],
-      "label": "Layer 0 (Input): Near-Vanished",
+      "label": "Grid 6",
       "position": 5,
       "rows": 5
     }

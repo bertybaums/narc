@@ -97,7 +97,7 @@
           9
         ]
       ],
-      "label": "Horizontal gradient (left to right)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -135,14 +135,14 @@
           9
         ]
       ],
-      "label": "Vertical gradient (top to bottom)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 6
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Diagonal gradient (top-left to bottom-right)",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5

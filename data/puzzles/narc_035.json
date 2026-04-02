@@ -86,14 +86,14 @@
           1
         ]
       ],
-      "label": "the approaching trolley",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "the lever is pulled",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 3
@@ -129,7 +129,7 @@
           0
         ]
       ],
-      "label": "the aftermath",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     }

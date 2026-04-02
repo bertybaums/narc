@@ -110,7 +110,7 @@
           0
         ]
       ],
-      "label": "the first flutter",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -153,14 +153,14 @@
           0
         ]
       ],
-      "label": "the ripple begins",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "the spiral widens",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 7
@@ -268,7 +268,7 @@
           0
         ]
       ],
-      "label": "the full storm",
+      "label": "Grid 4",
       "position": 3,
       "rows": 9
     }

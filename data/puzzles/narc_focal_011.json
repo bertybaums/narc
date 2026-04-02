@@ -145,7 +145,7 @@
           0
         ]
       ],
-      "label": "Jack at the base",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -209,14 +209,14 @@
           0
         ]
       ],
-      "label": "Jack climbing",
+      "label": "Grid 2",
       "position": 1,
       "rows": 8
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Jack grabs egg, giant wakes",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 8
@@ -281,7 +281,7 @@
           0
         ]
       ],
-      "label": "Jack flees down",
+      "label": "Grid 4",
       "position": 3,
       "rows": 8
     }

@@ -76,7 +76,7 @@
           0
         ]
       ],
-      "label": "Boy approaches nettles",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -105,14 +105,14 @@
           0
         ]
       ],
-      "label": "Timid touch \u2014 sting!",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Bold grasp",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3

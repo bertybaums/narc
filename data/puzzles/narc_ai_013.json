@@ -72,7 +72,7 @@
           7
         ]
       ],
-      "label": "Input",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -95,14 +95,14 @@
           9
         ]
       ],
-      "label": "Encoder Output",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "Bottleneck (latent vector)",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 1
@@ -126,7 +126,7 @@
           8
         ]
       ],
-      "label": "Decoder Output",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     },
@@ -169,7 +169,7 @@
           6
         ]
       ],
-      "label": "Reconstruction",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     }

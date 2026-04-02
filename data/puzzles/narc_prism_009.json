@@ -5,7 +5,7 @@
   "sequence": [
     {
       "position": 0,
-      "label": "Before the performance",
+      "label": "Grid 1",
       "rows": 5,
       "cols": 6,
       "grid": [
@@ -53,7 +53,7 @@
     },
     {
       "position": 1,
-      "label": "Folk melody",
+      "label": "Grid 2",
       "rows": 5,
       "cols": 6,
       "grid": [
@@ -101,7 +101,7 @@
     },
     {
       "position": 2,
-      "label": "Jazz improvisation",
+      "label": "Grid 3",
       "rows": 5,
       "cols": 6,
       "grid": [
@@ -149,7 +149,7 @@
     },
     {
       "position": 3,
-      "label": "Return to folk theme",
+      "label": "Grid 4",
       "rows": 5,
       "cols": 6,
       "grid": null,
@@ -157,7 +157,7 @@
     },
     {
       "position": 4,
-      "label": "The finale",
+      "label": "Grid 5",
       "rows": 5,
       "cols": 6,
       "grid": [

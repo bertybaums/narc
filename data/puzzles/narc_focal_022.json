@@ -159,7 +159,7 @@
           5
         ]
       ],
-      "label": "before dawn",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -231,14 +231,14 @@
           5
         ]
       ],
-      "label": "sunlight arrives",
+      "label": "Grid 2",
       "position": 1,
       "rows": 8
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "photosynthesis active",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 8
@@ -311,7 +311,7 @@
           8
         ]
       ],
-      "label": "oxygen released",
+      "label": "Grid 4",
       "position": 3,
       "rows": 8
     }

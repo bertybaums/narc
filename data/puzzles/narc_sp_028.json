@@ -63,7 +63,7 @@
           9
         ]
       ],
-      "label": "Input (4x3)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -89,7 +89,7 @@
           9
         ]
       ],
-      "label": "Transposed then row-sorted (3x4)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     }

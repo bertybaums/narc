@@ -55,7 +55,7 @@
           0
         ]
       ],
-      "label": "Green - Go",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -78,14 +78,14 @@
           0
         ]
       ],
-      "label": "Yellow - Caution",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "Red - ?",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3

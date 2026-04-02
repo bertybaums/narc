@@ -70,7 +70,7 @@
           0
         ]
       ],
-      "label": "the craft",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -102,7 +102,7 @@
           0
         ]
       ],
-      "label": "ascent",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
@@ -145,14 +145,14 @@
           0
         ]
       ],
-      "label": "too close",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "the melting",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 4
@@ -176,7 +176,7 @@
           1
         ]
       ],
-      "label": "the sea",
+      "label": "Grid 5",
       "position": 4,
       "rows": 3
     }

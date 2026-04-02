@@ -61,7 +61,7 @@
           1
         ]
       ],
-      "label": "Cold world",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -87,14 +87,14 @@
           1
         ]
       ],
-      "label": "She appears",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "The smile",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3

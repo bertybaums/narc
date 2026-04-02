@@ -156,7 +156,7 @@
           4
         ]
       ],
-      "label": "healthy host",
+      "label": "Grid 1",
       "position": 0,
       "rows": 9
     },
@@ -227,14 +227,14 @@
           4
         ]
       ],
-      "label": "parasite enters",
+      "label": "Grid 2",
       "position": 1,
       "rows": 9
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "parasite hides deeper",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 9
@@ -306,7 +306,7 @@
           4
         ]
       ],
-      "label": "immune system searches",
+      "label": "Grid 4",
       "position": 3,
       "rows": 9
     }

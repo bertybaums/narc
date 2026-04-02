@@ -105,7 +105,7 @@
           0
         ]
       ],
-      "label": "Scorpion asks for a ride",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -149,14 +149,14 @@
           0
         ]
       ],
-      "label": "Crossing begins",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "The sting",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 4
@@ -201,7 +201,7 @@
           0
         ]
       ],
-      "label": "Both sink",
+      "label": "Grid 4",
       "position": 3,
       "rows": 4
     }

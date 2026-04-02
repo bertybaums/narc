@@ -114,7 +114,7 @@
           0
         ]
       ],
-      "label": "Detective and suspect face off",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
@@ -164,7 +164,7 @@
           0
         ]
       ],
-      "label": "Suspect talks, truth signals appear",
+      "label": "Grid 2",
       "position": 1,
       "rows": 6
     },
@@ -214,14 +214,14 @@
           0
         ]
       ],
-      "label": "Lies detected, truth signals vanish",
+      "label": "Grid 3",
       "position": 2,
       "rows": 6
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Detective confronts the liar",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 6

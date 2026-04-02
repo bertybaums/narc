@@ -127,7 +127,7 @@
           0
         ]
       ],
-      "label": "Teacher established, student small",
+      "label": "Grid 1",
       "position": 0,
       "rows": 7
     },
@@ -184,14 +184,14 @@
           0
         ]
       ],
-      "label": "Student begins to grow",
+      "label": "Grid 2",
       "position": 1,
       "rows": 7
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Knowledge transfer continues",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 7
@@ -249,7 +249,7 @@
           0
         ]
       ],
-      "label": "Student fully grown, teacher steps back",
+      "label": "Grid 4",
       "position": 3,
       "rows": 7
     }

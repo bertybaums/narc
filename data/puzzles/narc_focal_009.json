@@ -89,7 +89,7 @@
           0
         ]
       ],
-      "label": "Bears at home",
+      "label": "Grid 1",
       "position": 0,
       "rows": 4
     },
@@ -125,7 +125,7 @@
           9
         ]
       ],
-      "label": "Bears go for a walk",
+      "label": "Grid 2",
       "position": 1,
       "rows": 4
     },
@@ -161,14 +161,14 @@
           0
         ]
       ],
-      "label": "Goldilocks disrupts",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Bears return",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 4

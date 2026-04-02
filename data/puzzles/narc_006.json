@@ -139,7 +139,7 @@
           3
         ]
       ],
-      "label": "Cry 1",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -182,14 +182,14 @@
           3
         ]
       ],
-      "label": "Response 1",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "Cry 2",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -197,7 +197,7 @@
     {
       "cols": 5,
       "grid": null,
-      "label": "Response 2",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5
@@ -241,7 +241,7 @@
           3
         ]
       ],
-      "label": "Real wolf",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     },
@@ -284,7 +284,7 @@
           3
         ]
       ],
-      "label": "No help",
+      "label": "Grid 6",
       "position": 5,
       "rows": 5
     }

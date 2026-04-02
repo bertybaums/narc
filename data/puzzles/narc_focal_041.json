@@ -90,7 +90,7 @@
           0
         ]
       ],
-      "label": "Host sets up decorations",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -128,7 +128,7 @@
           3
         ]
       ],
-      "label": "Guests sneak in and hide",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -166,14 +166,14 @@
           3
         ]
       ],
-      "label": "Guest of honor arrives at door",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "Surprise! Everyone revealed",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 3

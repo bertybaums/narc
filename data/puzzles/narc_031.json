@@ -101,7 +101,7 @@
           0
         ]
       ],
-      "label": "the crystal lattice",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -144,14 +144,14 @@
           0
         ]
       ],
-      "label": "edges soften",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the melting point",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -195,7 +195,7 @@
           1
         ]
       ],
-      "label": "mostly liquid",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     },
@@ -238,7 +238,7 @@
           1
         ]
       ],
-      "label": "all liquid",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     }

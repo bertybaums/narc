@@ -94,7 +94,7 @@
           0
         ]
       ],
-      "label": "the parent cell",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -126,14 +126,14 @@
           0
         ]
       ],
-      "label": "the elongation",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "the daughters",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 6
@@ -190,7 +190,7 @@
           0
         ]
       ],
-      "label": "moving apart",
+      "label": "Grid 4",
       "position": 3,
       "rows": 6
     }

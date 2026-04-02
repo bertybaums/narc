@@ -81,7 +81,7 @@
           7
         ]
       ],
-      "label": "Theme Statement",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -113,7 +113,7 @@
           7
         ]
       ],
-      "label": "First Variation",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -145,14 +145,14 @@
           7
         ]
       ],
-      "label": "Second Variation",
+      "label": "Grid 3",
       "position": 2,
       "rows": 3
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "The Modulation",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 3
@@ -185,7 +185,7 @@
           7
         ]
       ],
-      "label": "Return",
+      "label": "Grid 5",
       "position": 4,
       "rows": 3
     }

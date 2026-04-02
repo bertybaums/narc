@@ -100,7 +100,7 @@
           8
         ]
       ],
-      "label": "Three houses built",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -141,14 +141,14 @@
           8
         ]
       ],
-      "label": "Wolf arrives at straw house",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 9,
       "grid": null,
-      "label": "Wolf blows down straw house",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3
@@ -190,7 +190,7 @@
           8
         ]
       ],
-      "label": "Wolf moves to stick house",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

@@ -153,14 +153,14 @@
           0
         ]
       ],
-      "label": "10x6 canvas: golden cuts at col 6, col 4; row 4, row 2. Focal at (3,3) and (3,6)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "5x8 canvas: golden cuts at col 3, col 2; row 5, row 3",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 8

@@ -142,7 +142,7 @@
           0
         ]
       ],
-      "label": "open reef",
+      "label": "Grid 1",
       "position": 0,
       "rows": 7
     },
@@ -206,14 +206,14 @@
           0
         ]
       ],
-      "label": "predator approaches",
+      "label": "Grid 2",
       "position": 1,
       "rows": 7
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "clownfish hides",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 7
@@ -278,7 +278,7 @@
           0
         ]
       ],
-      "label": "predator retreats",
+      "label": "Grid 4",
       "position": 3,
       "rows": 7
     }

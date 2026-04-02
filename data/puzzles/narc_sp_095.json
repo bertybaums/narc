@@ -75,14 +75,14 @@
           0
         ]
       ],
-      "label": "PUSH 3, PUSH 5, ADD -> [8]",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "DUP, then MUL",
+      "label": "Grid 2",
       "masked": true,
       "position": 1,
       "rows": 2

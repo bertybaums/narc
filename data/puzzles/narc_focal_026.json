@@ -207,7 +207,7 @@
           4
         ]
       ],
-      "label": "ocean surface",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -303,14 +303,14 @@
           4
         ]
       ],
-      "label": "evaporation",
+      "label": "Grid 2",
       "position": 1,
       "rows": 8
     },
     {
       "cols": 9,
       "grid": null,
-      "label": "cloud forms",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 8
@@ -407,7 +407,7 @@
           4
         ]
       ],
-      "label": "rain falls",
+      "label": "Grid 4",
       "position": 3,
       "rows": 8
     },
@@ -503,7 +503,7 @@
           4
         ]
       ],
-      "label": "river to sea",
+      "label": "Grid 5",
       "position": 4,
       "rows": 8
     }

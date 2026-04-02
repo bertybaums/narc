@@ -102,7 +102,7 @@
           3
         ]
       ],
-      "label": "abundance",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -145,7 +145,7 @@
           3
         ]
       ],
-      "label": "the hunters multiply",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -188,7 +188,7 @@
           0
         ]
       ],
-      "label": "peak predator",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
@@ -231,14 +231,14 @@
           3
         ]
       ],
-      "label": "the famine",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the return from the margins",
+      "label": "Grid 5",
       "masked": true,
       "position": 4,
       "rows": 5
@@ -282,7 +282,7 @@
           3
         ]
       ],
-      "label": "the rebound",
+      "label": "Grid 6",
       "position": 5,
       "rows": 5
     },
@@ -325,7 +325,7 @@
           3
         ]
       ],
-      "label": "the cycle renews",
+      "label": "Grid 7",
       "position": 6,
       "rows": 5
     },
@@ -368,7 +368,7 @@
           3
         ]
       ],
-      "label": "oscillation",
+      "label": "Grid 8",
       "position": 7,
       "rows": 5
     }

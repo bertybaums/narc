@@ -97,7 +97,7 @@
           0
         ]
       ],
-      "label": "shadows on the wall",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -126,14 +126,14 @@
           0
         ]
       ],
-      "label": "turning around",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "the world outside",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -163,7 +163,7 @@
           0
         ]
       ],
-      "label": "return to darkness",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

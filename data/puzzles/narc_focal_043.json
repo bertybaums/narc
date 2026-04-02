@@ -90,7 +90,7 @@
           6
         ]
       ],
-      "label": "Teacher hands out exam",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -128,14 +128,14 @@
           6
         ]
       ],
-      "label": "Student fills in answers",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Teacher reveals correct answers",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -174,7 +174,7 @@
           3
         ]
       ],
-      "label": "Graded: green=correct, red=wrong",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     }

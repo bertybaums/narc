@@ -90,7 +90,7 @@
           6
         ]
       ],
-      "label": "Traveler arrives, locals have customs",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -128,7 +128,7 @@
           6
         ]
       ],
-      "label": "Traveler tries to join, misplaced",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -166,14 +166,14 @@
           6
         ]
       ],
-      "label": "Traveler moves into custom position",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Full adaptation",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 5

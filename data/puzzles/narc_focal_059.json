@@ -130,7 +130,7 @@
           3
         ]
       ],
-      "label": "Threat approaches, hero guards community",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -188,14 +188,14 @@
           3
         ]
       ],
-      "label": "Hero moves toward threat",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "Hero confronts threat",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -254,7 +254,7 @@
           3
         ]
       ],
-      "label": "Both vanish, community safe",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     }

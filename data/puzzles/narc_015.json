@@ -102,7 +102,7 @@
           5
         ]
       ],
-      "label": "the base",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -145,7 +145,7 @@
           0
         ]
       ],
-      "label": "the climb",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
@@ -188,7 +188,7 @@
           0
         ]
       ],
-      "label": "near the top",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
@@ -231,14 +231,14 @@
           0
         ]
       ],
-      "label": "the peak",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the return",
+      "label": "Grid 5",
       "masked": true,
       "position": 4,
       "rows": 5
@@ -282,7 +282,7 @@
           0
         ]
       ],
-      "label": "once more",
+      "label": "Grid 6",
       "position": 5,
       "rows": 5
     }

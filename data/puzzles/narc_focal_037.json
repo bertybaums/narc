@@ -158,7 +158,7 @@
           3
         ]
       ],
-      "label": "old forest",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -230,14 +230,14 @@
           3
         ]
       ],
-      "label": "fire arrives",
+      "label": "Grid 2",
       "position": 1,
       "rows": 8
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "fire complete",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 8
@@ -310,7 +310,7 @@
           3
         ]
       ],
-      "label": "new growth emerges",
+      "label": "Grid 4",
       "position": 3,
       "rows": 8
     }

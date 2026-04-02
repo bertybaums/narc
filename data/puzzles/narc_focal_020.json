@@ -87,7 +87,7 @@
           0
         ]
       ],
-      "label": "Cinderella left behind",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -122,14 +122,14 @@
           0
         ]
       ],
-      "label": "Fairy godmother appears",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 7,
       "grid": null,
-      "label": "Transformation",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 3
@@ -165,7 +165,7 @@
           0
         ]
       ],
-      "label": "Cinderella arrives at ball",
+      "label": "Grid 4",
       "position": 3,
       "rows": 3
     }

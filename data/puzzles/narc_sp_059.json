@@ -121,7 +121,7 @@
           0
         ]
       ],
-      "label": "Stage open",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
@@ -177,7 +177,7 @@
           0
         ]
       ],
-      "label": "Curtain descending",
+      "label": "Grid 2",
       "position": 1,
       "rows": 6
     },
@@ -233,14 +233,14 @@
           0
         ]
       ],
-      "label": "Almost down",
+      "label": "Grid 3",
       "position": 2,
       "rows": 6
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "Curtain closed",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 6

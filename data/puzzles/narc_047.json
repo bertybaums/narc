@@ -110,7 +110,7 @@
           1
         ]
       ],
-      "label": "surface detail \u2014 borders visible",
+      "label": "Grid 1",
       "position": 0,
       "rows": 7
     },
@@ -166,7 +166,7 @@
           1
         ]
       ],
-      "label": "pulling back \u2014 borders fading",
+      "label": "Grid 2",
       "position": 1,
       "rows": 6
     },
@@ -209,7 +209,7 @@
           1
         ]
       ],
-      "label": "continents visible \u2014 borders thin",
+      "label": "Grid 3",
       "position": 2,
       "rows": 5
     },
@@ -241,14 +241,14 @@
           1
         ]
       ],
-      "label": "whole planet \u2014 borders still drawn",
+      "label": "Grid 4",
       "position": 3,
       "rows": 4
     },
     {
       "cols": 3,
       "grid": null,
-      "label": "the borders dissolve",
+      "label": "Grid 5",
       "masked": true,
       "position": 4,
       "rows": 3
@@ -265,7 +265,7 @@
           1
         ]
       ],
-      "label": "a tiny world",
+      "label": "Grid 6",
       "position": 5,
       "rows": 2
     },
@@ -276,7 +276,7 @@
           1
         ]
       ],
-      "label": "pale blue dot",
+      "label": "Grid 7",
       "position": 6,
       "rows": 1
     }

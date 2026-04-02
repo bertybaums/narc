@@ -102,7 +102,7 @@
           0
         ]
       ],
-      "label": "a path begins",
+      "label": "Grid 1",
       "position": 0,
       "rows": 5
     },
@@ -145,14 +145,14 @@
           0
         ]
       ],
-      "label": "the fork",
+      "label": "Grid 2",
       "position": 1,
       "rows": 5
     },
     {
       "cols": 5,
       "grid": null,
-      "label": "the choice",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 5
@@ -196,7 +196,7 @@
           0
         ]
       ],
-      "label": "onward",
+      "label": "Grid 4",
       "position": 3,
       "rows": 5
     },
@@ -239,7 +239,7 @@
           0
         ]
       ],
-      "label": "the other fades",
+      "label": "Grid 5",
       "position": 4,
       "rows": 5
     }

@@ -67,7 +67,8 @@
       "clue:exception",
       "domain:biology",
       "domain:ecology",
-      "spectrum:human-edge"
+      "spectrum:human-edge",
+      "draft:consecutive-duplicate"
     ]
   },
   "narrative": "The one that roots deepest survives when the warmth drives the color from the rest. While its neighbors pale and surrender their tenants, the deep-rooted holdfast keeps its hue in a whitening world.",

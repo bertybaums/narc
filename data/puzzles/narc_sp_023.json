@@ -63,7 +63,7 @@
           4
         ]
       ],
-      "label": "Input (3x7)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -83,7 +83,7 @@
           0
         ]
       ],
-      "label": "Max and Min (3x2)",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     }

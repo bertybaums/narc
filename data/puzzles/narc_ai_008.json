@@ -51,7 +51,7 @@
           4
         ]
       ],
-      "label": "Character-Level Tokens",
+      "label": "Grid 1",
       "position": 0,
       "rows": 1
     },
@@ -67,14 +67,14 @@
           4
         ]
       ],
-      "label": "After BPE Merge 1",
+      "label": "Grid 2",
       "position": 1,
       "rows": 1
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "After BPE Merge 2",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 1
@@ -87,7 +87,7 @@
           9
         ]
       ],
-      "label": "After BPE Merge 3",
+      "label": "Grid 4",
       "position": 3,
       "rows": 1
     }

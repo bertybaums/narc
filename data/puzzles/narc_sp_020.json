@@ -72,7 +72,7 @@
           0
         ]
       ],
-      "label": "Input",
+      "label": "Grid 1",
       "position": 0,
       "rows": 2
     },
@@ -104,7 +104,7 @@
           4
         ]
       ],
-      "label": "After double reversal",
+      "label": "Grid 2",
       "position": 1,
       "rows": 2
     }

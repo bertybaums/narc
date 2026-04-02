@@ -97,7 +97,7 @@
           0
         ]
       ],
-      "label": "Empty",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
@@ -141,7 +141,7 @@
           1
         ]
       ],
-      "label": "A little",
+      "label": "Grid 2",
       "position": 1,
       "rows": 6
     },
@@ -185,14 +185,14 @@
           1
         ]
       ],
-      "label": "More",
+      "label": "Grid 3",
       "position": 2,
       "rows": 6
     },
     {
       "cols": 4,
       "grid": null,
-      "label": "Keep pouring",
+      "label": "Grid 4",
       "masked": true,
       "position": 3,
       "rows": 6

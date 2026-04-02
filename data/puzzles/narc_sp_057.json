@@ -41,7 +41,7 @@
           0
         ]
       ],
-      "label": "Close",
+      "label": "Grid 1",
       "position": 0,
       "rows": 1
     },
@@ -57,14 +57,14 @@
           0
         ]
       ],
-      "label": "Drifting",
+      "label": "Grid 2",
       "position": 1,
       "rows": 1
     },
     {
       "cols": 6,
       "grid": null,
-      "label": "Apart",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 1

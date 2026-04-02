@@ -88,7 +88,7 @@
           9
         ]
       ],
-      "label": "Input",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -128,7 +128,7 @@
           3
         ]
       ],
-      "label": "Cumulative sum",
+      "label": "Grid 2",
       "position": 1,
       "rows": 8
     }

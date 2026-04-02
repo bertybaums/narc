@@ -88,7 +88,7 @@
           0
         ]
       ],
-      "label": "Zoom Level 1 (closest)",
+      "label": "Grid 1",
       "position": 0,
       "rows": 6
     },
@@ -111,14 +111,14 @@
           7
         ]
       ],
-      "label": "Zoom Level 2",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
     {
       "cols": 2,
       "grid": null,
-      "label": "Zoom Level 3",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 2
@@ -130,7 +130,7 @@
           9
         ]
       ],
-      "label": "Zoom Level 4 (the pale blue dot)",
+      "label": "Grid 4",
       "position": 3,
       "rows": 1
     }

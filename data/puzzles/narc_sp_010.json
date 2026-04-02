@@ -65,7 +65,7 @@
           3
         ]
       ],
-      "label": "Matrix A",
+      "label": "Grid 1",
       "position": 0,
       "rows": 3
     },
@@ -91,7 +91,7 @@
           2
         ]
       ],
-      "label": "Matrix B",
+      "label": "Grid 2",
       "position": 1,
       "rows": 3
     },
@@ -119,7 +119,7 @@
           5
         ]
       ],
-      "label": "Transpose of (A+B)",
+      "label": "Grid 3",
       "position": 2,
       "rows": 4
     }

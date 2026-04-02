@@ -190,7 +190,7 @@
           1
         ]
       ],
-      "label": "magma deep below",
+      "label": "Grid 1",
       "position": 0,
       "rows": 8
     },
@@ -278,14 +278,14 @@
           1
         ]
       ],
-      "label": "magma rising",
+      "label": "Grid 2",
       "position": 1,
       "rows": 8
     },
     {
       "cols": 8,
       "grid": null,
-      "label": "eruption begins",
+      "label": "Grid 3",
       "masked": true,
       "position": 2,
       "rows": 8
@@ -374,7 +374,7 @@
           1
         ]
       ],
-      "label": "full eruption",
+      "label": "Grid 4",
       "position": 3,
       "rows": 8
     }
