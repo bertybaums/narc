@@ -431,43 +431,57 @@ function modelDots(p) {
 // ==================== BROWSE ====================
 let browseRendered = false;
 const activeTags = new Set();
+let lastDraftState = null;
+
+const DIMS = [
+    ['Spectrum', 'spectrum', 'btn-outline-danger', true],
+    ['Audience', 'audience', 'btn-outline-info', false],
+    ['Arc', 'arc', 'btn-outline-warning', false],
+    ['Clue', 'clue', 'btn-outline-success', false],
+    ['Domain', 'domain', 'btn-outline-secondary', false],
+    ['Grids', 'grids', 'btn-outline-light', false],
+];
 
 function renderBrowse() {
-    if (browseRendered) return;
-    browseRendered = true;
+    if (!browseRendered) {
+        browseRendered = true;
+        lastDraftState = null;
+    }
+    filterBrowse();
+}
 
+function rebuildFilters(showDrafts) {
     const tagCounts = {};
     PUZZLES.forEach(p => {
+        if (p.is_draft && !showDrafts) return;
         (p.tags || '').split(',').forEach(t => {
             t = t.trim();
             if (t) tagCounts[t] = (tagCounts[t] || 0) + 1;
         });
     });
 
-    const dims = [
-        ['Spectrum', 'spectrum', 'btn-outline-danger', SPECTRUM_ORDER.filter(t => tagCounts[t])],
-        ['Audience', 'audience', 'btn-outline-info', null],
-        ['Arc', 'arc', 'btn-outline-warning', null],
-        ['Clue', 'clue', 'btn-outline-success', null],
-        ['Domain', 'domain', 'btn-outline-secondary', null],
-        ['Grids', 'grids', 'btn-outline-light', null],
-    ];
-
     const filtersEl = document.getElementById('browse-filters');
-    dims.forEach(([label, prefix, cls, order]) => {
-        let tags = order || Object.keys(tagCounts).filter(t => t.startsWith(prefix + ':'))
-            .sort((a,b) => (tagCounts[b]||0) - (tagCounts[a]||0));
+    filtersEl.innerHTML = '';
+    DIMS.forEach(([label, prefix, cls, useSpectrumOrder]) => {
+        let tags;
+        if (useSpectrumOrder) {
+            tags = SPECTRUM_ORDER.filter(t => tagCounts[t]);
+        } else {
+            tags = Object.keys(tagCounts).filter(t => t.startsWith(prefix + ':'))
+                .sort((a,b) => (tagCounts[b]||0) - (tagCounts[a]||0));
+        }
         if (!tags.length) return;
         let row = document.createElement('div');
         row.className = 'mb-1';
         row.innerHTML = '<strong class="text-muted me-2">' + label + ':</strong>' +
-            tags.map(t => '<button class="btn btn-sm ' + cls + ' tag-btn mb-1 me-1" data-tag="' + t +
+            tags.map(t => '<button class="btn btn-sm ' + cls + ' tag-btn mb-1 me-1' +
+                (activeTags.has(t) ? ' active' : '') +
+                '" data-tag="' + t +
                 '" onclick="toggleTag(this)">' + t.split(':')[1] +
                 ' <span class="badge bg-secondary">' + (tagCounts[t]||0) + '</span></button>').join('');
         filtersEl.appendChild(row);
     });
     filtersEl.innerHTML += '<button class="btn btn-sm btn-outline-danger mt-1" onclick="clearTags()">Clear filters</button>';
-    filterBrowse();
 }
 
 function toggleTag(btn) {
@@ -487,6 +501,13 @@ function clearTags() {
 function filterBrowse() {
     const search = (document.getElementById('browse-search').value || '').toLowerCase();
     const showDrafts = document.getElementById('show-drafts').checked;
+
+    // Rebuild filter buttons when draft toggle changes
+    if (showDrafts !== lastDraftState) {
+        lastDraftState = showDrafts;
+        rebuildFilters(showDrafts);
+    }
+
     const grid = document.getElementById('browse-grid');
     grid.innerHTML = '';
     let shown = 0;
