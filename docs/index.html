@@ -558,7 +558,12 @@ function solvePuzzle(pid) {
     solveState = { puzzle: p, selectedColor: 0, answerGrids: {}, narrativeRevealed: false };
 
     const c = document.getElementById('solve-container');
-    c.innerHTML = '<h2>' + p.title + '</h2>' +
+    const reviseBtn = p.is_draft ?
+        ' <button class="btn btn-sm btn-outline-warning ms-2" onclick="revisePuzzle(\'' +
+        p.puzzle_id + '\')">Revise this puzzle</button>' : '';
+    c.innerHTML = '<h2>' + p.title +
+        (p.is_draft ? ' <span class="badge bg-warning text-dark" style="font-size:0.5em;vertical-align:middle;">Draft</span>' : '') +
+        reviseBtn + '</h2>' +
         '<p class="text-muted">' + p.sequence.length + ' grids &middot; reconstruct ' +
         (p.masked_positions.length === 1 ? 'grid #' + (p.masked_positions[0]+1) :
          p.masked_positions.length + ' grids') + '</p>';
@@ -922,6 +927,71 @@ showView = function(name) {
     origShowView(name);
     if (name === 'create' && !createInited) { createInited = true; initCreate(); }
 };
+
+function revisePuzzle(pid) {
+    const p = PUZZLES.find(x => x.puzzle_id === pid);
+    if (!p) return;
+
+    // Switch to create view (initializes if needed)
+    showView('create');
+
+    // Set ID, title, narrative
+    document.getElementById('create-pid').value = p.puzzle_id + '_rev';
+    document.getElementById('create-title').value = p.title;
+    document.getElementById('create-narrative').value = p.narrative;
+
+    // Set sequence length and rebuild slots
+    const n = p.sequence.length;
+    const slider = document.getElementById('create-seq-len');
+    slider.value = n;
+    document.getElementById('create-seq-display').textContent = n;
+
+    // Set masked positions
+    createMasked = new Set(p.masked_positions);
+
+    // Build slots (this resets grids)
+    buildCreateSlots();
+
+    // Now populate each grid with the puzzle data
+    p.sequence.forEach((item, i) => {
+        const rows = item.rows;
+        const cols = item.cols;
+
+        // Set dimensions
+        document.getElementById('create-dim-' + i).value = cols + 'x' + rows;
+        createGrids[i].resize(rows, cols);
+
+        // Fill grid data
+        let gridData = item.grid;
+        if (item.masked && p.answer_grids[String(item.position)]) {
+            gridData = p.answer_grids[String(item.position)];
+        }
+        if (gridData) {
+            for (let r = 0; r < rows; r++) {
+                for (let c = 0; c < cols; c++) {
+                    createGrids[i].grid[r][c] = gridData[r][c];
+                }
+            }
+        }
+
+        // Set label
+        const labelEl = document.getElementById('create-label-' + i);
+        if (labelEl && item.label) labelEl.value = item.label;
+
+        // Re-render
+        renderCreateGrid(i);
+    });
+
+    // Re-apply masked styling (buildCreateSlots already applied it, but re-render may have reset)
+    createMasked.forEach(idx => {
+        const slot = document.getElementById('create-slot-' + idx);
+        if (slot) {
+            slot.classList.add('masked');
+            const btn = slot.querySelector('button:last-child');
+            if (btn) { btn.className = 'btn btn-sm mt-1 btn-warning'; btn.textContent = 'Masked'; }
+        }
+    });
+}
 </script>
 </body>
 </html>
