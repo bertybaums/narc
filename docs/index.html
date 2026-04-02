@@ -560,7 +560,7 @@ function solvePuzzle(pid) {
     const c = document.getElementById('solve-container');
     const reviseBtn = p.is_draft ?
         ' <button class="btn btn-sm btn-outline-warning ms-2" onclick="revisePuzzle(\'' +
-        p.puzzle_id + '\')">Revise this puzzle</button>' : '';
+        p.puzzle_id + '\')">Copy + Revise</button>' : '';
     c.innerHTML = '<h2>' + p.title +
         (p.is_draft ? ' <span class="badge bg-warning text-dark" style="font-size:0.5em;vertical-align:middle;">Draft</span>' : '') +
         reviseBtn + '</h2>' +
