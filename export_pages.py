@@ -70,12 +70,17 @@ def main(output_dir):
             model_results[m] = {"status": status, "results": results}
         pdata["variants"] = variants
         pdata["model_results"] = model_results
+        # Flag as draft if unsolvable on ALL tested models (both condition)
+        statuses = [model_results[m]["status"] for m in MODELS if model_results[m]["results"]]
+        pdata["is_draft"] = all(s == "unsolvable" for s in statuses) if statuses else True
         all_puzzles.append(pdata)
 
     conn.close()
 
     # Stats
     total_variants = sum(len(p["variants"]) for p in all_puzzles)
+    active_puzzles = [p for p in all_puzzles if not p.get("is_draft")]
+    draft_puzzles = [p for p in all_puzzles if p.get("is_draft")]
     grid_sizes = set()
     for p in all_puzzles:
         for item in p["sequence"]:
@@ -104,7 +109,8 @@ def main(output_dir):
     # Write the single-page app
     html = _build_page(
         all_puzzles, puzzles_json, tag_counts, spectrum_order, tags_by_prefix,
-        total_variants, len(grid_sizes), MODELS
+        total_variants, len(grid_sizes), MODELS,
+        len(active_puzzles), len(draft_puzzles)
     )
 
     (out / "index.html").write_text(html)
@@ -115,7 +121,8 @@ def main(output_dir):
 
 
 def _build_page(puzzles, puzzles_json, tag_counts, spectrum_order, tags_by_prefix,
-                total_variants, num_grid_sizes, models):
+                total_variants, num_grid_sizes, models,
+                num_active=0, num_draft=0):
     """Build the full single-page app HTML."""
 
     # Read JS for embedding
@@ -223,8 +230,9 @@ abstract reasoning tasks from the <a href="https://arcprize.org/" style="color:#
 <div class="card mb-4"><div class="card-body">
 <h4>The puzzle corpus</h4>
 <div class="row text-center my-3">
-<div class="col"><div style="font-size:2em;font-weight:bold;color:#f59e0b;">{len(puzzles)}</div>
-<div class="text-muted">Puzzles</div></div>
+<div class="col"><div style="font-size:2em;font-weight:bold;color:#f59e0b;">{num_active}</div>
+<div class="text-muted">Active puzzles</div>
+<div class="text-muted" style="font-size:0.8em;">{num_draft} drafts</div></div>
 <div class="col"><div style="font-size:2em;font-weight:bold;color:#f59e0b;">{total_variants}</div>
 <div class="text-muted">Narrative variants</div></div>
 <div class="col"><div style="font-size:2em;font-weight:bold;color:#f59e0b;">{num_grid_sizes}</div>
@@ -266,8 +274,14 @@ and more. Each is rated on both <strong>human difficulty</strong> and <strong>AI
 <div id="view-browse" class="view">
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Puzzles <small class="text-muted" id="browse-count"></small></h2>
-    <input type="text" id="browse-search" class="form-control form-control-sm"
-           placeholder="Search..." style="width:200px;" oninput="filterBrowse()">
+    <div class="d-flex align-items-center gap-3">
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="show-drafts" onchange="filterBrowse()">
+            <label class="form-check-label text-muted" for="show-drafts">Show draft puzzles</label>
+        </div>
+        <input type="text" id="browse-search" class="form-control form-control-sm"
+               placeholder="Search..." style="width:200px;" oninput="filterBrowse()">
+    </div>
 </div>
 <div id="browse-filters" class="mb-3"></div>
 <div id="browse-grid" class="row g-3"></div>
@@ -295,6 +309,10 @@ and more. Each is rated on both <strong>human difficulty</strong> and <strong>AI
         <option value="narrative_sufficient">Narrative sufficient</option>
         <option value="unsolvable">Unsolvable</option>
     </select>
+    <div class="form-check form-switch d-inline-block ms-3">
+        <input class="form-check-input" type="checkbox" id="inspect-show-drafts" onchange="filterInspect()">
+        <label class="form-check-label text-muted" for="inspect-show-drafts">Show drafts</label>
+    </div>
     <span class="text-muted ms-2" id="inspect-count"></span>
 </div>
 <div id="inspect-list"></div>
@@ -429,11 +447,15 @@ function clearTags() {{
 
 function filterBrowse() {{
     const search = (document.getElementById('browse-search').value || '').toLowerCase();
+    const showDrafts = document.getElementById('show-drafts').checked;
     const grid = document.getElementById('browse-grid');
     grid.innerHTML = '';
     let shown = 0;
 
     PUZZLES.forEach(p => {{
+        // Hide drafts unless toggle is on
+        if (p.is_draft && !showDrafts) return;
+
         const tags = p.tags || '';
         const title = (p.title || '').toLowerCase();
         const pid = (p.puzzle_id || '').toLowerCase();
@@ -445,11 +467,17 @@ function filterBrowse() {{
         const diffStr = p.human_difficulty && p.ai_difficulty ?
             'H' + p.human_difficulty + '/A' + p.ai_difficulty : '';
 
+        // Badges
+        let badges = '';
+        if (p.creator === 'claude') badges += '<span class="badge bg-secondary me-1" style="font-size:0.65em;">AI-generated</span>';
+        if (p.is_draft) badges += '<span class="badge bg-warning text-dark me-1" style="font-size:0.65em;">Draft</span>';
+
         const col = document.createElement('div');
         col.className = 'col-md-4';
-        col.innerHTML = '<div class="card puzzle-card" onclick="solvePuzzle(\\'' + p.puzzle_id + '\\')">' +
+        col.innerHTML = '<div class="card puzzle-card' + (p.is_draft ? ' border-warning' : '') +
+            '" onclick="solvePuzzle(\\'' + p.puzzle_id + '\\')">' +
             '<div class="card-body">' +
-            '<h5 class="card-title">' + p.title + '</h5>' +
+            '<h5 class="card-title">' + p.title + ' ' + badges + '</h5>' +
             '<p class="text-muted mb-1">' + p.sequence.length + ' grids &middot; ' + maskedStr +
             (diffStr ? ' &middot; ' + diffStr : '') + '</p>' +
             '<div class="mb-1">' + modelDots(p) + '</div>' +
@@ -650,11 +678,13 @@ function renderInspect() {{
 function filterInspect() {{
     const search = (document.getElementById('inspect-search').value || '').toLowerCase();
     const sf = document.getElementById('inspect-status').value;
+    const showDrafts = document.getElementById('inspect-show-drafts').checked;
     const list = document.getElementById('inspect-list');
     list.innerHTML = '';
     let shown = 0;
 
     PUZZLES.forEach(p => {{
+        if (p.is_draft && !showDrafts) return;
         const pid = p.puzzle_id.toLowerCase();
         const title = (p.title||'').toLowerCase();
         if (search && !pid.includes(search) && !title.includes(search)) return;
@@ -678,9 +708,11 @@ function filterInspect() {{
                 statusDot(mr.status, short)+'</td>'+cells+'</tr>';
         }});
 
+        const iBadges = (p.creator === 'claude' ? '<span class="badge bg-secondary" style="font-size:0.6em;margin-left:6px;">AI</span>' : '') +
+            (p.is_draft ? '<span class="badge bg-warning text-dark" style="font-size:0.6em;margin-left:4px;">Draft</span>' : '');
         list.innerHTML += '<details><summary>' +
             '<span style="color:#666;font-family:monospace;font-size:0.85em;width:130px;flex-shrink:0;">'+p.puzzle_id+'</span>' +
-            '<span style="flex:1;font-weight:600;">'+p.title+'</span>' +
+            '<span style="flex:1;font-weight:600;">'+p.title+iBadges+'</span>' +
             '<span style="color:#888;font-size:0.85em;margin-right:8px;">'+p.sequence.length+'g</span>' +
             '<span>'+modelDots(p)+'</span></summary>' +
             '<div><div class="narrative-text visible" style="display:block;margin-bottom:10px;">'+
