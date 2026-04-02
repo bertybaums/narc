@@ -503,8 +503,6 @@ function filterBrowse() {{
             '<h5 class="card-title">' + p.title + ' ' + badges + '</h5>' +
             '<p class="text-muted mb-1">' + p.sequence.length + ' grids &middot; ' + maskedStr +
             (diffStr ? ' &middot; ' + diffStr : '') + '</p>' +
-            '<div class="mb-1">' + modelDots(p) + '</div>' +
-            '<p class="card-text small text-truncate">' + (p.narrative||'').slice(0,80) + '...</p>' +
             '<button class="btn btn-sm btn-narc" onclick="event.stopPropagation();solvePuzzle(\\'' +
             p.puzzle_id + '\\')">Solve</button></div></div>';
         grid.appendChild(col);
