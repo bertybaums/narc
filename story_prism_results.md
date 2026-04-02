@@ -47,10 +47,10 @@ Each puzzle was designed to be strong on at least 3 Story Prism facets:
 
 | Primary facet | Puzzles |
 |---|---|
-| Teller & Told | The Captain's Log (1st-person diary), Dear Committee (epistolary), The Confession (retrospective) |
-| Actors | The Negotiation (opposing goals), The Understudies (scale switch), The Hive (individual vs. collective) |
-| How It Feels | The Thaw (sensory/renewal), The Vigil (dread/approach), The Standing Ovation (joy building) |
-| Multi-facet | The Cartographer's Dilemma (teller+world+actors), The Lullaby (feeling+actors+events), The Inheritance (actors+world+events) |
+| Teller & Told | [The Captain's Log](https://bertybaums.github.io/narc/#narc_prism_001) (1st-person diary), [Dear Committee](https://bertybaums.github.io/narc/#narc_prism_002) (epistolary), [The Confession](https://bertybaums.github.io/narc/#narc_prism_003) (retrospective) |
+| Actors | [The Negotiation](https://bertybaums.github.io/narc/#narc_prism_004) (opposing goals), [The Understudies](https://bertybaums.github.io/narc/#narc_prism_005) (scale switch), [The Hive](https://bertybaums.github.io/narc/#narc_prism_006) (individual vs. collective) |
+| How It Feels | [The Thaw](https://bertybaums.github.io/narc/#narc_prism_007) (sensory/renewal), [The Vigil](https://bertybaums.github.io/narc/#narc_prism_008) (dread/approach), [The Standing Ovation](https://bertybaums.github.io/narc/#narc_prism_009) (joy building) |
+| Multi-facet | [The Cartographer's Dilemma](https://bertybaums.github.io/narc/#narc_prism_010) (teller+world+actors), [The Lullaby](https://bertybaums.github.io/narc/#narc_prism_011) (feeling+actors+events), [The Inheritance](https://bertybaums.github.io/narc/#narc_prism_012) (actors+world+events) |
 
 ### 4. Tested everything on 4 AI models
 All puzzles and variants were tested on gpt-oss-120b, gpt-oss-20b, qwen3.5-122b, and nemotron-3-super via the MindRouter HPC infrastructure at the University of Idaho.
@@ -65,12 +65,12 @@ Of the 12 new Story Prism puzzles, **6 are robustly NARC** (the property holds o
 
 | Puzzle | Primary facets | Models showing NARC |
 |---|---|---|
-| **Dear Committee** | Teller | 4/4 |
-| **The Confession** | Teller + Feeling | 4/4 |
-| **The Standing Ovation** | Feeling + Events | 4/4 |
-| **The Vigil** | Feeling | 3/4 |
-| **The Cartographer's Dilemma** | Teller + World + Actors | 3/4 |
-| **The Lullaby** | Feeling + Actors + Events | 3/4 |
+| **[Dear Committee](https://bertybaums.github.io/narc/#narc_prism_002)** | Teller | 4/4 |
+| **[The Confession](https://bertybaums.github.io/narc/#narc_prism_003)** | Teller + Feeling | 4/4 |
+| **[The Standing Ovation](https://bertybaums.github.io/narc/#narc_prism_009)** | Feeling + Events | 4/4 |
+| **[The Vigil](https://bertybaums.github.io/narc/#narc_prism_008)** | Feeling | 3/4 |
+| **[The Cartographer's Dilemma](https://bertybaums.github.io/narc/#narc_prism_010)** | Teller + World + Actors | 3/4 |
+| **[The Lullaby](https://bertybaums.github.io/narc/#narc_prism_011)** | Feeling + Actors + Events | 3/4 |
 
 **The facets that were most underrepresented in the original corpus — Teller and Feeling — produce the most reliable NARC puzzles.** All three teller-forward puzzles are NARC on 2+ models. The feeling-forward puzzles (Vigil, Standing Ovation, Lullaby) are NARC on 3-4 models.
 
@@ -80,7 +80,7 @@ By contrast, the actors-forward puzzles without other strong facets (Understudie
 
 Testing the same puzzle with narratives foregrounding different actors produced measurably different results:
 
-**"The Boy Who Cried Wolf" (narc_006) — 6 narrative variants tested on gpt-oss-120b:**
+**["The Hillside"](https://bertybaums.github.io/narc/#narc_006) (narc_006, originally "The Boy Who Cried Wolf") — 6 narrative variants tested on gpt-oss-120b:**
 
 | Narrative variant | Grids only | Narrative only | Both |
 |---|---|---|---|
@@ -92,7 +92,7 @@ Testing the same puzzle with narratives foregrounding different actors produced 
 
 The `both` condition is robust across all perspectives (always correct), but **narrative-only performance varies dramatically by actor**: the villagers' perspective gives 46% accuracy while the wolf's perspective gives 0%. The villagers experience the *repetition and disappointment* directly — the key structural clue — while the wolf only observes the outcome.
 
-**"The Journey" (narc_009) — landscape perspective outperforms traveler:**
+**["The Journey"](https://bertybaums.github.io/narc/#narc_009) (narc_009) — landscape perspective outperforms traveler:**
 
 | Variant | Narrative only |
 |---|---|
@@ -104,7 +104,7 @@ Foregrounding the spatial layout (landscape as protagonist) nearly triples narra
 
 ### Result 3: Emotional framing affects clue legibility
 
-**"The Lighthouse" (narc_001) — hope vs. dread framing:**
+**["The Lighthouse"](https://bertybaums.github.io/narc/#narc_001) (narc_001) — hope vs. dread framing:**
 
 | Variant | Narrative only |
 |---|---|
@@ -115,24 +115,24 @@ The hopeful framing describes the beam's *progression* ("faint... brighter... ce
 
 ### Result 4: Different models comprehend different narrative framings
 
-**"The Negotiation" (narc_prism_004)** is completely unsolvable on gpt-oss-120b (0% on all conditions) but shows the NARC property on both qwen3.5-122b and nemotron-3-super. The narrative describes two nations dividing territory through rounds of concessions — a social/strategic framing that some model architectures parse better than others.
+**["The Negotiation"](https://bertybaums.github.io/narc/#narc_prism_004) (narc_prism_004)** is completely unsolvable on gpt-oss-120b (0% on all conditions) but shows the NARC property on both qwen3.5-122b and nemotron-3-super. The narrative describes two nations dividing territory through rounds of concessions — a social/strategic framing that some model architectures parse better than others.
 
 **Cross-model NARC classification for all 12 puzzles:**
 
 | Puzzle | gpt-oss-120b | gpt-oss-20b | qwen3.5-122b | nemotron-3-super |
 |---|---|---|---|---|
-| The Captain's Log | NARC | fail | fail | NARC |
-| Dear Committee | NARC | NARC | NARC | NARC |
-| The Confession | NARC | NARC | NARC | NARC |
-| The Negotiation | fail | fail | NARC | NARC |
-| The Understudies | grids suff. | NARC | fail | grids suff. |
-| The Hive | fail | NARC | fail | fail |
-| The Thaw | grids suff. | fail | NARC | fail |
-| The Vigil | NARC | NARC | NARC | grids suff. |
-| The Standing Ovation | NARC | NARC | NARC | NARC |
-| The Cartographer | NARC | fail | NARC | NARC |
-| The Lullaby | NARC | fail | NARC | NARC |
-| The Inheritance | NARC | fail | fail | NARC |
+| [The Captain's Log](https://bertybaums.github.io/narc/#narc_prism_001) | NARC | fail | fail | NARC |
+| [Dear Committee](https://bertybaums.github.io/narc/#narc_prism_002) | NARC | NARC | NARC | NARC |
+| [The Confession](https://bertybaums.github.io/narc/#narc_prism_003) | NARC | NARC | NARC | NARC |
+| [The Negotiation](https://bertybaums.github.io/narc/#narc_prism_004) | fail | fail | NARC | NARC |
+| [The Understudies](https://bertybaums.github.io/narc/#narc_prism_005) | grids suff. | NARC | fail | grids suff. |
+| [The Hive](https://bertybaums.github.io/narc/#narc_prism_006) | fail | NARC | fail | fail |
+| [The Thaw](https://bertybaums.github.io/narc/#narc_prism_007) | grids suff. | fail | NARC | fail |
+| [The Vigil](https://bertybaums.github.io/narc/#narc_prism_008) | NARC | NARC | NARC | grids suff. |
+| [The Standing Ovation](https://bertybaums.github.io/narc/#narc_prism_009) | NARC | NARC | NARC | NARC |
+| [The Cartographer](https://bertybaums.github.io/narc/#narc_prism_010) | NARC | fail | NARC | NARC |
+| [The Lullaby](https://bertybaums.github.io/narc/#narc_prism_011) | NARC | fail | NARC | NARC |
+| [The Inheritance](https://bertybaums.github.io/narc/#narc_prism_012) | NARC | fail | fail | NARC |
 
 No single model solves all puzzles. The model that benefits most from a given narrative depends on which Story Prism facets that narrative foregrounds.
 

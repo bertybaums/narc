@@ -379,6 +379,22 @@ function showView(name) {{
     if (name === 'inspect') renderInspect();
 }}
 
+// ==================== DEEP LINKING ====================
+function updateHash(pid) {{
+    history.replaceState(null, '', '#' + pid);
+}}
+
+function loadFromHash() {{
+    const hash = location.hash.slice(1);
+    if (hash) {{
+        const p = PUZZLES.find(x => x.puzzle_id === hash);
+        if (p) {{ solvePuzzle(hash); return; }}
+    }}
+    showView('about');
+}}
+
+window.addEventListener('hashchange', loadFromHash);
+
 // ==================== STATUS DOT ====================
 function statusDot(status, label) {{
     const cls = status === 'narc' ? 'dot-narc' : status === 'grids_sufficient' ? 'dot-grids' :
@@ -529,6 +545,7 @@ let solveState = {{}};
 function solvePuzzle(pid) {{
     const p = PUZZLES.find(x => x.puzzle_id === pid);
     if (!p) return;
+    updateHash(pid);
     showView('solve');
     solveState = {{ puzzle: p, selectedColor: 0, answerGrids: {{}}, narrativeRevealed: false }};
 
@@ -935,6 +952,9 @@ showView = function(name) {{
     origShowView(name);
     if (name === 'create' && !createInited) {{ createInited = true; initCreate(); }}
 }};
+
+// Load puzzle from URL hash on page load
+loadFromHash();
 
 function revisePuzzle(pid) {{
     const p = PUZZLES.find(x => x.puzzle_id === pid);
