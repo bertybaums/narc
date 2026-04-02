@@ -502,6 +502,9 @@ function filterBrowse() {{
         if (p.creator === 'claude') badges += '<span class="badge bg-secondary me-1" style="font-size:0.65em;">AI-generated</span>';
         if (p.is_draft) badges += '<span class="badge bg-warning text-dark me-1" style="font-size:0.65em;">Draft</span>';
 
+        const nVar = (p.variants || []).length;
+        const varStr = nVar > 1 ? ' &middot; ' + nVar + ' variants' : '';
+
         const col = document.createElement('div');
         col.className = 'col-md-4';
         col.innerHTML = '<div class="card puzzle-card' + (p.is_draft ? ' border-warning' : '') +
@@ -509,9 +512,11 @@ function filterBrowse() {{
             '<div class="card-body">' +
             '<h5 class="card-title">' + p.title + ' ' + badges + '</h5>' +
             '<p class="text-muted mb-1">' + p.sequence.length + ' grids &middot; ' + maskedStr +
-            (diffStr ? ' &middot; ' + diffStr : '') + '</p>' +
-            '<button class="btn btn-sm btn-narc" onclick="event.stopPropagation();solvePuzzle(\\'' +
-            p.puzzle_id + '\\')">Solve</button></div></div>';
+            (diffStr ? ' &middot; ' + diffStr : '') + varStr + '</p>' +
+            '<button class="btn btn-sm btn-narc me-1" onclick="event.stopPropagation();solvePuzzle(\\'' +
+            p.puzzle_id + '\\')">Solve</button>' +
+            '<button class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation();revisePuzzle(\\'' +
+            p.puzzle_id + '\\')">Copy + Revise</button></div></div>';
         grid.appendChild(col);
         shown++;
     }});
@@ -528,9 +533,8 @@ function solvePuzzle(pid) {{
     solveState = {{ puzzle: p, selectedColor: 0, answerGrids: {{}}, narrativeRevealed: false }};
 
     const c = document.getElementById('solve-container');
-    const reviseBtn = p.is_draft ?
-        ' <button class="btn btn-sm btn-outline-warning ms-2" onclick="revisePuzzle(\\'' +
-        p.puzzle_id + '\\')">Copy + Revise</button>' : '';
+    const reviseBtn = ' <button class="btn btn-sm btn-outline-secondary ms-2" onclick="revisePuzzle(\\'' +
+        p.puzzle_id + '\\')">Copy + Revise</button>';
     c.innerHTML = '<h2>' + p.title +
         (p.is_draft ? ' <span class="badge bg-warning text-dark" style="font-size:0.5em;vertical-align:middle;">Draft</span>' : '') +
         reviseBtn + '</h2>' +
