@@ -1,0 +1,1836 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8">
+<title>NARC Ordering Experiment</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  body { font-family: system-ui; max-width: 1000px; margin: 2em auto; padding: 0 1em; }
+  .metric { font-size: 2em; font-weight: bold; }
+  .metric-label { font-size: 0.8em; color: #666; }
+  table { font-size: 0.9em; }
+</style>
+</head><body>
+<h1>NARC Ordering Experiment</h1>
+<p class="text-muted">Task: given all grids in shuffled order, recover the correct chronological sequence.
+Measures whether narratives help models understand temporal/causal ordering.</p>
+
+<div class="row text-center my-4">
+  <div class="col"><div class="metric">251</div><div class="metric-label">Puzzles</div></div>
+  <div class="col"><div class="metric">+0.278</div><div class="metric-label">Avg tau (grids only)</div></div>
+  <div class="col"><div class="metric">+0.616</div><div class="metric-label">Avg tau (+ narrative)</div></div>
+  <div class="col"><div class="metric">+0.338</div><div class="metric-label">Avg narrative lift</div></div>
+</div>
+
+<div class="row text-center mb-4">
+  <div class="col"><div class="metric">87/251</div><div class="metric-label">Exact match (grids only)</div></div>
+  <div class="col"><div class="metric">148/251</div><div class="metric-label">Exact match (+ narrative)</div></div>
+  <div class="col"><div class="metric">110</div><div class="metric-label">Narrative helps</div></div>
+  <div class="col"><div class="metric">43</div><div class="metric-label">Narrative hurts</div></div>
+</div>
+
+<h2>By Grid Count</h2>
+<table class="table table-sm table-striped">
+<thead><tr><th>Grids</th><th>N</th><th>Avg tau (grids)</th><th>Avg tau (narr)</th>
+<th>Avg lift</th><th>Exact (grids)</th><th>Exact (narr)</th></tr></thead>
+<tbody><tr>
+            <td>4</td><td>135</td>
+            <td>+0.365</td>
+            <td>+0.674</td>
+            <td>+0.309</td>
+            <td>57/135</td>
+            <td>91/135</td>
+        </tr><tr>
+            <td>5</td><td>78</td>
+            <td>+0.282</td>
+            <td>+0.626</td>
+            <td>+0.344</td>
+            <td>28/78</td>
+            <td>47/78</td>
+        </tr><tr>
+            <td>6</td><td>26</td>
+            <td>-0.092</td>
+            <td>+0.405</td>
+            <td>+0.497</td>
+            <td>0/26</td>
+            <td>6/26</td>
+        </tr><tr>
+            <td>7</td><td>8</td>
+            <td>+0.250</td>
+            <td>+0.179</td>
+            <td>-0.071</td>
+            <td>1/8</td>
+            <td>2/8</td>
+        </tr><tr>
+            <td>8</td><td>4</td>
+            <td>-0.268</td>
+            <td>+0.714</td>
+            <td>+0.982</td>
+            <td>1/4</td>
+            <td>2/4</td>
+        </tr></tbody>
+</table>
+
+<h2>All Puzzles (sorted by lift)</h2>
+<table class="table table-sm table-hover">
+<thead><tr><th>Puzzle</th><th>Grids</th><th>tau (grids)</th><th>tau (narr)</th>
+<th>Lift</th><th>Exact (g)</th><th>Exact (n)</th></tr></thead>
+<tbody><tr>
+            <td>narc_004</td><td>5</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_043</td><td>8</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_003</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_003</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_008</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_008</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_008</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_003</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_008</td><td>5</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_027</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_202</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_202</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_011</td><td>5</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_011</td><td>5</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_011</td><td>5</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_011</td><td>5</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_048</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_059</td><td>4</td>
+            <td>-1.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+2.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_005</td><td>5</td>
+            <td>-0.800</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.800</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_005</td><td>5</td>
+            <td>-0.800</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.800</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_011</td><td>6</td>
+            <td>-0.867</td>
+            <td>+0.867</td>
+            <td class="text-success"><strong>+1.733</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_007</td><td>6</td>
+            <td>-0.867</td>
+            <td>+0.867</td>
+            <td class="text-success"><strong>+1.733</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_040</td><td>4</td>
+            <td>-0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_054</td><td>4</td>
+            <td>-0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_006</td><td>4</td>
+            <td>-0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_071</td><td>4</td>
+            <td>-0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_007</td><td>6</td>
+            <td>-0.733</td>
+            <td>+0.867</td>
+            <td class="text-success"><strong>+1.600</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_prism_001</td><td>5</td>
+            <td>-0.600</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.600</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_001</td><td>5</td>
+            <td>-0.600</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.600</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_005</td><td>5</td>
+            <td>-0.600</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.600</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_011</td><td>6</td>
+            <td>-0.867</td>
+            <td>+0.600</td>
+            <td class="text-success"><strong>+1.467</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_011</td><td>6</td>
+            <td>-0.467</td>
+            <td>+0.867</td>
+            <td class="text-success"><strong>+1.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_003</td><td>4</td>
+            <td>-0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_018</td><td>4</td>
+            <td>-0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_003</td><td>5</td>
+            <td>-0.800</td>
+            <td>+0.400</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_011</td><td>6</td>
+            <td>-0.333</td>
+            <td>+0.867</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_304</td><td>5</td>
+            <td>-0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_001</td><td>5</td>
+            <td>-0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_004</td><td>5</td>
+            <td>-0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_004</td><td>5</td>
+            <td>-0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_007</td><td>5</td>
+            <td>-0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_007</td><td>6</td>
+            <td>-0.733</td>
+            <td>+0.333</td>
+            <td class="text-success"><strong>+1.067</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_029</td><td>7</td>
+            <td>-0.048</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.048</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_003</td><td>5</td>
+            <td>-0.800</td>
+            <td>+0.200</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_043</td><td>8</td>
+            <td>-0.071</td>
+            <td>+0.929</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_102</td><td>5</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_002</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_002</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_003</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_003</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_003</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_010</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_018</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_039</td><td>4</td>
+            <td>-1.000</td>
+            <td>+0.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_047</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_084</td><td>4</td>
+            <td>+0.000</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+1.000</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_203</td><td>6</td>
+            <td>+0.067</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.933</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_043</td><td>8</td>
+            <td>-1.000</td>
+            <td>-0.071</td>
+            <td class="text-success"><strong>+0.929</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_008</td><td>5</td>
+            <td>+0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.800</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_008</td><td>5</td>
+            <td>+0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.800</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_026</td><td>5</td>
+            <td>-0.200</td>
+            <td>+0.600</td>
+            <td class="text-success"><strong>+0.800</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_026</td><td>5</td>
+            <td>-0.200</td>
+            <td>+0.600</td>
+            <td class="text-success"><strong>+0.800</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_prism_004</td><td>5</td>
+            <td>+0.200</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.800</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_006</td><td>6</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_006</td><td>6</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_003</td><td>4</td>
+            <td>-1.000</td>
+            <td>-0.333</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_003</td><td>4</td>
+            <td>-1.000</td>
+            <td>-0.333</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_105</td><td>4</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_105</td><td>4</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_002</td><td>4</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_039</td><td>4</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_067</td><td>4</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_075</td><td>4</td>
+            <td>+0.333</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_003</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.667</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_009</td><td>4</td>
+            <td>-0.333</td>
+            <td>+0.333</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_104</td><td>6</td>
+            <td>-0.600</td>
+            <td>+0.067</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_047</td><td>4</td>
+            <td>-0.667</td>
+            <td>+0.000</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_047</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.667</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_086</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.667</td>
+            <td class="text-success"><strong>+0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_303</td><td>5</td>
+            <td>-0.200</td>
+            <td>+0.400</td>
+            <td class="text-success"><strong>+0.600</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_034</td><td>5</td>
+            <td>+0.600</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_102</td><td>5</td>
+            <td>+0.600</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_203</td><td>6</td>
+            <td>+0.600</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_204</td><td>5</td>
+            <td>-0.400</td>
+            <td>+0.000</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_204</td><td>5</td>
+            <td>-0.400</td>
+            <td>+0.000</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_102</td><td>5</td>
+            <td>+0.200</td>
+            <td>+0.600</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_104</td><td>6</td>
+            <td>-0.333</td>
+            <td>+0.067</td>
+            <td class="text-success"><strong>+0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_027</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_027</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_027</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_101</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_003</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_006</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_006</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_010</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_010</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_018</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_018</td><td>4</td>
+            <td>+0.667</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_040</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.333</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_036</td><td>4</td>
+            <td>-0.333</td>
+            <td>+0.000</td>
+            <td class="text-success"><strong>+0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_203</td><td>6</td>
+            <td>+0.733</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.267</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_203</td><td>6</td>
+            <td>+0.733</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.267</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_005</td><td>5</td>
+            <td>+0.800</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_005</td><td>5</td>
+            <td>+0.800</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_005</td><td>5</td>
+            <td>+0.800</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_008</td><td>5</td>
+            <td>+0.800</td>
+            <td>+1.000</td>
+            <td class="text-success"><strong>+0.200</strong></td>
+            <td></td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_102</td><td>5</td>
+            <td>+0.400</td>
+            <td>+0.600</td>
+            <td class="text-success"><strong>+0.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_104</td><td>6</td>
+            <td>-0.067</td>
+            <td>+0.067</td>
+            <td class="text-success"><strong>+0.133</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_015</td><td>6</td>
+            <td>-0.333</td>
+            <td>-0.200</td>
+            <td class="text-success"><strong>+0.133</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_029</td><td>7</td>
+            <td>+0.524</td>
+            <td>+0.619</td>
+            <td class="text-success"><strong>+0.095</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_001</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_001</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_001</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_001</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_002</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_002</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_002</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_003</td><td>5</td>
+            <td>-0.800</td>
+            <td>-0.800</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_004</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_004</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_005</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_005</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_006</td><td>6</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_008</td><td>7</td>
+            <td>+0.143</td>
+            <td>+0.143</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_029</td><td>7</td>
+            <td>-0.333</td>
+            <td>-0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_029</td><td>7</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_041</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_041</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_041</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_041</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_043</td><td>8</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_ai_005</td><td>5</td>
+            <td>+0.800</td>
+            <td>+0.800</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_007</td><td>6</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_012</td><td>6</td>
+            <td>-0.067</td>
+            <td>-0.067</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_013</td><td>5</td>
+            <td>-0.600</td>
+            <td>-0.600</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_014</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_014</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_014</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_003</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_009</td><td>4</td>
+            <td>+0.667</td>
+            <td>+0.667</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_009</td><td>4</td>
+            <td>+0.667</td>
+            <td>+0.667</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_025</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_focal_026</td><td>5</td>
+            <td>+0.600</td>
+            <td>+0.600</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_047</td><td>4</td>
+            <td>-0.667</td>
+            <td>-0.667</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_047</td><td>4</td>
+            <td>-0.667</td>
+            <td>-0.667</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_054</td><td>4</td>
+            <td>-1.000</td>
+            <td>-1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_101</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_105</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_105</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_204</td><td>5</td>
+            <td>-0.400</td>
+            <td>-0.400</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_204</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_301</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_302</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_302</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_302</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_302</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_303</td><td>5</td>
+            <td>+0.400</td>
+            <td>+0.400</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_304</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_304</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_305</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_305</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_gap_305</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_002</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_004</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_005</td><td>5</td>
+            <td>-0.600</td>
+            <td>-0.600</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_prism_007</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_007</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_008</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_008</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_008</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_008</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_009</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_009</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_012</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_prism_012</td><td>5</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_036</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_036</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_038</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_038</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_038</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_038</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_043</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_043</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_043</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_043</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_047</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_048</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_048</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_048</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_059</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_059</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_067</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_067</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_067</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_068</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_068</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_068</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_070</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_070</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_071</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_071</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_075</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_075</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_078</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_078</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_078</td><td>4</td>
+            <td>+1.000</td>
+            <td>+1.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td>Y</td>
+            <td>Y</td>
+        </tr><tr>
+            <td>narc_sp_085</td><td>4</td>
+            <td>+0.000</td>
+            <td>+0.000</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_086</td><td>4</td>
+            <td>-0.333</td>
+            <td>-0.333</td>
+            <td class=""><strong>+0.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_012</td><td>6</td>
+            <td>+0.067</td>
+            <td>-0.067</td>
+            <td class="text-danger"><strong>-0.133</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_012</td><td>6</td>
+            <td>+0.067</td>
+            <td>-0.067</td>
+            <td class="text-danger"><strong>-0.133</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_303</td><td>5</td>
+            <td>+0.600</td>
+            <td>+0.400</td>
+            <td class="text-danger"><strong>-0.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_303</td><td>5</td>
+            <td>+0.600</td>
+            <td>+0.400</td>
+            <td class="text-danger"><strong>-0.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_003</td><td>5</td>
+            <td>+0.400</td>
+            <td>+0.200</td>
+            <td class="text-danger"><strong>-0.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_006</td><td>6</td>
+            <td>+0.600</td>
+            <td>+0.333</td>
+            <td class="text-danger"><strong>-0.267</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_009</td><td>4</td>
+            <td>-0.333</td>
+            <td>-0.667</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_025</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.000</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_025</td><td>4</td>
+            <td>+0.333</td>
+            <td>+0.000</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_084</td><td>4</td>
+            <td>+0.667</td>
+            <td>+0.333</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_084</td><td>4</td>
+            <td>+0.000</td>
+            <td>-0.333</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_002</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.667</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_040</td><td>4</td>
+            <td>-0.667</td>
+            <td>-1.000</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_101</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.667</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_101</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.667</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_305</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.667</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_085</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.667</td>
+            <td class="text-danger"><strong>-0.333</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_015</td><td>6</td>
+            <td>-0.333</td>
+            <td>-0.733</td>
+            <td class="text-danger"><strong>-0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_015</td><td>6</td>
+            <td>-0.333</td>
+            <td>-0.733</td>
+            <td class="text-danger"><strong>-0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_012</td><td>6</td>
+            <td>+0.333</td>
+            <td>-0.067</td>
+            <td class="text-danger"><strong>-0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_034</td><td>5</td>
+            <td>+0.200</td>
+            <td>-0.200</td>
+            <td class="text-danger"><strong>-0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_034</td><td>5</td>
+            <td>+0.200</td>
+            <td>-0.200</td>
+            <td class="text-danger"><strong>-0.400</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_prism_007</td><td>5</td>
+            <td>+1.000</td>
+            <td>+0.600</td>
+            <td class="text-danger"><strong>-0.400</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_008</td><td>7</td>
+            <td>+0.238</td>
+            <td>-0.333</td>
+            <td class="text-danger"><strong>-0.571</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_008</td><td>7</td>
+            <td>+0.238</td>
+            <td>-0.333</td>
+            <td class="text-danger"><strong>-0.571</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_008</td><td>7</td>
+            <td>+0.238</td>
+            <td>-0.333</td>
+            <td class="text-danger"><strong>-0.571</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_301</td><td>5</td>
+            <td>+1.000</td>
+            <td>+0.400</td>
+            <td class="text-danger"><strong>-0.600</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_301</td><td>5</td>
+            <td>+1.000</td>
+            <td>+0.400</td>
+            <td class="text-danger"><strong>-0.600</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_047</td><td>4</td>
+            <td>+0.000</td>
+            <td>-0.667</td>
+            <td class="text-danger"><strong>-0.667</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_005</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.333</td>
+            <td class="text-danger"><strong>-0.667</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_005</td><td>4</td>
+            <td>+1.000</td>
+            <td>+0.333</td>
+            <td class="text-danger"><strong>-0.667</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_013</td><td>5</td>
+            <td>-0.200</td>
+            <td>-1.000</td>
+            <td class="text-danger"><strong>-0.800</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_ai_013</td><td>5</td>
+            <td>-0.200</td>
+            <td>-1.000</td>
+            <td class="text-danger"><strong>-0.800</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_034</td><td>5</td>
+            <td>+1.000</td>
+            <td>+0.200</td>
+            <td class="text-danger"><strong>-0.800</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_047</td><td>4</td>
+            <td>+0.333</td>
+            <td>-0.667</td>
+            <td class="text-danger"><strong>-1.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_039</td><td>4</td>
+            <td>+0.000</td>
+            <td>-1.000</td>
+            <td class="text-danger"><strong>-1.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_sp_070</td><td>4</td>
+            <td>+0.333</td>
+            <td>-0.667</td>
+            <td class="text-danger"><strong>-1.000</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_004</td><td>5</td>
+            <td>+1.000</td>
+            <td>-0.200</td>
+            <td class="text-danger"><strong>-1.200</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_gap_304</td><td>5</td>
+            <td>+1.000</td>
+            <td>-0.200</td>
+            <td class="text-danger"><strong>-1.200</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_prism_012</td><td>5</td>
+            <td>+0.800</td>
+            <td>-0.400</td>
+            <td class="text-danger"><strong>-1.200</strong></td>
+            <td></td>
+            <td></td>
+        </tr><tr>
+            <td>narc_prism_012</td><td>5</td>
+            <td>+1.000</td>
+            <td>-0.400</td>
+            <td class="text-danger"><strong>-1.400</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_054</td><td>4</td>
+            <td>+1.000</td>
+            <td>-1.000</td>
+            <td class="text-danger"><strong>-2.000</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr><tr>
+            <td>narc_focal_054</td><td>4</td>
+            <td>+1.000</td>
+            <td>-1.000</td>
+            <td class="text-danger"><strong>-2.000</strong></td>
+            <td>Y</td>
+            <td></td>
+        </tr></tbody>
+</table>
+
+</body></html>
