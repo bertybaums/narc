@@ -1,5 +1,7 @@
 """Flask server for NARC puzzle creation and solving."""
 
+import csv
+import io
 import json
 import os
 from datetime import datetime, timedelta
@@ -474,9 +476,21 @@ def admin_dashboard():
             history.append(d)
     activity = db.get_recent_activity(conn)
     users = db.get_all_users(conn) if current_user()["role"] == "owner" else []
+    # Solve attempt stats
+    row = conn.execute("""SELECT COUNT(*) as total,
+        COUNT(DISTINCT session_id) as sessions,
+        COUNT(DISTINCT puzzle_id) as puzzles_attempted,
+        AVG(CASE WHEN correct IS NOT NULL THEN correct ELSE NULL END) as accuracy
+        FROM solve_attempts""").fetchone()
+    solve_stats = {
+        "total": row["total"],
+        "sessions": row["sessions"],
+        "puzzles_attempted": row["puzzles_attempted"],
+        "accuracy": (row["accuracy"] or 0) * 100,
+    }
     conn.close()
     return render_template("admin.html", pending=pending, history=history,
-                           activity=activity, users=users)
+                           activity=activity, users=users, solve_stats=solve_stats)
 
 
 # --- Submission review API ---
@@ -650,6 +664,46 @@ def api_change_password():
                     user["username"], "Changed own password")
     conn.close()
     return jsonify({"status": "ok"})
+
+
+@app.route("/api/admin/export/solve-attempts")
+@require_role("owner", "reviewer")
+def api_export_solve_attempts():
+    conn = get_conn()
+    rows = conn.execute(
+        "SELECT * FROM solve_attempts ORDER BY created_at"
+    ).fetchall()
+    conn.close()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    if rows:
+        writer.writerow(rows[0].keys())
+        for r in rows:
+            writer.writerow(tuple(r))
+    resp = app.make_response(output.getvalue())
+    resp.headers["Content-Type"] = "text/csv"
+    resp.headers["Content-Disposition"] = "attachment; filename=solve_attempts.csv"
+    return resp
+
+
+@app.route("/api/admin/export/submissions")
+@require_role("owner", "reviewer")
+def api_export_submissions():
+    conn = get_conn()
+    rows = conn.execute(
+        "SELECT * FROM submissions ORDER BY created_at"
+    ).fetchall()
+    conn.close()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    if rows:
+        writer.writerow(rows[0].keys())
+        for r in rows:
+            writer.writerow(tuple(r))
+    resp = app.make_response(output.getvalue())
+    resp.headers["Content-Type"] = "text/csv"
+    resp.headers["Content-Disposition"] = "attachment; filename=submissions.csv"
+    return resp
 
 
 @app.route("/api/solve", methods=["POST"])
