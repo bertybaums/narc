@@ -24,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (EDIT_DATA) {
         loadFromData(EDIT_DATA);
+        if (EDIT_DATA.variants) loadVariants(EDIT_DATA.variants);
     } else {
         numSlots = parseInt(slider.value);
         buildSlots();
@@ -200,11 +201,37 @@ function collectPuzzleData() {
     };
 }
 
+function collectVariants() {
+    const fields = document.querySelectorAll('.variant-field');
+    const variants = [];
+    fields.forEach(f => {
+        const name = f.querySelector('.variant-name').value.trim();
+        const text = f.querySelector('.variant-text').value.trim();
+        if (name && text) variants.push({ variant: name, narrative: text });
+    });
+    return variants;
+}
+
 async function savePuzzle() {
     const data = collectPuzzleData();
     if (!data) {
         showStatus('Please fill in puzzle ID, title, narrative, and mask at least one grid.', 'danger');
         return;
+    }
+
+    // Include variants
+    data.variants = collectVariants();
+
+    // Include submitter info and revision flag for visitors
+    if (!IS_ADMIN) {
+        const nameEl = document.getElementById('submitter-name');
+        const emailEl = document.getElementById('submitter-email');
+        if (nameEl) data.submitter_name = nameEl.value.trim();
+        if (emailEl) data.submitter_email = emailEl.value.trim();
+    }
+    if (IS_REVISION) {
+        data.is_revision = true;
+        data.original_puzzle_id = EDIT_DATA ? EDIT_DATA.puzzle_id.replace(/_rev$/, '') : null;
     }
 
     try {
@@ -215,7 +242,11 @@ async function savePuzzle() {
         });
         const result = await resp.json();
         if (resp.ok) {
-            showStatus('Puzzle saved: ' + data.puzzle_id, 'success');
+            if (result.status === 'submitted') {
+                showStatus('Submitted for review! Thank you.', 'success');
+            } else {
+                showStatus('Puzzle saved: ' + data.puzzle_id, 'success');
+            }
         } else {
             showStatus('Error: ' + (result.error || 'Unknown error'), 'danger');
         }
@@ -294,5 +325,40 @@ function clearAll() {
     maskedSlots.clear();
     document.getElementById('narrative').value = '';
     document.getElementById('char-count').textContent = '0';
+    document.getElementById('variants-container').innerHTML =
+        '<p class="text-muted small" id="no-variants-msg">No additional variants. The main narrative is saved as "original".</p>';
     buildSlots();
+}
+
+// --- Variant management ---
+
+let variantCount = 0;
+
+function addVariantField(name, text) {
+    const msg = document.getElementById('no-variants-msg');
+    if (msg) msg.style.display = 'none';
+
+    const container = document.getElementById('variants-container');
+    const idx = variantCount++;
+    const div = document.createElement('div');
+    div.className = 'mb-2 variant-field';
+    div.innerHTML = `
+        <div class="d-flex gap-2 mb-1">
+            <input type="text" class="form-control form-control-sm variant-name"
+                   placeholder="Variant name (e.g. physics, mythology)" value="${name || ''}" style="width:200px;">
+            <button class="btn btn-sm btn-outline-danger" onclick="this.closest('.variant-field').remove()">Remove</button>
+        </div>
+        <textarea class="form-control form-control-sm variant-text" rows="3"
+                  placeholder="Variant narrative...">${text || ''}</textarea>
+    `;
+    container.appendChild(div);
+}
+
+function loadVariants(variants) {
+    if (!variants || variants.length <= 1) return;
+    for (const v of variants) {
+        if (v.variant !== 'original') {
+            addVariantField(v.source_domain || v.variant, v.narrative);
+        }
+    }
 }

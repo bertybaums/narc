@@ -136,6 +136,10 @@ function revealNarrative() {
     document.getElementById('narrative-text').classList.add('visible');
     document.getElementById('btn-reveal').style.display = 'none';
 
+    // Show variant tabs if present
+    const vtabs = document.getElementById('variant-tabs');
+    if (vtabs) vtabs.classList.add('visible');
+
     // Reveal descriptive labels
     document.querySelectorAll('.slot-label[data-full-label]').forEach(el => {
         el.textContent = el.dataset.fullLabel;
@@ -281,4 +285,13 @@ function clearAnswer() {
         answerGrids[posStr] = new Grid(item.rows, item.cols);
         renderAnswerGrid(posStr);
     }
+}
+
+function switchVariant(idx) {
+    const variants = PUZZLE.variants;
+    if (!variants || !variants[idx]) return;
+    document.getElementById('narrative-text').textContent = variants[idx].narrative;
+    document.querySelectorAll('#variant-tabs .vtab').forEach((btn, i) => {
+        btn.classList.toggle('active', i === idx);
+    });
 }

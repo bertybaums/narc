@@ -71,3 +71,39 @@ CREATE TABLE IF NOT EXISTS solve_attempts (
     skipped_phase1 INTEGER DEFAULT 0,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+-- Auth and submission review
+
+CREATE TABLE IF NOT EXISTS users (
+    user_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    username      TEXT NOT NULL UNIQUE,
+    password_hash TEXT NOT NULL,
+    role          TEXT NOT NULL CHECK(role IN ('owner', 'reviewer')),
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS submissions (
+    submission_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+    submission_type  TEXT NOT NULL CHECK(submission_type IN ('new_puzzle', 'revision', 'variant')),
+    status           TEXT NOT NULL DEFAULT 'pending'
+                     CHECK(status IN ('pending', 'approved', 'rejected', 'reversed')),
+    payload_json     TEXT NOT NULL,
+    target_puzzle_id TEXT,
+    submitter_name   TEXT,
+    submitter_email  TEXT,
+    reviewer_id      INTEGER REFERENCES users(user_id),
+    review_note      TEXT,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    reviewed_at      TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS activity_log (
+    log_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id       INTEGER REFERENCES users(user_id),
+    action        TEXT NOT NULL,
+    target_type   TEXT,          -- 'puzzle', 'variant', 'submission', 'user'
+    target_id     TEXT,          -- puzzle_id, submission_id, etc.
+    detail        TEXT,          -- human-readable summary
+    snapshot_json TEXT,          -- state before change (for reversals)
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

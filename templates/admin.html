@@ -1,0 +1,315 @@
+{% extends "base.html" %}
+{% block title %}NARC — Admin{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Admin Dashboard</h2>
+
+<ul class="nav nav-tabs mb-4" id="admin-tabs">
+    <li class="nav-item">
+        <a class="nav-link active" href="#" onclick="showTab('pending')">
+            Pending <span class="badge bg-warning text-dark">{{ pending | length }}</span>
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showTab('activity')">Activity</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showTab('history')">History</a>
+    </li>
+    {% if user.role == 'owner' %}
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showTab('accounts')">Accounts</a>
+    </li>
+    {% endif %}
+    <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showTab('settings')">Settings</a>
+    </li>
+</ul>
+
+<!-- Pending Tab -->
+<div id="tab-pending" class="admin-tab">
+    {% if pending %}
+    {% for s in pending %}
+    <div class="card mb-3 admin-submission-card submission-{{ s.submission_type }}">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge bg-info me-1">{{ s.submission_type }}</span>
+                {% if s.target_puzzle_id %}
+                <span class="text-muted">for {{ s.target_puzzle_id }}</span>
+                {% endif %}
+            </div>
+            <small class="text-muted">
+                {{ s.created_at }}
+                {% if s.submitter_name %} &middot; {{ s.submitter_name }}{% endif %}
+                {% if s.submitter_email %} ({{ s.submitter_email }}){% endif %}
+            </small>
+        </div>
+        <div class="card-body">
+            <div id="submission-preview-{{ s.submission_id }}">
+                <pre class="small" style="max-height:300px;overflow:auto;white-space:pre-wrap;">{{ s.payload_json }}</pre>
+            </div>
+            <div class="d-flex gap-2 mt-3">
+                <button class="btn btn-sm btn-outline-secondary"
+                        onclick="toggleEdit({{ s.submission_id }})">Edit</button>
+                <button class="btn btn-sm btn-success"
+                        onclick="reviewSubmission({{ s.submission_id }}, 'approve')">Approve</button>
+                <button class="btn btn-sm btn-danger"
+                        onclick="reviewSubmission({{ s.submission_id }}, 'reject')">Reject</button>
+            </div>
+            <div id="submission-edit-{{ s.submission_id }}" style="display:none;" class="mt-3">
+                <textarea class="form-control form-control-sm mb-2" rows="10"
+                          id="submission-payload-{{ s.submission_id }}">{{ s.payload_json }}</textarea>
+                <button class="btn btn-sm btn-outline-secondary"
+                        onclick="saveEdit({{ s.submission_id }})">Save Edit</button>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">No pending submissions.</p>
+    {% endif %}
+</div>
+
+<!-- Activity Tab -->
+<div id="tab-activity" class="admin-tab" style="display:none;">
+    {% if activity %}
+    <div class="list-group">
+    {% for a in activity %}
+        <div class="list-group-item list-group-item-action d-flex justify-content-between align-items-start"
+             style="background: transparent; border-color: #333;">
+            <div>
+                <span class="badge bg-secondary me-1">{{ a.action }}</span>
+                {% if a.target_type %}
+                <span class="text-muted">{{ a.target_type }}</span>
+                {% endif %}
+                {% if a.target_id %}
+                <code>{{ a.target_id }}</code>
+                {% endif %}
+                {% if a.detail %}
+                <span class="ms-1">{{ a.detail }}</span>
+                {% endif %}
+            </div>
+            <small class="text-muted text-nowrap ms-3">
+                {{ a.username or 'visitor' }} &middot; {{ a.created_at }}
+            </small>
+        </div>
+    {% endfor %}
+    </div>
+    {% else %}
+    <p class="text-muted">No activity yet.</p>
+    {% endif %}
+</div>
+
+<!-- History Tab -->
+<div id="tab-history" class="admin-tab" style="display:none;">
+    {% if history %}
+    {% for s in history %}
+    <div class="card mb-3 admin-submission-card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <div>
+                <span class="badge {% if s.status == 'approved' %}bg-success{% elif s.status == 'rejected' %}bg-danger{% else %}bg-secondary{% endif %} me-1">
+                    {{ s.status }}
+                </span>
+                <span class="badge bg-info me-1">{{ s.submission_type }}</span>
+                {% if s.target_puzzle_id %}
+                <span class="text-muted">for {{ s.target_puzzle_id }}</span>
+                {% endif %}
+            </div>
+            <small class="text-muted">
+                Reviewed {{ s.reviewed_at }}
+                {% if s.submitter_name %} &middot; by {{ s.submitter_name }}{% endif %}
+            </small>
+        </div>
+        <div class="card-body">
+            <pre class="small" style="max-height:200px;overflow:auto;white-space:pre-wrap;">{{ s.payload_json }}</pre>
+            {% if s.review_note %}
+            <p class="text-muted small mt-2">Note: {{ s.review_note }}</p>
+            {% endif %}
+            {% if user.role == 'owner' and s.status in ('approved', 'rejected') and s.reversible %}
+            <button class="btn btn-sm btn-outline-warning mt-2"
+                    onclick="reverseSubmission({{ s.submission_id }})">Reverse Decision</button>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-muted">No reviewed submissions yet.</p>
+    {% endif %}
+</div>
+
+<!-- Settings Tab (all admins) -->
+<div id="tab-settings" class="admin-tab" style="display:none;">
+    <div class="card mb-3">
+        <div class="card-header">Change Your Password</div>
+        <div class="card-body">
+            <div class="d-flex gap-2 align-items-end">
+                <div>
+                    <label class="form-label">Current Password</label>
+                    <input type="password" id="current-password" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <div>
+                    <label class="form-label">New Password</label>
+                    <input type="password" id="new-pw" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <div>
+                    <label class="form-label">Confirm</label>
+                    <input type="password" id="confirm-pw" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <button class="btn btn-sm btn-narc" onclick="changePassword()">Change</button>
+            </div>
+            <div id="pw-status" class="mt-2" style="display:none;"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Accounts Tab (owner only) -->
+{% if user.role == 'owner' %}
+<div id="tab-accounts" class="admin-tab" style="display:none;">
+    <div class="card mb-3">
+        <div class="card-header">Create Reviewer Account</div>
+        <div class="card-body">
+            <div class="d-flex gap-2 align-items-end">
+                <div>
+                    <label class="form-label">Username</label>
+                    <input type="text" id="new-username" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <div>
+                    <label class="form-label">Password</label>
+                    <input type="password" id="new-password" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <button class="btn btn-sm btn-narc" onclick="createUser()">Create</button>
+            </div>
+            <div id="user-status" class="mt-2" style="display:none;"></div>
+        </div>
+    </div>
+
+    <h5>Existing Accounts</h5>
+    <div class="list-group" id="users-list">
+    {% for u in users %}
+        <div class="list-group-item d-flex justify-content-between align-items-center"
+             style="background: transparent; border-color: #333;">
+            <div>
+                <strong>{{ u.username }}</strong>
+                <span class="badge {% if u.role == 'owner' %}bg-warning text-dark{% else %}bg-info{% endif %} ms-2">{{ u.role }}</span>
+            </div>
+            <div>
+                <small class="text-muted me-3">{{ u.created_at }}</small>
+                {% if u.role != 'owner' %}
+                <button class="btn btn-sm btn-outline-danger"
+                        onclick="deleteUser({{ u.user_id }}, '{{ u.username }}')">Delete</button>
+                {% endif %}
+            </div>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showTab(name) {
+    document.querySelectorAll('.admin-tab').forEach(t => t.style.display = 'none');
+    document.getElementById('tab-' + name).style.display = 'block';
+    document.querySelectorAll('#admin-tabs .nav-link').forEach(l => l.classList.remove('active'));
+    event.target.closest('.nav-link').classList.add('active');
+}
+
+function toggleEdit(sid) {
+    const el = document.getElementById('submission-edit-' + sid);
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+}
+
+async function saveEdit(sid) {
+    const payload = document.getElementById('submission-payload-' + sid).value;
+    try { JSON.parse(payload); } catch(e) {
+        alert('Invalid JSON: ' + e.message);
+        return;
+    }
+    const resp = await fetch('/api/submissions/' + sid, {
+        method: 'PUT',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({payload_json: payload})
+    });
+    if (resp.ok) {
+        document.getElementById('submission-edit-' + sid).style.display = 'none';
+        document.querySelector('#submission-preview-' + sid + ' pre').textContent = payload;
+    }
+}
+
+async function reviewSubmission(sid, action) {
+    const note = action === 'reject' ? prompt('Rejection note (optional):') : null;
+    const resp = await fetch('/api/submissions/' + sid + '/' + action, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({review_note: note})
+    });
+    if (resp.ok) location.reload();
+    else alert('Error: ' + (await resp.json()).error);
+}
+
+async function reverseSubmission(sid) {
+    if (!confirm('Reverse this decision? This will undo the approval/rejection.')) return;
+    const resp = await fetch('/api/submissions/' + sid + '/reverse', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'}
+    });
+    if (resp.ok) location.reload();
+    else alert('Error: ' + (await resp.json()).error);
+}
+
+async function createUser() {
+    const username = document.getElementById('new-username').value.trim();
+    const password = document.getElementById('new-password').value;
+    if (!username || !password) { alert('Username and password required.'); return; }
+    const resp = await fetch('/api/admin/users', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({username, password})
+    });
+    const result = await resp.json();
+    const el = document.getElementById('user-status');
+    if (resp.ok) {
+        el.className = 'mt-2 text-success';
+        el.textContent = 'Created ' + username;
+        el.style.display = 'block';
+        location.reload();
+    } else {
+        el.className = 'mt-2 text-danger';
+        el.textContent = result.error;
+        el.style.display = 'block';
+    }
+}
+
+async function deleteUser(uid, username) {
+    if (!confirm('Delete reviewer "' + username + '"?')) return;
+    const resp = await fetch('/api/admin/users/' + uid, { method: 'DELETE' });
+    if (resp.ok) location.reload();
+}
+
+async function changePassword() {
+    const current = document.getElementById('current-password').value;
+    const newPw = document.getElementById('new-pw').value;
+    const confirm = document.getElementById('confirm-pw').value;
+    const el = document.getElementById('pw-status');
+    if (!current || !newPw) { el.className = 'mt-2 text-danger'; el.textContent = 'All fields required.'; el.style.display = 'block'; return; }
+    if (newPw !== confirm) { el.className = 'mt-2 text-danger'; el.textContent = 'Passwords do not match.'; el.style.display = 'block'; return; }
+    const resp = await fetch('/api/admin/change-password', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({current_password: current, new_password: newPw})
+    });
+    const result = await resp.json();
+    if (resp.ok) {
+        el.className = 'mt-2 text-success'; el.textContent = 'Password changed.';
+        document.getElementById('current-password').value = '';
+        document.getElementById('new-pw').value = '';
+        document.getElementById('confirm-pw').value = '';
+    } else {
+        el.className = 'mt-2 text-danger'; el.textContent = result.error;
+    }
+    el.style.display = 'block';
+}
+</script>
+{% endblock %}

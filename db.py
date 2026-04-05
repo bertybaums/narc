@@ -2,6 +2,7 @@
 
 import json
 import sqlite3
+from datetime import datetime, timedelta
 from pathlib import Path
 
 SCHEMA_PATH = Path(__file__).parent / "schema.sql"
@@ -196,5 +197,132 @@ def insert_solve_attempt(conn, puzzle_id, session_id, phase, saw_narrative,
            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, session_id, solver_name, phase, saw_narrative,
          submitted_grids, correct, cell_accuracy, time_spent_ms, skipped_phase1),
+    )
+    conn.commit()
+
+
+# --- users ---
+
+def create_user(conn, username, password_hash, role):
+    conn.execute(
+        "INSERT INTO users (username, password_hash, role) VALUES (?, ?, ?)",
+        (username, password_hash, role),
+    )
+    conn.commit()
+
+
+def get_user_by_username(conn, username):
+    return conn.execute(
+        "SELECT * FROM users WHERE username=?", (username,)
+    ).fetchone()
+
+
+def get_user_by_id(conn, user_id):
+    return conn.execute(
+        "SELECT * FROM users WHERE user_id=?", (user_id,)
+    ).fetchone()
+
+
+def get_all_users(conn):
+    return conn.execute(
+        "SELECT user_id, username, role, created_at FROM users ORDER BY created_at"
+    ).fetchall()
+
+
+def delete_user(conn, user_id):
+    conn.execute("DELETE FROM users WHERE user_id=?", (user_id,))
+    conn.commit()
+
+
+def update_user_password(conn, user_id, password_hash):
+    conn.execute(
+        "UPDATE users SET password_hash=? WHERE user_id=?",
+        (password_hash, user_id),
+    )
+    conn.commit()
+
+
+# --- submissions ---
+
+def create_submission(conn, submission_type, payload_json, target_puzzle_id=None,
+                      submitter_name=None, submitter_email=None):
+    conn.execute(
+        """INSERT INTO submissions
+           (submission_type, payload_json, target_puzzle_id, submitter_name, submitter_email)
+           VALUES (?, ?, ?, ?, ?)""",
+        (submission_type, payload_json, target_puzzle_id, submitter_name, submitter_email),
+    )
+    conn.commit()
+    return conn.execute("SELECT last_insert_rowid()").fetchone()[0]
+
+
+def get_submission(conn, submission_id):
+    return conn.execute(
+        "SELECT * FROM submissions WHERE submission_id=?", (submission_id,)
+    ).fetchone()
+
+
+def get_submissions(conn, status=None):
+    if status:
+        return conn.execute(
+            "SELECT * FROM submissions WHERE status=? ORDER BY created_at DESC",
+            (status,)
+        ).fetchall()
+    return conn.execute(
+        "SELECT * FROM submissions ORDER BY created_at DESC"
+    ).fetchall()
+
+
+def update_submission_payload(conn, submission_id, payload_json):
+    conn.execute(
+        "UPDATE submissions SET payload_json=? WHERE submission_id=?",
+        (payload_json, submission_id),
+    )
+    conn.commit()
+
+
+def review_submission(conn, submission_id, status, reviewer_id, review_note=None):
+    conn.execute(
+        """UPDATE submissions
+           SET status=?, reviewer_id=?, review_note=?, reviewed_at=datetime('now')
+           WHERE submission_id=?""",
+        (status, reviewer_id, review_note, submission_id),
+    )
+    conn.commit()
+
+
+# --- activity log ---
+
+def log_activity(conn, user_id, action, target_type=None, target_id=None,
+                 detail=None, snapshot_json=None):
+    conn.execute(
+        """INSERT INTO activity_log
+           (user_id, action, target_type, target_id, detail, snapshot_json)
+           VALUES (?, ?, ?, ?, ?, ?)""",
+        (user_id, action, target_type, target_id, detail, snapshot_json),
+    )
+    conn.commit()
+
+
+def get_recent_activity(conn, limit=50):
+    return conn.execute(
+        """SELECT a.*, u.username
+           FROM activity_log a
+           LEFT JOIN users u ON a.user_id = u.user_id
+           ORDER BY a.created_at DESC LIMIT ?""",
+        (limit,)
+    ).fetchall()
+
+
+def get_activity_entry(conn, log_id):
+    return conn.execute(
+        "SELECT * FROM activity_log WHERE log_id=?", (log_id,)
+    ).fetchone()
+
+
+def delete_variant(conn, puzzle_id, variant):
+    conn.execute(
+        "DELETE FROM narrative_variants WHERE puzzle_id=? AND variant=?",
+        (puzzle_id, variant),
     )
     conn.commit()

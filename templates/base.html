@@ -13,16 +13,38 @@
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">NARC</a>
-            <div class="navbar-nav">
+            <div class="navbar-nav me-auto">
                 <a class="nav-link" href="/about">About</a>
                 <a class="nav-link" href="/browse">Browse</a>
                 <a class="nav-link" href="/create">Create</a>
                 <a class="nav-link" href="/inspect">Inspect</a>
+                {% if user %}
+                <a class="nav-link" href="/admin">Admin</a>
+                {% endif %}
+            </div>
+            <div class="navbar-nav">
+                {% if user %}
+                <span class="nav-link text-muted">{{ user.username }} ({{ user.role }})</span>
+                <a class="nav-link" href="/logout">Logout</a>
+                {% else %}
+                <a class="nav-link" href="/login">Login</a>
+                {% endif %}
             </div>
         </div>
     </nav>
 
     <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+
         {% block content %}{% endblock %}
     </div>
 

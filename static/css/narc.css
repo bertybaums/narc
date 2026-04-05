@@ -211,3 +211,20 @@ body {
     border-color: #d97706;
     color: #000;
 }
+
+/* Admin dashboard */
+.admin-submission-card {
+    border-left: 4px solid #6c757d;
+}
+
+.admin-submission-card.submission-new_puzzle {
+    border-left-color: #f59e0b;
+}
+
+.admin-submission-card.submission-revision {
+    border-left-color: #8b5cf6;
+}
+
+.admin-submission-card.submission-variant {
+    border-left-color: #0dcaf0;
+}

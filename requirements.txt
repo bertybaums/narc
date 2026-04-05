@@ -3,3 +3,4 @@ pyyaml>=6.0
 Pillow>=10.0
 httpx>=0.27
 click>=8.0
+gunicorn>=22.0

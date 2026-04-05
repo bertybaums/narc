@@ -61,9 +61,45 @@
             </div>
         </div>
 
+        <!-- Variants -->
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Narrative Variants
+                <button class="btn btn-sm btn-outline-secondary" onclick="addVariantField()">+ Add Variant</button>
+            </div>
+            <div class="card-body" id="variants-container">
+                <p class="text-muted small" id="no-variants-msg">No additional variants. The main narrative is saved as "original".</p>
+            </div>
+        </div>
+
+        <!-- Submitter info (visitors only) -->
+        {% if not user %}
+        <div class="card mb-3">
+            <div class="card-header">Your Info <small class="text-muted">(optional)</small></div>
+            <div class="card-body">
+                <div class="d-flex gap-3 flex-wrap">
+                    <div>
+                        <label class="form-label">Name</label>
+                        <input type="text" id="submitter-name" class="form-control form-control-sm"
+                               placeholder="Your name" style="width: 200px;">
+                    </div>
+                    <div>
+                        <label class="form-label">Email</label>
+                        <input type="email" id="submitter-email" class="form-control form-control-sm"
+                               placeholder="your@email.com" style="width: 250px;">
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+
         <!-- Actions -->
         <div class="d-flex gap-2 mb-4">
+            {% if user %}
             <button id="btn-save" class="btn btn-narc" onclick="savePuzzle()">Save Puzzle</button>
+            {% else %}
+            <button id="btn-save" class="btn btn-narc" onclick="savePuzzle()">Submit for Review</button>
+            {% endif %}
             <button id="btn-preview" class="btn btn-outline-secondary" onclick="togglePreview()">Preview</button>
             <button id="btn-clear" class="btn btn-outline-danger" onclick="clearAll()">Clear All</button>
         </div>
@@ -86,6 +122,8 @@
 {% block scripts %}
 <script>
 const EDIT_DATA = {{ puzzle_json | safe if puzzle_json else 'null' }};
+const IS_ADMIN = {{ 'true' if user else 'false' }};
+const IS_REVISION = {{ 'true' if revise_mode else 'false' }};
 </script>
 <script src="/static/js/create.js"></script>
 {% endblock %}

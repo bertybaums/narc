@@ -1,9 +1,27 @@
 {% extends "base.html" %}
 {% block title %}NARC — Solve: {{ puzzle.title }}{% endblock %}
 
+{% block head %}
+<style>
+.variant-tabs { display: none; margin-top: 8px; gap: 4px; flex-wrap: wrap; }
+.variant-tabs.visible { display: flex; }
+.vtab {
+    padding: 4px 10px; border: 1px solid #555; border-radius: 4px;
+    background: transparent; color: #aaa; cursor: pointer; font-size: 0.8em;
+}
+.vtab.active { background: #2d1f00; color: #daa520; border-color: #f59e0b; }
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="mb-3">
-    <h2>{{ puzzle.title }}</h2>
+    <h2>
+        {{ puzzle.title }}
+        {% if puzzle.is_draft %}
+        <span class="badge bg-warning text-dark" style="font-size:0.5em; vertical-align:middle;">Draft</span>
+        {% endif %}
+        <a href="/create?revise={{ puzzle.puzzle_id }}" class="btn btn-sm btn-outline-secondary ms-2">Copy + Revise</a>
+    </h2>
     <p class="text-muted">{{ puzzle.sequence | length }} grids &middot;
     {% if puzzle.masked_positions | length == 1 %}
         reconstruct grid #{{ puzzle.masked_positions[0] + 1 }}
@@ -27,6 +45,15 @@
         Reveal Clue
     </button>
     <div id="narrative-text" class="narrative-text">{{ puzzle.narrative }}</div>
+    {% if puzzle.variants and puzzle.variants | length > 1 %}
+    <div class="variant-tabs" id="variant-tabs">
+        {% for v in puzzle.variants %}
+        <button class="vtab{{ ' active' if loop.index0 == 0 }}" onclick="switchVariant({{ loop.index0 }})">
+            {{ 'Original' if v.variant == 'original' else (v.source_domain or v.variant) }}
+        </button>
+        {% endfor %}
+    </div>
+    {% endif %}
 </div>
 
 <!-- Answer editor -->

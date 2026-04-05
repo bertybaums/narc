@@ -3,10 +3,14 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Puzzles <small class="text-muted">({{ puzzles | length }})</small></h2>
-    <div>
+    <h2 class="mb-0">Puzzles <small class="text-muted" id="puzzle-count">({{ puzzles | length }})</small></h2>
+    <div class="d-flex align-items-center gap-3">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="show-drafts" onchange="filterPuzzles()">
+            <label class="form-check-label text-muted" for="show-drafts">Show draft puzzles</label>
+        </div>
         <input type="text" id="search" class="form-control form-control-sm" placeholder="Search..."
-               style="width: 200px; display: inline-block;" oninput="filterPuzzles()">
+               style="width: 200px;" oninput="filterPuzzles()">
     </div>
 </div>
 
@@ -70,10 +74,17 @@
 <div class="row g-3" id="puzzle-grid">
     {% for p in puzzles %}
     <div class="col-md-4 puzzle-item" data-tags="{{ p.tags or '' }}"
-         data-title="{{ p.title | lower }}" data-id="{{ p.puzzle_id | lower }}">
-        <div class="card puzzle-card" onclick="location.href='/solve/{{ p.puzzle_id }}'">
+         data-title="{{ p.title | lower }}" data-id="{{ p.puzzle_id | lower }}"
+         data-draft="{{ 'true' if p.is_draft else 'false' }}"
+         {% if p.is_draft %}style="display: none;"{% endif %}>
+        <div class="card puzzle-card{{ ' border-warning' if p.is_draft }}" onclick="location.href='/solve/{{ p.puzzle_id }}'">
             <div class="card-body">
-                <h5 class="card-title">{{ p.title }}</h5>
+                <h5 class="card-title">
+                    {{ p.title }}
+                    {% if p.is_draft %}
+                    <span class="badge bg-warning text-dark" style="font-size:0.65em;">Draft</span>
+                    {% endif %}
+                </h5>
                 <p class="text-muted mb-1">
                     {{ p.sequence | length }} grids &middot;
                     {% if p.masked_positions | length == 1 %}
@@ -85,11 +96,14 @@
                     &middot; <span title="Human {{ p.human_difficulty }}/5, AI {{ p.ai_difficulty }}/5">
                         H{{ p.human_difficulty }} A{{ p.ai_difficulty }}</span>
                     {% endif %}
+                    {% if p.variant_count > 1 %}
+                    &middot; {{ p.variant_count }} variants
+                    {% endif %}
                 </p>
                 <p class="card-text small text-truncate">{{ p.narrative[:80] }}...</p>
                 <div class="d-flex gap-2 mt-2 flex-wrap">
-                    <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc">Solve</a>
-                    <a href="/create?edit={{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary">Edit</a>
+                    <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc" onclick="event.stopPropagation()">Solve</a>
+                    <a href="/create?revise={{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation()">Copy + Revise</a>
                 </div>
             </div>
         </div>
@@ -129,6 +143,7 @@ function clearFilters() {
 
 function filterPuzzles() {
     const search = document.getElementById('search').value.toLowerCase();
+    const showDrafts = document.getElementById('show-drafts').checked;
     const items = document.querySelectorAll('.puzzle-item');
     let shown = 0;
 
@@ -136,6 +151,13 @@ function filterPuzzles() {
         const tags = item.dataset.tags || '';
         const title = item.dataset.title || '';
         const id = item.dataset.id || '';
+        const isDraft = item.dataset.draft === 'true';
+
+        // Hide drafts unless toggle is on
+        if (isDraft && !showDrafts) {
+            item.style.display = 'none';
+            return;
+        }
 
         // Text search
         const matchesSearch = !search || title.includes(search) || id.includes(search);
@@ -157,12 +179,17 @@ function filterPuzzles() {
         }
     });
 
+    const total = items.length;
     const countEl = document.getElementById('filter-count');
-    if (activeTags.size > 0 || search) {
-        countEl.textContent = `Showing ${shown} of ${items.length}`;
+    if (activeTags.size > 0 || search || !showDrafts) {
+        countEl.textContent = `Showing ${shown} of ${total}`;
     } else {
         countEl.textContent = '';
     }
+    document.getElementById('puzzle-count').textContent = '(' + shown + ')';
 }
+
+// Set initial count on load
+document.addEventListener('DOMContentLoaded', filterPuzzles);
 </script>
 {% endblock %}
