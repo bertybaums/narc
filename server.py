@@ -278,18 +278,21 @@ def create():
     puzzle = None
     puzzle_json = "null"
     revise_mode = False
+    original_creator = None
     if edit_id or revise_id:
         conn = get_conn()
         row = db.get_puzzle(conn, edit_id or revise_id)
         if row:
             puzzle = enrich_puzzle(conn, db.puzzle_to_json(row))
+            original_creator = puzzle.get("creator", "human")
             if revise_id:
                 revise_mode = True
                 puzzle["puzzle_id"] = puzzle["puzzle_id"] + "_rev"
             puzzle_json = json.dumps(puzzle)
         conn.close()
     return render_template("create.html", puzzle=puzzle, puzzle_json=puzzle_json,
-                           revise_mode=revise_mode)
+                           revise_mode=revise_mode,
+                           original_creator=original_creator)
 
 
 @app.route("/solve/<puzzle_id>")
@@ -438,6 +441,27 @@ def api_add_variant(puzzle_id):
         return jsonify({"status": "submitted", "submission_id": sid})
 
 
+@app.route("/api/puzzles/<puzzle_id>/creator", methods=["PUT"])
+@require_role("owner", "reviewer")
+def api_update_creator(puzzle_id):
+    data = request.get_json()
+    creator = data.get("creator") if data else None
+    if creator not in ("human", "claude", "colab"):
+        return jsonify({"error": "Invalid creator value"}), 400
+    conn = get_conn()
+    row = db.get_puzzle(conn, puzzle_id)
+    if not row:
+        conn.close()
+        return jsonify({"error": "Puzzle not found"}), 404
+    old_creator = row["creator"]
+    db.update_puzzle_creator(conn, puzzle_id, creator)
+    user = current_user()
+    db.log_activity(conn, user["user_id"], "update_creator", "puzzle",
+                    puzzle_id, f"Changed creator: {old_creator} → {creator}")
+    conn.close()
+    return jsonify({"status": "ok"})
+
+
 @app.route("/api/puzzles/<puzzle_id>", methods=["DELETE"])
 @require_role("owner")
 def api_delete_puzzle(puzzle_id):
@@ -488,9 +512,12 @@ def admin_dashboard():
         "puzzles_attempted": row["puzzles_attempted"],
         "accuracy": (row["accuracy"] or 0) * 100,
     }
+    # Puzzle list for admin origin management
+    all_puzzles = [db.puzzle_to_json(r) for r in db.get_all_puzzles(conn)]
     conn.close()
     return render_template("admin.html", pending=pending, history=history,
-                           activity=activity, users=users, solve_stats=solve_stats)
+                           activity=activity, users=users, solve_stats=solve_stats,
+                           all_puzzles=all_puzzles)
 
 
 # --- Submission review API ---

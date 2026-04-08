@@ -320,6 +320,14 @@ def get_activity_entry(conn, log_id):
     ).fetchone()
 
 
+def update_puzzle_creator(conn, puzzle_id, creator):
+    conn.execute(
+        "UPDATE puzzles SET creator=? WHERE puzzle_id=?",
+        (creator, puzzle_id),
+    )
+    conn.commit()
+
+
 def delete_variant(conn, puzzle_id, variant):
     conn.execute(
         "DELETE FROM narrative_variants WHERE puzzle_id=? AND variant=?",

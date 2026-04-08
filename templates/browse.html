@@ -76,11 +76,19 @@
     <div class="col-md-4 puzzle-item" data-tags="{{ p.tags or '' }}"
          data-title="{{ p.title | lower }}" data-id="{{ p.puzzle_id | lower }}"
          data-draft="{{ 'true' if p.is_draft else 'false' }}"
+         data-creator="{{ p.creator or 'human' }}"
          {% if p.is_draft %}style="display: none;"{% endif %}>
         <div class="card puzzle-card{{ ' border-warning' if p.is_draft }}" onclick="location.href='/solve/{{ p.puzzle_id }}'">
             <div class="card-body">
                 <h5 class="card-title">
                     {{ p.title }}
+                    {% if p.creator == 'claude' %}
+                    <span class="badge bg-info" style="font-size:0.65em;">AI-generated</span>
+                    {% elif p.creator == 'colab' %}
+                    <span class="badge bg-success" style="font-size:0.65em;">AI-Hum-Colab</span>
+                    {% else %}
+                    <span class="badge bg-secondary" style="font-size:0.65em;">Hum-generated</span>
+                    {% endif %}
                     {% if p.is_draft %}
                     <span class="badge bg-warning text-dark" style="font-size:0.65em;">Draft</span>
                     {% endif %}

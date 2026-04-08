@@ -197,7 +197,7 @@ function collectPuzzleData() {
         sequence: sequence,
         masked_positions: maskedPositions,
         answer_grids: answerGrids,
-        metadata: { creator: 'human', difficulty: difficulty }
+        metadata: { creator: determineCreator(), difficulty: difficulty }
     };
 }
 
@@ -361,4 +361,21 @@ function loadVariants(variants) {
             addVariantField(v.source_domain || v.variant, v.narrative);
         }
     }
+}
+
+function determineCreator() {
+    // New puzzle from scratch = human
+    if (!IS_REVISION && !EDIT_DATA) return 'human';
+    // Editing or revising an existing puzzle: human revising anything → colab
+    // (original "human" edited by human stays "human" only in edit mode, not revision)
+    if (!ORIGINAL_CREATOR) return 'human';
+    if (IS_REVISION) {
+        // Revising always means a human is modifying, so:
+        // claude → colab, colab stays colab, human stays human
+        if (ORIGINAL_CREATOR === 'claude') return 'colab';
+        if (ORIGINAL_CREATOR === 'colab') return 'colab';
+        return 'human';
+    }
+    // Edit mode (same puzzle_id): preserve original creator
+    return ORIGINAL_CREATOR;
 }

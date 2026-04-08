@@ -124,6 +124,7 @@
 const EDIT_DATA = {{ puzzle_json | safe if puzzle_json else 'null' }};
 const IS_ADMIN = {{ 'true' if user else 'false' }};
 const IS_REVISION = {{ 'true' if revise_mode else 'false' }};
+const ORIGINAL_CREATOR = {{ ('"%s"' % original_creator) | safe if original_creator else 'null' }};
 </script>
 <script src="/static/js/create.js"></script>
 {% endblock %}

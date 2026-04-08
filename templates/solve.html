@@ -17,6 +17,13 @@
 <div class="mb-3">
     <h2>
         {{ puzzle.title }}
+        {% if puzzle.creator == 'claude' %}
+        <span class="badge bg-info" style="font-size:0.5em; vertical-align:middle;">AI-generated</span>
+        {% elif puzzle.creator == 'colab' %}
+        <span class="badge bg-success" style="font-size:0.5em; vertical-align:middle;">AI-Hum-Colab</span>
+        {% else %}
+        <span class="badge bg-secondary" style="font-size:0.5em; vertical-align:middle;">Hum-generated</span>
+        {% endif %}
         {% if puzzle.is_draft %}
         <span class="badge bg-warning text-dark" style="font-size:0.5em; vertical-align:middle;">Draft</span>
         {% endif %}
