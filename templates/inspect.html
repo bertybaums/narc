@@ -1,0 +1,741 @@
+{% extends "base.html" %}
+{% block title %}NARC — Inspect{% endblock %}
+
+{% block head %}
+<style>
+.inspect-tabs { display: flex; gap: 4px; margin-bottom: 20px; }
+.inspect-tab {
+    padding: 8px 20px; border: 1px solid #374151; border-radius: 6px 6px 0 0;
+    background: #1a1a2e; color: #888; cursor: pointer; text-decoration: none;
+    font-weight: 600; border-bottom: none;
+}
+.inspect-tab:hover { background: #1f2040; color: #ddd; }
+.inspect-tab.active { background: #0f0f1a; color: #f59e0b; border-color: #f59e0b; border-bottom: 1px solid #0f0f1a; }
+
+.summary-bar { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; padding: 12px; background: #1a1a2e; border-radius: 8px; }
+.summary-card { background: #1f2937; padding: 10px 16px; border-radius: 6px; text-align: center; min-width: 100px; }
+.summary-card .value { font-size: 1.6em; font-weight: bold; }
+.summary-card .label { color: #888; font-size: 0.8em; }
+
+.controls { margin-bottom: 16px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.controls input, .controls select {
+    background: #1f2937; border: 1px solid #374151; color: #e0e0e0;
+    padding: 6px 10px; border-radius: 4px;
+}
+.controls input { width: 250px; }
+
+.puzzle { border: 1px solid #2a2a3e; border-radius: 8px; margin-bottom: 6px; overflow: hidden; }
+.puzzle-header { padding: 8px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; background: #1a1a2e; }
+.puzzle-header:hover { background: #1f2040; }
+.puzzle-header .title { font-weight: 600; color: #e0e0e0; flex: 1; }
+.puzzle-header .pid { color: #666; font-family: monospace; font-size: 0.85em; min-width: 130px; }
+.puzzle-header .meta { color: #888; font-size: 0.85em; }
+.toggle { color: #666; transition: transform 0.2s; font-size: 0.8em; }
+.toggle.open { transform: rotate(90deg); }
+
+.dots { display: flex; gap: 3px; }
+.dot { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 0.7em; font-weight: 600; }
+.dot-narc { background: #134e1f; color: #2ECC40; }
+.dot-grids { background: #0a3050; color: #0074D9; }
+.dot-narr { background: #4a3000; color: #FF851B; }
+.dot-fail { background: #2a1515; color: #666; }
+
+.puzzle-body { display: none; padding: 14px; background: #111122; }
+.narrative { padding: 10px 14px; background: #1a1500; border-left: 3px solid #f59e0b; color: #daa520; margin: 10px 0; font-style: italic; line-height: 1.5; border-radius: 0 4px 4px 4px; font-size: 0.9em; }
+
+.results-table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 0.85em; }
+.results-table th { background: #1a1a2e; padding: 5px 8px; text-align: center; border-bottom: 2px solid #333; }
+.results-table td { padding: 5px 8px; text-align: center; border-bottom: 1px solid #222; }
+.results-table .model-name { text-align: left; font-weight: 600; white-space: nowrap; }
+.result-pass { color: #2ECC40; }
+.result-fail { color: #666; }
+
+.origin-badge { font-size: 0.65em; padding: 2px 6px; border-radius: 3px; vertical-align: middle; margin-left: 6px; }
+
+/* Stance group card */
+.stance-group { border: 1px solid #2a2a3e; border-radius: 8px; margin-bottom: 8px; overflow: hidden; }
+.stance-group-header { padding: 10px 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; background: #1a1a2e; }
+.stance-group-header:hover { background: #1f2040; }
+.stance-group-body { display: none; padding: 14px; background: #111122; }
+.stance-col { flex: 1; min-width: 200px; }
+.stance-label { font-weight: 600; font-size: 0.9em; margin-bottom: 4px; }
+.stance-label.intentional { color: #e74c3c; }
+.stance-label.design { color: #3498db; }
+.stance-label.physical { color: #2ecc40; }
+
+/* Tau bar */
+.tau-bar { display: inline-block; height: 14px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
+.tau-positive { background: #2ECC40; }
+.tau-negative { background: #e74c3c; }
+
+.highlights { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+.highlight-card {
+    flex: 1; min-width: 220px; max-width: 33%;
+    background: #1a1a2e; border: 1px solid #2a2a3e; border-radius: 8px;
+    padding: 12px; cursor: pointer;
+}
+.highlight-card:hover { border-color: #f59e0b; }
+.highlight-card .hl-title { font-weight: 600; color: #e0e0e0; font-size: 0.9em; margin-bottom: 4px; }
+.highlight-card .hl-pid { color: #666; font-family: monospace; font-size: 0.75em; }
+.highlight-card .hl-stat { color: #f59e0b; font-size: 0.85em; margin-top: 6px; }
+.highlight-card .hl-why { color: #888; font-size: 0.8em; margin-top: 4px; font-style: italic; }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2 class="mb-2" style="color:#f59e0b;">NARC Inspector</h2>
+<p style="color:#aaa;font-size:0.9em;max-width:800px;line-height:1.6;" class="mb-3">
+    NARC puzzles are designed so that neither the grid sequence nor the narrative clue is sufficient on its own — but together they uniquely determine the answer. The experiments below probe different dimensions of this narrative–visual interaction. <em>Masking</em> tests whether models can reconstruct hidden grids. <em>Ordering</em> tests whether narratives help recover temporal structure. <em>Odd-one-out</em> tests whether narratives help models recognize which grids belong together. <em>Stances</em> tests how the same visual pattern responds to different narrative framings.
+</p>
+
+<div class="inspect-tabs">
+    <a class="inspect-tab {{ 'active' if tab == 'masking' }}" href="/inspect?tab=masking">Masking</a>
+    <a class="inspect-tab {{ 'active' if tab == 'ordering' }}" href="/inspect?tab=ordering">Ordering</a>
+    <a class="inspect-tab {{ 'active' if tab == 'oddoneout' }}" href="/inspect?tab=oddoneout">Odd-One-Out</a>
+    <a class="inspect-tab {{ 'active' if tab == 'stances' }}" href="/inspect?tab=stances">Stances</a>
+</div>
+
+{% if tab == 'masking' %}
+<!-- ==================== MASKING TAB ==================== -->
+<div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
+    <div class="card-body" style="padding:12px 16px;">
+        <p class="mb-1" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>Masking experiment:</strong> One or more grids in a sequence are hidden. The model attempts to reconstruct the masked grid(s) under three conditions: <em>grids only</em> (no narrative), <em>narrative only</em> (no grids), and <em>both</em> (grids + narrative). A puzzle has the <strong>NARC property</strong> for a given model when it is solved correctly with both but not with either alone.
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            <span class="dot dot-narc">N</span> = NARC (solved only with both)
+            &nbsp;&nbsp;<span class="dot dot-grids">G</span> = Grids sufficient (solvable from grids alone)
+            &nbsp;&nbsp;<span class="dot dot-narr">L</span> = Narrative sufficient (solvable from narrative alone)
+            &nbsp;&nbsp;<span class="dot dot-fail">&times;</span> = Unsolvable (failed on all conditions)
+        </p>
+    </div>
+</div>
+{% if highlights %}
+<div class="highlights">
+    {% for h in highlights %}
+    <div class="highlight-card" onclick="showHighlight('{{ h.puzzle_id }}')">
+        <div class="hl-title">{{ h.title }}</div>
+        <div class="hl-pid">{{ h.puzzle_id }}</div>
+        <div class="hl-stat">NARC on {{ h.narc_count }}/{{ h.results | length }} models</div>
+        <div class="hl-why">Solved only when grids and narrative are combined</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="summary-bar">
+    {% for model in models %}
+    {% if summary.get(model, 0) > 0 %}
+    <div class="summary-card">
+        <div class="value" style="color:#2ECC40;">{{ summary[model] }}</div>
+        <div class="label">{{ model }} NARC</div>
+    </div>
+    {% endif %}
+    {% endfor %}
+    <div class="summary-card">
+        <div class="value">{{ puzzles | length }}</div>
+        <div class="label">Puzzles tested</div>
+    </div>
+</div>
+
+<div class="controls">
+    <input type="text" id="search" placeholder="Search title or ID..." oninput="filterPuzzles()">
+    <select id="status-filter" onchange="filterPuzzles()">
+        <option value="">All statuses</option>
+        <option value="narc">NARC only</option>
+        <option value="grids_sufficient">Grids sufficient</option>
+        <option value="unsolvable">Unsolvable</option>
+    </select>
+    <select id="origin-filter" onchange="filterPuzzles()">
+        <option value="">All origins</option>
+        <option value="human">Hum-generated</option>
+        <option value="claude">AI-generated</option>
+        <option value="colab">AI-Hum-Colab</option>
+    </select>
+    <span class="count" id="count-display"></span>
+</div>
+
+<div id="puzzle-list">
+{% for p in puzzles %}
+<div class="puzzle" data-statuses="{{ p.statuses | join(' ') }}" data-pid="{{ p.puzzle_id }}"
+     data-title="{{ p.title | lower }}" data-creator="{{ p.creator or 'claude' }}">
+    <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
+        <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
+        <span class="pid">{{ p.puzzle_id }}</span>
+        <span class="title">
+            {{ p.title }}
+            {% if p.creator == 'human' %}
+            <span class="origin-badge badge bg-secondary">Hum</span>
+            {% elif p.creator == 'colab' %}
+            <span class="origin-badge badge bg-success">Colab</span>
+            {% else %}
+            <span class="origin-badge badge bg-info">AI</span>
+            {% endif %}
+        </span>
+        <div class="dots">
+            {% for model in models %}
+            {% set r = p.results.get(model, {}) %}
+            {% if r.get('has_narc') %}
+            <span class="dot dot-narc" title="{{ model }}: NARC">N</span>
+            {% elif r.get('grids_only') %}
+            <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
+            {% elif r.get('narrative_only') %}
+            <span class="dot dot-narr" title="{{ model }}: narrative sufficient">L</span>
+            {% elif r %}
+            <span class="dot dot-fail" title="{{ model }}: unsolvable">&times;</span>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="puzzle-body" id="body-{{ p.puzzle_id }}">
+        <div class="sequence-container mb-3" id="seq-{{ p.puzzle_id }}"></div>
+        <script type="application/json" id="seq-data-{{ p.puzzle_id }}">{{ {"seq": p.sequence, "masked": p.masked_positions, "answers": p.answer_grids} | tojson }}</script>
+        <div class="narrative">{{ p.narrative }}</div>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Grids Only</th>
+                    <th>Narrative Only</th>
+                    <th>Both</th>
+                    <th>NARC</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in models %}
+                {% set r = p.results.get(model) %}
+                {% if r %}
+                <tr>
+                    <td class="model-name">{{ model }}</td>
+                    <td class="{{ 'result-pass' if r.grids_only else 'result-fail' }}">
+                        {{ '&#10003;' | safe if r.grids_only else '&times;' | safe }}
+                    </td>
+                    <td class="{{ 'result-pass' if r.narrative_only else 'result-fail' }}">
+                        {{ '&#10003;' | safe if r.narrative_only else '&times;' | safe }}
+                    </td>
+                    <td class="{{ 'result-pass' if r.both else 'result-fail' }}">
+                        {{ '&#10003;' | safe if r.both else '&times;' | safe }}
+                    </td>
+                    <td>
+                        {% if r.has_narc %}
+                        <span class="dot dot-narc">NARC</span>
+                        {% else %}
+                        <span class="result-fail">&mdash;</span>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+{% elif tab == 'ordering' %}
+<!-- ==================== ORDERING TAB ==================== -->
+<div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
+    <div class="card-body" style="padding:12px 16px;">
+        <p class="mb-1" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>Ordering experiment:</strong> All grids are shown (unmasked) in a shuffled order. The model must recover the correct chronological sequence. Tested under two conditions: <em>grids only</em> and <em>grids + narrative</em>. Agreement with the true order is measured by Kendall's &tau; (&#8722;1 = reversed, 0 = random, +1 = perfect). <strong>Narrative lift</strong> = &tau; with narrative minus &tau; without.
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            &tau; = Kendall's tau correlation &nbsp;&nbsp; Lift = &tau;(grids+narrative) &#8722; &tau;(grids only) &nbsp;&nbsp; Positive lift = narrative helps ordering
+        </p>
+    </div>
+</div>
+{% if highlights %}
+<div class="highlights">
+    {% for h in highlights %}
+    <div class="highlight-card" onclick="showHighlight('{{ h.puzzle_id }}')">
+        <div class="hl-title">{{ h.title }}</div>
+        <div class="hl-pid">{{ h.puzzle_id }}</div>
+        <div class="hl-stat">Narrative lift: {{ '%+.3f' | format(h.avg_lift) }} &tau;</div>
+        <div class="hl-why">Narrative dramatically improves sequence recovery</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="summary-bar">
+    {% for model in ordering_models %}
+    <div class="summary-card">
+        <div class="value" style="color:#f59e0b;">{{ ordering_summary[model] }}</div>
+        <div class="label">{{ model }} avg &tau;</div>
+    </div>
+    {% endfor %}
+    <div class="summary-card">
+        <div class="value">{{ puzzles | length }}</div>
+        <div class="label">Puzzles tested</div>
+    </div>
+</div>
+
+<div class="controls">
+    <input type="text" id="search" placeholder="Search title or ID..." oninput="filterPuzzles()">
+    <span class="count" id="count-display"></span>
+</div>
+
+<div id="puzzle-list">
+{% for p in puzzles %}
+<div class="puzzle" data-pid="{{ p.puzzle_id }}" data-title="{{ p.title | lower }}"
+     data-creator="{{ p.creator or 'claude' }}" data-statuses="">
+    <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
+        <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
+        <span class="pid">{{ p.puzzle_id }}</span>
+        <span class="title">
+            {{ p.title }}
+            {% if p.creator == 'human' %}
+            <span class="origin-badge badge bg-secondary">Hum</span>
+            {% elif p.creator == 'colab' %}
+            <span class="origin-badge badge bg-success">Colab</span>
+            {% else %}
+            <span class="origin-badge badge bg-info">AI</span>
+            {% endif %}
+        </span>
+        <span class="meta">
+            lift: <strong style="color:{{ '#2ECC40' if p.avg_lift > 0 else '#e74c3c' }}">
+                {{ '%+.3f' | format(p.avg_lift) }}</strong>
+        </span>
+    </div>
+    <div class="puzzle-body" id="body-{{ p.puzzle_id }}">
+        <div class="sequence-container mb-3" id="seq-{{ p.puzzle_id }}"></div>
+        <script type="application/json" id="seq-data-{{ p.puzzle_id }}">{{ {"seq": p.sequence, "masked": p.masked_positions, "answers": p.answer_grids} | tojson }}</script>
+        <div class="narrative">{{ p.narrative }}</div>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Grids Only &tau;</th>
+                    <th>+ Narrative &tau;</th>
+                    <th>Lift</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in ordering_models %}
+                {% set t = p.tau_results.get(model, {}) %}
+                {% if t %}
+                <tr>
+                    <td class="model-name">{{ model }}</td>
+                    <td>{{ '%.3f' | format(t.get('grids_only', 0)) }}</td>
+                    <td>{{ '%.3f' | format(t.get('grids_and_narrative', 0)) }}</td>
+                    <td style="color:{{ '#2ECC40' if p.lifts.get(model, 0) > 0 else '#e74c3c' }}">
+                        {{ '%+.3f' | format(p.lifts.get(model, 0)) }}
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+{% elif tab == 'stances' %}
+<!-- ==================== STANCES TAB ==================== -->
+<div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
+    <div class="card-body" style="padding:12px 16px;">
+        <p class="mb-1" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>Stance experiment:</strong> Inspired by Daniel Dennett's three interpretive stances. The same grid sequence is paired with three different narratives: <span style="color:#e74c3c;"><strong>intentional</strong></span> (beliefs, desires, goals — e.g., "Red betrayed the truce"), <span style="color:#3498db;"><strong>design</strong></span> (functional rules — e.g., "When blue reaches column 1, red overrides"), and <span style="color:#2ecc40;"><strong>physical</strong></span> (step-by-step cell changes — e.g., "Cell (1,1) changes from 1 to 2"). Each is tested via the standard 3-condition masking protocol.
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            <span style="color:#e74c3c;">I</span> = Intentional &nbsp;&nbsp;
+            <span style="color:#3498db;">D</span> = Design &nbsp;&nbsp;
+            <span style="color:#2ecc40;">P</span> = Physical &nbsp;&nbsp;
+            N/6 = NARC count out of 6 models &nbsp;&nbsp;
+            G = grids only &nbsp;&nbsp; N = narrative only &nbsp;&nbsp; B = both
+        </p>
+    </div>
+</div>
+{% if highlights %}
+<div class="highlights">
+    {% for h in highlights %}
+    <div class="highlight-card" onclick="showStanceHighlight('{{ h.name }}')">
+        <div class="hl-title">{{ h.name }}</div>
+        <div class="hl-stat">
+            {% for stance in ['intentional', 'design', 'physical'] %}
+            {% if stance in h.stances %}
+            <span style="color:{{ '#e74c3c' if stance == 'intentional' else '#3498db' if stance == 'design' else '#2ecc40' }}">
+                {{ stance[0] | upper }}:{{ h.stances[stance].narc_count }}/{{ h.stances[stance].results | length }}</span>&nbsp;
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="hl-why">Same grids, different narratives, dramatically different results</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<p class="text-muted mb-3">
+    {{ stance_groups | length }} stance groups &middot;
+    Same grids described three ways: intentional, design, physical
+</p>
+
+<div class="controls">
+    <input type="text" id="search" placeholder="Search group name..." oninput="filterGroups()">
+    <span class="count" id="count-display"></span>
+</div>
+
+<div id="puzzle-list">
+{% for g in stance_groups %}
+<div class="stance-group" data-title="{{ g.name | lower }}">
+    <div class="stance-group-header" onclick="togglePuzzle('sg-{{ loop.index }}')">
+        <span class="toggle" id="tog-sg-{{ loop.index }}">&#9654;</span>
+        <span class="title" style="flex:1; font-weight:600;">{{ g.name }}</span>
+        <div class="dots" style="gap:8px;">
+            {% for stance in ['intentional', 'design', 'physical'] %}
+            {% if stance in g.stances %}
+            {% set nc = g.stances[stance].narc_count %}
+            <span style="font-size:0.8em;">
+                <span style="color:{{ '#e74c3c' if stance == 'intentional' else '#3498db' if stance == 'design' else '#2ecc40' }}">
+                    {{ stance[0] | upper }}</span>:
+                <strong>{{ nc }}/{{ g.stances[stance].results | length }}</strong>
+            </span>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+    <div class="puzzle-body" id="body-sg-{{ loop.index }}">
+        <!-- Grid sequence (shared across stances) -->
+        {% set first_stance = (g.stances.values() | list)[0] %}
+        <div class="sequence-container mb-3" id="seq-sg-{{ loop.index }}"></div>
+        <script type="application/json" id="seq-data-sg-{{ loop.index }}">{{ {"seq": first_stance.sequence, "masked": first_stance.masked_positions, "answers": first_stance.answer_grids} | tojson }}</script>
+
+        <div class="d-flex gap-3 flex-wrap">
+            {% for stance in ['intentional', 'design', 'physical'] %}
+            {% if stance in g.stances %}
+            {% set sp = g.stances[stance] %}
+            <div class="stance-col">
+                <div class="stance-label {{ stance }}">
+                    {{ stance | capitalize }}
+                    ({{ sp.narc_count }}/{{ sp.results | length }} NARC)
+                </div>
+                <div class="narrative" style="font-size:0.85em;">{{ sp.narrative }}</div>
+                <table class="results-table">
+                    <thead><tr><th>Model</th><th>G</th><th>N</th><th>B</th><th></th></tr></thead>
+                    <tbody>
+                        {% for model in stance_models %}
+                        {% set r = sp.results.get(model) %}
+                        {% if r %}
+                        <tr>
+                            <td class="model-name" style="font-size:0.75em;">{{ model }}</td>
+                            <td class="{{ 'result-pass' if r.grids_only else 'result-fail' }}">
+                                {{ '&#10003;' | safe if r.grids_only else '&times;' | safe }}</td>
+                            <td class="{{ 'result-pass' if r.narrative_only else 'result-fail' }}">
+                                {{ '&#10003;' | safe if r.narrative_only else '&times;' | safe }}</td>
+                            <td class="{{ 'result-pass' if r.both else 'result-fail' }}">
+                                {{ '&#10003;' | safe if r.both else '&times;' | safe }}</td>
+                            <td>{% if r.has_narc %}<span class="dot dot-narc">N</span>{% endif %}</td>
+                        </tr>
+                        {% endif %}
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endfor %}
+</div>
+
+{% elif tab == 'oddoneout' %}
+<!-- ==================== ODD-ONE-OUT TAB ==================== -->
+<div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
+    <div class="card-body" style="padding:12px 16px;">
+        <p class="mb-1" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>Odd-one-out experiment:</strong> Three grids from the same puzzle are shown alongside one distractor grid from a different puzzle. The model must identify which grid doesn't belong. Tested under two conditions: <em>grids only</em> and <em>grids + narrative</em>. This probes whether narratives help models recognize which grids are thematically related, even when pixel-level reconstruction (masking) fails.
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            Accuracy = % of trials where distractor was correctly identified &nbsp;&nbsp;
+            Lift = accuracy(+narrative) &#8722; accuracy(grids only) in percentage points &nbsp;&nbsp;
+            <span style="color:#e74c3c;">Red border</span> = distractor grid
+        </p>
+    </div>
+</div>
+{% if ooo_puzzles %}
+{% if highlights %}
+<div class="highlights">
+    {% for h in highlights %}
+    <div class="highlight-card" onclick="showHighlight('{{ h.puzzle_id }}')">
+        <div class="hl-title">{{ h.title }}</div>
+        <div class="hl-pid">{{ h.puzzle_id }}</div>
+        <div class="hl-stat">Narrative lift: {{ '%+.1f' | format(h.avg_ooo_lift) }}pp accuracy</div>
+        <div class="hl-why">Narrative helps models spot which grid doesn't belong</div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<div class="summary-bar">
+    {% for model in ooo_models %}
+    <div class="summary-card">
+        <div class="value" style="color:#f59e0b;">{{ ooo_summary[model].with_narrative }}%</div>
+        <div class="label">{{ model }} +narr</div>
+    </div>
+    {% endfor %}
+    <div class="summary-card">
+        <div class="value">{{ ooo_puzzles | length }}</div>
+        <div class="label">Puzzles tested</div>
+    </div>
+</div>
+
+<div class="controls">
+    <input type="text" id="search" placeholder="Search title or ID..." oninput="filterPuzzles()">
+    <span class="count" id="count-display"></span>
+</div>
+
+<div id="puzzle-list">
+{% for p in ooo_puzzles %}
+<div class="puzzle" data-pid="{{ p.puzzle_id }}" data-title="{{ p.title | lower }}"
+     data-creator="{{ p.creator or 'claude' }}" data-statuses="">
+    <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
+        <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
+        <span class="pid">{{ p.puzzle_id }}</span>
+        <span class="title">
+            {{ p.title }}
+            {% if p.creator == 'human' %}
+            <span class="origin-badge badge bg-secondary">Hum</span>
+            {% elif p.creator == 'colab' %}
+            <span class="origin-badge badge bg-success">Colab</span>
+            {% else %}
+            <span class="origin-badge badge bg-info">AI</span>
+            {% endif %}
+        </span>
+        <span class="meta">
+            lift: <strong style="color:{{ '#2ECC40' if p.avg_ooo_lift > 0 else '#e74c3c' if p.avg_ooo_lift < 0 else '#888' }}">
+                {{ '%+.1f' | format(p.avg_ooo_lift) }}pp</strong>
+        </span>
+    </div>
+    <div class="puzzle-body" id="body-{{ p.puzzle_id }}">
+        {% if p.ooo_grids %}
+        <div class="mb-2" style="font-size:0.8em;color:#888;">
+            Which grid doesn't belong? (Distractor from <code>{{ p.ooo_distractor_id }}</code>)
+        </div>
+        <div class="sequence-container mb-3" id="ooo-{{ p.puzzle_id }}"></div>
+        <script type="application/json" id="ooo-data-{{ p.puzzle_id }}">{{ {"grids": p.ooo_grids, "dist_pos": p.ooo_distractor_pos} | tojson }}</script>
+        {% endif %}
+        <div class="narrative">{{ p.narrative }}</div>
+        <table class="results-table">
+            <thead>
+                <tr>
+                    <th>Model</th>
+                    <th>Grids Only</th>
+                    <th>+ Narrative</th>
+                    <th>Lift</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for model in ooo_models %}
+                {% set r = p.ooo_results.get(model, {}) %}
+                {% if r %}
+                <tr>
+                    <td class="model-name">{{ model }}</td>
+                    <td>{{ '%.1f' | format(r.get('grids_only', 0)) }}%</td>
+                    <td>{{ '%.1f' | format(r.get('grids_and_narrative', 0)) }}%</td>
+                    <td style="color:{{ '#2ECC40' if p.ooo_lifts.get(model, 0) > 0 else '#e74c3c' if p.ooo_lifts.get(model, 0) < 0 else '#888' }}">
+                        {{ '%+.1f' | format(p.ooo_lifts.get(model, 0)) }}pp
+                    </td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <p class="text-muted">No odd-one-out data yet.</p>
+    <p class="text-muted small">Run: <code>python collect_oddoneout.py --model gpt-oss-120b</code></p>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+function showStanceHighlight(groupName) {
+    // Find the stance group by matching the title text
+    const groups = document.querySelectorAll('.stance-group');
+    for (const group of groups) {
+        if (group.dataset.title === groupName.toLowerCase()) {
+            const header = group.querySelector('.stance-group-header');
+            const togId = header.querySelector('.toggle').id;
+            const bodyId = togId.replace('tog-', 'body-');
+            const body = document.getElementById(bodyId);
+            const tog = document.getElementById(togId);
+            if (body) {
+                body.style.display = 'block';
+                if (tog) tog.classList.add('open');
+                group.scrollIntoView({behavior: 'smooth', block: 'start'});
+            }
+            break;
+        }
+    }
+}
+
+function showHighlight(pid) {
+    // Expand the puzzle body and scroll to it
+    const body = document.getElementById('body-' + pid);
+    const tog = document.getElementById('tog-' + pid);
+    if (body) {
+        body.style.display = 'block';
+        if (tog) tog.classList.add('open');
+        body.closest('.puzzle').scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+}
+
+function togglePuzzle(id) {
+    const body = document.getElementById('body-' + id);
+    const tog = document.getElementById('tog-' + id);
+    if (body.style.display === 'block') {
+        body.style.display = 'none';
+        tog.classList.remove('open');
+    } else {
+        body.style.display = 'block';
+        tog.classList.add('open');
+    }
+}
+
+function filterPuzzles() {
+    const searchEl = document.getElementById('search');
+    if (!searchEl) return;
+    const search = searchEl.value.toLowerCase();
+    const statusFilter = document.getElementById('status-filter');
+    const originFilter = document.getElementById('origin-filter');
+    const status = statusFilter ? statusFilter.value : '';
+    const origin = originFilter ? originFilter.value : '';
+    const items = document.querySelectorAll('.puzzle');
+    let shown = 0;
+
+    items.forEach(item => {
+        const title = item.dataset.title || '';
+        const pid = item.dataset.pid || '';
+        const statuses = item.dataset.statuses || '';
+        const creator = item.dataset.creator || '';
+
+        const matchSearch = !search || title.includes(search) || pid.includes(search);
+        const matchStatus = !status || statuses.includes(status);
+        const matchOrigin = !origin || creator === origin;
+
+        if (matchSearch && matchStatus && matchOrigin) {
+            item.style.display = '';
+            shown++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+
+    document.getElementById('count-display').textContent = shown + ' shown';
+}
+
+function renderAllGrids() {
+    document.querySelectorAll('.sequence-container[id^="seq-"]').forEach(container => {
+        const dataEl = document.getElementById('seq-data-' + container.id.replace('seq-', ''));
+        if (!dataEl) return;
+        const data = JSON.parse(dataEl.textContent);
+        const seq = data.seq;
+        const masked = new Set(data.masked);
+        const answers = data.answers;
+        seq.forEach((item, i) => {
+            if (i > 0) {
+                const arrow = document.createElement('span');
+                arrow.style.cssText = 'color:#444;font-size:1.2em;padding:0 4px;align-self:center;';
+                arrow.textContent = '\u2192';
+                container.appendChild(arrow);
+            }
+            const slot = document.createElement('div');
+            slot.style.display = 'inline-block';
+            slot.style.textAlign = 'center';
+            const label = document.createElement('div');
+            label.style.cssText = 'font-size:0.75em;color:#888;margin-bottom:2px;';
+            label.textContent = 'Grid ' + (i + 1);
+            slot.appendChild(label);
+            const canvas = document.createElement('div');
+            if (masked.has(i)) {
+                const ag = answers[String(i)];
+                if (ag) {
+                    const g = new Grid(ag.length, ag[0].length, ag);
+                    renderGrid(canvas, g, {cellSize: 20});
+                    canvas.style.border = '2px dashed #f59e0b';
+                    canvas.style.borderRadius = '4px';
+                } else {
+                    renderMaskedPlaceholder(canvas, item.rows, item.cols, 20);
+                }
+            } else if (item.grid) {
+                const g = new Grid(item.rows, item.cols, item.grid);
+                renderGrid(canvas, g, {cellSize: 20});
+            }
+            slot.appendChild(canvas);
+            container.appendChild(slot);
+        });
+        container.style.display = 'flex';
+        container.style.gap = '6px';
+        container.style.alignItems = 'flex-start';
+        container.style.overflowX = 'auto';
+    });
+}
+
+function renderOooGrids() {
+    document.querySelectorAll('.sequence-container[id^="ooo-"]').forEach(container => {
+        const dataEl = document.getElementById('ooo-data-' + container.id.replace('ooo-', ''));
+        if (!dataEl) return;
+        const data = JSON.parse(dataEl.textContent);
+        const grids = data.grids;
+        const distPos = data.dist_pos;
+        const labels = ['A', 'B', 'C', 'D'];
+        grids.forEach((grid, i) => {
+            if (i > 0) {
+                const spacer = document.createElement('span');
+                spacer.style.cssText = 'width:12px;display:inline-block;';
+                container.appendChild(spacer);
+            }
+            const slot = document.createElement('div');
+            slot.style.display = 'inline-block';
+            slot.style.textAlign = 'center';
+            const label = document.createElement('div');
+            label.style.cssText = 'font-size:0.8em;margin-bottom:2px;font-weight:600;';
+            if (i === distPos) {
+                label.style.color = '#e74c3c';
+                label.textContent = labels[i] + ' (odd)';
+            } else {
+                label.style.color = '#888';
+                label.textContent = labels[i];
+            }
+            slot.appendChild(label);
+            const canvas = document.createElement('div');
+            const g = new Grid(grid.length, grid[0].length, grid);
+            renderGrid(canvas, g, {cellSize: 20});
+            if (i === distPos) {
+                canvas.style.border = '2px solid #e74c3c';
+                canvas.style.borderRadius = '4px';
+            }
+            slot.appendChild(canvas);
+            container.appendChild(slot);
+        });
+        container.style.display = 'flex';
+        container.style.gap = '6px';
+        container.style.alignItems = 'flex-start';
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => { renderAllGrids(); renderOooGrids(); });
+
+function filterGroups() {
+    const search = document.getElementById('search').value.toLowerCase();
+    const items = document.querySelectorAll('.stance-group');
+    let shown = 0;
+    items.forEach(item => {
+        const title = item.dataset.title || '';
+        if (!search || title.includes(search)) {
+            item.style.display = '';
+            shown++;
+        } else {
+            item.style.display = 'none';
+        }
+    });
+    document.getElementById('count-display').textContent = shown + ' shown';
+}
+</script>
+{% endblock %}

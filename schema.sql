@@ -12,6 +12,9 @@ CREATE TABLE IF NOT EXISTS puzzles (
     human_difficulty INTEGER,             -- 1-5 predicted difficulty for humans
     ai_difficulty    INTEGER,             -- 1-5 predicted difficulty for AI
     tags            TEXT,
+    parent_puzzle_id TEXT,                -- grid variant parent (e.g. narc_003)
+    stance_group    TEXT,                 -- stance experiment group name (e.g. The Chase)
+    stance          TEXT,                 -- intentional, design, or physical
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -70,6 +73,26 @@ CREATE TABLE IF NOT EXISTS solve_attempts (
     time_spent_ms  INTEGER,
     skipped_phase1 INTEGER DEFAULT 0,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS oddoneout_trials (
+    trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+    puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    distractor_id  TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    model_name     TEXT NOT NULL,
+    condition      TEXT NOT NULL,             -- 'grids_only' or 'grids_and_narrative'
+    repeat_num     INTEGER DEFAULT 1,
+    prompt_text    TEXT,
+    raw_response   TEXT,
+    response_text  TEXT,
+    response_at    TEXT,
+    latency_ms     INTEGER,
+    error          TEXT,
+    predicted_odd  INTEGER,                   -- 0-3 index of predicted odd-one-out
+    correct_odd    INTEGER NOT NULL,          -- 0-3 index of actual distractor
+    correct        INTEGER,                   -- 1 if predicted == correct
+    reasoning      TEXT,
+    UNIQUE(puzzle_id, distractor_id, model_name, condition, repeat_num)
 );
 
 -- Auth and submission review

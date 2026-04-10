@@ -4,7 +4,7 @@ narc.db-wal
 narc.db-shm
 
 # Generated reports (regenerate with inspector.py / analyze.py)
-inspect.html
+/inspect.html
 analysis_*.html
 focal_analysis_*.html
 focal_results_*.json

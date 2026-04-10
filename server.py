@@ -191,24 +191,355 @@ def about():
 
 @app.route("/inspect")
 def inspect():
-    inspect_path = Path(__file__).parent / "inspect.html"
-    if not inspect_path.exists():
-        return "Run python inspector.py first", 404
-    html = inspect_path.read_text()
-    # Inject nav bar after <body> tag
-    admin_link = ''
-    user = current_user()
-    if user:
-        admin_link = '<a href="/admin" style="color:#ccc;text-decoration:none;">Admin</a>'
-    nav = f"""<nav style="background:#16213e;padding:8px 20px;margin:-16px -16px 16px;display:flex;align-items:center;gap:20px;font-family:-apple-system,sans-serif;">
-    <a href="/" style="color:#f59e0b;font-weight:bold;text-decoration:none;font-size:1.1em;">NARC</a>
-    <a href="/browse" style="color:#ccc;text-decoration:none;">Browse</a>
-    <a href="/create" style="color:#ccc;text-decoration:none;">Create</a>
-    <a href="/inspect" style="color:#fff;text-decoration:none;">Inspect</a>
-    {admin_link}
-    </nav>"""
-    html = html.replace("<body>", "<body>" + nav, 1)
-    return html
+    tab = request.args.get("tab", "masking")
+    conn = get_conn()
+
+    # Get all models that have been tested
+    models = [r[0] for r in conn.execute(
+        "SELECT DISTINCT model_name FROM trials ORDER BY model_name"
+    ).fetchall()]
+
+    if tab == "masking":
+        data = _inspect_masking(conn, models)
+    elif tab == "ordering":
+        data = _inspect_ordering(conn)
+    elif tab == "stances":
+        data = _inspect_stances(conn)
+    elif tab == "oddoneout":
+        data = _inspect_oddoneout(conn)
+    else:
+        data = {}
+
+    conn.close()
+    return render_template("inspect.html", tab=tab, models=models, **data)
+
+
+def _inspect_masking(conn, models):
+    """Build masking tab data: per-puzzle classification results."""
+    rows = conn.execute(
+        """SELECT c.puzzle_id, c.model_name, c.grids_only, c.narrative_only,
+                  c.both, c.has_narc
+           FROM classifications c
+           ORDER BY c.puzzle_id, c.model_name"""
+    ).fetchall()
+    # Build puzzle -> model -> result map
+    cls_map = {}
+    for r in rows:
+        cls_map.setdefault(r["puzzle_id"], {})[r["model_name"]] = {
+            "grids_only": r["grids_only"],
+            "narrative_only": r["narrative_only"],
+            "both": r["both"],
+            "has_narc": r["has_narc"],
+        }
+
+    # Get puzzle info
+    puzzles = []
+    for p in conn.execute(
+        "SELECT * FROM puzzles ORDER BY puzzle_id"
+    ).fetchall():
+        pid = p["puzzle_id"]
+        if pid not in cls_map:
+            continue
+        pdata = db.puzzle_to_json(p)
+        pdata["results"] = cls_map[pid]
+        # Compute status per model
+        statuses = set()
+        narc_count = 0
+        for model, res in cls_map[pid].items():
+            if res["has_narc"]:
+                statuses.add("narc")
+                narc_count += 1
+            elif res["grids_only"]:
+                statuses.add("grids_sufficient")
+            elif res["narrative_only"]:
+                statuses.add("narrative_sufficient")
+            else:
+                statuses.add("unsolvable")
+        pdata["statuses"] = list(statuses)
+        pdata["narc_count"] = narc_count
+        puzzles.append(pdata)
+
+    # Summary stats
+    summary = {}
+    for m in models:
+        summary[m] = sum(1 for p in puzzles
+                         if p["results"].get(m, {}).get("has_narc"))
+
+    # Pick 3 highlights: highest NARC count, skip drafts and stance puzzles
+    trial_map = _build_draft_map(conn)
+    highlights = []
+    seen_creators = set()
+    for p in sorted(puzzles, key=lambda x: -x["narc_count"]):
+        if len(highlights) >= 3:
+            break
+        if p.get("stance"):
+            continue
+        if _is_draft(p["puzzle_id"], p.get("tags"), trial_map):
+            continue
+        creator = p.get("creator", "claude")
+        if creator not in seen_creators or len(highlights) < 3:
+            highlights.append(p)
+            seen_creators.add(creator)
+    return {"puzzles": puzzles, "summary": summary, "highlights": highlights}
+
+
+def _inspect_ordering(conn):
+    """Build ordering tab data: per-puzzle tau scores."""
+    models = [r[0] for r in conn.execute(
+        "SELECT DISTINCT model_name FROM ordering_trials ORDER BY model_name"
+    ).fetchall()]
+
+    rows = conn.execute(
+        """SELECT puzzle_id, model_name, condition,
+                  AVG(kendall_tau) as avg_tau, COUNT(*) as n
+           FROM ordering_trials
+           WHERE kendall_tau IS NOT NULL
+           GROUP BY puzzle_id, model_name, condition"""
+    ).fetchall()
+
+    # Build puzzle -> model -> condition -> tau
+    tau_map = {}
+    for r in rows:
+        tau_map.setdefault(r["puzzle_id"], {}).setdefault(
+            r["model_name"], {}
+        )[r["condition"]] = round(r["avg_tau"], 3)
+
+    puzzles = []
+    for p in conn.execute(
+        "SELECT * FROM puzzles ORDER BY puzzle_id"
+    ).fetchall():
+        pid = p["puzzle_id"]
+        if pid not in tau_map:
+            continue
+        pdata = db.puzzle_to_json(p)
+        pdata["tau_results"] = tau_map[pid]
+        # Compute narrative lift per model
+        lifts = {}
+        for model, conds in tau_map[pid].items():
+            go = conds.get("grids_only", 0)
+            gn = conds.get("grids_and_narrative", 0)
+            lifts[model] = round(gn - go, 3)
+        pdata["lifts"] = lifts
+        pdata["avg_lift"] = round(
+            sum(lifts.values()) / len(lifts), 3
+        ) if lifts else 0
+        puzzles.append(pdata)
+
+    # Sort by avg lift descending
+    puzzles.sort(key=lambda p: -p["avg_lift"])
+
+    summary = {}
+    for m in models:
+        taus = [p["tau_results"].get(m, {}).get("grids_and_narrative", 0)
+                for p in puzzles if m in p["tau_results"]]
+        summary[m] = round(sum(taus) / len(taus), 3) if taus else 0
+
+    # Top 3 highlights by lift
+    highlights = puzzles[:3] if len(puzzles) >= 3 else puzzles
+
+    return {"puzzles": puzzles, "ordering_models": models,
+            "ordering_summary": summary, "highlights": highlights}
+
+
+def _inspect_stances(conn):
+    """Build stances tab data: grouped by stance_group."""
+    rows = conn.execute(
+        """SELECT p.*, c.model_name, c.grids_only, c.narrative_only,
+                  c.both, c.has_narc
+           FROM puzzles p
+           LEFT JOIN classifications c ON p.puzzle_id = c.puzzle_id
+           WHERE p.stance_group IS NOT NULL
+           ORDER BY p.stance_group, p.stance"""
+    ).fetchall()
+
+    models = sorted(set(r["model_name"] for r in rows if r["model_name"]))
+
+    # Group by stance_group
+    groups = {}
+    for r in rows:
+        group = r["stance_group"]
+        stance = r["stance"]
+        if group not in groups:
+            groups[group] = {"name": group, "stances": {}}
+        if stance not in groups[group]["stances"]:
+            pdata = db.puzzle_to_json(r)
+            pdata["results"] = {}
+            groups[group]["stances"][stance] = pdata
+        if r["model_name"]:
+            groups[group]["stances"][stance]["results"][r["model_name"]] = {
+                "has_narc": r["has_narc"],
+                "grids_only": r["grids_only"],
+                "narrative_only": r["narrative_only"],
+                "both": r["both"],
+            }
+
+    # Compute NARC counts per stance per group
+    for g in groups.values():
+        for stance, pdata in g["stances"].items():
+            pdata["narc_count"] = sum(
+                1 for r in pdata["results"].values() if r.get("has_narc")
+            )
+
+    # Sort groups by name
+    group_list = sorted(groups.values(), key=lambda g: g["name"])
+
+    # Top 3 highlights: groups with biggest spread between stances
+    def stance_spread(g):
+        counts = [s.get("narc_count", 0) for s in g["stances"].values()]
+        return max(counts) - min(counts) if counts else 0
+    stance_highlights = sorted(group_list, key=stance_spread, reverse=True)[:3]
+
+    return {"stance_groups": group_list, "stance_models": models,
+            "highlights": stance_highlights}
+
+
+def _reconstruct_ooo_grids(conn, puzzle_data, distractor_id):
+    """Reconstruct the 4-grid arrangement used in an odd-one-out trial."""
+    import hashlib
+    import random as rng_mod
+
+    pid = puzzle_data["puzzle_id"]
+    seed = hashlib.md5(pid.encode()).hexdigest()
+    rng = rng_mod.Random(seed)
+
+    # Select 3 puzzle grids (same logic as collect_oddoneout.py)
+    seq = puzzle_data["sequence"]
+    masked = set(puzzle_data["masked_positions"])
+    visible = [item for item in seq if item["position"] not in masked
+               and item.get("grid")]
+    if len(visible) < 3:
+        answer_grids = puzzle_data.get("answer_grids", {})
+        for pos in puzzle_data["masked_positions"]:
+            ag = answer_grids.get(str(pos))
+            if ag:
+                visible.append({"position": pos, "grid": ag,
+                                "rows": len(ag), "cols": len(ag[0])})
+    if len(visible) < 3:
+        return None, None
+
+    selected = rng.sample(visible, min(3, len(visible)))
+    while len(selected) < 3:
+        selected.append(rng.choice(visible))
+    puzzle_grids = [item["grid"] for item in selected]
+
+    # Pick distractor (same logic — re-seed rng, find matching grid)
+    rng2 = rng_mod.Random(seed)
+    all_pids = [r["puzzle_id"] for r in db.get_all_puzzles(conn)]
+    candidates = [p for p in all_pids if p != pid]
+    rng2.shuffle(candidates)
+
+    ref = visible[0]
+    distractor_grid = None
+    for cand_pid in candidates[:50]:
+        if cand_pid == distractor_id:
+            row = db.get_puzzle(conn, cand_pid)
+            if row:
+                cand = db.puzzle_to_json(row)
+                cand_masked = set(cand["masked_positions"])
+                for item in cand["sequence"]:
+                    if item["position"] not in cand_masked and item.get("grid"):
+                        if (item["rows"] == ref["rows"]
+                                and item["cols"] == ref["cols"]):
+                            distractor_grid = item["grid"]
+                            break
+                if not distractor_grid:
+                    for item in cand["sequence"]:
+                        if item["position"] not in cand_masked and item.get("grid"):
+                            distractor_grid = item["grid"]
+                            break
+            break
+
+    if not distractor_grid:
+        return None, None
+
+    # Deterministic distractor position
+    distractor_pos = rng_mod.Random(seed).randint(0, 3)
+
+    all_grids = list(puzzle_grids)
+    all_grids.insert(distractor_pos, distractor_grid)
+    return all_grids, distractor_pos
+
+
+def _inspect_oddoneout(conn):
+    """Build odd-one-out tab data: per-puzzle accuracy."""
+    table_exists = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='oddoneout_trials'"
+    ).fetchone()
+    if not table_exists:
+        return {"ooo_puzzles": [], "ooo_models": [], "ooo_summary": {}}
+
+    ooo_models = [r[0] for r in conn.execute(
+        "SELECT DISTINCT model_name FROM oddoneout_trials ORDER BY model_name"
+    ).fetchall()]
+
+    rows = conn.execute(
+        """SELECT puzzle_id, model_name, condition,
+                  COUNT(*) as n, SUM(correct) as correct_count
+           FROM oddoneout_trials
+           WHERE correct IS NOT NULL
+           GROUP BY puzzle_id, model_name, condition"""
+    ).fetchall()
+
+    if not rows:
+        return {"ooo_puzzles": [], "ooo_models": ooo_models, "ooo_summary": {}}
+
+    acc_map = {}
+    for r in rows:
+        acc_map.setdefault(r["puzzle_id"], {}).setdefault(
+            r["model_name"], {}
+        )[r["condition"]] = round(r["correct_count"] / r["n"] * 100, 1) if r["n"] else 0
+
+    # Get distractor IDs per puzzle
+    distractor_map = {}
+    for r in conn.execute(
+        "SELECT DISTINCT puzzle_id, distractor_id FROM oddoneout_trials"
+    ).fetchall():
+        distractor_map[r["puzzle_id"]] = r["distractor_id"]
+
+    puzzles = []
+    for p in conn.execute("SELECT * FROM puzzles ORDER BY puzzle_id").fetchall():
+        pid = p["puzzle_id"]
+        if pid not in acc_map:
+            continue
+        pdata = db.puzzle_to_json(p)
+        pdata["ooo_results"] = acc_map[pid]
+        lifts = {}
+        for model, conds in acc_map[pid].items():
+            go = conds.get("grids_only", 0)
+            gn = conds.get("grids_and_narrative", 0)
+            lifts[model] = round(gn - go, 1)
+        pdata["ooo_lifts"] = lifts
+        pdata["avg_ooo_lift"] = round(
+            sum(lifts.values()) / len(lifts), 1
+        ) if lifts else 0
+
+        # Reconstruct the 4-grid arrangement
+        dist_id = distractor_map.get(pid)
+        if dist_id:
+            ooo_grids, dist_pos = _reconstruct_ooo_grids(conn, pdata, dist_id)
+            pdata["ooo_grids"] = ooo_grids
+            pdata["ooo_distractor_pos"] = dist_pos
+            pdata["ooo_distractor_id"] = dist_id
+        puzzles.append(pdata)
+
+    puzzles.sort(key=lambda p: -p["avg_ooo_lift"])
+
+    summary = {}
+    for m in ooo_models:
+        accs_go = [p["ooo_results"].get(m, {}).get("grids_only", 0)
+                   for p in puzzles if m in p["ooo_results"]]
+        accs_gn = [p["ooo_results"].get(m, {}).get("grids_and_narrative", 0)
+                   for p in puzzles if m in p["ooo_results"]]
+        summary[m] = {
+            "grids_only": round(sum(accs_go) / len(accs_go), 1) if accs_go else 0,
+            "with_narrative": round(sum(accs_gn) / len(accs_gn), 1) if accs_gn else 0,
+        }
+
+    # Top 3 highlights by lift (diverse puzzle IDs)
+    ooo_highlights = puzzles[:3] if len(puzzles) >= 3 else puzzles
+
+    return {"ooo_puzzles": puzzles, "ooo_models": ooo_models,
+            "ooo_summary": summary, "highlights": ooo_highlights}
 
 
 @app.route("/login", methods=["GET", "POST"])

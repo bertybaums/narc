@@ -22,14 +22,17 @@ def init_db(path=DB_PATH):
 def upsert_puzzle(conn, puzzle_id, title, narrative, sequence_json,
                   masked_positions, answer_grids,
                   creator='human', difficulty=None, tags=None,
-                  human_difficulty=None, ai_difficulty=None):
+                  human_difficulty=None, ai_difficulty=None,
+                  parent_puzzle_id=None, stance_group=None, stance=None):
     conn.execute(
         """INSERT OR REPLACE INTO puzzles
            (puzzle_id, title, narrative, sequence_json, masked_positions,
-            answer_grids, creator, difficulty, human_difficulty, ai_difficulty, tags)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            answer_grids, creator, difficulty, human_difficulty, ai_difficulty, tags,
+            parent_puzzle_id, stance_group, stance)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, title, narrative, sequence_json, masked_positions,
-         answer_grids, creator, difficulty, human_difficulty, ai_difficulty, tags),
+         answer_grids, creator, difficulty, human_difficulty, ai_difficulty, tags,
+         parent_puzzle_id, stance_group, stance),
     )
     conn.commit()
 
@@ -67,6 +70,9 @@ def puzzle_to_json(row):
         "human_difficulty": row["human_difficulty"],
         "ai_difficulty": row["ai_difficulty"],
         "tags": row["tags"],
+        "parent_puzzle_id": row["parent_puzzle_id"],
+        "stance_group": row["stance_group"],
+        "stance": row["stance"],
         "created_at": row["created_at"],
     }
 
