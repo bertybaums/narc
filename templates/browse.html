@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Puzzles <small class="text-muted" id="puzzle-count">({{ puzzles | length }})</small></h2>
+    <h2 class="mb-0">Puzzles <small class="text-muted" id="puzzle-count">({{ puzzles | length + stance_groups | length }})</small></h2>
     <div class="d-flex align-items-center gap-3">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="show-drafts" onchange="filterPuzzles()">
@@ -14,7 +14,7 @@
     </div>
 </div>
 
-{% if puzzles %}
+{% if puzzles or stance_groups %}
 
 <!-- Tag filters -->
 <div class="mb-3" id="tag-filters">
@@ -70,13 +70,15 @@
     <span id="filter-count" class="text-muted ms-2"></span>
 </div>
 
-<!-- Puzzle cards -->
+<!-- Masking experiment puzzles -->
+<h4 class="mt-2 mb-3">Masking Experiment <small class="text-muted">({{ puzzles | length }})</small></h4>
 <div class="row g-3" id="puzzle-grid">
     {% for p in puzzles %}
     <div class="col-md-4 puzzle-item" data-tags="{{ p.tags or '' }}"
          data-title="{{ p.title | lower }}" data-id="{{ p.puzzle_id | lower }}"
          data-draft="{{ 'true' if p.is_draft else 'false' }}"
          data-creator="{{ p.creator or 'human' }}"
+         data-section="masking"
          {% if p.is_draft %}style="display: none;"{% endif %}>
         <div class="card puzzle-card{{ ' border-warning' if p.is_draft }}" onclick="location.href='/solve/{{ p.puzzle_id }}'">
             <div class="card-body">
@@ -118,6 +120,53 @@
     </div>
     {% endfor %}
 </div>
+
+<!-- Stance experiment puzzles -->
+{% if stance_groups %}
+<h4 class="mt-5 mb-3">Stance Experiment <small class="text-muted">({{ stance_groups | length }} groups)</small></h4>
+<div class="row g-3" id="stance-grid">
+    {% for group in stance_groups %}
+    <div class="col-12 puzzle-item stance-group-item" data-section="stance"
+         data-title="{{ group.name | lower }}"
+         data-tags="{% for s, p in group.puzzles.items() %}{{ p.tags or '' }} {% endfor %}">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ group.name }}</h5>
+                <div class="row g-2 mt-2">
+                    {% for stance in ['intentional', 'design', 'physical'] %}
+                    {% if stance in group.puzzles %}
+                    {% set p = group.puzzles[stance] %}
+                    <div class="col-md-4">
+                        <div class="card h-100 border-secondary" onclick="location.href='/solve/{{ p.puzzle_id }}'" style="cursor:pointer;">
+                            <div class="card-body py-2 px-3">
+                                <div class="d-flex align-items-center mb-1">
+                                    {% if stance == 'intentional' %}
+                                    <span class="badge bg-primary me-2">Intentional</span>
+                                    {% elif stance == 'design' %}
+                                    <span class="badge bg-success me-2">Design</span>
+                                    {% else %}
+                                    <span class="badge bg-warning text-dark me-2">Physical</span>
+                                    {% endif %}
+                                    <small class="text-muted">
+                                        {{ p.sequence | length }} grids &middot;
+                                        masked #{{ p.masked_positions[0] + 1 }}
+                                    </small>
+                                </div>
+                                <p class="card-text small text-truncate mb-1">{{ p.narrative[:100] }}...</p>
+                                <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation()">Solve</a>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
 {% else %}
 <div class="text-center py-5">
     <p class="text-muted">No puzzles yet.</p>

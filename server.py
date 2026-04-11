@@ -593,7 +593,23 @@ def browse():
     ]
     spectrum_tags = [t for t in spectrum_order if t in tag_counts]
 
-    return render_template("browse.html", puzzles=puzzles, tag_counts=tag_counts,
+    # Separate regular puzzles from stance puzzles
+    regular_puzzles = [p for p in puzzles if not p.get("stance")]
+    stance_puzzles = [p for p in puzzles if p.get("stance")]
+
+    # Group stance puzzles by stance_group
+    from collections import OrderedDict
+    stance_groups = OrderedDict()
+    for p in stance_puzzles:
+        group = p["stance_group"]
+        if group not in stance_groups:
+            stance_groups[group] = {"name": group, "puzzles": {}}
+        stance_groups[group]["puzzles"][p["stance"]] = p
+    stance_group_list = list(stance_groups.values())
+
+    return render_template("browse.html", puzzles=regular_puzzles,
+                           stance_groups=stance_group_list,
+                           tag_counts=tag_counts,
                            audience_tags=tags_by_prefix("audience"),
                            arc_tags=tags_by_prefix("arc"),
                            clue_tags=tags_by_prefix("clue"),
