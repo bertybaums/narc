@@ -176,8 +176,13 @@ def migrate(dry_run=False):
            OR distractor_id IN (SELECT puzzle_id FROM puzzles WHERE stance IS NOT NULL)""").fetchone()[0]
     total_sa = conn.execute("SELECT COUNT(*) FROM solve_attempts").fetchone()[0]
     stance_sa = conn.execute("SELECT COUNT(*) FROM solve_attempts WHERE puzzle_id IN (SELECT puzzle_id FROM puzzles WHERE stance IS NOT NULL)").fetchone()[0]
-    total_votes = conn.execute("SELECT COUNT(*) FROM votes").fetchone()[0]
-    stance_votes = conn.execute("SELECT COUNT(*) FROM votes WHERE puzzle_id IN (SELECT puzzle_id FROM puzzles WHERE stance IS NOT NULL)").fetchone()[0]
+    # Votes table may not exist yet on older DBs
+    try:
+        total_votes = conn.execute("SELECT COUNT(*) FROM votes").fetchone()[0]
+        stance_votes = conn.execute("SELECT COUNT(*) FROM votes WHERE puzzle_id IN (SELECT puzzle_id FROM puzzles WHERE stance IS NOT NULL)").fetchone()[0]
+    except sqlite3.OperationalError:
+        total_votes = 0
+        stance_votes = 0
 
     print(f"Puzzles: {total_puzzles} total, {stance_puzzles} stance")
     print(f"Trials: {total_trials} total, {stance_trials} stance")
