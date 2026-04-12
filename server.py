@@ -342,28 +342,51 @@ def _inspect_ordering(conn):
 
 
 def _inspect_stances(conn):
-    """Build stances tab data: grouped by stance_group."""
+    """Build stances tab data: grouped by stance_group, using narrative variants."""
     rows = conn.execute(
-        """SELECT p.*, c.model_name, c.grids_only, c.narrative_only,
+        """SELECT p.puzzle_id, p.stance_group, p.title, p.sequence_json,
+                  p.masked_positions, p.answer_grids, p.creator, p.difficulty,
+                  p.human_difficulty, p.ai_difficulty, p.tags, p.created_at,
+                  nv.variant, nv.source_domain, nv.narrative as variant_narrative,
+                  nv.variant_id,
+                  c.model_name, c.grids_only, c.narrative_only,
                   c.both, c.has_narc
            FROM puzzles p
+           JOIN narrative_variants nv ON p.puzzle_id = nv.puzzle_id
            LEFT JOIN classifications c ON p.puzzle_id = c.puzzle_id
+               AND c.variant_id = nv.variant_id
            WHERE p.stance_group IS NOT NULL
-           ORDER BY p.stance_group, p.stance"""
+             AND nv.source_domain LIKE 'stance:%'
+           ORDER BY p.stance_group, nv.source_domain"""
     ).fetchall()
 
     models = sorted(set(r["model_name"] for r in rows if r["model_name"]))
 
-    # Group by stance_group
+    # Group by stance_group, then by stance (from source_domain)
     groups = {}
     for r in rows:
         group = r["stance_group"]
-        stance = r["stance"]
+        # Extract stance name from source_domain (e.g., "stance:intentional" -> "intentional")
+        stance = r["source_domain"].replace("stance:", "") if r["source_domain"] else r["variant"]
         if group not in groups:
             groups[group] = {"name": group, "stances": {}}
         if stance not in groups[group]["stances"]:
-            pdata = db.puzzle_to_json(r)
-            pdata["results"] = {}
+            pdata = {
+                "puzzle_id": r["puzzle_id"],
+                "title": r["title"],
+                "narrative": r["variant_narrative"],
+                "sequence": json.loads(r["sequence_json"]),
+                "masked_positions": json.loads(r["masked_positions"]),
+                "answer_grids": json.loads(r["answer_grids"]),
+                "creator": r["creator"],
+                "difficulty": r["difficulty"],
+                "human_difficulty": r["human_difficulty"],
+                "ai_difficulty": r["ai_difficulty"],
+                "tags": r["tags"],
+                "created_at": r["created_at"],
+                "stance": stance,
+                "results": {},
+            }
             groups[group]["stances"][stance] = pdata
         if r["model_name"]:
             groups[group]["stances"][stance]["results"][r["model_name"]] = {
@@ -571,7 +594,35 @@ def browse():
     rows = db.get_all_puzzles(conn)
     trial_map = _build_draft_map(conn)
     puzzles = [enrich_puzzle(conn, db.puzzle_to_json(r), trial_map) for r in rows]
+
+    # Fetch vote counts and solve stats
+    vote_counts = db.get_vote_counts(conn)
+    solve_stats = db.get_puzzle_solve_stats(conn)
+    voter_id = request.cookies.get('narc_voter_id')
+    voter_votes = db.get_voter_votes(conn, voter_id) if voter_id else {}
     conn.close()
+
+    # Enrich each puzzle with vote and solve data
+    for p in puzzles:
+        pid = p["puzzle_id"]
+        vc = vote_counts.get(pid, {"up": 0, "down": 0, "net": 0})
+        p["vote_net"] = vc["net"]
+        p["vote_up"] = vc["up"]
+        p["vote_down"] = vc["down"]
+        p["my_vote"] = voter_votes.get(pid, 0)
+        ss = solve_stats.get(pid, {})
+        p["attempt_count"] = ss.get("attempts", 0)
+        p["solve_rate"] = ss.get("solve_rate")
+        p["narrative_lift"] = ss.get("narrative_lift")
+
+    # Compute grids: tag from actual sequence length (not stored tags)
+    for p in puzzles:
+        grid_tag = f"grids:{len(p['sequence'])}"
+        existing = (p.get("tags") or "")
+        # Strip any stored grids: tags, add computed one
+        tag_parts = [t.strip() for t in existing.split(",") if t.strip() and not t.strip().startswith("grids:")]
+        tag_parts.append(grid_tag)
+        p["tags"] = ",".join(tag_parts)
 
     # Collect tag counts by prefix for filter buttons
     tag_counts = {}
@@ -593,28 +644,22 @@ def browse():
     ]
     spectrum_tags = [t for t in spectrum_order if t in tag_counts]
 
-    # Separate regular puzzles from stance puzzles
-    regular_puzzles = [p for p in puzzles if not p.get("stance")]
-    stance_puzzles = [p for p in puzzles if p.get("stance")]
+    # Suppress grid variants from browse (parent_puzzle_id set)
+    browsable = [p for p in puzzles if not p.get("parent_puzzle_id")]
 
-    # Group stance puzzles by stance_group
-    from collections import OrderedDict
-    stance_groups = OrderedDict()
-    for p in stance_puzzles:
-        group = p["stance_group"]
-        if group not in stance_groups:
-            stance_groups[group] = {"name": group, "puzzles": {}}
-        stance_groups[group]["puzzles"][p["stance"]] = p
-    stance_group_list = list(stance_groups.values())
+    # Filter starter puzzles
+    starter_puzzles = [p for p in browsable
+                       if "collection:starter" in (p.get("tags") or "")]
 
-    return render_template("browse.html", puzzles=regular_puzzles,
-                           stance_groups=stance_group_list,
+    return render_template("browse.html", puzzles=browsable,
+                           starter_puzzles=starter_puzzles,
                            tag_counts=tag_counts,
                            audience_tags=tags_by_prefix("audience"),
                            arc_tags=tags_by_prefix("arc"),
                            clue_tags=tags_by_prefix("clue"),
                            domain_tags=tags_by_prefix("domain"),
-                           grid_tags=tags_by_prefix("grids"),
+                           grid_tags=sorted([t for t in tag_counts if t.startswith("grids:")],
+                                           key=lambda t: int(t.split(":")[1])),
                            spectrum_tags=spectrum_tags)
 
 
@@ -1080,6 +1125,51 @@ def api_export_submissions():
     return resp
 
 
+@app.route("/api/vote", methods=["POST"])
+def api_vote():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data"}), 400
+
+    puzzle_id = data.get("puzzle_id")
+    voter_id = data.get("voter_id")
+    value = data.get("value")
+
+    if not puzzle_id or not voter_id or value not in (1, -1, 0):
+        return jsonify({"error": "Invalid data"}), 400
+
+    ip = request.remote_addr
+    conn = get_conn()
+
+    # Rate limit: max 50 votes per IP per hour
+    if db.count_recent_votes_by_ip(conn, ip) > 50:
+        conn.close()
+        return jsonify({"error": "Rate limited"}), 429
+
+    if value == 0:
+        db.delete_vote(conn, puzzle_id, voter_id)
+    else:
+        db.upsert_vote(conn, puzzle_id, voter_id, value, ip)
+
+    counts = db.get_puzzle_vote_counts(conn, puzzle_id)
+    conn.close()
+
+    resp = jsonify({"status": "ok", "up": counts["up"], "down": counts["down"]})
+    resp.set_cookie('narc_voter_id', voter_id, max_age=365*24*3600, samesite='Lax')
+    return resp
+
+
+@app.route("/api/variant-view", methods=["POST"])
+def api_variant_view():
+    data = request.get_json()
+    if not data:
+        return jsonify({"error": "No data"}), 400
+    conn = get_conn()
+    db.insert_variant_view(conn, data["session_id"], data["puzzle_id"], data["variant"])
+    conn.close()
+    return jsonify({"status": "ok"})
+
+
 @app.route("/api/solve", methods=["POST"])
 def api_solve_attempt():
     data = request.get_json()
@@ -1099,6 +1189,7 @@ def api_solve_attempt():
         cell_accuracy=data.get("cell_accuracy"),
         time_spent_ms=data.get("time_spent_ms"),
         skipped_phase1=data.get("skipped_phase1", 0),
+        active_variant=data.get("active_variant"),
     )
     conn.close()
     return jsonify({"status": "ok"})

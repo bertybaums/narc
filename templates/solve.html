@@ -56,7 +56,7 @@
     <div class="variant-tabs" id="variant-tabs">
         {% for v in puzzle.variants %}
         <button class="vtab{{ ' active' if loop.index0 == 0 }}" onclick="switchVariant({{ loop.index0 }})">
-            {{ 'Original' if v.variant == 'original' else (v.source_domain or v.variant) }}
+            {% if v.source_domain and v.source_domain.startswith('stance:') %}{{ v.source_domain | replace('stance:', '') | capitalize }}{% elif v.variant == 'original' %}Original{% else %}{{ v.source_domain or v.variant }}{% endif %}
         </button>
         {% endfor %}
     </div>
@@ -98,6 +98,12 @@
         <div id="phase1-continue" class="mt-3" style="display:none;">
             <button class="btn btn-narc" onclick="revealNarrative()">Reveal Narrative &amp; Try Again</button>
         </div>
+        <div id="vote-prompt" class="text-center mt-3 pt-3 border-top" style="display:none;">
+            <p class="text-muted mb-2">Did you enjoy this puzzle?</p>
+            <button class="btn btn-outline-warning btn-sm me-2 vote-solve-btn" data-value="1" onclick="voteSolve(1, this)">&#9650; Upvote</button>
+            <button class="btn btn-outline-secondary btn-sm vote-solve-btn" data-value="-1" onclick="voteSolve(-1, this)">&#9660; Downvote</button>
+            <span id="vote-thanks" class="text-muted ms-2" style="display:none;">Thanks!</span>
+        </div>
     </div>
 </div>
 {% endblock %}
@@ -107,6 +113,33 @@
 const PUZZLE = {{ puzzle_json | safe }};
 const SESSION_ID = crypto.randomUUID();
 let startTime = Date.now();
+
+function getVoterId() {
+    let id = localStorage.getItem('narc_voter_id');
+    if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem('narc_voter_id', id);
+    }
+    return id;
+}
+
+let solveVoted = false;
+async function voteSolve(value, btn) {
+    if (solveVoted) return;
+    solveVoted = true;
+    const resp = await fetch('/api/vote', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({puzzle_id: PUZZLE.puzzle_id, voter_id: getVoterId(), value: value})
+    });
+    const data = await resp.json();
+    if (data.status === 'ok') {
+        document.querySelectorAll('.vote-solve-btn').forEach(b => b.disabled = true);
+        btn.classList.add(value === 1 ? 'btn-warning' : 'btn-secondary');
+        btn.classList.remove(value === 1 ? 'btn-outline-warning' : 'btn-outline-secondary');
+        document.getElementById('vote-thanks').style.display = '';
+    }
+}
 </script>
 <script src="/static/js/solve.js"></script>
 {% endblock %}

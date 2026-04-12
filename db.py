@@ -195,16 +195,121 @@ def upsert_classification(conn, puzzle_id, model_name, grids_only,
 
 def insert_solve_attempt(conn, puzzle_id, session_id, phase, saw_narrative,
                          submitted_grids, correct, cell_accuracy,
-                         time_spent_ms=None, solver_name=None, skipped_phase1=0):
+                         time_spent_ms=None, solver_name=None, skipped_phase1=0,
+                         active_variant=None):
     conn.execute(
         """INSERT INTO solve_attempts
            (puzzle_id, session_id, solver_name, phase, saw_narrative,
-            submitted_grids, correct, cell_accuracy, time_spent_ms, skipped_phase1)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            submitted_grids, correct, cell_accuracy, time_spent_ms, skipped_phase1,
+            active_variant)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, session_id, solver_name, phase, saw_narrative,
-         submitted_grids, correct, cell_accuracy, time_spent_ms, skipped_phase1),
+         submitted_grids, correct, cell_accuracy, time_spent_ms, skipped_phase1,
+         active_variant),
     )
     conn.commit()
+
+
+def insert_variant_view(conn, session_id, puzzle_id, variant):
+    conn.execute(
+        """INSERT INTO variant_views (session_id, puzzle_id, variant)
+           VALUES (?, ?, ?)""",
+        (session_id, puzzle_id, variant),
+    )
+    conn.commit()
+
+
+# --- votes ---
+
+def upsert_vote(conn, puzzle_id, voter_id, value, ip_address=None):
+    conn.execute(
+        """INSERT INTO votes (puzzle_id, voter_id, value, ip_address)
+           VALUES (?, ?, ?, ?)
+           ON CONFLICT(puzzle_id, voter_id)
+           DO UPDATE SET value=excluded.value, ip_address=excluded.ip_address,
+                         created_at=CURRENT_TIMESTAMP""",
+        (puzzle_id, voter_id, value, ip_address),
+    )
+    conn.commit()
+
+
+def delete_vote(conn, puzzle_id, voter_id):
+    conn.execute(
+        "DELETE FROM votes WHERE puzzle_id=? AND voter_id=?",
+        (puzzle_id, voter_id),
+    )
+    conn.commit()
+
+
+def get_vote_counts(conn):
+    rows = conn.execute(
+        """SELECT puzzle_id,
+                  SUM(CASE WHEN value=1 THEN 1 ELSE 0 END) as up,
+                  SUM(CASE WHEN value=-1 THEN 1 ELSE 0 END) as down,
+                  SUM(value) as net
+           FROM votes GROUP BY puzzle_id"""
+    ).fetchall()
+    return {r["puzzle_id"]: {"up": r["up"], "down": r["down"], "net": r["net"]}
+            for r in rows}
+
+
+def get_voter_votes(conn, voter_id):
+    rows = conn.execute(
+        "SELECT puzzle_id, value FROM votes WHERE voter_id=?",
+        (voter_id,),
+    ).fetchall()
+    return {r["puzzle_id"]: r["value"] for r in rows}
+
+
+def get_puzzle_solve_stats(conn):
+    rows = conn.execute(
+        """SELECT puzzle_id,
+                  COUNT(*) as total_attempts,
+                  SUM(CASE WHEN correct=1 THEN 1 ELSE 0 END) as correct_count,
+                  CASE WHEN COUNT(*)>0
+                       THEN CAST(SUM(CASE WHEN correct=1 THEN 1 ELSE 0 END) AS REAL)/COUNT(*)
+                       ELSE NULL END as solve_rate,
+                  SUM(CASE WHEN phase=1 AND correct=1 THEN 1 ELSE 0 END) as phase1_correct,
+                  SUM(CASE WHEN phase=1 THEN 1 ELSE 0 END) as phase1_total,
+                  SUM(CASE WHEN phase=2 AND correct=1 THEN 1 ELSE 0 END) as phase2_correct,
+                  SUM(CASE WHEN phase=2 THEN 1 ELSE 0 END) as phase2_total
+           FROM solve_attempts
+           WHERE skipped_phase1=0
+           GROUP BY puzzle_id"""
+    ).fetchall()
+    stats = {}
+    for r in rows:
+        p1_rate = r["phase1_correct"] / r["phase1_total"] if r["phase1_total"] else None
+        p2_rate = r["phase2_correct"] / r["phase2_total"] if r["phase2_total"] else None
+        narrative_lift = None
+        if p1_rate is not None and p2_rate is not None:
+            narrative_lift = p2_rate - p1_rate
+        stats[r["puzzle_id"]] = {
+            "attempts": r["total_attempts"],
+            "correct": r["correct_count"],
+            "solve_rate": r["solve_rate"],
+            "narrative_lift": narrative_lift,
+        }
+    return stats
+
+
+def count_recent_votes_by_ip(conn, ip_address):
+    row = conn.execute(
+        """SELECT COUNT(*) as cnt FROM votes
+           WHERE ip_address=? AND created_at > datetime('now', '-1 hour')""",
+        (ip_address,),
+    ).fetchone()
+    return row["cnt"]
+
+
+def get_puzzle_vote_counts(conn, puzzle_id):
+    row = conn.execute(
+        """SELECT COALESCE(SUM(CASE WHEN value=1 THEN 1 ELSE 0 END), 0) as up,
+                  COALESCE(SUM(CASE WHEN value=-1 THEN 1 ELSE 0 END), 0) as down
+           FROM votes WHERE puzzle_id=?""",
+        (puzzle_id,),
+    ).fetchone()
+    return {"up": row["up"], "down": row["down"]}
 
 
 # --- users ---

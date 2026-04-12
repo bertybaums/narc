@@ -156,6 +156,25 @@ body {
     transform: translateY(-2px);
 }
 
+/* Vote widget */
+.vote-widget {
+    min-width: 30px;
+    cursor: default;
+}
+.vote-widget button {
+    line-height: 1;
+    text-decoration: none;
+    opacity: 0.4;
+    color: #9ca3af;
+}
+.vote-widget button:hover {
+    opacity: 1;
+}
+.vote-widget button.text-warning,
+.vote-widget button.text-primary {
+    opacity: 1;
+}
+
 /* Phase indicator */
 .phase-badge {
     display: inline-block;

@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS classifications (
     narrative_only INTEGER,
     both           INTEGER,
     has_narc       INTEGER,
-    PRIMARY KEY (puzzle_id, model_name)
+    PRIMARY KEY (puzzle_id, variant_id, model_name)
 );
 
 CREATE TABLE IF NOT EXISTS solve_attempts (
@@ -72,8 +72,20 @@ CREATE TABLE IF NOT EXISTS solve_attempts (
     cell_accuracy  REAL,
     time_spent_ms  INTEGER,
     skipped_phase1 INTEGER DEFAULT 0,
+    active_variant TEXT,
     created_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+
+CREATE TABLE IF NOT EXISTS variant_views (
+    view_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id  TEXT NOT NULL,
+    puzzle_id   TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    variant     TEXT NOT NULL,
+    viewed_at   TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_variant_views_puzzle ON variant_views(puzzle_id);
+CREATE INDEX IF NOT EXISTS idx_variant_views_session ON variant_views(session_id);
 
 CREATE TABLE IF NOT EXISTS oddoneout_trials (
     trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,6 +106,21 @@ CREATE TABLE IF NOT EXISTS oddoneout_trials (
     reasoning      TEXT,
     UNIQUE(puzzle_id, distractor_id, model_name, condition, repeat_num)
 );
+
+-- Voting
+
+CREATE TABLE IF NOT EXISTS votes (
+    vote_id     INTEGER PRIMARY KEY AUTOINCREMENT,
+    puzzle_id   TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    voter_id    TEXT NOT NULL,
+    value       INTEGER NOT NULL,  -- +1 or -1
+    ip_address  TEXT,
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(puzzle_id, voter_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_votes_puzzle ON votes(puzzle_id);
+CREATE INDEX IF NOT EXISTS idx_votes_voter ON votes(voter_id);
 
 -- Auth and submission review
 

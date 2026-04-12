@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-0">Puzzles <small class="text-muted" id="puzzle-count">({{ puzzles | length + stance_groups | length }})</small></h2>
+    <h2 class="mb-0">Puzzles <small class="text-muted" id="puzzle-count">({{ puzzles | length }})</small></h2>
     <div class="d-flex align-items-center gap-3">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" id="show-drafts" onchange="filterPuzzles()">
@@ -14,7 +14,24 @@
     </div>
 </div>
 
-{% if puzzles or stance_groups %}
+{% if puzzles %}
+
+<!-- Sort modes -->
+<div class="d-flex align-items-center gap-2 mb-3 flex-wrap">
+    <strong class="text-muted">Sort:</strong>
+    <div class="btn-group btn-group-sm flex-wrap" role="group" id="sort-modes">
+        <button class="btn btn-outline-light active" data-sort="top" onclick="setSort(this)">Top</button>
+        <button class="btn btn-outline-light" data-sort="default" onclick="setSort(this)">Default</button>
+        <button class="btn btn-outline-light" data-sort="new" onclick="setSort(this)">New</button>
+        <button class="btn btn-outline-light" data-sort="random" onclick="setSort(this)">Random</button>
+        <button class="btn btn-outline-light" data-sort="easiest" onclick="setSort(this)">Easiest</button>
+        <button class="btn btn-outline-light" data-sort="hardest" onclick="setSort(this)">Hardest</button>
+        <button class="btn btn-outline-light" data-sort="narrative-lift" onclick="setSort(this)">Narrative Lift</button>
+        <button class="btn btn-outline-light" data-sort="most-attempted" onclick="setSort(this)">Most Attempted</button>
+        <button class="btn btn-outline-light" data-sort="unsolved" onclick="setSort(this)">Unsolved</button>
+        <button class="btn btn-outline-light" data-sort="ai-stumpers" onclick="setSort(this)">AI Stumpers</button>
+    </div>
+</div>
 
 <!-- Tag filters -->
 <div class="mb-3" id="tag-filters">
@@ -43,12 +60,14 @@
         {% endfor %}
     </div>
     <div class="mb-2">
-        <strong class="text-muted me-2">Domain:</strong>
+        <strong class="text-muted me-2" style="cursor:pointer;" onclick="toggleDomainTags()">Domain: <span id="domain-toggle" class="small">&#9654;</span></strong>
+        <span id="domain-tags" style="display:none;">
         {% for tag in domain_tags %}
         <button class="btn btn-sm btn-outline-secondary tag-btn mb-1" data-tag="{{ tag }}" onclick="toggleTag(this)">
             {{ tag.split(':')[1] }} <span class="badge bg-secondary">{{ tag_counts[tag] }}</span>
         </button>
         {% endfor %}
+        </span>
     </div>
     <div class="mb-2">
         <strong class="text-muted me-2">Spectrum:</strong>
@@ -70,8 +89,37 @@
     <span id="filter-count" class="text-muted ms-2"></span>
 </div>
 
-<!-- Masking experiment puzzles -->
-<h4 class="mt-2 mb-3">Masking Experiment <small class="text-muted">({{ puzzles | length }})</small></h4>
+<!-- Starter section -->
+{% if starter_puzzles %}
+<div id="starter-section">
+    <h4 class="mt-2 mb-3">Start Here <small class="text-muted">({{ starter_puzzles | length }})</small></h4>
+    <div class="row g-3">
+        {% for p in starter_puzzles %}
+        <div class="col-md-4">
+            <div class="card puzzle-card border-warning" onclick="location.href='/solve/{{ p.puzzle_id }}'">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ p.title }}
+                        <span class="badge bg-warning text-dark" style="font-size:0.65em;">Starter</span>
+                    </h5>
+                    <p class="text-muted mb-1">
+                        {{ p.sequence | length }} grids &middot;
+                        {% if p.masked_positions | length == 1 %}
+                            masked #{{ p.masked_positions[0] + 1 }}
+                        {% else %}
+                            {{ p.masked_positions | length }} masked
+                        {% endif %}
+                    </p>
+                    <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc" onclick="event.stopPropagation()">Solve</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <hr class="my-4">
+</div>
+{% endif %}
+
 <div class="row g-3" id="puzzle-grid">
     {% for p in puzzles %}
     <div class="col-md-4 puzzle-item" data-tags="{{ p.tags or '' }}"
@@ -79,93 +127,65 @@
          data-draft="{{ 'true' if p.is_draft else 'false' }}"
          data-creator="{{ p.creator or 'human' }}"
          data-section="masking"
+         data-puzzle-id="{{ p.puzzle_id }}"
+         data-vote-net="{{ p.vote_net|default(0) }}"
+         data-created="{{ p.created_at or '' }}"
+         data-attempts="{{ p.attempt_count|default(0) }}"
+         data-solve-rate="{{ p.solve_rate if p.solve_rate is not none else '' }}"
+         data-narrative-lift="{{ p.narrative_lift if p.narrative_lift is not none else '' }}"
          {% if p.is_draft %}style="display: none;"{% endif %}>
         <div class="card puzzle-card{{ ' border-warning' if p.is_draft }}" onclick="location.href='/solve/{{ p.puzzle_id }}'">
-            <div class="card-body">
-                <h5 class="card-title">
-                    {{ p.title }}
-                    {% if p.creator == 'claude' %}
-                    <span class="badge bg-info" style="font-size:0.65em;">AI-generated</span>
-                    {% elif p.creator == 'colab' %}
-                    <span class="badge bg-success" style="font-size:0.65em;">AI-Hum-Colab</span>
-                    {% else %}
-                    <span class="badge bg-secondary" style="font-size:0.65em;">Hum-generated</span>
-                    {% endif %}
-                    {% if p.is_draft %}
-                    <span class="badge bg-warning text-dark" style="font-size:0.65em;">Draft</span>
-                    {% endif %}
-                </h5>
-                <p class="text-muted mb-1">
-                    {{ p.sequence | length }} grids &middot;
-                    {% if p.masked_positions | length == 1 %}
-                        masked #{{ p.masked_positions[0] + 1 }}
-                    {% else %}
-                        {{ p.masked_positions | length }} masked
-                    {% endif %}
-                    {% if p.human_difficulty and p.ai_difficulty %}
-                    &middot; <span title="Human {{ p.human_difficulty }}/5, AI {{ p.ai_difficulty }}/5">
-                        H{{ p.human_difficulty }} A{{ p.ai_difficulty }}</span>
-                    {% endif %}
-                    {% if p.variant_count > 1 %}
-                    &middot; {{ p.variant_count }} variants
-                    {% endif %}
-                </p>
-                <p class="card-text small text-truncate">{{ p.narrative[:80] }}...</p>
-                <div class="d-flex gap-2 mt-2 flex-wrap">
-                    <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc" onclick="event.stopPropagation()">Solve</a>
-                    <a href="/create?revise={{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation()">Copy + Revise</a>
+            <div class="card-body d-flex">
+                <div class="vote-widget d-flex flex-column align-items-center me-2"
+                     onclick="event.stopPropagation()" data-my-vote="{{ p.my_vote|default(0) }}">
+                    <button class="btn btn-sm btn-link p-0 vote-up{{ ' text-warning' if p.my_vote == 1 }}"
+                            onclick="vote('{{ p.puzzle_id }}', 1, this)" title="Upvote">&#9650;</button>
+                    <span class="vote-count small fw-bold">{{ p.vote_net|default(0) }}</span>
+                    <button class="btn btn-sm btn-link p-0 vote-down{{ ' text-primary' if p.my_vote == -1 }}"
+                            onclick="vote('{{ p.puzzle_id }}', -1, this)" title="Downvote">&#9660;</button>
                 </div>
-            </div>
-        </div>
-    </div>
-    {% endfor %}
-</div>
-
-<!-- Stance experiment puzzles -->
-{% if stance_groups %}
-<h4 class="mt-5 mb-3">Stance Experiment <small class="text-muted">({{ stance_groups | length }} groups)</small></h4>
-<div class="row g-3" id="stance-grid">
-    {% for group in stance_groups %}
-    <div class="col-12 puzzle-item stance-group-item" data-section="stance"
-         data-title="{{ group.name | lower }}"
-         data-tags="{% for s, p in group.puzzles.items() %}{{ p.tags or '' }} {% endfor %}">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ group.name }}</h5>
-                <div class="row g-2 mt-2">
-                    {% for stance in ['intentional', 'design', 'physical'] %}
-                    {% if stance in group.puzzles %}
-                    {% set p = group.puzzles[stance] %}
-                    <div class="col-md-4">
-                        <div class="card h-100 border-secondary" onclick="location.href='/solve/{{ p.puzzle_id }}'" style="cursor:pointer;">
-                            <div class="card-body py-2 px-3">
-                                <div class="d-flex align-items-center mb-1">
-                                    {% if stance == 'intentional' %}
-                                    <span class="badge bg-primary me-2">Intentional</span>
-                                    {% elif stance == 'design' %}
-                                    <span class="badge bg-success me-2">Design</span>
-                                    {% else %}
-                                    <span class="badge bg-warning text-dark me-2">Physical</span>
-                                    {% endif %}
-                                    <small class="text-muted">
-                                        {{ p.sequence | length }} grids &middot;
-                                        masked #{{ p.masked_positions[0] + 1 }}
-                                    </small>
-                                </div>
-                                <p class="card-text small text-truncate mb-1">{{ p.narrative[:100] }}...</p>
-                                <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation()">Solve</a>
-                            </div>
-                        </div>
+                <div class="flex-grow-1">
+                    <h5 class="card-title">
+                        {{ p.title }}
+                        {% if p.creator == 'claude' %}
+                        <span class="badge bg-info" style="font-size:0.65em;">AI-generated</span>
+                        {% elif p.creator == 'colab' %}
+                        <span class="badge bg-success" style="font-size:0.65em;">AI-Hum-Colab</span>
+                        {% else %}
+                        <span class="badge bg-secondary" style="font-size:0.65em;">Hum-generated</span>
+                        {% endif %}
+                        {% if p.is_draft %}
+                        <span class="badge bg-warning text-dark" style="font-size:0.65em;">Draft</span>
+                        {% endif %}
+                    </h5>
+                    <p class="text-muted mb-1">
+                        {{ p.sequence | length }} grids &middot;
+                        {% if p.masked_positions | length == 1 %}
+                            masked #{{ p.masked_positions[0] + 1 }}
+                        {% else %}
+                            {{ p.masked_positions | length }} masked
+                        {% endif %}
+                        {% if p.human_difficulty and p.ai_difficulty %}
+                        &middot; <span title="Human {{ p.human_difficulty }}/5, AI {{ p.ai_difficulty }}/5">
+                            H{{ p.human_difficulty }} A{{ p.ai_difficulty }}</span>
+                        {% endif %}
+                        {% if p.variant_count > 1 %}
+                        &middot; {{ p.variant_count }} variants
+                        {% endif %}
+                        {% if p.attempt_count %}
+                        &middot; {{ p.attempt_count }} attempt{{ 's' if p.attempt_count != 1 }}
+                        {% endif %}
+                    </p>
+                    <div class="d-flex gap-2 mt-2 flex-wrap">
+                        <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc" onclick="event.stopPropagation()">Solve</a>
+                        <a href="/create?revise={{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation()">Copy + Revise</a>
                     </div>
-                    {% endif %}
-                    {% endfor %}
                 </div>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
-{% endif %}
 
 {% else %}
 <div class="text-center py-5">
@@ -178,7 +198,50 @@
 {% block scripts %}
 <script>
 const activeTags = new Set();
+let currentSort = 'top';
 
+// --- Voter ID ---
+function getVoterId() {
+    let id = localStorage.getItem('narc_voter_id');
+    if (!id) {
+        id = crypto.randomUUID();
+        localStorage.setItem('narc_voter_id', id);
+    }
+    return id;
+}
+
+// --- Voting ---
+async function vote(puzzleId, value, btn) {
+    const widget = btn.closest('.vote-widget');
+    const currentVote = parseInt(widget.dataset.myVote || '0');
+    const newValue = (currentVote === value) ? 0 : value;
+
+    const resp = await fetch('/api/vote', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({puzzle_id: puzzleId, voter_id: getVoterId(), value: newValue})
+    });
+    const data = await resp.json();
+    if (data.status === 'ok') {
+        const net = data.up - data.down;
+        widget.querySelector('.vote-count').textContent = net;
+        widget.dataset.myVote = newValue;
+        widget.closest('.puzzle-item').dataset.voteNet = net;
+        widget.querySelector('.vote-up').classList.toggle('text-warning', newValue === 1);
+        widget.querySelector('.vote-down').classList.toggle('text-primary', newValue === -1);
+    }
+}
+
+// --- Domain tag collapse ---
+function toggleDomainTags() {
+    const tags = document.getElementById('domain-tags');
+    const arrow = document.getElementById('domain-toggle');
+    const visible = tags.style.display !== 'none';
+    tags.style.display = visible ? 'none' : '';
+    arrow.innerHTML = visible ? '&#9654;' : '&#9660;';
+}
+
+// --- Tag filtering ---
 function toggleTag(btn) {
     const tag = btn.dataset.tag;
     if (activeTags.has(tag)) {
@@ -210,16 +273,13 @@ function filterPuzzles() {
         const id = item.dataset.id || '';
         const isDraft = item.dataset.draft === 'true';
 
-        // Hide drafts unless toggle is on
         if (isDraft && !showDrafts) {
             item.style.display = 'none';
             return;
         }
 
-        // Text search
         const matchesSearch = !search || title.includes(search) || id.includes(search);
 
-        // Tag filter: item must have ALL active tags
         let matchesTags = true;
         for (const tag of activeTags) {
             if (!tags.includes(tag)) {
@@ -246,7 +306,86 @@ function filterPuzzles() {
     document.getElementById('puzzle-count').textContent = '(' + shown + ')';
 }
 
-// Set initial count on load
-document.addEventListener('DOMContentLoaded', filterPuzzles);
+// --- Sorting ---
+function setSort(btn) {
+    document.querySelectorAll('#sort-modes .btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentSort = btn.dataset.sort;
+    sortPuzzles();
+}
+
+function sortPuzzles() {
+    ['puzzle-grid'].forEach(gridId => {
+        const grid = document.getElementById(gridId);
+        if (!grid) return;
+        const items = [...grid.children];
+
+        if (currentSort === 'default') {
+            items.sort((a, b) => (parseInt(a.dataset.originalIndex) || 0) - (parseInt(b.dataset.originalIndex) || 0));
+        } else {
+            items.sort((a, b) => {
+                switch (currentSort) {
+                    case 'top':
+                        return (parseFloat(b.dataset.voteNet) || 0) - (parseFloat(a.dataset.voteNet) || 0);
+                    case 'new':
+                        return (b.dataset.created || '').localeCompare(a.dataset.created || '');
+                    case 'random':
+                        return Math.random() - 0.5;
+                    case 'easiest':
+                        return compareStat(b, a, 'solveRate');
+                    case 'hardest':
+                        return compareStat(a, b, 'solveRate');
+                    case 'narrative-lift':
+                        return compareStat(b, a, 'narrativeLift');
+                    case 'most-attempted':
+                        return (parseInt(b.dataset.attempts) || 0) - (parseInt(a.dataset.attempts) || 0);
+                    case 'unsolved':
+                        return scoreUnsolved(b) - scoreUnsolved(a);
+                    case 'ai-stumpers':
+                        return scoreAiStumper(b) - scoreAiStumper(a);
+                    default:
+                        return 0;
+                }
+            });
+        }
+
+        items.forEach(item => grid.appendChild(item));
+    });
+
+    // Hide/show starter section based on sort mode
+    const starter = document.getElementById('starter-section');
+    if (starter) starter.style.display = (currentSort === 'default') ? '' : 'none';
+
+    filterPuzzles();
+}
+
+function compareStat(a, b, attr) {
+    const va = a.dataset[attr] ? parseFloat(a.dataset[attr]) : -Infinity;
+    const vb = b.dataset[attr] ? parseFloat(b.dataset[attr]) : -Infinity;
+    return va - vb;
+}
+
+function scoreUnsolved(el) {
+    const attempts = parseInt(el.dataset.attempts) || 0;
+    const rate = el.dataset.solveRate;
+    if (attempts > 0 && (rate === '0' || rate === '0.0')) return -attempts;
+    if (attempts > 0 && rate === '') return -attempts;  // no correct field = unsolved
+    return 1;
+}
+
+function scoreAiStumper(el) {
+    const tags = el.dataset.tags || '';
+    if (tags.includes('spectrum:human-forte')) return -2;
+    if (tags.includes('spectrum:human-edge')) return -1;
+    return 0;
+}
+
+// --- Init ---
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.puzzle-item').forEach((el, i) => {
+        el.dataset.originalIndex = i;
+    });
+    sortPuzzles();
+});
 </script>
 {% endblock %}

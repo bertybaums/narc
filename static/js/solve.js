@@ -12,6 +12,7 @@ let selectedColor = 0;
 let answerGrids = {};      // keyed by position string: {"2": Grid, "3": Grid}
 let narrativeRevealed = false;
 let preNarrativeSubmitted = false;
+let activeVariant = (PUZZLE.variants && PUZZLE.variants.length > 0) ? PUZZLE.variants[0].variant : 'original';
 
 document.addEventListener('DOMContentLoaded', () => {
     renderPuzzleSequence();
@@ -128,7 +129,8 @@ function revealNarrative() {
                 saw_narrative: 0,
                 skipped_phase1: 1,
                 submitted_grids: null,
-                time_spent_ms: Date.now() - startTime
+                time_spent_ms: Date.now() - startTime,
+                active_variant: null
             })
         });
     }
@@ -201,7 +203,8 @@ async function submitAnswer() {
             submitted_grids: submitted,
             correct: allCorrect ? 1 : 0,
             cell_accuracy: cellAccuracy,
-            time_spent_ms: timeSpent
+            time_spent_ms: timeSpent,
+            active_variant: narrativeRevealed ? activeVariant : null
         })
     });
 
@@ -277,6 +280,10 @@ function showFeedback(submitted, expected, correct, cellAccuracy) {
     if (!narrativeRevealed && !correct) {
         document.getElementById('phase1-continue').style.display = 'block';
     }
+
+    // Show vote prompt after any submission
+    const votePrompt = document.getElementById('vote-prompt');
+    if (votePrompt) votePrompt.style.display = '';
 }
 
 function clearAnswer() {
@@ -293,5 +300,16 @@ function switchVariant(idx) {
     document.getElementById('narrative-text').textContent = variants[idx].narrative;
     document.querySelectorAll('#variant-tabs .vtab').forEach((btn, i) => {
         btn.classList.toggle('active', i === idx);
+    });
+    activeVariant = variants[idx].variant;
+    // Track variant view
+    fetch('/api/variant-view', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            session_id: SESSION_ID,
+            puzzle_id: PUZZLE.puzzle_id,
+            variant: activeVariant
+        })
     });
 }
