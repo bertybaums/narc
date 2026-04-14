@@ -406,11 +406,26 @@ def _inspect_stances(conn):
     # Sort groups by name
     group_list = sorted(groups.values(), key=lambda g: g["name"])
 
-    # Top 3 highlights: groups with biggest spread between stances
+    # Top 3 highlights: biggest stance-spread, filtered to groups where at
+    # least intentional or moral produced at least one NARC success; ensure
+    # at least one highlight includes the moral stance.
     def stance_spread(g):
         counts = [s.get("narc_count", 0) for s in g["stances"].values()]
         return max(counts) - min(counts) if counts else 0
-    stance_highlights = sorted(group_list, key=stance_spread, reverse=True)[:3]
+
+    def has_intentional_or_moral_success(g):
+        for s in ("intentional", "moral"):
+            if g["stances"].get(s, {}).get("narc_count", 0) >= 1:
+                return True
+        return False
+
+    eligible = [g for g in group_list if has_intentional_or_moral_success(g)]
+    ranked = sorted(eligible, key=stance_spread, reverse=True)
+    moral_groups = [g for g in ranked if "moral" in g["stances"]]
+
+    stance_highlights = ranked[:3]
+    if moral_groups and not any("moral" in h["stances"] for h in stance_highlights):
+        stance_highlights = stance_highlights[:2] + [moral_groups[0]]
 
     return {"stance_groups": group_list, "stance_models": models,
             "highlights": stance_highlights}

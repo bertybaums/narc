@@ -62,6 +62,7 @@
 .stance-label.intentional { color: #e74c3c; }
 .stance-label.design { color: #3498db; }
 .stance-label.physical { color: #2ecc40; }
+.stance-label.moral { color: #9b59b6; }
 
 /* Tau bar */
 .tau-bar { display: inline-block; height: 14px; border-radius: 2px; margin-right: 4px; vertical-align: middle; }
@@ -335,12 +336,13 @@
 <div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
     <div class="card-body" style="padding:12px 16px;">
         <p class="mb-1" style="color:#d0d0d0;font-size:0.9em;">
-            <strong>Stance experiment:</strong> Inspired by Daniel Dennett's three interpretive stances. The same grid sequence is paired with three different narratives: <span style="color:#e74c3c;"><strong>intentional</strong></span> (beliefs, desires, goals — e.g., "Red betrayed the truce"), <span style="color:#3498db;"><strong>design</strong></span> (functional rules — e.g., "When blue reaches column 1, red overrides"), and <span style="color:#2ecc40;"><strong>physical</strong></span> (step-by-step cell changes — e.g., "Cell (1,1) changes from 1 to 2"). Each is tested via the standard 3-condition masking protocol.
+            <strong>Stance experiment:</strong> Inspired by Daniel Dennett's three interpretive stances. The same grid sequence is paired with three different narratives: <span style="color:#e74c3c;"><strong>intentional</strong></span> (beliefs, desires, goals — e.g., "Red betrayed the truce"), <span style="color:#3498db;"><strong>design</strong></span> (functional rules — e.g., "When blue reaches column 1, red overrides"), and <span style="color:#2ecc40;"><strong>physical</strong></span> (step-by-step cell changes — e.g., "Cell (1,1) changes from 1 to 2"), and <span style="color:#9b59b6;"><strong>moral</strong></span> (evaluative reasons — an agent overrides an expected trajectory for ethical reasons, e.g., a soldier refusing an unlawful order). Each is tested via the standard 3-condition masking protocol.
         </p>
         <p class="mb-0" style="color:#888;font-size:0.8em;">
             <span style="color:#e74c3c;">I</span> = Intentional &nbsp;&nbsp;
             <span style="color:#3498db;">D</span> = Design &nbsp;&nbsp;
             <span style="color:#2ecc40;">P</span> = Physical &nbsp;&nbsp;
+            <span style="color:#9b59b6;">M</span> = Moral &nbsp;&nbsp;
             N/6 = NARC count out of 6 models &nbsp;&nbsp;
             G = grids only &nbsp;&nbsp; N = narrative only &nbsp;&nbsp; B = both
         </p>
@@ -352,9 +354,9 @@
     <div class="highlight-card" onclick="showStanceHighlight('{{ h.name }}')">
         <div class="hl-title">{{ h.name }}</div>
         <div class="hl-stat">
-            {% for stance in ['intentional', 'design', 'physical'] %}
+            {% for stance in ['intentional', 'design', 'physical', 'moral'] %}
             {% if stance in h.stances %}
-            <span style="color:{{ '#e74c3c' if stance == 'intentional' else '#3498db' if stance == 'design' else '#2ecc40' }}">
+            <span style="color:{{ '#e74c3c' if stance == 'intentional' else '#3498db' if stance == 'design' else '#2ecc40' if stance == 'physical' else '#9b59b6' }}">
                 {{ stance[0] | upper }}:{{ h.stances[stance].narc_count }}/{{ h.stances[stance].results | length }}</span>&nbsp;
             {% endif %}
             {% endfor %}
@@ -381,11 +383,11 @@
         <span class="toggle" id="tog-sg-{{ loop.index }}">&#9654;</span>
         <span class="title" style="flex:1; font-weight:600;">{{ g.name }}</span>
         <div class="dots" style="gap:8px;">
-            {% for stance in ['intentional', 'design', 'physical'] %}
+            {% for stance in ['intentional', 'design', 'physical', 'moral'] %}
             {% if stance in g.stances %}
             {% set nc = g.stances[stance].narc_count %}
             <span style="font-size:0.8em;">
-                <span style="color:{{ '#e74c3c' if stance == 'intentional' else '#3498db' if stance == 'design' else '#2ecc40' }}">
+                <span style="color:{{ '#e74c3c' if stance == 'intentional' else '#3498db' if stance == 'design' else '#2ecc40' if stance == 'physical' else '#9b59b6' }}">
                     {{ stance[0] | upper }}</span>:
                 <strong>{{ nc }}/{{ g.stances[stance].results | length }}</strong>
             </span>
@@ -400,7 +402,7 @@
         <script type="application/json" id="seq-data-sg-{{ loop.index }}">{{ {"seq": first_stance.sequence, "masked": first_stance.masked_positions, "answers": first_stance.answer_grids} | tojson }}</script>
 
         <div class="d-flex gap-3 flex-wrap">
-            {% for stance in ['intentional', 'design', 'physical'] %}
+            {% for stance in ['intentional', 'design', 'physical', 'moral'] %}
             {% if stance in g.stances %}
             {% set sp = g.stances[stance] %}
             <div class="stance-col">
