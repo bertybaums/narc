@@ -11,6 +11,9 @@
         </a>
     </li>
     <li class="nav-item">
+        <a class="nav-link" href="#" onclick="showTab('airun'); loadReviewJobs();">AI Review</a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="#" onclick="showTab('activity')">Activity</a>
     </li>
     <li class="nav-item">
@@ -74,6 +77,17 @@
     {% else %}
     <p class="text-muted">No pending submissions.</p>
     {% endif %}
+</div>
+
+<!-- AI Review Tab -->
+<div id="tab-airun" class="admin-tab" style="display:none;">
+    <p class="text-muted small">
+        Puzzles with no trial data for <code>gpt-oss-120b</code>. Run the pipeline
+        (collect + classify) to test and promote out of Drafts.
+    </p>
+    <div id="airun-untested"><em class="text-muted">Loading...</em></div>
+    <h5 class="mt-4">Recent Jobs</h5>
+    <div id="airun-jobs"><em class="text-muted">Loading...</em></div>
 </div>
 
 <!-- Activity Tab -->
@@ -407,6 +421,75 @@ async function changePassword() {
         el.className = 'mt-2 text-danger'; el.textContent = result.error;
     }
     el.style.display = 'block';
+}
+
+// --- AI Review ---
+let airunPollTimer = null;
+
+async function loadReviewJobs() {
+    const r = await fetch('/api/admin/review-jobs');
+    const data = await r.json();
+    renderUntested(data.untested);
+    renderJobs(data.jobs);
+    // Poll if any active
+    const anyActive = data.jobs.some(j => j.status === 'queued' || j.status === 'running');
+    if (airunPollTimer) { clearTimeout(airunPollTimer); airunPollTimer = null; }
+    if (anyActive) {
+        airunPollTimer = setTimeout(loadReviewJobs, 5000);
+    }
+}
+
+function renderUntested(list) {
+    const el = document.getElementById('airun-untested');
+    if (!list.length) {
+        el.innerHTML = '<p class="text-muted">No untested puzzles — all puzzles have trial data.</p>';
+        return;
+    }
+    const rows = list.map(p => {
+        const active = p.active_job;
+        const btn = active
+          ? `<span class="badge bg-info">${active.status}</span>`
+          : `<button class="btn btn-sm btn-primary" onclick="runReview('${p.puzzle_id}')">Run AI review</button>`;
+        return `<tr>
+            <td><a href="/solve/${p.puzzle_id}">${p.puzzle_id}</a></td>
+            <td>${escapeHtml(p.title)}</td>
+            <td class="small text-muted">${p.created_at || ''}</td>
+            <td>${btn}</td>
+        </tr>`;
+    }).join('');
+    el.innerHTML = `<table class="table table-sm"><thead><tr>
+        <th>ID</th><th>Title</th><th>Created</th><th>Action</th></tr></thead>
+        <tbody>${rows}</tbody></table>`;
+}
+
+function renderJobs(jobs) {
+    const el = document.getElementById('airun-jobs');
+    if (!jobs.length) { el.innerHTML = '<p class="text-muted">No jobs yet.</p>'; return; }
+    const rows = jobs.map(j => {
+        const badge = {queued:'secondary', running:'info', done:'success', failed:'danger'}[j.status] || 'secondary';
+        const errCell = j.error ? `<br><small class="text-danger">${escapeHtml(j.error)}</small>` : '';
+        return `<tr>
+            <td>${j.job_id}</td>
+            <td>${j.puzzle_id}</td>
+            <td><span class="badge bg-${badge}">${j.status}</span>${errCell}</td>
+            <td class="small text-muted">${j.started_at || j.created_at}</td>
+            <td><a href="/api/admin/review-jobs/${j.job_id}/log" target="_blank">log</a></td>
+        </tr>`;
+    }).join('');
+    el.innerHTML = `<table class="table table-sm"><thead><tr>
+        <th>#</th><th>Puzzle</th><th>Status</th><th>Started</th><th></th></tr></thead>
+        <tbody>${rows}</tbody></table>`;
+}
+
+async function runReview(puzzleId) {
+    const r = await fetch(`/api/admin/puzzles/${puzzleId}/run-review`, {method:'POST'});
+    const data = await r.json();
+    if (!r.ok) { alert(data.error || 'Failed to queue'); return; }
+    loadReviewJobs();
+}
+
+function escapeHtml(s) {
+    return (s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 }
 </script>
 {% endblock %}

@@ -4,6 +4,8 @@ import csv
 import io
 import json
 import os
+import subprocess
+import threading
 from datetime import datetime, timedelta
 from functools import wraps
 from pathlib import Path
@@ -1098,6 +1100,127 @@ def api_change_password():
                     user["username"], "Changed own password")
     conn.close()
     return jsonify({"status": "ok"})
+
+
+# --- AI review jobs ---
+
+REVIEW_MODEL = "gpt-oss-120b"
+REVIEW_LOG_DIR = Path(__file__).parent / "logs" / "review"
+REVIEW_LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+
+def _run_review_job(job_id, puzzle_id, log_path):
+    """Background worker: run collect.py then classify.py for a single puzzle."""
+    conn = get_conn()
+    db.set_review_job_status(conn, job_id, "running")
+    conn.close()
+
+    env = os.environ.copy()
+    if not env.get("MINDROUTER_API_KEY"):
+        conn = get_conn()
+        db.set_review_job_status(conn, job_id, "failed",
+                                 error="MINDROUTER_API_KEY not set")
+        conn.close()
+        return
+
+    repo = Path(__file__).parent
+    try:
+        with open(log_path, "w") as log:
+            log.write(f"=== collect.py --model {REVIEW_MODEL} --puzzle {puzzle_id} ===\n")
+            log.flush()
+            r1 = subprocess.run(
+                ["python", "collect.py", "--model", REVIEW_MODEL, "--puzzle", puzzle_id],
+                cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
+                timeout=1800,
+            )
+            log.write(f"\n=== collect exit {r1.returncode} ===\n")
+            log.write(f"\n=== classify.py --model {REVIEW_MODEL} ===\n")
+            log.flush()
+            r2 = subprocess.run(
+                ["python", "classify.py", "--model", REVIEW_MODEL],
+                cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
+                timeout=600,
+            )
+            log.write(f"\n=== classify exit {r2.returncode} ===\n")
+        ok = (r1.returncode == 0 and r2.returncode == 0)
+        conn = get_conn()
+        if ok:
+            db.set_review_job_status(conn, job_id, "done")
+        else:
+            db.set_review_job_status(conn, job_id, "failed",
+                                     error=f"collect={r1.returncode} classify={r2.returncode}")
+        conn.close()
+    except Exception as e:
+        conn = get_conn()
+        db.set_review_job_status(conn, job_id, "failed", error=str(e))
+        conn.close()
+
+
+@app.route("/api/admin/review-jobs", methods=["GET"])
+@require_role("owner", "reviewer")
+def api_list_review_jobs():
+    conn = get_conn()
+    jobs = [dict(r) for r in db.get_review_jobs(conn)]
+    untested = db.get_untested_puzzle_ids(conn, REVIEW_MODEL)
+    # Puzzles with an active (queued/running) job
+    active = {}
+    for j in jobs:
+        if j["status"] in ("queued", "running"):
+            active[j["puzzle_id"]] = j
+    untested_info = []
+    for pid in untested:
+        p = db.get_puzzle(conn, pid)
+        if not p:
+            continue
+        untested_info.append({
+            "puzzle_id": pid,
+            "title": p["title"],
+            "created_at": p["created_at"],
+            "active_job": active.get(pid),
+        })
+    conn.close()
+    return jsonify({"jobs": jobs, "untested": untested_info, "model": REVIEW_MODEL})
+
+
+@app.route("/api/admin/puzzles/<puzzle_id>/run-review", methods=["POST"])
+@require_role("owner", "reviewer")
+def api_run_review(puzzle_id):
+    conn = get_conn()
+    puzzle = db.get_puzzle(conn, puzzle_id)
+    if not puzzle:
+        conn.close()
+        return jsonify({"error": "Puzzle not found"}), 404
+    existing = db.get_active_review_job_for_puzzle(conn, puzzle_id)
+    if existing:
+        conn.close()
+        return jsonify({"error": "Job already queued/running",
+                        "job_id": existing["job_id"]}), 409
+    user = current_user()
+    log_path = str(REVIEW_LOG_DIR / f"job_{puzzle_id}_{int(datetime.utcnow().timestamp())}.log")
+    job_id = db.create_review_job(conn, puzzle_id, REVIEW_MODEL,
+                                  user["user_id"], log_path)
+    db.log_activity(conn, user["user_id"], "run_review", "puzzle",
+                    puzzle_id, f"Queued AI review on {REVIEW_MODEL}")
+    conn.close()
+    t = threading.Thread(target=_run_review_job,
+                         args=(job_id, puzzle_id, log_path), daemon=True)
+    t.start()
+    return jsonify({"status": "queued", "job_id": job_id})
+
+
+@app.route("/api/admin/review-jobs/<int:job_id>/log")
+@require_role("owner", "reviewer")
+def api_review_job_log(job_id):
+    conn = get_conn()
+    job = db.get_review_job(conn, job_id)
+    conn.close()
+    if not job or not job["log_path"]:
+        return jsonify({"error": "Not found"}), 404
+    try:
+        with open(job["log_path"]) as f:
+            return jsonify({"log": f.read()[-20000:]})
+    except FileNotFoundError:
+        return jsonify({"log": ""})
 
 
 @app.route("/api/admin/export/solve-attempts")

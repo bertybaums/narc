@@ -147,6 +147,23 @@ CREATE TABLE IF NOT EXISTS submissions (
     reviewed_at      TIMESTAMP
 );
 
+CREATE TABLE IF NOT EXISTS review_jobs (
+    job_id        INTEGER PRIMARY KEY AUTOINCREMENT,
+    puzzle_id     TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    model_name    TEXT NOT NULL,
+    status        TEXT NOT NULL DEFAULT 'queued'
+                  CHECK(status IN ('queued', 'running', 'done', 'failed')),
+    started_at    TIMESTAMP,
+    finished_at   TIMESTAMP,
+    log_path      TEXT,
+    error         TEXT,
+    created_by    INTEGER REFERENCES users(user_id),
+    created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_review_jobs_puzzle ON review_jobs(puzzle_id);
+CREATE INDEX IF NOT EXISTS idx_review_jobs_status ON review_jobs(status);
+
 CREATE TABLE IF NOT EXISTS activity_log (
     log_id        INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id       INTEGER REFERENCES users(user_id),

@@ -16,6 +16,7 @@ services:
       - ./inspect.html:/app/inspect.html
     environment:
       - NARC_SECRET_KEY=${NARC_SECRET_KEY}
+      - MINDROUTER_API_KEY=${MINDROUTER_API_KEY}
     networks:
       - narc-net
     restart: unless-stopped

@@ -445,3 +445,68 @@ def delete_variant(conn, puzzle_id, variant):
         (puzzle_id, variant),
     )
     conn.commit()
+
+
+# --- review jobs ---
+
+def create_review_job(conn, puzzle_id, model_name, created_by, log_path):
+    cur = conn.execute(
+        """INSERT INTO review_jobs (puzzle_id, model_name, created_by, log_path)
+           VALUES (?, ?, ?, ?)""",
+        (puzzle_id, model_name, created_by, log_path),
+    )
+    conn.commit()
+    return cur.lastrowid
+
+
+def set_review_job_status(conn, job_id, status, error=None):
+    now = datetime.utcnow().isoformat()
+    if status == "running":
+        conn.execute(
+            "UPDATE review_jobs SET status=?, started_at=? WHERE job_id=?",
+            (status, now, job_id),
+        )
+    elif status in ("done", "failed"):
+        conn.execute(
+            "UPDATE review_jobs SET status=?, finished_at=?, error=? WHERE job_id=?",
+            (status, now, error, job_id),
+        )
+    else:
+        conn.execute(
+            "UPDATE review_jobs SET status=? WHERE job_id=?",
+            (status, job_id),
+        )
+    conn.commit()
+
+
+def get_review_job(conn, job_id):
+    return conn.execute(
+        "SELECT * FROM review_jobs WHERE job_id=?", (job_id,)
+    ).fetchone()
+
+
+def get_review_jobs(conn, limit=50):
+    return conn.execute(
+        "SELECT * FROM review_jobs ORDER BY created_at DESC LIMIT ?", (limit,)
+    ).fetchall()
+
+
+def get_active_review_job_for_puzzle(conn, puzzle_id):
+    return conn.execute(
+        """SELECT * FROM review_jobs
+           WHERE puzzle_id=? AND status IN ('queued', 'running')
+           ORDER BY created_at DESC LIMIT 1""",
+        (puzzle_id,),
+    ).fetchone()
+
+
+def get_untested_puzzle_ids(conn, model_name):
+    """Puzzles with zero trial rows for the given model."""
+    rows = conn.execute(
+        """SELECT p.puzzle_id FROM puzzles p
+           LEFT JOIN trials t ON t.puzzle_id=p.puzzle_id AND t.model_name=?
+           WHERE t.trial_id IS NULL
+           ORDER BY p.created_at DESC""",
+        (model_name,),
+    ).fetchall()
+    return [r["puzzle_id"] for r in rows]
