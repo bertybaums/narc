@@ -65,9 +65,28 @@ function loadFromData(data) {
     }
 }
 
+// Cache of previously-seen slot state by index, so that shrinking and re-growing
+// the sequence length (or toggling) restores prior grids/dims/labels.
+let slotCache = {};
+
+function snapshotSlots() {
+    for (let i = 0; i < slotGrids.length; i++) {
+        if (!slotGrids[i]) continue;
+        const dimInput = document.querySelector(`#slot-${i} .dim-input`);
+        const labelInput = document.querySelector(`#slot-${i} .label-input`);
+        slotCache[i] = {
+            grid: slotGrids[i],
+            dim: dimInput ? dimInput.value : '5x5',
+            label: labelInput ? labelInput.value : ''
+        };
+    }
+}
+
 function buildSlots() {
+    snapshotSlots();
     const container = document.getElementById('grid-slots');
     container.innerHTML = '';
+    const prev = slotGrids;
     slotGrids = [];
 
     for (let i = 0; i < numSlots; i++) {
@@ -83,12 +102,16 @@ function buildSlots() {
         slot.className = 'grid-slot' + (isMasked ? ' masked' : '');
         slot.id = 'slot-' + i;
 
+        const cached = slotCache[i];
+        const dimVal = cached ? cached.dim : '5x5';
+        const labelVal = cached ? cached.label : '';
+
         slot.innerHTML = `
             <div class="slot-label">Grid ${i + 1}</div>
             <div class="mb-1">
-                <input type="text" class="dim-input" value="5x5" placeholder="WxH"
+                <input type="text" class="dim-input" value="${dimVal}" placeholder="WxH"
                        onchange="resizeSlotGrid(${i})">
-                <input type="text" class="label-input dim-input" value="" placeholder="label"
+                <input type="text" class="label-input dim-input" value="${labelVal.replace(/"/g, '&quot;')}" placeholder="label"
                        style="width:80px; margin-left:4px;">
             </div>
             <div class="grid-wrapper">
@@ -103,7 +126,14 @@ function buildSlots() {
         `;
         container.appendChild(slot);
 
-        slotGrids[i] = new Grid(5, 5);
+        if (cached && cached.grid) {
+            slotGrids[i] = cached.grid;
+        } else {
+            const parts = dimVal.split('x');
+            const w = parseInt(parts[0]) || 5;
+            const h = parseInt(parts[1]) || 5;
+            slotGrids[i] = new Grid(h, w);
+        }
         renderSlotGrid(i);
     }
 }
@@ -323,6 +353,7 @@ function togglePreviewNarrative() {
 function clearAll() {
     if (!confirm('Clear all grids and narrative?')) return;
     maskedSlots.clear();
+    slotCache = {};
     document.getElementById('narrative').value = '';
     document.getElementById('char-count').textContent = '0';
     document.getElementById('variants-container').innerHTML =
