@@ -6,6 +6,7 @@ docs/
 abt-resources/
 *.db
 *.db.*
-*.sql
+narc_dump.sql
+narc_recover.sql
 .env
 logs/
