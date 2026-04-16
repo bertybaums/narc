@@ -10,9 +10,17 @@ import db
 
 @click.command()
 @click.option("--model", default="gpt-oss-120b", help="Model name")
-def main(model):
+@click.option("--puzzle", default=None, help="Single puzzle ID (default: all)")
+def main(model, puzzle):
     conn = db.init_db()
-    puzzles = db.get_all_puzzles(conn)
+    if puzzle:
+        row = db.get_puzzle(conn, puzzle)
+        if not row:
+            click.echo(f"Puzzle {puzzle} not found")
+            return
+        puzzles = [row]
+    else:
+        puzzles = db.get_all_puzzles(conn)
 
     narc_count = 0
     total = 0

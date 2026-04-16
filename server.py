@@ -1110,6 +1110,27 @@ REVIEW_LOG_DIR = Path(__file__).parent / "logs" / "review"
 REVIEW_LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
+def _cleanup_stuck_review_jobs():
+    """On startup, mark any queued/running jobs as failed — their threads died."""
+    try:
+        conn = get_conn()
+        conn.execute(
+            """UPDATE review_jobs
+               SET status='failed',
+                   finished_at=?,
+                   error=COALESCE(error, 'interrupted by server restart')
+               WHERE status IN ('queued', 'running')""",
+            (datetime.utcnow().isoformat(),),
+        )
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        print(f"WARNING: review job cleanup failed: {e}")
+
+
+_cleanup_stuck_review_jobs()
+
+
 def _run_review_job(job_id, puzzle_id, model_name, log_path):
     """Background worker: run collect.py then classify.py for one (puzzle, model)."""
     conn = get_conn()
@@ -1138,7 +1159,7 @@ def _run_review_job(job_id, puzzle_id, model_name, log_path):
             log.write(f"\n=== classify.py --model {model_name} ===\n")
             log.flush()
             r2 = subprocess.run(
-                ["python", "classify.py", "--model", model_name],
+                ["python", "classify.py", "--model", model_name, "--puzzle", puzzle_id],
                 cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
                 timeout=600,
             )

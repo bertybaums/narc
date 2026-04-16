@@ -182,8 +182,22 @@ def get_trials(conn, puzzle_id, model_name=None, variant_id=None):
 
 def upsert_classification(conn, puzzle_id, model_name, grids_only,
                           narrative_only, both, has_narc, variant_id=None):
+    # SQLite treats NULL variant_id values as distinct in UNIQUE constraints,
+    # so INSERT OR REPLACE doesn't dedupe. Delete first to guarantee uniqueness.
+    if variant_id is None:
+        conn.execute(
+            """DELETE FROM classifications
+               WHERE puzzle_id=? AND model_name=? AND variant_id IS NULL""",
+            (puzzle_id, model_name),
+        )
+    else:
+        conn.execute(
+            """DELETE FROM classifications
+               WHERE puzzle_id=? AND model_name=? AND variant_id=?""",
+            (puzzle_id, model_name, variant_id),
+        )
     conn.execute(
-        """INSERT OR REPLACE INTO classifications
+        """INSERT INTO classifications
            (puzzle_id, variant_id, model_name, grids_only, narrative_only, both, has_narc)
            VALUES (?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, variant_id, model_name, grids_only, narrative_only, both, has_narc),
