@@ -28,7 +28,9 @@ if _secret == "dev-secret-change-in-prod":
     print("WARNING: Using default secret key. Set NARC_SECRET_KEY in production.")
 app.secret_key = _secret
 
-MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "nemotron-3-super"]
+MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "nemotron-3-super",
+          "gemma-4-26b", "gemma-4-31b"]
+REVIEW_MODELS = MODELS
 
 
 def get_conn():
@@ -1104,13 +1106,12 @@ def api_change_password():
 
 # --- AI review jobs ---
 
-REVIEW_MODEL = "gpt-oss-120b"
 REVIEW_LOG_DIR = Path(__file__).parent / "logs" / "review"
 REVIEW_LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def _run_review_job(job_id, puzzle_id, log_path):
-    """Background worker: run collect.py then classify.py for a single puzzle."""
+def _run_review_job(job_id, puzzle_id, model_name, log_path):
+    """Background worker: run collect.py then classify.py for one (puzzle, model)."""
     conn = get_conn()
     db.set_review_job_status(conn, job_id, "running")
     conn.close()
@@ -1126,18 +1127,18 @@ def _run_review_job(job_id, puzzle_id, log_path):
     repo = Path(__file__).parent
     try:
         with open(log_path, "w") as log:
-            log.write(f"=== collect.py --model {REVIEW_MODEL} --puzzle {puzzle_id} ===\n")
+            log.write(f"=== collect.py --model {model_name} --puzzle {puzzle_id} ===\n")
             log.flush()
             r1 = subprocess.run(
-                ["python", "collect.py", "--model", REVIEW_MODEL, "--puzzle", puzzle_id],
+                ["python", "collect.py", "--model", model_name, "--puzzle", puzzle_id],
                 cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
                 timeout=1800,
             )
             log.write(f"\n=== collect exit {r1.returncode} ===\n")
-            log.write(f"\n=== classify.py --model {REVIEW_MODEL} ===\n")
+            log.write(f"\n=== classify.py --model {model_name} ===\n")
             log.flush()
             r2 = subprocess.run(
-                ["python", "classify.py", "--model", REVIEW_MODEL],
+                ["python", "classify.py", "--model", model_name],
                 cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
                 timeout=600,
             )
@@ -1154,6 +1155,27 @@ def _run_review_job(job_id, puzzle_id, log_path):
         conn = get_conn()
         db.set_review_job_status(conn, job_id, "failed", error=str(e))
         conn.close()
+
+
+def _queue_review_job(conn, puzzle_id, model_name, user_id, rerun=False):
+    """Create and start a single review job. Returns job_id or None if active one exists."""
+    existing = conn.execute(
+        """SELECT job_id FROM review_jobs
+           WHERE puzzle_id=? AND model_name=? AND status IN ('queued', 'running')
+           LIMIT 1""",
+        (puzzle_id, model_name),
+    ).fetchone()
+    if existing:
+        return None
+    if rerun:
+        db.delete_trials_for_puzzle_model(conn, puzzle_id, model_name)
+    ts = int(datetime.utcnow().timestamp())
+    log_path = str(REVIEW_LOG_DIR / f"job_{puzzle_id}_{model_name}_{ts}.log")
+    job_id = db.create_review_job(conn, puzzle_id, model_name, user_id, log_path)
+    t = threading.Thread(target=_run_review_job,
+                         args=(job_id, puzzle_id, model_name, log_path), daemon=True)
+    t.start()
+    return job_id
 
 
 @app.route("/api/admin/review-jobs", methods=["GET"])
@@ -1185,51 +1207,98 @@ def api_list_review_jobs():
             (j["puzzle_id"], j["model_name"]),
         ).fetchall()
         j["trials"] = {r["condition"]: r["correct"] for r in trial_rows}
-    untested = db.get_untested_puzzle_ids(conn, REVIEW_MODEL)
-    # Puzzles with an active (queued/running) job
+
+    # Active (queued/running) jobs indexed by (puzzle_id, model_name)
     active = {}
     for j in jobs:
         if j["status"] in ("queued", "running"):
-            active[j["puzzle_id"]] = j
+            active[(j["puzzle_id"], j["model_name"])] = j
+
+    # Per-(puzzle, model) trial presence matrix
+    trial_presence = conn.execute(
+        """SELECT puzzle_id, model_name,
+                  COUNT(*) as total,
+                  SUM(CASE WHEN response_text IS NOT NULL OR error IS NOT NULL THEN 1 ELSE 0 END) as completed
+           FROM trials GROUP BY puzzle_id, model_name"""
+    ).fetchall()
+    presence = {}
+    for r in trial_presence:
+        presence.setdefault(r["puzzle_id"], {})[r["model_name"]] = {
+            "total": r["total"], "completed": r["completed"]
+        }
+
+    # Build coverage: every puzzle × REVIEW_MODELS
+    all_puzzles = db.get_all_puzzles(conn)
+    coverage = []
     untested_info = []
-    for pid in untested:
-        p = db.get_puzzle(conn, pid)
-        if not p:
-            continue
-        untested_info.append({
+    for p in all_puzzles:
+        pid = p["puzzle_id"]
+        p_presence = presence.get(pid, {})
+        models_status = []
+        tested_count = 0
+        for m in REVIEW_MODELS:
+            info = p_presence.get(m)
+            act = active.get((pid, m))
+            if act:
+                state = "running" if act["status"] == "running" else "queued"
+            elif info and info["completed"] > 0:
+                state = "tested"
+                tested_count += 1
+            else:
+                state = "missing"
+            models_status.append({"model": m, "state": state,
+                                  "job_id": act["job_id"] if act else None})
+        row = {
             "puzzle_id": pid,
             "title": p["title"],
             "created_at": p["created_at"],
-            "active_job": active.get(pid),
-        })
+            "models": models_status,
+            "tested_count": tested_count,
+        }
+        if tested_count == 0:
+            untested_info.append(row)
+        elif tested_count < len(REVIEW_MODELS):
+            coverage.append(row)
     conn.close()
-    return jsonify({"jobs": jobs, "untested": untested_info, "model": REVIEW_MODEL})
+    return jsonify({
+        "jobs": jobs,
+        "untested": untested_info,
+        "coverage": coverage,
+        "models": REVIEW_MODELS,
+    })
 
 
 @app.route("/api/admin/puzzles/<puzzle_id>/run-review", methods=["POST"])
 @require_role("owner", "reviewer")
 def api_run_review(puzzle_id):
+    data = request.get_json(silent=True) or {}
+    model = data.get("model")
+    rerun = bool(data.get("rerun"))
+    models = [model] if model else list(REVIEW_MODELS)
+    invalid = [m for m in models if m not in REVIEW_MODELS]
+    if invalid:
+        return jsonify({"error": f"Unknown model(s): {invalid}"}), 400
+
     conn = get_conn()
     puzzle = db.get_puzzle(conn, puzzle_id)
     if not puzzle:
         conn.close()
         return jsonify({"error": "Puzzle not found"}), 404
-    existing = db.get_active_review_job_for_puzzle(conn, puzzle_id)
-    if existing:
-        conn.close()
-        return jsonify({"error": "Job already queued/running",
-                        "job_id": existing["job_id"]}), 409
+
     user = current_user()
-    log_path = str(REVIEW_LOG_DIR / f"job_{puzzle_id}_{int(datetime.utcnow().timestamp())}.log")
-    job_id = db.create_review_job(conn, puzzle_id, REVIEW_MODEL,
-                                  user["user_id"], log_path)
-    db.log_activity(conn, user["user_id"], "run_review", "puzzle",
-                    puzzle_id, f"Queued AI review on {REVIEW_MODEL}")
+    queued = []
+    skipped = []
+    for m in models:
+        jid = _queue_review_job(conn, puzzle_id, m, user["user_id"], rerun=rerun)
+        if jid:
+            queued.append({"model": m, "job_id": jid})
+        else:
+            skipped.append(m)
+    db.log_activity(conn, user["user_id"], "run_review", "puzzle", puzzle_id,
+                    f"Queued AI review on {[q['model'] for q in queued]}"
+                    + (f" (rerun)" if rerun else ""))
     conn.close()
-    t = threading.Thread(target=_run_review_job,
-                         args=(job_id, puzzle_id, log_path), daemon=True)
-    t.start()
-    return jsonify({"status": "queued", "job_id": job_id})
+    return jsonify({"status": "queued", "queued": queued, "skipped": skipped})
 
 
 @app.route("/api/admin/review-jobs/<int:job_id>/log")

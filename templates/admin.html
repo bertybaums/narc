@@ -82,10 +82,13 @@
 <!-- AI Review Tab -->
 <div id="tab-airun" class="admin-tab" style="display:none;">
     <p class="text-muted small">
-        Puzzles with no trial data for <code>gpt-oss-120b</code>. Run the pipeline
-        (collect + classify) to test and promote out of Drafts.
+        Run the test pipeline (collect + classify) across all 6 models. A puzzle with at least one
+        tested model drops out of Drafts.
     </p>
+    <h5>Untested (no trials on any model)</h5>
     <div id="airun-untested"><em class="text-muted">Loading...</em></div>
+    <h5 class="mt-4">Partial coverage</h5>
+    <div id="airun-coverage"><em class="text-muted">Loading...</em></div>
     <h5 class="mt-4">Recent Jobs</h5>
     <div id="airun-jobs"><em class="text-muted">Loading...</em></div>
 </div>
@@ -425,13 +428,15 @@ async function changePassword() {
 
 // --- AI Review ---
 let airunPollTimer = null;
+let airunModels = [];
 
 async function loadReviewJobs() {
     const r = await fetch('/api/admin/review-jobs');
     const data = await r.json();
+    airunModels = data.models || [];
     renderUntested(data.untested);
+    renderCoverage(data.coverage);
     renderJobs(data.jobs);
-    // Poll if any active
     const anyActive = data.jobs.some(j => j.status === 'queued' || j.status === 'running');
     if (airunPollTimer) { clearTimeout(airunPollTimer); airunPollTimer = null; }
     if (anyActive) {
@@ -439,27 +444,79 @@ async function loadReviewJobs() {
     }
 }
 
+function shortModel(m) {
+    return m.replace('gpt-oss-', 'gpt')
+            .replace('qwen3.5-', 'qwen')
+            .replace('nemotron-3-super', 'nem')
+            .replace('gemma-4-', 'gem');
+}
+
+function cellForState(puzzleId, m, state) {
+    if (state === 'queued') return '<span class="badge bg-secondary">queued</span>';
+    if (state === 'running') return '<span class="badge bg-info">running</span>';
+    if (state === 'tested')
+        return `<button class="btn btn-sm btn-outline-secondary" title="Rerun ${m}"
+                onclick="runReview('${puzzleId}', '${m}', true)">✓ rerun</button>`;
+    return `<button class="btn btn-sm btn-primary" title="Run ${m}"
+            onclick="runReview('${puzzleId}', '${m}', false)">run</button>`;
+}
+
 function renderUntested(list) {
     const el = document.getElementById('airun-untested');
     if (!list.length) {
-        el.innerHTML = '<p class="text-muted">No untested puzzles — all puzzles have trial data.</p>';
+        el.innerHTML = '<p class="text-muted">No untested puzzles.</p>';
         return;
     }
     const rows = list.map(p => {
-        const active = p.active_job;
-        const btn = active
-          ? `<span class="badge bg-info">${active.status}</span>`
-          : `<button class="btn btn-sm btn-primary" onclick="runReview('${p.puzzle_id}')">Run AI review</button>`;
+        const allRunning = p.models.some(ms => ms.state === 'queued' || ms.state === 'running');
+        const action = allRunning
+          ? '<span class="badge bg-info">running</span>'
+          : `<button class="btn btn-sm btn-primary" onclick="runReview('${p.puzzle_id}')">Run all 6</button>`;
         return `<tr>
             <td><a href="/solve/${p.puzzle_id}">${p.puzzle_id}</a></td>
             <td>${escapeHtml(p.title)}</td>
             <td class="small text-muted">${p.created_at || ''}</td>
-            <td>${btn}</td>
+            <td>${action}</td>
         </tr>`;
     }).join('');
     el.innerHTML = `<table class="table table-sm"><thead><tr>
         <th>ID</th><th>Title</th><th>Created</th><th>Action</th></tr></thead>
         <tbody>${rows}</tbody></table>`;
+}
+
+function renderCoverage(list) {
+    const el = document.getElementById('airun-coverage');
+    if (!list || !list.length) {
+        el.innerHTML = '<p class="text-muted">All tested puzzles have full model coverage.</p>';
+        return;
+    }
+    const header = airunModels.map(m => `<th class="small">${shortModel(m)}</th>`).join('');
+    const rows = list.map(p => {
+        const cells = p.models.map(ms => `<td>${cellForState(p.puzzle_id, ms.model, ms.state)}</td>`).join('');
+        const missing = p.models.filter(ms => ms.state === 'missing').map(ms => ms.model);
+        const runMissing = missing.length
+            ? `<button class="btn btn-sm btn-outline-primary" onclick="runMissing('${p.puzzle_id}', ${JSON.stringify(missing).replace(/"/g,'&quot;')})">Run missing (${missing.length})</button>`
+            : '';
+        return `<tr>
+            <td><a href="/solve/${p.puzzle_id}">${p.puzzle_id}</a></td>
+            <td class="small">${escapeHtml(p.title)}</td>
+            ${cells}
+            <td>${runMissing}</td>
+        </tr>`;
+    }).join('');
+    el.innerHTML = `<table class="table table-sm align-middle"><thead><tr>
+        <th>ID</th><th>Title</th>${header}<th></th></tr></thead>
+        <tbody>${rows}</tbody></table>`;
+}
+
+async function runMissing(puzzleId, models) {
+    for (const m of models) {
+        await fetch(`/api/admin/puzzles/${puzzleId}/run-review`, {
+            method:'POST', headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({model: m})
+        });
+    }
+    loadReviewJobs();
 }
 
 function renderJobs(jobs) {
@@ -483,6 +540,7 @@ function renderJobs(jobs) {
         return `<tr>
             <td>${j.job_id}</td>
             <td><a href="/solve/${j.puzzle_id}">${j.puzzle_id}</a></td>
+            <td class="small">${shortModel(j.model_name)}</td>
             <td><span class="badge bg-${badge}">${j.status}</span>${errCell}</td>
             <td>${result}</td>
             <td class="small text-muted">${j.started_at || j.created_at}</td>
@@ -490,12 +548,19 @@ function renderJobs(jobs) {
         </tr>`;
     }).join('');
     el.innerHTML = `<table class="table table-sm"><thead><tr>
-        <th>#</th><th>Puzzle</th><th>Status</th><th>Result</th><th>Started</th><th></th></tr></thead>
+        <th>#</th><th>Puzzle</th><th>Model</th><th>Status</th><th>Result</th><th>Started</th><th></th></tr></thead>
         <tbody>${rows}</tbody></table>`;
 }
 
-async function runReview(puzzleId) {
-    const r = await fetch(`/api/admin/puzzles/${puzzleId}/run-review`, {method:'POST'});
+async function runReview(puzzleId, model, rerun) {
+    const body = {};
+    if (model) body.model = model;
+    if (rerun) body.rerun = true;
+    const r = await fetch(`/api/admin/puzzles/${puzzleId}/run-review`, {
+        method:'POST',
+        headers:{'Content-Type':'application/json'},
+        body: JSON.stringify(body)
+    });
     const data = await r.json();
     if (!r.ok) { alert(data.error || 'Failed to queue'); return; }
     loadReviewJobs();

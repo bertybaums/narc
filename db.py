@@ -510,3 +510,16 @@ def get_untested_puzzle_ids(conn, model_name):
         (model_name,),
     ).fetchall()
     return [r["puzzle_id"] for r in rows]
+
+
+def delete_trials_for_puzzle_model(conn, puzzle_id, model_name):
+    """Delete all trials for a (puzzle, model) — used for reruns."""
+    conn.execute(
+        "DELETE FROM trials WHERE puzzle_id=? AND model_name=?",
+        (puzzle_id, model_name),
+    )
+    conn.execute(
+        "DELETE FROM classifications WHERE puzzle_id=? AND model_name=?",
+        (puzzle_id, model_name),
+    )
+    conn.commit()
