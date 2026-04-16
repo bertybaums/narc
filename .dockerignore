@@ -5,4 +5,7 @@ __pycache__
 docs/
 abt-resources/
 *.db
+*.db.*
+*.sql
 .env
+logs/
