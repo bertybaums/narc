@@ -2,6 +2,16 @@
 narc.db
 narc.db-wal
 narc.db-shm
+narc.db.*
+narc_dump.sql
+narc_recover.sql
+
+# Logs and large local artifacts
+collect_*.log
+cross_model_*
+abt-resources/
+old_narc/
+logs/
 
 # Generated reports (regenerate with inspector.py / analyze.py)
 /inspect.html
