@@ -541,6 +541,7 @@ function renderJobs(jobs) {
         return `<tr>
             <td>${j.job_id}</td>
             <td><a href="/solve/${j.puzzle_id}">${j.puzzle_id}</a></td>
+            <td class="small">${escapeHtml(j.title || '')}</td>
             <td class="small">${shortModel(j.model_name)}</td>
             <td><span class="badge bg-${badge}">${j.status}</span>${errCell}</td>
             <td>${result}</td>
@@ -549,7 +550,7 @@ function renderJobs(jobs) {
         </tr>`;
     }).join('');
     el.innerHTML = `<table class="table table-sm"><thead><tr>
-        <th>#</th><th>Puzzle</th><th>Model</th><th>Status</th><th>Result</th><th>Started</th><th></th></tr></thead>
+        <th>#</th><th>Puzzle</th><th>Title</th><th>Model</th><th>Status</th><th>Result</th><th>Started</th><th></th></tr></thead>
         <tbody>${rows}</tbody></table>`;
 }
 

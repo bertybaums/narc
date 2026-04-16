@@ -1204,8 +1204,10 @@ def _queue_review_job(conn, puzzle_id, model_name, user_id, rerun=False):
 def api_list_review_jobs():
     conn = get_conn()
     jobs = [dict(r) for r in db.get_review_jobs(conn)]
-    # Attach classification + trial summary per job
+    # Attach classification + trial summary + puzzle title per job
     for j in jobs:
+        p = db.get_puzzle(conn, j["puzzle_id"])
+        j["title"] = p["title"] if p else ""
         cls = conn.execute(
             """SELECT grids_only, narrative_only, both, has_narc
                FROM classifications
