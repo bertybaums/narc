@@ -82,8 +82,9 @@
 <!-- AI Review Tab -->
 <div id="tab-airun" class="admin-tab" style="display:none;">
     <p class="text-muted small">
-        Run the test pipeline (collect + classify) across all 6 models. A puzzle with at least one
-        tested model drops out of Drafts.
+        Run the test pipeline (collect + classify) across all 6 models. A puzzle leaves Drafts
+        only when at least one model solves it correctly in the <code>grids_only</code> or
+        <code>both</code> condition — trials alone aren't enough.
     </p>
     <h5>Untested (no trials on any model)</h5>
     <div id="airun-untested"><em class="text-muted">Loading...</em></div>
