@@ -465,19 +465,32 @@ function renderUntested(list) {
 function renderJobs(jobs) {
     const el = document.getElementById('airun-jobs');
     if (!jobs.length) { el.innerHTML = '<p class="text-muted">No jobs yet.</p>'; return; }
+    const mark = v => v === 1 ? '<span class="text-success">✓</span>'
+        : v === 0 ? '<span class="text-danger">✗</span>'
+        : '<span class="text-muted">—</span>';
     const rows = jobs.map(j => {
         const badge = {queued:'secondary', running:'info', done:'success', failed:'danger'}[j.status] || 'secondary';
         const errCell = j.error ? `<br><small class="text-danger">${escapeHtml(j.error)}</small>` : '';
+        let result = '<span class="text-muted">—</span>';
+        if (j.status === 'done') {
+            const t = j.trials || {};
+            const c = j.classification || {};
+            const narc = c.has_narc === 1
+                ? '<span class="badge bg-success">NARC</span>'
+                : c.has_narc === 0 ? '<span class="badge bg-secondary">not NARC</span>' : '';
+            result = `<small>grids:${mark(t.grids_only)} narr:${mark(t.narrative_only)} both:${mark(t.both)}</small> ${narc}`;
+        }
         return `<tr>
             <td>${j.job_id}</td>
-            <td>${j.puzzle_id}</td>
+            <td><a href="/solve/${j.puzzle_id}">${j.puzzle_id}</a></td>
             <td><span class="badge bg-${badge}">${j.status}</span>${errCell}</td>
+            <td>${result}</td>
             <td class="small text-muted">${j.started_at || j.created_at}</td>
             <td><a href="/api/admin/review-jobs/${j.job_id}/log" target="_blank">log</a></td>
         </tr>`;
     }).join('');
     el.innerHTML = `<table class="table table-sm"><thead><tr>
-        <th>#</th><th>Puzzle</th><th>Status</th><th>Started</th><th></th></tr></thead>
+        <th>#</th><th>Puzzle</th><th>Status</th><th>Result</th><th>Started</th><th></th></tr></thead>
         <tbody>${rows}</tbody></table>`;
 }
 

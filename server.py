@@ -1161,6 +1161,30 @@ def _run_review_job(job_id, puzzle_id, log_path):
 def api_list_review_jobs():
     conn = get_conn()
     jobs = [dict(r) for r in db.get_review_jobs(conn)]
+    # Attach classification + trial summary per job
+    for j in jobs:
+        cls = conn.execute(
+            """SELECT grids_only, narrative_only, both, has_narc
+               FROM classifications
+               WHERE puzzle_id=? AND model_name=? AND variant_id IS NULL""",
+            (j["puzzle_id"], j["model_name"]),
+        ).fetchone()
+        if not cls:
+            cls = conn.execute(
+                """SELECT grids_only, narrative_only, both, has_narc
+                   FROM classifications
+                   WHERE puzzle_id=? AND model_name=?
+                   ORDER BY variant_id LIMIT 1""",
+                (j["puzzle_id"], j["model_name"]),
+            ).fetchone()
+        j["classification"] = dict(cls) if cls else None
+        trial_rows = conn.execute(
+            """SELECT condition, MAX(correct) as correct
+               FROM trials WHERE puzzle_id=? AND model_name=?
+               GROUP BY condition""",
+            (j["puzzle_id"], j["model_name"]),
+        ).fetchall()
+        j["trials"] = {r["condition"]: r["correct"] for r in trial_rows}
     untested = db.get_untested_puzzle_ids(conn, REVIEW_MODEL)
     # Puzzles with an active (queued/running) job
     active = {}
