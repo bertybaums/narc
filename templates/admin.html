@@ -523,8 +523,9 @@ async function runMissing(puzzleId, models) {
 function renderJobs(jobs) {
     const el = document.getElementById('airun-jobs');
     if (!jobs.length) { el.innerHTML = '<p class="text-muted">No jobs yet.</p>'; return; }
-    const mark = v => v === 1 ? '<span class="text-success">✓</span>'
+    const mark = (v, err) => v === 1 ? '<span class="text-success">✓</span>'
         : v === 0 ? '<span class="text-danger">✗</span>'
+        : err ? `<span class="text-warning" style="cursor:help;text-decoration:underline dotted" title="${escapeHtml(err)}">⚠</span>`
         : '<span class="text-muted">—</span>';
     const rows = jobs.map(j => {
         const badge = {queued:'secondary', running:'info', done:'success', failed:'danger'}[j.status] || 'secondary';
@@ -532,11 +533,12 @@ function renderJobs(jobs) {
         let result = '<span class="text-muted">—</span>';
         if (j.status === 'done') {
             const t = j.trials || {};
+            const te = j.trial_errors || {};
             const c = j.classification || {};
             const narc = c.has_narc === 1
                 ? '<span class="badge bg-success">NARC</span>'
                 : c.has_narc === 0 ? '<span class="badge bg-secondary">not NARC</span>' : '';
-            result = `<small>grids:${mark(t.grids_only)} narr:${mark(t.narrative_only)} both:${mark(t.both)}</small> ${narc}`;
+            result = `<small>grids:${mark(t.grids_only, te.grids_only)} narr:${mark(t.narrative_only, te.narrative_only)} both:${mark(t.both, te.both)}</small> ${narc}`;
         }
         return `<tr>
             <td>${j.job_id}</td>

@@ -15,6 +15,7 @@ CREATE TABLE IF NOT EXISTS puzzles (
     parent_puzzle_id TEXT,                -- grid variant parent (e.g. narc_003)
     stance_group    TEXT,                 -- stance experiment group name (e.g. The Chase)
     stance          TEXT,                 -- intentional, design, or physical
+    status          TEXT NOT NULL DEFAULT 'draft', -- draft | active | featured (lifecycle, not taxonomy)
     created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

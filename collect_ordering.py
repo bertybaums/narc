@@ -68,35 +68,11 @@ def ensure_ordering_tables(conn):
 
 
 def get_active_puzzle_ids(conn):
-    """Return puzzle_ids that are 'active' (not draft) per export_pages.py logic.
-
-    Draft = unsolvable on ALL tested models (grids_only=0 AND both=0), OR has draft: tag.
-    """
-    # Get classifications
+    """Return puzzle_ids that are not drafts (status != 'draft')."""
     rows = conn.execute(
-        "SELECT puzzle_id, model_name, grids_only, both FROM classifications"
+        "SELECT puzzle_id FROM puzzles WHERE status != 'draft'"
     ).fetchall()
-    classifs = {}
-    for r in rows:
-        classifs.setdefault(r["puzzle_id"], {})[r["model_name"]] = (
-            r["grids_only"], r["both"]
-        )
-
-    # Get all puzzles
-    puzzles = conn.execute("SELECT puzzle_id, tags FROM puzzles").fetchall()
-    active = []
-    for p in puzzles:
-        pid = p["puzzle_id"]
-        tags = p["tags"] or ""
-        has_draft_tag = "draft:" in tags
-        pid_c = classifs.get(pid, {})
-        unsolvable = (
-            len(pid_c) > 0
-            and all(go == 0 and b == 0 for go, b in pid_c.values())
-        )
-        if not (unsolvable or has_draft_tag):
-            active.append(pid)
-    return active
+    return [r["puzzle_id"] for r in rows]
 
 
 def get_eligible_puzzles(conn, single_puzzle=None):

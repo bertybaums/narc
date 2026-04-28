@@ -54,6 +54,29 @@ def delete_puzzle(conn, puzzle_id):
     conn.commit()
 
 
+def set_puzzle_status(conn, puzzle_id, status):
+    """status: 'draft' | 'active' | 'featured'"""
+    if status not in ("draft", "active", "featured"):
+        raise ValueError(f"Invalid status: {status}")
+    conn.execute("UPDATE puzzles SET status=? WHERE puzzle_id=?", (status, puzzle_id))
+    conn.commit()
+
+
+def set_puzzle_tags(conn, puzzle_id, tags):
+    """tags: comma-separated string or None. Lifecycle tags (draft:, featured:) are
+    silently stripped — use set_puzzle_status for those."""
+    if tags is None:
+        clean = None
+    else:
+        parts = [t.strip() for t in tags.split(",") if t.strip()]
+        parts = [t for t in parts
+                 if not t.startswith("draft:") and not t.startswith("featured:")]
+        clean = ",".join(parts) if parts else None
+    conn.execute("UPDATE puzzles SET tags=? WHERE puzzle_id=?", (clean, puzzle_id))
+    conn.commit()
+    return clean
+
+
 def puzzle_to_json(row):
     """Convert a puzzle DB row to a JSON-serializable dict."""
     masked_positions = json.loads(row["masked_positions"])
@@ -73,6 +96,7 @@ def puzzle_to_json(row):
         "parent_puzzle_id": row["parent_puzzle_id"],
         "stance_group": row["stance_group"],
         "stance": row["stance"],
+        "status": row["status"] if "status" in row.keys() else "draft",
         "created_at": row["created_at"],
     }
 

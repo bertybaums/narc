@@ -81,47 +81,12 @@ def inject_user():
     return {"user": current_user()}
 
 
-def _build_draft_map(conn):
-    """Batch-compute is_draft for all puzzles. Returns {puzzle_id: bool}."""
-    # Get all trials with a correct result, grouped by puzzle+model+condition
-    rows = conn.execute(
-        """SELECT puzzle_id, model_name, condition, MAX(correct) as correct
-           FROM trials
-           WHERE correct IS NOT NULL
-           GROUP BY puzzle_id, model_name, condition"""
-    ).fetchall()
-    # Build: puzzle_id -> model -> {condition: correct}
-    trial_map = {}
-    for r in rows:
-        trial_map.setdefault(r["puzzle_id"], {}).setdefault(
-            r["model_name"], {}
-        )[r["condition"]] = r["correct"]
-    return trial_map
-
-
-def _is_draft(puzzle_id, tags, trial_map):
-    """Determine if a puzzle is a draft based on trial results and tags."""
-    has_draft_tag = any(
-        t.strip().startswith("draft:")
-        for t in (tags or "").split(",")
-    )
-    if has_draft_tag:
-        return True
-    model_data = trial_map.get(puzzle_id, {})
-    if not model_data:
-        return True  # No trials at all
-    # Unsolvable = no model can solve it via grids_only or both
-    for model_name in MODELS:
-        results = model_data.get(model_name, {})
-        if results.get("grids_only") or results.get("both"):
-            return False
-    return True
-
-
 def enrich_puzzle(conn, pdata, trial_map=None):
-    """Add is_draft, variants, and variant_count to a puzzle dict."""
+    """Add is_draft, is_featured, variants, and variant_count to a puzzle dict.
+    The trial_map argument is unused (kept for call-site compatibility) since
+    lifecycle now lives on puzzles.status.
+    """
     pid = pdata["puzzle_id"]
-    # Variants
     variants = []
     for v in get_variants(conn, pid):
         variants.append({
@@ -131,12 +96,9 @@ def enrich_puzzle(conn, pdata, trial_map=None):
         })
     pdata["variants"] = variants
     pdata["variant_count"] = len(variants)
-    # Draft status
-    if trial_map is not None:
-        pdata["is_draft"] = _is_draft(pid, pdata.get("tags"), trial_map)
-    else:
-        tm = _build_draft_map(conn)
-        pdata["is_draft"] = _is_draft(pid, pdata.get("tags"), tm)
+    status = pdata.get("status") or "draft"
+    pdata["is_draft"] = (status == "draft")
+    pdata["is_featured"] = (status == "featured")
     return pdata
 
 
@@ -169,8 +131,6 @@ def about():
     conn = get_conn()
     puzzles = db.get_all_puzzles(conn)
     variant_count = conn.execute("SELECT COUNT(*) as c FROM narrative_variants").fetchone()["c"]
-    trial_map = _build_draft_map(conn)
-    # Count unique grid sizes and active/draft
     grid_sizes = set()
     active_count = 0
     draft_count = 0
@@ -178,7 +138,7 @@ def about():
         pdata = db.puzzle_to_json(p)
         for item in pdata["sequence"]:
             grid_sizes.add((item["rows"], item["cols"]))
-        if _is_draft(pdata["puzzle_id"], pdata.get("tags"), trial_map):
+        if pdata.get("status") == "draft":
             draft_count += 1
         else:
             active_count += 1
@@ -270,7 +230,6 @@ def _inspect_masking(conn, models):
                          if p["results"].get(m, {}).get("has_narc"))
 
     # Pick 3 highlights: highest NARC count, skip drafts and stance puzzles
-    trial_map = _build_draft_map(conn)
     highlights = []
     seen_creators = set()
     for p in sorted(puzzles, key=lambda x: -x["narc_count"]):
@@ -278,7 +237,7 @@ def _inspect_masking(conn, models):
             break
         if p.get("stance"):
             continue
-        if _is_draft(p["puzzle_id"], p.get("tags"), trial_map):
+        if p.get("status") == "draft":
             continue
         creator = p.get("creator", "claude")
         if creator not in seen_creators or len(highlights) < 3:
@@ -611,8 +570,7 @@ def logout():
 def browse():
     conn = get_conn()
     rows = db.get_all_puzzles(conn)
-    trial_map = _build_draft_map(conn)
-    puzzles = [enrich_puzzle(conn, db.puzzle_to_json(r), trial_map) for r in rows]
+    puzzles = [enrich_puzzle(conn, db.puzzle_to_json(r)) for r in rows]
 
     # Fetch vote counts and solve stats
     vote_counts = db.get_vote_counts(conn)
@@ -871,6 +829,48 @@ def api_update_creator(puzzle_id):
                     puzzle_id, f"Changed creator: {old_creator} → {creator}")
     conn.close()
     return jsonify({"status": "ok"})
+
+
+@app.route("/api/puzzles/<puzzle_id>/status", methods=["PUT"])
+@require_role("owner", "reviewer")
+def api_update_status(puzzle_id):
+    data = request.get_json() or {}
+    status = data.get("status")
+    if status not in ("draft", "active", "featured"):
+        return jsonify({"error": "Invalid status"}), 400
+    conn = get_conn()
+    row = db.get_puzzle(conn, puzzle_id)
+    if not row:
+        conn.close()
+        return jsonify({"error": "Puzzle not found"}), 404
+    old_status = row["status"] if "status" in row.keys() else None
+    db.set_puzzle_status(conn, puzzle_id, status)
+    user = current_user()
+    db.log_activity(conn, user["user_id"], "update_status", "puzzle",
+                    puzzle_id, f"Status: {old_status} → {status}")
+    conn.close()
+    return jsonify({"status": "ok"})
+
+
+@app.route("/api/puzzles/<puzzle_id>/tags", methods=["PUT"])
+@require_role("owner", "reviewer")
+def api_update_tags(puzzle_id):
+    data = request.get_json() or {}
+    tags = data.get("tags")
+    if tags is not None and not isinstance(tags, str):
+        return jsonify({"error": "tags must be a comma-separated string or null"}), 400
+    conn = get_conn()
+    row = db.get_puzzle(conn, puzzle_id)
+    if not row:
+        conn.close()
+        return jsonify({"error": "Puzzle not found"}), 404
+    old_tags = row["tags"]
+    new_tags = db.set_puzzle_tags(conn, puzzle_id, tags)
+    user = current_user()
+    db.log_activity(conn, user["user_id"], "update_tags", "puzzle",
+                    puzzle_id, f"Tags: {old_tags!r} → {new_tags!r}")
+    conn.close()
+    return jsonify({"status": "ok", "tags": new_tags})
 
 
 @app.route("/api/puzzles/<puzzle_id>", methods=["DELETE"])
@@ -1224,12 +1224,16 @@ def api_list_review_jobs():
             ).fetchone()
         j["classification"] = dict(cls) if cls else None
         trial_rows = conn.execute(
-            """SELECT condition, MAX(correct) as correct
+            """SELECT condition,
+                      MAX(correct) as correct,
+                      MAX(CASE WHEN correct IS NULL THEN error END) as error
                FROM trials WHERE puzzle_id=? AND model_name=?
                GROUP BY condition""",
             (j["puzzle_id"], j["model_name"]),
         ).fetchall()
         j["trials"] = {r["condition"]: r["correct"] for r in trial_rows}
+        j["trial_errors"] = {r["condition"]: r["error"] for r in trial_rows
+                             if r["correct"] is None and r["error"]}
 
     # Active (queued/running) jobs indexed by (puzzle_id, model_name)
     active = {}

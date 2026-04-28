@@ -26,6 +26,8 @@
         {% endif %}
         {% if puzzle.is_draft %}
         <span class="badge bg-warning text-dark" style="font-size:0.5em; vertical-align:middle;">Draft</span>
+        {% elif puzzle.is_featured %}
+        <span class="badge bg-warning text-dark" style="font-size:0.5em; vertical-align:middle;">★ Featured</span>
         {% endif %}
         <a href="/create?revise={{ puzzle.puzzle_id }}" class="btn btn-sm btn-outline-secondary ms-2">Copy + Revise</a>
     </h2>
@@ -37,6 +39,71 @@
     {% endif %}
     </p>
 </div>
+
+{% if user and user.role in ('owner', 'reviewer') %}
+<div class="card mb-3 border-secondary">
+    <div class="card-header py-2 d-flex align-items-center">
+        <span class="me-auto small text-muted">Admin</span>
+    </div>
+    <div class="card-body py-2">
+        <div class="row g-2 align-items-center">
+            <div class="col-auto">
+                <label class="form-label small mb-0 me-2">Status</label>
+                <select id="admin-status" class="form-select form-select-sm d-inline-block w-auto"
+                        onchange="updateStatus(this.value)">
+                    <option value="draft"    {% if puzzle.status == 'draft' %}selected{% endif %}>draft (hidden from browse)</option>
+                    <option value="active"   {% if puzzle.status == 'active' %}selected{% endif %}>active</option>
+                    <option value="featured" {% if puzzle.status == 'featured' %}selected{% endif %}>featured</option>
+                </select>
+            </div>
+            <div class="col">
+                <label class="form-label small mb-0 me-2" for="admin-tags">Tags</label>
+                <input type="text" id="admin-tags" class="form-control form-control-sm d-inline-block"
+                       style="width: calc(100% - 100px);"
+                       value="{{ puzzle.tags or '' }}"
+                       placeholder="audience:general,domain:literature,arc:cyclical,...">
+                <button class="btn btn-sm btn-outline-primary ms-1" onclick="updateTags()">Save</button>
+            </div>
+        </div>
+        <div id="admin-msg" class="small mt-1"></div>
+    </div>
+</div>
+<script>
+async function updateStatus(s) {
+    const r = await fetch(`/api/puzzles/{{ puzzle.puzzle_id }}/status`, {
+        method:'PUT', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({status: s})
+    });
+    const msg = document.getElementById('admin-msg');
+    if (r.ok) {
+        msg.className = 'small mt-1 text-success';
+        msg.textContent = `Status set to ${s}.`;
+    } else {
+        const d = await r.json().catch(()=>({}));
+        msg.className = 'small mt-1 text-danger';
+        msg.textContent = d.error || `Failed (HTTP ${r.status}).`;
+    }
+}
+async function updateTags() {
+    const tags = document.getElementById('admin-tags').value;
+    const r = await fetch(`/api/puzzles/{{ puzzle.puzzle_id }}/tags`, {
+        method:'PUT', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({tags})
+    });
+    const msg = document.getElementById('admin-msg');
+    if (r.ok) {
+        const d = await r.json();
+        document.getElementById('admin-tags').value = d.tags || '';
+        msg.className = 'small mt-1 text-success';
+        msg.textContent = 'Tags saved.';
+    } else {
+        const d = await r.json().catch(()=>({}));
+        msg.className = 'small mt-1 text-danger';
+        msg.textContent = d.error || `Failed (HTTP ${r.status}).`;
+    }
+}
+</script>
+{% endif %}
 
 <!-- Grid sequence -->
 <div class="card mb-3">
