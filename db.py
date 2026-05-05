@@ -14,7 +14,32 @@ def init_db(path=DB_PATH):
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA_PATH.read_text())
+    _apply_migrations(conn)
     return conn
+
+
+def _apply_migrations(conn):
+    """Idempotent migrations for schema changes that CREATE TABLE IF NOT EXISTS
+    can't apply to existing tables (e.g. CHECK constraint changes)."""
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='users'"
+    ).fetchone()
+    if row and "'collaborator'" not in row[0]:
+        conn.executescript("""
+            BEGIN;
+            CREATE TABLE users_new (
+                user_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                username      TEXT NOT NULL UNIQUE,
+                password_hash TEXT NOT NULL,
+                role          TEXT NOT NULL CHECK(role IN ('owner', 'reviewer', 'collaborator')),
+                created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            );
+            INSERT INTO users_new (user_id, username, password_hash, role, created_at)
+                SELECT user_id, username, password_hash, role, created_at FROM users;
+            DROP TABLE users;
+            ALTER TABLE users_new RENAME TO users;
+            COMMIT;
+        """)
 
 
 # --- puzzles ---

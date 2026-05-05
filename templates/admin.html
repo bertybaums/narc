@@ -264,9 +264,9 @@
 {% if user.role == 'owner' %}
 <div id="tab-accounts" class="admin-tab" style="display:none;">
     <div class="card mb-3">
-        <div class="card-header">Create Reviewer Account</div>
+        <div class="card-header">Create Account</div>
         <div class="card-body">
-            <div class="d-flex gap-2 align-items-end">
+            <div class="d-flex gap-2 align-items-end flex-wrap">
                 <div>
                     <label class="form-label">Username</label>
                     <input type="text" id="new-username" class="form-control form-control-sm" style="width:160px;">
@@ -274,6 +274,13 @@
                 <div>
                     <label class="form-label">Password</label>
                     <input type="password" id="new-password" class="form-control form-control-sm" style="width:160px;">
+                </div>
+                <div>
+                    <label class="form-label">Role</label>
+                    <select id="new-role" class="form-select form-select-sm" style="width:160px;">
+                        <option value="reviewer">reviewer (admin access)</option>
+                        <option value="collaborator">collaborator (downloads only)</option>
+                    </select>
                 </div>
                 <button class="btn btn-sm btn-narc" onclick="createUser()">Create</button>
             </div>
@@ -288,7 +295,7 @@
              style="background: transparent; border-color: #333;">
             <div>
                 <strong>{{ u.username }}</strong>
-                <span class="badge {% if u.role == 'owner' %}bg-warning text-dark{% else %}bg-info{% endif %} ms-2">{{ u.role }}</span>
+                <span class="badge {% if u.role == 'owner' %}bg-warning text-dark{% elif u.role == 'collaborator' %}bg-secondary{% else %}bg-info{% endif %} ms-2">{{ u.role }}</span>
             </div>
             <div>
                 <small class="text-muted me-3">{{ u.created_at }}</small>
@@ -360,17 +367,18 @@ async function reverseSubmission(sid) {
 async function createUser() {
     const username = document.getElementById('new-username').value.trim();
     const password = document.getElementById('new-password').value;
+    const role = document.getElementById('new-role').value;
     if (!username || !password) { alert('Username and password required.'); return; }
     const resp = await fetch('/api/admin/users', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
-        body: JSON.stringify({username, password})
+        body: JSON.stringify({username, password, role})
     });
     const result = await resp.json();
     const el = document.getElementById('user-status');
     if (resp.ok) {
         el.className = 'mt-2 text-success';
-        el.textContent = 'Created ' + username;
+        el.textContent = 'Created ' + role + ' ' + username;
         el.style.display = 'block';
         location.reload();
     } else {
@@ -381,7 +389,7 @@ async function createUser() {
 }
 
 async function deleteUser(uid, username) {
-    if (!confirm('Delete reviewer "' + username + '"?')) return;
+    if (!confirm('Delete user "' + username + '"?')) return;
     const resp = await fetch('/api/admin/users/' + uid, { method: 'DELETE' });
     if (resp.ok) location.reload();
 }

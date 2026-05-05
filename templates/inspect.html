@@ -96,6 +96,25 @@
     <a class="inspect-tab {{ 'active' if tab == 'stances' }}" href="/inspect?tab=stances">Stances</a>
 </div>
 
+{% if user %}
+<div class="d-flex align-items-center gap-3 mb-3 flex-wrap" style="font-size:0.85em;color:#888;">
+    <strong style="color:#aaa;">Download:</strong>
+    <a href="/api/inspect/export/{{ tab }}.json" class="text-info">This tab (JSON)</a>
+    <a href="/api/inspect/export/puzzles.json" class="text-info">All puzzles + variants (JSON)</a>
+    <span class="text-muted">|</span>
+    <span class="text-muted">Tip: tick puzzles below to bundle a subset.</span>
+</div>
+<div id="selection-bar" class="align-items-center gap-2 mb-3 px-3 py-2"
+     style="display:none; position:sticky; top:0; z-index:50;
+            background:#1a1f3a; border:1px solid #f59e0b; border-radius:6px;
+            font-size:0.9em;">
+    <strong style="color:#f59e0b;">Selected: <span id="selection-count">0</span></strong>
+    <button class="btn btn-sm btn-narc" onclick="downloadSelected()">Download selected (JSON)</button>
+    <button class="btn btn-sm btn-outline-secondary" onclick="clearSelection()">Clear</button>
+    <span id="selection-status" class="text-muted ms-2"></span>
+</div>
+{% endif %}
+
 {% if tab == 'masking' %}
 <!-- ==================== MASKING TAB ==================== -->
 <div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
@@ -160,6 +179,11 @@
 <div class="puzzle" data-statuses="{{ p.statuses | join(' ') }}" data-pid="{{ p.puzzle_id }}"
      data-title="{{ p.title | lower }}" data-creator="{{ p.creator or 'claude' }}">
     <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
+        {% if user %}
+        <input type="checkbox" class="puzzle-select" data-pid="{{ p.puzzle_id }}"
+               onclick="event.stopPropagation(); updateSelection()"
+               title="Select for bundle download">
+        {% endif %}
         <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
         <span class="pid">{{ p.puzzle_id }}</span>
         <span class="title">
@@ -191,6 +215,10 @@
         <div class="sequence-container mb-3" id="seq-{{ p.puzzle_id }}"></div>
         <script type="application/json" id="seq-data-{{ p.puzzle_id }}">{{ {"seq": p.sequence, "masked": p.masked_positions, "answers": p.answer_grids} | tojson }}</script>
         <div class="narrative">{{ p.narrative }}</div>
+        {% if user %}
+        <div class="mb-2"><a class="text-info" style="font-size:0.8em;"
+            href="/api/inspect/export/puzzle/{{ p.puzzle_id }}.json">Download this puzzle (JSON)</a></div>
+        {% endif %}
         <table class="results-table">
             <thead>
                 <tr>
@@ -280,6 +308,11 @@
 <div class="puzzle" data-pid="{{ p.puzzle_id }}" data-title="{{ p.title | lower }}"
      data-creator="{{ p.creator or 'claude' }}" data-statuses="">
     <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
+        {% if user %}
+        <input type="checkbox" class="puzzle-select" data-pid="{{ p.puzzle_id }}"
+               onclick="event.stopPropagation(); updateSelection()"
+               title="Select for bundle download">
+        {% endif %}
         <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
         <span class="pid">{{ p.puzzle_id }}</span>
         <span class="title">
@@ -301,6 +334,10 @@
         <div class="sequence-container mb-3" id="seq-{{ p.puzzle_id }}"></div>
         <script type="application/json" id="seq-data-{{ p.puzzle_id }}">{{ {"seq": p.sequence, "masked": p.masked_positions, "answers": p.answer_grids} | tojson }}</script>
         <div class="narrative">{{ p.narrative }}</div>
+        {% if user %}
+        <div class="mb-2"><a class="text-info" style="font-size:0.8em;"
+            href="/api/inspect/export/puzzle/{{ p.puzzle_id }}.json">Download this puzzle (JSON)</a></div>
+        {% endif %}
         <table class="results-table">
             <thead>
                 <tr>
@@ -378,8 +415,14 @@
 
 <div id="puzzle-list">
 {% for g in stance_groups %}
+{% set group_pids = g.stances.values() | map(attribute='puzzle_id') | join(',') %}
 <div class="stance-group" data-title="{{ g.name | lower }}">
     <div class="stance-group-header" onclick="togglePuzzle('sg-{{ loop.index }}')">
+        {% if user %}
+        <input type="checkbox" class="puzzle-select" data-pid="{{ group_pids }}"
+               onclick="event.stopPropagation(); updateSelection()"
+               title="Select all stances in this group for bundle download">
+        {% endif %}
         <span class="toggle" id="tog-sg-{{ loop.index }}">&#9654;</span>
         <span class="title" style="flex:1; font-weight:600;">{{ g.name }}</span>
         <div class="dots" style="gap:8px;">
@@ -400,6 +443,13 @@
         {% set first_stance = (g.stances.values() | list)[0] %}
         <div class="sequence-container mb-3" id="seq-sg-{{ loop.index }}"></div>
         <script type="application/json" id="seq-data-sg-{{ loop.index }}">{{ {"seq": first_stance.sequence, "masked": first_stance.masked_positions, "answers": first_stance.answer_grids} | tojson }}</script>
+
+        {% if user %}
+        <div class="mb-2"><a class="text-info" style="font-size:0.8em;"
+            href="javascript:void(0)"
+            onclick="downloadIds('{{ group_pids }}'.split(','), 'narc_group_{{ g.name | replace(' ', '_') }}')">
+            Download this group (JSON, all stances)</a></div>
+        {% endif %}
 
         <div class="d-flex gap-3 flex-wrap">
             {% for stance in ['intentional', 'design', 'physical', 'moral'] %}
@@ -490,6 +540,11 @@
 <div class="puzzle" data-pid="{{ p.puzzle_id }}" data-title="{{ p.title | lower }}"
      data-creator="{{ p.creator or 'claude' }}" data-statuses="">
     <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
+        {% if user %}
+        <input type="checkbox" class="puzzle-select" data-pid="{{ p.puzzle_id }}"
+               onclick="event.stopPropagation(); updateSelection()"
+               title="Select for bundle download">
+        {% endif %}
         <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
         <span class="pid">{{ p.puzzle_id }}</span>
         <span class="title">
@@ -516,6 +571,10 @@
         <script type="application/json" id="ooo-data-{{ p.puzzle_id }}">{{ {"grids": p.ooo_grids, "dist_pos": p.ooo_distractor_pos} | tojson }}</script>
         {% endif %}
         <div class="narrative">{{ p.narrative }}</div>
+        {% if user %}
+        <div class="mb-2"><a class="text-info" style="font-size:0.8em;"
+            href="/api/inspect/export/puzzle/{{ p.puzzle_id }}.json">Download this puzzle (JSON)</a></div>
+        {% endif %}
         <table class="results-table">
             <thead>
                 <tr>
@@ -598,6 +657,75 @@ function togglePuzzle(id) {
         body.style.display = 'block';
         tog.classList.add('open');
     }
+}
+
+// ----- Puzzle selection + bundle download -----
+
+function collectSelectedIds() {
+    const ids = new Set();
+    document.querySelectorAll('.puzzle-select:checked').forEach(c => {
+        (c.dataset.pid || '').split(',').filter(Boolean).forEach(p => ids.add(p));
+    });
+    return Array.from(ids);
+}
+
+function updateSelection() {
+    const bar = document.getElementById('selection-bar');
+    if (!bar) return;
+    const ids = collectSelectedIds();
+    const count = document.getElementById('selection-count');
+    if (ids.length > 0) {
+        bar.style.display = 'flex';
+        if (count) count.textContent = ids.length;
+    } else {
+        bar.style.display = 'none';
+    }
+    const status = document.getElementById('selection-status');
+    if (status) status.textContent = '';
+}
+
+function clearSelection() {
+    document.querySelectorAll('.puzzle-select:checked').forEach(c => { c.checked = false; });
+    updateSelection();
+}
+
+async function downloadIds(ids, baseName) {
+    if (!ids || ids.length === 0) { alert('Nothing selected.'); return; }
+    const status = document.getElementById('selection-status');
+    if (status) status.textContent = 'Building bundle...';
+    let resp;
+    try {
+        resp = await fetch('/api/inspect/export/selected.json', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ids})
+        });
+    } catch (e) {
+        alert('Network error: ' + e.message);
+        if (status) status.textContent = '';
+        return;
+    }
+    if (!resp.ok) {
+        const err = await resp.json().catch(() => ({}));
+        alert('Download failed: ' + (err.error || resp.status));
+        if (status) status.textContent = '';
+        return;
+    }
+    const blob = await resp.blob();
+    const url = URL.createObjectURL(blob);
+    const today = new Date().toISOString().slice(0, 10);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${baseName}_${today}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    if (status) status.textContent = `Downloaded ${ids.length} puzzle${ids.length === 1 ? '' : 's'}.`;
+}
+
+function downloadSelected() {
+    downloadIds(collectSelectedIds(), 'narc_selected');
 }
 
 function filterPuzzles() {

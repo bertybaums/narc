@@ -129,7 +129,7 @@ CREATE TABLE IF NOT EXISTS users (
     user_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     username      TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
-    role          TEXT NOT NULL CHECK(role IN ('owner', 'reviewer')),
+    role          TEXT NOT NULL CHECK(role IN ('owner', 'reviewer', 'collaborator')),
     created_at    TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

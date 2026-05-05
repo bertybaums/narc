@@ -554,6 +554,8 @@ def login():
         if user and check_password_hash(user["password_hash"], password):
             session["user_id"] = user["user_id"]
             flash(f"Welcome, {username}.", "success")
+            if user["role"] == "collaborator":
+                return redirect(url_for("inspect"))
             return redirect(url_for("admin_dashboard"))
         flash("Invalid username or password.", "danger")
     return render_template("login.html")
@@ -1052,15 +1054,18 @@ def api_create_user():
     data = request.get_json()
     if not data or not data.get("username") or not data.get("password"):
         return jsonify({"error": "Username and password required"}), 400
+    role = data.get("role", "reviewer")
+    if role not in ("reviewer", "collaborator"):
+        return jsonify({"error": "Role must be 'reviewer' or 'collaborator'"}), 400
     conn = get_conn()
     if db.get_user_by_username(conn, data["username"]):
         conn.close()
         return jsonify({"error": "Username already exists"}), 409
     db.create_user(conn, data["username"],
-                   generate_password_hash(data["password"]), "reviewer")
+                   generate_password_hash(data["password"]), role)
     user = current_user()
     db.log_activity(conn, user["user_id"], "create_user", "user",
-                    data["username"], f"Created reviewer account '{data['username']}'")
+                    data["username"], f"Created {role} account '{data['username']}'")
     conn.close()
     return jsonify({"status": "ok"})
 
@@ -1381,6 +1386,172 @@ def api_export_submissions():
     resp.headers["Content-Type"] = "text/csv"
     resp.headers["Content-Disposition"] = "attachment; filename=submissions.csv"
     return resp
+
+
+# --- Inspect data exports (collaborators + admins) ---
+
+DATA_ROLES = ("owner", "reviewer", "collaborator")
+
+
+def _json_download(name, payload):
+    body = {
+        "schema": "narc-export-v1",
+        "exported_at": datetime.utcnow().isoformat() + "Z",
+        **payload,
+    }
+    today = datetime.utcnow().strftime("%Y-%m-%d")
+    resp = app.make_response(json.dumps(body, indent=2))
+    resp.headers["Content-Type"] = "application/json"
+    resp.headers["Content-Disposition"] = f"attachment; filename={name}_{today}.json"
+    return resp
+
+
+@app.route("/api/inspect/export/masking.json")
+@require_role(*DATA_ROLES)
+def api_export_masking():
+    conn = get_conn()
+    models = [r[0] for r in conn.execute(
+        "SELECT DISTINCT model_name FROM trials ORDER BY model_name"
+    ).fetchall()]
+    data = _inspect_masking(conn, models)
+    conn.close()
+    data.pop("highlights", None)
+    return _json_download("narc_masking", {"experiment": "masking",
+                                           "models": models, **data})
+
+
+@app.route("/api/inspect/export/ordering.json")
+@require_role(*DATA_ROLES)
+def api_export_ordering():
+    conn = get_conn()
+    data = _inspect_ordering(conn)
+    conn.close()
+    data.pop("highlights", None)
+    return _json_download("narc_ordering", {"experiment": "ordering", **data})
+
+
+@app.route("/api/inspect/export/stances.json")
+@require_role(*DATA_ROLES)
+def api_export_stances():
+    conn = get_conn()
+    data = _inspect_stances(conn)
+    conn.close()
+    data.pop("highlights", None)
+    return _json_download("narc_stances", {"experiment": "stances", **data})
+
+
+@app.route("/api/inspect/export/oddoneout.json")
+@require_role(*DATA_ROLES)
+def api_export_oddoneout():
+    conn = get_conn()
+    data = _inspect_oddoneout(conn)
+    conn.close()
+    data.pop("highlights", None)
+    return _json_download("narc_oddoneout", {"experiment": "oddoneout", **data})
+
+
+@app.route("/api/inspect/export/puzzles.json")
+@require_role(*DATA_ROLES)
+def api_export_puzzles():
+    conn = get_conn()
+    puzzles = []
+    for row in db.get_all_puzzles(conn):
+        p = db.puzzle_to_json(row)
+        variants = []
+        for v in db.get_variants(conn, p["puzzle_id"]):
+            variants.append({
+                "variant_id": v["variant_id"],
+                "variant": v["variant"],
+                "source_domain": v["source_domain"],
+                "narrative": v["narrative"],
+                "generator": v["generator"],
+                "created_at": v["created_at"],
+            })
+        p["variants"] = variants
+        puzzles.append(p)
+    conn.close()
+    return _json_download("narc_puzzles", {"puzzles": puzzles,
+                                            "count": len(puzzles)})
+
+
+def _build_puzzle_bundle(conn, pid):
+    row = db.get_puzzle(conn, pid)
+    if not row:
+        return None
+    bundle = db.puzzle_to_json(row)
+    bundle["variants"] = [
+        {"variant_id": v["variant_id"], "variant": v["variant"],
+         "source_domain": v["source_domain"], "narrative": v["narrative"],
+         "generator": v["generator"], "created_at": v["created_at"]}
+        for v in db.get_variants(conn, pid)
+    ]
+    bundle["classifications"] = [dict(r) for r in conn.execute(
+        """SELECT model_name, variant_id, grids_only, narrative_only, both, has_narc
+           FROM classifications WHERE puzzle_id=?
+           ORDER BY model_name, variant_id""", (pid,)).fetchall()]
+    bundle["ordering"] = [
+        {"model_name": r["model_name"], "condition": r["condition"],
+         "avg_kendall_tau": round(r["avg_tau"], 4) if r["avg_tau"] is not None else None,
+         "exact_match_rate": round(r["exact_rate"], 4) if r["exact_rate"] is not None else None,
+         "n_trials": r["n"]}
+        for r in conn.execute(
+            """SELECT model_name, condition, AVG(kendall_tau) as avg_tau,
+                      AVG(exact_match) as exact_rate, COUNT(*) as n
+               FROM ordering_trials
+               WHERE puzzle_id=? AND kendall_tau IS NOT NULL
+               GROUP BY model_name, condition""", (pid,)).fetchall()]
+    ooo_table = conn.execute(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name='oddoneout_trials'"
+    ).fetchone()
+    if ooo_table:
+        bundle["oddoneout"] = [
+            {"model_name": r["model_name"], "condition": r["condition"],
+             "accuracy": round(r["correct_count"] / r["n"], 4) if r["n"] else None,
+             "n_trials": r["n"]}
+            for r in conn.execute(
+                """SELECT model_name, condition, COUNT(*) as n,
+                          SUM(correct) as correct_count
+                   FROM oddoneout_trials
+                   WHERE puzzle_id=? AND correct IS NOT NULL
+                   GROUP BY model_name, condition""", (pid,)).fetchall()]
+    else:
+        bundle["oddoneout"] = []
+    return bundle
+
+
+@app.route("/api/inspect/export/puzzle/<pid>.json")
+@require_role(*DATA_ROLES)
+def api_export_one_puzzle(pid):
+    conn = get_conn()
+    bundle = _build_puzzle_bundle(conn, pid)
+    conn.close()
+    if not bundle:
+        return jsonify({"error": "Not found"}), 404
+    return _json_download(f"narc_puzzle_{pid}", bundle)
+
+
+@app.route("/api/inspect/export/selected.json", methods=["POST"])
+@require_role(*DATA_ROLES)
+def api_export_selected():
+    data = request.get_json(silent=True) or {}
+    ids = data.get("ids")
+    if not isinstance(ids, list) or not ids:
+        return jsonify({"error": "ids must be a non-empty list"}), 400
+    if len(ids) > 500:
+        return jsonify({"error": "Too many ids (max 500)"}), 400
+    conn = get_conn()
+    bundles = []
+    missing = []
+    for pid in ids:
+        b = _build_puzzle_bundle(conn, pid)
+        if b:
+            bundles.append(b)
+        else:
+            missing.append(pid)
+    conn.close()
+    return _json_download("narc_selected", {"puzzles": bundles,
+                                             "count": len(bundles),
+                                             "missing": missing})
 
 
 @app.route("/api/vote", methods=["POST"])
