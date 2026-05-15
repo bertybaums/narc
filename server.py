@@ -4,8 +4,8 @@ import csv
 import io
 import json
 import os
-import subprocess
 import threading
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timedelta
 from functools import wraps
 from pathlib import Path
@@ -17,6 +17,9 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 import db
 from db import get_variants, get_trials
+from collect import run_collect_job
+from classify import run_classify_job
+from ratelimit import mindrouter_bucket
 
 app = Flask(__name__)
 DATA_DIR = Path(__file__).parent / "data" / "puzzles"
@@ -1136,55 +1139,64 @@ def _cleanup_stuck_review_jobs():
 _cleanup_stuck_review_jobs()
 
 
-def _run_review_job(job_id, puzzle_id, model_name, log_path):
-    """Background worker: run collect.py then classify.py for one (puzzle, model)."""
-    conn = get_conn()
-    db.set_review_job_status(conn, job_id, "running")
-    conn.close()
+_REVIEW_WORKER_COUNT = int(os.environ.get("NARC_REVIEW_WORKERS", "3"))
+_REVIEW_EXECUTOR = ThreadPoolExecutor(
+    max_workers=_REVIEW_WORKER_COUNT, thread_name_prefix="review"
+)
 
-    env = os.environ.copy()
-    if not env.get("MINDROUTER_API_KEY"):
+
+def _run_review_job(job_id, puzzle_id, model_name, log_path):
+    """Worker: run collect + classify in-process for one (puzzle, model).
+    All HTTP calls flow through the shared MindRouter token bucket, so the
+    100 req/min ceiling is honored regardless of how many jobs run in parallel.
+    """
+    if not os.environ.get("MINDROUTER_API_KEY"):
         conn = get_conn()
         db.set_review_job_status(conn, job_id, "failed",
                                  error="MINDROUTER_API_KEY not set")
         conn.close()
         return
 
-    repo = Path(__file__).parent
+    conn_status = get_conn()
+    db.set_review_job_status(conn_status, job_id, "running")
+    conn_status.close()
+
     try:
         with open(log_path, "w") as log:
-            log.write(f"=== collect.py --model {model_name} --puzzle {puzzle_id} ===\n")
-            log.flush()
-            r1 = subprocess.run(
-                ["python", "collect.py", "--model", model_name, "--puzzle", puzzle_id],
-                cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
-                timeout=1800,
+            def log_write(msg):
+                log.write(str(msg) + "\n")
+                log.flush()
+
+            log_write(f"=== collect: model={model_name} puzzle={puzzle_id} ===")
+            collect_result = run_collect_job(
+                model=model_name, puzzle=puzzle_id, log_fn=log_write
             )
-            log.write(f"\n=== collect exit {r1.returncode} ===\n")
-            log.write(f"\n=== classify.py --model {model_name} ===\n")
-            log.flush()
-            r2 = subprocess.run(
-                ["python", "classify.py", "--model", model_name, "--puzzle", puzzle_id],
-                cwd=repo, env=env, stdout=log, stderr=subprocess.STDOUT,
-                timeout=600,
+            log_write(f"=== collect done: {collect_result} ===")
+
+            log_write(f"=== classify: model={model_name} puzzle={puzzle_id} ===")
+            classify_result = run_classify_job(
+                model=model_name, puzzle=puzzle_id, log_fn=log_write
             )
-            log.write(f"\n=== classify exit {r2.returncode} ===\n")
-        ok = (r1.returncode == 0 and r2.returncode == 0)
+            log_write(f"=== classify done: {classify_result} ===")
+
         conn = get_conn()
-        if ok:
-            db.set_review_job_status(conn, job_id, "done")
-        else:
-            db.set_review_job_status(conn, job_id, "failed",
-                                     error=f"collect={r1.returncode} classify={r2.returncode}")
+        db.set_review_job_status(conn, job_id, "done")
         conn.close()
     except Exception as e:
+        try:
+            with open(log_path, "a") as log:
+                log.write(f"\n=== ERROR ===\n{e}\n")
+        except Exception:
+            pass
         conn = get_conn()
         db.set_review_job_status(conn, job_id, "failed", error=str(e))
         conn.close()
 
 
 def _queue_review_job(conn, puzzle_id, model_name, user_id, rerun=False):
-    """Create and start a single review job. Returns job_id or None if active one exists."""
+    """Create a review job and submit it to the worker pool.
+    Returns job_id, or None if an active job already exists for this (puzzle, model).
+    """
     existing = conn.execute(
         """SELECT job_id FROM review_jobs
            WHERE puzzle_id=? AND model_name=? AND status IN ('queued', 'running')
@@ -1198,9 +1210,7 @@ def _queue_review_job(conn, puzzle_id, model_name, user_id, rerun=False):
     ts = int(datetime.utcnow().timestamp())
     log_path = str(REVIEW_LOG_DIR / f"job_{puzzle_id}_{model_name}_{ts}.log")
     job_id = db.create_review_job(conn, puzzle_id, model_name, user_id, log_path)
-    t = threading.Thread(target=_run_review_job,
-                         args=(job_id, puzzle_id, model_name, log_path), daemon=True)
-    t.start()
+    _REVIEW_EXECUTOR.submit(_run_review_job, job_id, puzzle_id, model_name, log_path)
     return job_id
 
 

@@ -103,6 +103,13 @@ CREATE INDEX IF NOT EXISTS idx_solve_events_session ON solve_events(session_id);
 CREATE INDEX IF NOT EXISTS idx_solve_events_puzzle ON solve_events(puzzle_id);
 CREATE INDEX IF NOT EXISTS idx_solve_events_created ON solve_events(created_at);
 
+-- Cross-process token bucket state (one row per named bucket)
+CREATE TABLE IF NOT EXISTS rate_limit_state (
+    bucket_name  TEXT PRIMARY KEY,
+    tokens       REAL NOT NULL,
+    last_refill  REAL NOT NULL
+);
+
 CREATE TABLE IF NOT EXISTS oddoneout_trials (
     trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),

@@ -1,11 +1,14 @@
 """Phase 1: Run 3-condition testing on subject models via MindRouter.
 
-Usage:
+CLI:
     python collect.py [--model MODEL] [--puzzle PUZZLE_ID] [--condition CONDITION]
+
+In-process (e.g., from server.py):
+    from collect import run_collect_job
+    run_collect_job(model="gpt-oss-120b", puzzle="narc_001", log_fn=log.write)
 """
 
 import json
-import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 import click
@@ -34,7 +37,6 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     trial_id = trial_row["trial_id"]
     condition = trial_row["condition"]
 
-    # Build prompt
     if condition == "grids_only":
         messages = prompts.build_grids_only(puzzle_data)
     elif condition == "narrative_only":
@@ -44,7 +46,6 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     else:
         raise ValueError(f"Unknown condition: {condition}")
 
-    # Two-pass call
     try:
         raw1, reasoning, raw2, text2, total_latency = models.call_llm_two_pass(
             model_config, messages, prompts.build_extraction, extraction_config
@@ -52,13 +53,11 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     except Exception as e:
         return trial_id, None, None, None, str(e), 0
 
-    # Parse response grids — try pass-2 output first, then raw reasoning
     predicted, parsed_reasoning, parse_error = grids.parse_response_grids(text2)
 
     if predicted is None:
         predicted, _, _ = grids.parse_response_grids(reasoning)
 
-    # Pass 3: strict retry if still no parse
     if predicted is None:
         try:
             masked_positions = puzzle_data["masked_positions"]
@@ -73,11 +72,134 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
             total_latency += latency3
             predicted, _, parse_error = grids.parse_response_grids(text3)
             if predicted is not None:
-                text2 = text3  # use the successful extraction
+                text2 = text3
         except Exception:
-            pass  # keep original parse_error
+            pass
 
     return trial_id, raw1, text2, reasoning, parse_error if predicted is None else None, total_latency, predicted
+
+
+def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
+                    dry_run=False, log_fn=print):
+    """Collect responses for one model across one or all puzzles.
+
+    Returns dict with keys: pending, completed, errors.
+    log_fn is called with progress messages (defaults to print for CLI use).
+    """
+    config = load_config()
+    model_config = get_model_config(config, model)
+    extraction_config = get_model_config(config, "gpt-oss-120b-extract")
+    conditions = [condition] if condition else config["experiment"]["conditions"]
+
+    conn = db.init_db()
+    try:
+        if puzzle:
+            row = db.get_puzzle(conn, puzzle)
+            if not row:
+                log_fn(f"Puzzle {puzzle} not found")
+                return {"pending": 0, "completed": 0, "errors": 0}
+            rows = [row]
+        else:
+            rows = db.get_all_puzzles(conn)
+
+        log_fn(f"Collecting: {len(rows)} puzzles x {len(conditions)} conditions on {model}")
+
+        for row in rows:
+            puzzle_data = db.puzzle_to_json(row)
+            for cond in conditions:
+                prompt_text = json.dumps(
+                    prompts.build_grids_only(puzzle_data) if cond == "grids_only"
+                    else prompts.build_narrative_only(puzzle_data) if cond == "narrative_only"
+                    else prompts.build_both(puzzle_data)
+                )
+                db.insert_trial(conn, puzzle_data["puzzle_id"], model, cond, prompt_text)
+
+        pending = db.get_pending_trials(conn, model_name=model)
+        if puzzle:
+            pending = [t for t in pending if t["puzzle_id"] == puzzle]
+        log_fn(f"Pending trials: {len(pending)}")
+
+        if dry_run:
+            for t in pending:
+                log_fn(f"  Would run: {t['puzzle_id']} / {t['condition']}")
+            return {"pending": len(pending), "completed": 0, "errors": 0}
+
+        completed = 0
+        errors = 0
+
+        puzzle_cache = {}
+        for t in pending:
+            pid = t["puzzle_id"]
+            if pid not in puzzle_cache:
+                puzzle_row = db.get_puzzle(conn, pid)
+                puzzle_cache[pid] = db.puzzle_to_json(puzzle_row)
+
+        def process_trial(trial_row):
+            puzzle_data = puzzle_cache[trial_row["puzzle_id"]]
+            return run_trial(model_config, extraction_config, trial_row, puzzle_data)
+
+        with ThreadPoolExecutor(max_workers=concurrency) as executor:
+            futures = {executor.submit(process_trial, t): t for t in pending}
+            for future in as_completed(futures):
+                trial_row = futures[future]
+                try:
+                    result = future.result()
+                    trial_id = result[0]
+                    raw_response = result[1]
+                    response_text = result[2]
+                    reasoning = result[3]
+                    error = result[4]
+                    latency = result[5]
+                    predicted = result[6] if len(result) > 6 else None
+
+                    db.update_trial_response(conn, trial_id, raw_response, response_text,
+                                             latency, error=error)
+
+                    if predicted is not None:
+                        puzzle_data = puzzle_cache[trial_row["puzzle_id"]]
+                        expected = puzzle_data["answer_grids"]
+                        masked_positions = puzzle_data["masked_positions"]
+
+                        pred_mapped = predicted
+                        if "_single" in predicted and len(masked_positions) == 1:
+                            pred_mapped = {str(masked_positions[0]): predicted["_single"]}
+
+                        all_correct = True
+                        total_cells = 0
+                        matching_cells = 0
+                        for pos_str, exp_grid in expected.items():
+                            pred_grid = pred_mapped.get(pos_str, [])
+                            c, acc = grids.compare_grids(pred_grid, exp_grid)
+                            if not c:
+                                all_correct = False
+                            r = len(exp_grid)
+                            cols = len(exp_grid[0]) if r > 0 else 0
+                            n = r * cols
+                            total_cells += n
+                            matching_cells += int(acc * n)
+
+                        cell_accuracy = matching_cells / total_cells if total_cells else 0
+                        db.update_trial_evaluation(
+                            conn, trial_id, json.dumps(pred_mapped), reasoning,
+                            1 if all_correct else 0, cell_accuracy
+                        )
+                        status = "correct" if all_correct else f"wrong ({cell_accuracy:.1%})"
+                    else:
+                        status = f"parse_error: {error}"
+                        errors += 1
+
+                    completed += 1
+                    log_fn(f"  [{completed}/{len(pending)}] "
+                           f"{trial_row['puzzle_id']}/{trial_row['condition']}: {status}")
+
+                except Exception as e:
+                    log_fn(f"  ERROR {trial_row['puzzle_id']}/{trial_row['condition']}: {e}")
+                    errors += 1
+
+        log_fn(f"\nDone: {completed} completed, {errors} errors")
+        return {"pending": len(pending), "completed": completed, "errors": errors}
+    finally:
+        conn.close()
 
 
 @click.command()
@@ -87,125 +209,8 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
 @click.option("--concurrency", default=8, type=int, help="Max parallel requests")
 @click.option("--dry-run", is_flag=True, help="Show what would be done without calling API")
 def main(model, puzzle, condition, concurrency, dry_run):
-    config = load_config()
-    model_config = get_model_config(config, model)
-    extraction_config = get_model_config(config, "gpt-oss-120b-extract")
-    conditions = [condition] if condition else config["experiment"]["conditions"]
-
-    conn = db.init_db()
-
-    # Get puzzles
-    if puzzle:
-        rows = [db.get_puzzle(conn, puzzle)]
-        if not rows[0]:
-            click.echo(f"Puzzle {puzzle} not found")
-            return
-    else:
-        rows = db.get_all_puzzles(conn)
-
-    click.echo(f"Collecting: {len(rows)} puzzles x {len(conditions)} conditions on {model}")
-
-    # Insert trial rows
-    trial_ids = []
-    for row in rows:
-        puzzle_data = db.puzzle_to_json(row)
-        for cond in conditions:
-            prompt_text = json.dumps(
-                prompts.build_grids_only(puzzle_data) if cond == "grids_only"
-                else prompts.build_narrative_only(puzzle_data) if cond == "narrative_only"
-                else prompts.build_both(puzzle_data)
-            )
-            tid = db.insert_trial(conn, puzzle_data["puzzle_id"], model, cond, prompt_text)
-            trial_ids.append(tid)
-
-    # Get pending trials
-    pending = db.get_pending_trials(conn, model_name=model)
-    click.echo(f"Pending trials: {len(pending)}")
-
-    if dry_run:
-        for t in pending:
-            click.echo(f"  Would run: {t['puzzle_id']} / {t['condition']}")
-        return
-
-    # Run trials
-    completed = 0
-    errors = 0
-
-    # Pre-load puzzle data (avoids cross-thread DB access)
-    puzzle_cache = {}
-    for t in pending:
-        pid = t["puzzle_id"]
-        if pid not in puzzle_cache:
-            puzzle_row = db.get_puzzle(conn, pid)
-            puzzle_cache[pid] = db.puzzle_to_json(puzzle_row)
-
-    def process_trial(trial_row):
-        puzzle_data = puzzle_cache[trial_row["puzzle_id"]]
-        return run_trial(model_config, extraction_config, trial_row, puzzle_data)
-
-    with ThreadPoolExecutor(max_workers=concurrency) as executor:
-        futures = {executor.submit(process_trial, t): t for t in pending}
-        for future in as_completed(futures):
-            trial_row = futures[future]
-            try:
-                result = future.result()
-                trial_id = result[0]
-                raw_response = result[1]
-                response_text = result[2]
-                reasoning = result[3]
-                error = result[4]
-                latency = result[5]
-                predicted = result[6] if len(result) > 6 else None
-
-                # Store response (main thread only)
-                db.update_trial_response(conn, trial_id, raw_response, response_text,
-                                         latency, error=error)
-
-                # Evaluate if we got grids
-                if predicted is not None:
-                    puzzle_data = puzzle_cache[trial_row["puzzle_id"]]
-                    expected = puzzle_data["answer_grids"]
-                    masked_positions = puzzle_data["masked_positions"]
-
-                    # Map predicted grids to positions
-                    pred_mapped = predicted
-                    if "_single" in predicted and len(masked_positions) == 1:
-                        pred_mapped = {str(masked_positions[0]): predicted["_single"]}
-
-                    # Compare all masked grids
-                    all_correct = True
-                    total_cells = 0
-                    matching_cells = 0
-                    for pos_str, exp_grid in expected.items():
-                        pred_grid = pred_mapped.get(pos_str, [])
-                        c, acc = grids.compare_grids(pred_grid, exp_grid)
-                        if not c:
-                            all_correct = False
-                        r = len(exp_grid)
-                        cols = len(exp_grid[0]) if r > 0 else 0
-                        n = r * cols
-                        total_cells += n
-                        matching_cells += int(acc * n)
-
-                    cell_accuracy = matching_cells / total_cells if total_cells else 0
-                    db.update_trial_evaluation(
-                        conn, trial_id, json.dumps(pred_mapped), reasoning,
-                        1 if all_correct else 0, cell_accuracy
-                    )
-                    status = "correct" if all_correct else f"wrong ({cell_accuracy:.1%})"
-                else:
-                    status = f"parse_error: {error}"
-                    errors += 1
-
-                completed += 1
-                click.echo(f"  [{completed}/{len(pending)}] "
-                           f"{trial_row['puzzle_id']}/{trial_row['condition']}: {status}")
-
-            except Exception as e:
-                click.echo(f"  ERROR {trial_row['puzzle_id']}/{trial_row['condition']}: {e}")
-                errors += 1
-
-    click.echo(f"\nDone: {completed} completed, {errors} errors")
+    run_collect_job(model=model, puzzle=puzzle, condition=condition,
+                    concurrency=concurrency, dry_run=dry_run, log_fn=click.echo)
 
 
 if __name__ == "__main__":

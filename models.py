@@ -11,6 +11,8 @@ import time
 
 import httpx
 
+from ratelimit import mindrouter_bucket
+
 
 def call_llm(model_config, messages):
     """Call an LLM. Returns (raw_response_json, response_text, latency_ms)."""
@@ -31,6 +33,8 @@ def call_llm(model_config, messages):
         body["max_tokens"] = model_config["max_tokens"]
     if "reasoning_effort" in model_config:
         body["reasoning_effort"] = model_config["reasoning_effort"]
+
+    mindrouter_bucket.acquire()
 
     start = time.monotonic()
     with httpx.Client(timeout=model_config.get("timeout", 300.0)) as client:
