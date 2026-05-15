@@ -6,18 +6,101 @@
  * - They can submit a guess before revealing (recorded as pre-narrative attempt)
  * - They can reveal the narrative at any time (recorded whether they guessed first or not)
  * - After revealing, they can submit again (recorded as post-narrative attempt)
+ * - After submit: banner shows right/wrong; user can either try again or click
+ *   "Reveal Answer" to see the diff + expected grids.
+ * - Per-action events streamed to /api/solve-events for full session replay.
  */
 
 let selectedColor = 0;
 let answerGrids = {};      // keyed by position string: {"2": Grid, "3": Grid}
 let narrativeRevealed = false;
 let preNarrativeSubmitted = false;
+let answerRevealed = false;  // sticky once user clicks "Reveal Answer"
+let lastFeedback = null;     // {submitted, expected, correct, cellAccuracy}
 let activeVariant = (PUZZLE.variants && PUZZLE.variants.length > 0) ? PUZZLE.variants[0].variant : 'original';
+
+// --- Event recording -------------------------------------------------------
+
+const pageLoadMs = Date.now();
+let eventQueue = [];
+let flushTimer = null;
+const FLUSH_INTERVAL_MS = 5000;
+const FLUSH_THRESHOLD = 20;
+
+function recordEvent(type, payload = null) {
+    eventQueue.push({
+        type,
+        payload,
+        client_ms: Date.now() - pageLoadMs
+    });
+    if (eventQueue.length >= FLUSH_THRESHOLD) {
+        flushEvents();
+    } else if (!flushTimer) {
+        flushTimer = setTimeout(flushEvents, FLUSH_INTERVAL_MS);
+    }
+}
+
+function flushEvents(useBeacon = false) {
+    if (flushTimer) {
+        clearTimeout(flushTimer);
+        flushTimer = null;
+    }
+    if (eventQueue.length === 0) return;
+    const events = eventQueue;
+    eventQueue = [];
+    const body = JSON.stringify({
+        session_id: SESSION_ID,
+        puzzle_id: PUZZLE.puzzle_id,
+        events
+    });
+    if (useBeacon && navigator.sendBeacon) {
+        try {
+            navigator.sendBeacon('/api/solve-events', new Blob([body], {type: 'application/json'}));
+        } catch (e) {}
+    } else {
+        fetch('/api/solve-events', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body,
+            keepalive: true
+        }).catch(() => {});
+    }
+}
+
+window.addEventListener('beforeunload', () => flushEvents(true));
+window.addEventListener('pagehide', () => flushEvents(true));
+
+// --- Init ------------------------------------------------------------------
 
 document.addEventListener('DOMContentLoaded', () => {
     renderPuzzleSequence();
     setupAnswerEditors();
+    recordEvent('page_load', {
+        puzzle_id: PUZZLE.puzzle_id,
+        n_grids: PUZZLE.sequence.length,
+        n_masked: PUZZLE.masked_positions.length,
+        n_variants: (PUZZLE.variants || []).length
+    });
+    updateScrollAffordance();
+    const seqEl = document.getElementById('puzzle-sequence');
+    if (seqEl) seqEl.addEventListener('scroll', updateScrollAffordance);
+    window.addEventListener('resize', updateScrollAffordance);
 });
+
+// --- Scroll affordance -----------------------------------------------------
+
+function updateScrollAffordance() {
+    const container = document.getElementById('puzzle-sequence');
+    const wrapper = document.getElementById('sequence-wrapper');
+    if (!container || !wrapper) return;
+    const canScroll = container.scrollWidth > container.clientWidth + 1;
+    const atStart = container.scrollLeft <= 1;
+    const atEnd = container.scrollLeft + container.clientWidth >= container.scrollWidth - 1;
+    wrapper.classList.toggle('has-overflow-left', canScroll && !atStart);
+    wrapper.classList.toggle('has-overflow-right', canScroll && !atEnd);
+}
+
+// --- Rendering -------------------------------------------------------------
 
 function renderPuzzleSequence() {
     const container = document.getElementById('puzzle-sequence');
@@ -28,7 +111,7 @@ function renderPuzzleSequence() {
         if (i > 0) {
             const arrow = document.createElement('div');
             arrow.className = 'sequence-arrow';
-            arrow.textContent = '\u2192';
+            arrow.textContent = '→';
             container.appendChild(arrow);
         }
 
@@ -59,10 +142,16 @@ function renderPuzzleSequence() {
         slot.appendChild(wrapper);
         container.appendChild(slot);
     }
+
+    // Defer affordance update so layout has settled
+    requestAnimationFrame(updateScrollAffordance);
 }
 
 function setupAnswerEditors() {
-    buildColorPicker(document.getElementById('answer-picker'), c => { selectedColor = c; });
+    buildColorPicker(document.getElementById('answer-picker'), c => {
+        selectedColor = c;
+        recordEvent('color_change', {color: c});
+    });
 
     const container = document.getElementById('answer-editors');
     container.innerHTML = '';
@@ -106,6 +195,10 @@ function renderAnswerGrid(posStr) {
         editable: true,
         cellSize: 28,
         onCellClick: (r, c) => {
+            const prev = gridObj.grid[r][c];
+            if (prev !== selectedColor) {
+                recordEvent('cell_paint', {pos: posStr, r, c, from: prev, to: selectedColor});
+            }
             gridObj.grid[r][c] = selectedColor;
             const cell = canvas.querySelectorAll('.grid_row')[r].querySelectorAll('.cell')[c];
             setCellColor(cell, selectedColor);
@@ -113,9 +206,14 @@ function renderAnswerGrid(posStr) {
     });
 }
 
+// --- Narrative reveal ------------------------------------------------------
+
 function revealNarrative() {
     if (narrativeRevealed) return;
     narrativeRevealed = true;
+    recordEvent('reveal_narrative', {
+        skipped_phase1: preNarrativeSubmitted ? 0 : 1
+    });
 
     // Record whether they made an initial guess or not
     if (!preNarrativeSubmitted) {
@@ -151,8 +249,12 @@ function revealNarrative() {
     if (p1continue) p1continue.style.display = 'none';
 
     document.getElementById('feedback').style.display = 'none';
+    answerRevealed = false;
+    lastFeedback = null;
     startTime = Date.now();
 }
+
+// --- Submit + feedback -----------------------------------------------------
 
 async function submitAnswer() {
     const submitted = {};
@@ -191,6 +293,16 @@ async function submitAnswer() {
     const phase = narrativeRevealed ? 2 : 1;
     if (phase === 1) preNarrativeSubmitted = true;
 
+    recordEvent('submit', {
+        phase,
+        correct: allCorrect,
+        cell_accuracy: cellAccuracy,
+        time_spent_ms: timeSpent,
+        saw_narrative: narrativeRevealed,
+        active_variant: narrativeRevealed ? activeVariant : null
+    });
+    flushEvents();  // ensure the submit is durable before navigating away
+
     await fetch('/api/solve', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -212,6 +324,8 @@ async function submitAnswer() {
 }
 
 function showFeedback(submitted, expected, correct, cellAccuracy) {
+    lastFeedback = { submitted, expected, correct, cellAccuracy };
+
     const feedback = document.getElementById('feedback');
     feedback.style.display = 'block';
 
@@ -224,18 +338,65 @@ function showFeedback(submitted, expected, correct, cellAccuracy) {
         banner.textContent = `Incorrect. Cell accuracy: ${(cellAccuracy * 100).toFixed(1)}%`;
     }
 
-    // Build feedback grids for each masked position
-    const positions = Object.keys(expected);
-    const rowEl = feedback.querySelector('.row');
+    const actions = document.getElementById('feedback-actions');
+    const details = document.getElementById('feedback-details');
+    const tryAgainHint = document.getElementById('try-again-hint');
+    const phase1cont = document.getElementById('phase1-continue');
+
+    if (correct) {
+        // Auto-show answer when correct (nothing to hide)
+        actions.style.display = 'none';
+        renderFeedbackDetails(submitted, expected);
+        details.style.display = '';
+        answerRevealed = true;
+        phase1cont.style.display = 'none';
+    } else if (answerRevealed) {
+        // User already revealed earlier; keep showing the diff
+        actions.style.display = 'none';
+        renderFeedbackDetails(submitted, expected);
+        details.style.display = '';
+        phase1cont.style.display = (!narrativeRevealed) ? 'block' : 'none';
+    } else {
+        // Two-step: offer to reveal answer
+        actions.style.display = '';
+        tryAgainHint.style.display = '';
+        details.style.display = 'none';
+        phase1cont.style.display = (!narrativeRevealed) ? 'block' : 'none';
+    }
+
+    const votePrompt = document.getElementById('vote-prompt');
+    if (votePrompt) votePrompt.style.display = '';
+
+    // Auto-scroll to feedback
+    requestAnimationFrame(() => {
+        feedback.scrollIntoView({behavior: 'smooth', block: 'start'});
+    });
+}
+
+function revealAnswer() {
+    if (!lastFeedback || answerRevealed) return;
+    answerRevealed = true;
+    recordEvent('reveal_answer', {
+        correct: lastFeedback.correct,
+        cell_accuracy: lastFeedback.cellAccuracy
+    });
+
+    renderFeedbackDetails(lastFeedback.submitted, lastFeedback.expected);
+    document.getElementById('feedback-details').style.display = '';
+    document.getElementById('feedback-actions').style.display = 'none';
+}
+
+function renderFeedbackDetails(submitted, expected) {
+    const rowEl = document.getElementById('feedback-details');
     rowEl.innerHTML = '';
 
+    const positions = Object.keys(expected);
     for (const posStr of positions) {
         const sub = submitted[posStr] || [];
         const exp = expected[posStr];
 
         const colWidth = positions.length === 1 ? 'col-md-4' : 'col-md-6 col-lg-4';
 
-        // Header for multi-mask
         if (positions.length > 1) {
             const header = document.createElement('div');
             header.className = 'col-12 mt-2';
@@ -243,7 +404,6 @@ function showFeedback(submitted, expected, correct, cellAccuracy) {
             rowEl.appendChild(header);
         }
 
-        // Submitted
         const subCol = document.createElement('div');
         subCol.className = colWidth + ' text-center';
         subCol.innerHTML = '<small class="text-muted">Your Answer</small>';
@@ -255,7 +415,6 @@ function showFeedback(submitted, expected, correct, cellAccuracy) {
         subCol.appendChild(subDiv);
         rowEl.appendChild(subCol);
 
-        // Diff
         const diffCol = document.createElement('div');
         diffCol.className = colWidth + ' text-center';
         diffCol.innerHTML = '<small class="text-muted">Diff</small>';
@@ -266,7 +425,6 @@ function showFeedback(submitted, expected, correct, cellAccuracy) {
         diffCol.appendChild(diffDiv);
         rowEl.appendChild(diffCol);
 
-        // Expected
         const expCol = document.createElement('div');
         expCol.className = colWidth + ' text-center';
         expCol.innerHTML = '<small class="text-muted">Expected</small>';
@@ -276,17 +434,10 @@ function showFeedback(submitted, expected, correct, cellAccuracy) {
         expCol.appendChild(expDiv);
         rowEl.appendChild(expCol);
     }
-
-    if (!narrativeRevealed && !correct) {
-        document.getElementById('phase1-continue').style.display = 'block';
-    }
-
-    // Show vote prompt after any submission
-    const votePrompt = document.getElementById('vote-prompt');
-    if (votePrompt) votePrompt.style.display = '';
 }
 
 function clearAnswer() {
+    recordEvent('clear_all');
     for (const posStr of Object.keys(answerGrids)) {
         const item = PUZZLE.sequence[parseInt(posStr)];
         answerGrids[posStr] = new Grid(item.rows, item.cols);
@@ -302,7 +453,7 @@ function switchVariant(idx) {
         btn.classList.toggle('active', i === idx);
     });
     activeVariant = variants[idx].variant;
-    // Track variant view
+    recordEvent('variant_switch', {variant: activeVariant, idx});
     fetch('/api/variant-view', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },

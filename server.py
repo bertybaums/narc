@@ -1624,6 +1624,24 @@ def api_solve_attempt():
     return jsonify({"status": "ok"})
 
 
+@app.route("/api/solve-events", methods=["POST"])
+def api_solve_events():
+    data = request.get_json(silent=True)
+    if not data:
+        return jsonify({"error": "No data"}), 400
+    session_id = data.get("session_id")
+    puzzle_id = data.get("puzzle_id")
+    events = data.get("events") or []
+    if not session_id or not puzzle_id:
+        return jsonify({"error": "Missing session_id or puzzle_id"}), 400
+    if not isinstance(events, list):
+        return jsonify({"error": "events must be a list"}), 400
+    conn = get_conn()
+    n = db.insert_solve_events(conn, session_id, puzzle_id, events)
+    conn.close()
+    return jsonify({"status": "ok", "inserted": n})
+
+
 @app.cli.command("seed-owner")
 @click.argument("username")
 @click.password_option()

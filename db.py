@@ -282,6 +282,31 @@ def insert_variant_view(conn, session_id, puzzle_id, variant):
     conn.commit()
 
 
+def insert_solve_events(conn, session_id, puzzle_id, events):
+    """Batch-insert solve events. Each event is {type, payload, client_ms}."""
+    rows = []
+    for ev in events:
+        payload = ev.get("payload")
+        payload_json = json.dumps(payload) if payload is not None else None
+        rows.append((
+            session_id,
+            puzzle_id,
+            ev.get("type", "unknown"),
+            payload_json,
+            ev.get("client_ms"),
+        ))
+    if not rows:
+        return 0
+    conn.executemany(
+        """INSERT INTO solve_events
+           (session_id, puzzle_id, event_type, payload, client_ms)
+           VALUES (?, ?, ?, ?, ?)""",
+        rows,
+    )
+    conn.commit()
+    return len(rows)
+
+
 # --- votes ---
 
 def upsert_vote(conn, puzzle_id, voter_id, value, ip_address=None):

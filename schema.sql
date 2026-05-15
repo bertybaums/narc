@@ -88,6 +88,21 @@ CREATE TABLE IF NOT EXISTS variant_views (
 CREATE INDEX IF NOT EXISTS idx_variant_views_puzzle ON variant_views(puzzle_id);
 CREATE INDEX IF NOT EXISTS idx_variant_views_session ON variant_views(session_id);
 
+-- Per-action event log for solve sessions (cell paints, reveals, submits, etc.)
+CREATE TABLE IF NOT EXISTS solve_events (
+    event_id    INTEGER PRIMARY KEY AUTOINCREMENT,
+    session_id  TEXT NOT NULL,
+    puzzle_id   TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    event_type  TEXT NOT NULL,
+    payload     TEXT,           -- JSON
+    client_ms   INTEGER,        -- ms since page load on the client
+    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_solve_events_session ON solve_events(session_id);
+CREATE INDEX IF NOT EXISTS idx_solve_events_puzzle ON solve_events(puzzle_id);
+CREATE INDEX IF NOT EXISTS idx_solve_events_created ON solve_events(created_at);
+
 CREATE TABLE IF NOT EXISTS oddoneout_trials (
     trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
