@@ -1159,31 +1159,43 @@ REVIEW_LOG_DIR = Path(__file__).parent / "logs" / "review"
 REVIEW_LOG_DIR.mkdir(parents=True, exist_ok=True)
 
 
-def _cleanup_stuck_review_jobs():
-    """On startup, mark any queued/running jobs as failed — their threads died."""
-    try:
-        conn = get_conn()
-        conn.execute(
-            """UPDATE review_jobs
-               SET status='failed',
-                   finished_at=?,
-                   error=COALESCE(error, 'interrupted by server restart')
-               WHERE status IN ('queued', 'running')""",
-            (datetime.utcnow().isoformat(),),
-        )
-        conn.commit()
-        conn.close()
-    except Exception as e:
-        print(f"WARNING: review job cleanup failed: {e}")
-
-
-_cleanup_stuck_review_jobs()
-
-
 _REVIEW_WORKER_COUNT = int(os.environ.get("NARC_REVIEW_WORKERS", "3"))
 _REVIEW_EXECUTOR = ThreadPoolExecutor(
     max_workers=_REVIEW_WORKER_COUNT, thread_name_prefix="review"
 )
+
+
+def _recover_review_jobs():
+    """On startup, requeue any jobs that were queued or interrupted mid-run.
+    Partial trial work is already preserved in the trials table — collect.py's
+    get_pending_trials returns only rows that haven't been answered yet, so a
+    requeued job naturally picks up where it left off.
+    """
+    try:
+        conn = get_conn()
+        rows = conn.execute(
+            """SELECT job_id, puzzle_id, model_name, log_path FROM review_jobs
+               WHERE status IN ('queued', 'running')"""
+        ).fetchall()
+        if not rows:
+            conn.close()
+            return
+        conn.execute(
+            """UPDATE review_jobs
+               SET status='queued', started_at=NULL, finished_at=NULL,
+                   error='requeued after restart'
+               WHERE status IN ('queued', 'running')"""
+        )
+        conn.commit()
+        conn.close()
+        for r in rows:
+            _REVIEW_EXECUTOR.submit(
+                _run_review_job, r["job_id"], r["puzzle_id"],
+                r["model_name"], r["log_path"]
+            )
+        print(f"Recovered {len(rows)} review job(s) after restart.")
+    except Exception as e:
+        print(f"WARNING: review job recovery failed: {e}")
 
 
 def _run_review_job(job_id, puzzle_id, model_name, log_path):
@@ -1253,6 +1265,10 @@ def _queue_review_job(conn, puzzle_id, model_name, user_id, rerun=False):
     job_id = db.create_review_job(conn, puzzle_id, model_name, user_id, log_path)
     _REVIEW_EXECUTOR.submit(_run_review_job, job_id, puzzle_id, model_name, log_path)
     return job_id
+
+
+# Recover any jobs left in queued/running when this process died.
+_recover_review_jobs()
 
 
 @app.route("/api/admin/review-jobs", methods=["GET"])
