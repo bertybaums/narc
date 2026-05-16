@@ -25,11 +25,88 @@ document.addEventListener('DOMContentLoaded', () => {
     if (EDIT_DATA) {
         loadFromData(EDIT_DATA);
         if (EDIT_DATA.variants) loadVariants(EDIT_DATA.variants);
+        if (!IS_REVISION) {
+            // Editing an existing puzzle — lock the ID to prevent accidental
+            // forks. Revisions get a fresh _rev suffix that the admin can tweak.
+            const idEl = document.getElementById('puzzle-id');
+            idEl.readOnly = true;
+            idEl.classList.add('text-muted');
+            document.getElementById('btn-regen-id').style.display = 'none';
+        } else {
+            // Revision: check whether the suggested _rev ID is available
+            checkIdAvailability();
+        }
     } else {
         numSlots = parseInt(slider.value);
         buildSlots();
+        // New puzzle — auto-fill an available ID
+        regenerateId();
     }
 });
+
+// --- ID availability ---
+
+let _idCheckTimer = null;
+
+function onIdInput() {
+    if (_idCheckTimer) clearTimeout(_idCheckTimer);
+    setIdStatus('checking', 'Checking…');
+    _idCheckTimer = setTimeout(checkIdAvailability, 300);
+}
+
+async function checkIdAvailability() {
+    const id = document.getElementById('puzzle-id').value.trim();
+    if (!id) {
+        setIdStatus('hidden', '');
+        return;
+    }
+    // In edit mode the existing ID is "ours" — not a conflict.
+    if (EDIT_DATA && !IS_REVISION && id === EDIT_DATA.puzzle_id) {
+        setIdStatus('ok', 'editing');
+        return;
+    }
+    try {
+        const r = await fetch('/api/puzzle-ids/check/' + encodeURIComponent(id));
+        const data = await r.json();
+        if (data.exists) {
+            setIdStatus('bad', 'taken');
+        } else {
+            setIdStatus('ok', 'available');
+        }
+    } catch (e) {
+        setIdStatus('hidden', '');
+    }
+}
+
+function setIdStatus(kind, text) {
+    const el = document.getElementById('id-status');
+    if (!el) return;
+    if (kind === 'hidden' || !text) {
+        el.style.display = 'none';
+        el.textContent = '';
+        return;
+    }
+    el.style.display = '';
+    el.textContent = text;
+    el.className = 'small ms-1 ' + ({
+        ok: 'text-success',
+        bad: 'text-danger',
+        checking: 'text-muted'
+    }[kind] || 'text-muted');
+}
+
+async function regenerateId() {
+    try {
+        const r = await fetch('/api/puzzle-ids/next?prefix=sub');
+        const data = await r.json();
+        if (data.puzzle_id) {
+            document.getElementById('puzzle-id').value = data.puzzle_id;
+            setIdStatus('ok', 'available');
+        }
+    } catch (e) {
+        setIdStatus('hidden', '');
+    }
+}
 
 function loadFromData(data) {
     document.getElementById('puzzle-id').value = data.puzzle_id || '';
@@ -264,6 +341,10 @@ async function savePuzzle() {
         data.original_puzzle_id = EDIT_DATA ? EDIT_DATA.puzzle_id.replace(/_rev$/, '') : null;
     }
 
+    // is_new tells the server whether to enforce ID uniqueness. Pure edits
+    // legitimately upsert; everything else is a new ID.
+    data.is_new = !EDIT_DATA || IS_REVISION;
+
     try {
         const resp = await fetch('/api/puzzles', {
             method: 'POST',
@@ -277,6 +358,9 @@ async function savePuzzle() {
             } else {
                 showStatus('Puzzle saved: ' + data.puzzle_id, 'success');
             }
+        } else if (resp.status === 409 && result.code === 'duplicate_id') {
+            showStatus(result.error + ' Click the regenerate button or pick another ID.', 'danger');
+            setIdStatus('bad', 'taken');
         } else {
             showStatus('Error: ' + (result.error || 'Unknown error'), 'danger');
         }

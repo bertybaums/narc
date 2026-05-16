@@ -693,6 +693,27 @@ def api_list_puzzles():
     return jsonify(puzzles)
 
 
+@app.route("/api/puzzle-ids/next", methods=["GET"])
+def api_next_puzzle_id():
+    """Suggest the next available puzzle ID for a given prefix (default 'sub')."""
+    prefix = request.args.get("prefix", "sub").strip()
+    if not prefix.replace("_", "").replace("-", "").isalnum():
+        return jsonify({"error": "Invalid prefix"}), 400
+    conn = get_conn()
+    pid = db.next_available_puzzle_id(conn, prefix=prefix)
+    conn.close()
+    return jsonify({"puzzle_id": pid, "prefix": prefix})
+
+
+@app.route("/api/puzzle-ids/check/<puzzle_id>", methods=["GET"])
+def api_check_puzzle_id(puzzle_id):
+    """Check whether a puzzle ID is already taken (in puzzles or pending submissions)."""
+    conn = get_conn()
+    exists = db.puzzle_exists(conn, puzzle_id)
+    conn.close()
+    return jsonify({"puzzle_id": puzzle_id, "exists": exists})
+
+
 @app.route("/api/puzzles/<puzzle_id>", methods=["GET"])
 def api_get_puzzle(puzzle_id):
     conn = get_conn()
@@ -760,9 +781,20 @@ def api_create_puzzle():
 
     user = current_user()
 
+    # is_new defaults to true (safer fail-closed). When set explicitly false the
+    # caller is editing an existing puzzle and an overwrite is intentional.
+    is_new = data.get("is_new", True)
+
+    conn = get_conn()
+    if is_new and db.puzzle_exists(conn, puzzle_id):
+        conn.close()
+        return jsonify({
+            "error": f"Puzzle ID '{puzzle_id}' is already taken. Pick a different ID.",
+            "code": "duplicate_id"
+        }), 409
+
     if user and user["role"] in ("owner", "reviewer"):
         # Admin: save directly
-        conn = get_conn()
         _save_puzzle_from_data(conn, data)
         db.log_activity(conn, user["user_id"], "save_puzzle", "puzzle",
                         puzzle_id, f"Saved puzzle '{title}'")
@@ -771,7 +803,6 @@ def api_create_puzzle():
     else:
         # Visitor: create submission
         sub_type = "revision" if data.get("is_revision") else "new_puzzle"
-        conn = get_conn()
         sid = db.create_submission(
             conn, sub_type, json.dumps(data),
             target_puzzle_id=data.get("original_puzzle_id"),
@@ -781,7 +812,8 @@ def api_create_puzzle():
         db.log_activity(conn, None, "submit_puzzle", "submission",
                         str(sid), f"Visitor submitted '{title}'")
         conn.close()
-        return jsonify({"status": "submitted", "submission_id": sid})
+        return jsonify({"status": "submitted", "submission_id": sid,
+                        "puzzle_id": puzzle_id})
 
 
 @app.route("/api/puzzles/<puzzle_id>/variants", methods=["POST"])
@@ -966,8 +998,17 @@ def api_approve_submission(sid):
     payload = json.loads(sub["payload_json"])
 
     if sub["submission_type"] in ("new_puzzle", "revision"):
+        # Re-check uniqueness at approval time — another puzzle with the same ID
+        # may have been added since this submission was queued.
+        proposed_id = payload.get("puzzle_id")
+        if sub["submission_type"] == "new_puzzle" and proposed_id and db.get_puzzle(conn, proposed_id):
+            new_id = db.next_available_puzzle_id(conn, prefix="sub")
+            payload["puzzle_id"] = new_id
+            detail_prefix = f"Reassigned ID {proposed_id} -> {new_id}. "
+        else:
+            detail_prefix = ""
         _save_puzzle_from_data(conn, payload)
-        detail = f"Approved puzzle '{payload.get('title', payload.get('puzzle_id'))}'"
+        detail = detail_prefix + f"Approved puzzle '{payload.get('title', payload.get('puzzle_id'))}'"
     elif sub["submission_type"] == "variant":
         pid = payload.get("puzzle_id") or sub["target_puzzle_id"]
         db.upsert_variant(conn, pid, payload["variant"], payload["narrative"],

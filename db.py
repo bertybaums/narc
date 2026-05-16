@@ -68,6 +68,47 @@ def get_puzzle(conn, puzzle_id):
     ).fetchone()
 
 
+def puzzle_exists(conn, puzzle_id):
+    """True if the ID is taken in the puzzles table OR is reserved by a pending submission."""
+    row = conn.execute("SELECT 1 FROM puzzles WHERE puzzle_id=? LIMIT 1", (puzzle_id,)).fetchone()
+    if row:
+        return True
+    row = conn.execute(
+        """SELECT 1 FROM submissions
+           WHERE status='pending'
+             AND submission_type IN ('new_puzzle', 'revision')
+             AND json_extract(payload_json, '$.puzzle_id') = ?
+           LIMIT 1""",
+        (puzzle_id,),
+    ).fetchone()
+    return row is not None
+
+
+def next_available_puzzle_id(conn, prefix="sub"):
+    """Return prefix_NNN with N = (max existing N for that prefix) + 1.
+    Considers both the puzzles table and pending submissions.
+    """
+    rows = conn.execute(
+        f"""SELECT puzzle_id FROM puzzles WHERE puzzle_id LIKE ?
+            UNION ALL
+            SELECT json_extract(payload_json, '$.puzzle_id') FROM submissions
+             WHERE status='pending'
+               AND submission_type IN ('new_puzzle', 'revision')
+               AND json_extract(payload_json, '$.puzzle_id') LIKE ?""",
+        (f"{prefix}_%", f"{prefix}_%"),
+    ).fetchall()
+    max_n = 0
+    plen = len(prefix) + 1  # +1 for the underscore
+    for r in rows:
+        pid = r[0] or ""
+        suffix = pid[plen:]
+        if suffix.isdigit():
+            n = int(suffix)
+            if n > max_n:
+                max_n = n
+    return f"{prefix}_{max_n + 1:03d}"
+
+
 def get_all_puzzles(conn):
     return conn.execute(
         "SELECT * FROM puzzles ORDER BY created_at"

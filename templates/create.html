@@ -9,10 +9,18 @@
         <!-- Metadata -->
         <div class="d-flex gap-3 mb-3 align-items-end flex-wrap">
             <div>
-                <label class="form-label">Puzzle ID</label>
-                <input type="text" id="puzzle-id" class="form-control form-control-sm"
-                       value="{{ puzzle.puzzle_id if puzzle else '' }}"
-                       placeholder="narc_001" style="width: 140px;">
+                <label class="form-label">Puzzle ID
+                    <span id="id-status" class="small ms-1" style="display:none;"></span>
+                </label>
+                <div class="d-flex gap-1">
+                    <input type="text" id="puzzle-id" class="form-control form-control-sm"
+                           value="{{ puzzle.puzzle_id if puzzle else '' }}"
+                           placeholder="auto-generated" style="width: 140px;"
+                           oninput="onIdInput()">
+                    <button type="button" id="btn-regen-id"
+                            class="btn btn-sm btn-outline-secondary" title="Generate new ID"
+                            onclick="regenerateId()">&#x21bb;</button>
+                </div>
             </div>
             <div>
                 <label class="form-label">Title</label>
