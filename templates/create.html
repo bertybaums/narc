@@ -125,6 +125,39 @@
         <div id="save-status" class="alert" style="display: none;"></div>
     </div>
 </div>
+
+<!-- Submit confirmation -->
+<div class="modal fade" id="confirm-submit-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="confirm-submit-title">Submit this puzzle?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="confirm-submit-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-narc" id="confirm-submit-btn" onclick="confirmSave()">Submit</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Submission acknowledgment -->
+<div class="modal fade" id="ack-submit-modal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ack-submit-title">Submitted!</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="ack-submit-body"></div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-narc" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block scripts %}

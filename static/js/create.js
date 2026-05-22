@@ -319,7 +319,15 @@ function collectVariants() {
     return variants;
 }
 
-async function savePuzzle() {
+// Save flow: validate → confirm modal → POST → acknowledgment modal.
+// performSave does the network call; savePuzzle and confirmSave bracket it
+// with the two modals.
+let pendingSaveData = null;
+let _confirmModal = null;
+let _ackModal = null;
+let _saveBusy = false;
+
+function savePuzzle() {
     const data = collectPuzzleData();
     if (!data) {
         showStatus('Please fill in puzzle ID, title, narrative, and mask at least one grid.', 'danger');
@@ -345,6 +353,81 @@ async function savePuzzle() {
     // legitimately upsert; everything else is a new ID.
     data.is_new = !EDIT_DATA || IS_REVISION;
 
+    // Confirm before anything hits the server.
+    pendingSaveData = data;
+    openConfirmModal(data);
+}
+
+// Confirm-dialog wording. Three cases: a visitor submission, an admin
+// overwriting an existing puzzle, and a fresh admin save.
+function confirmCopy(data) {
+    const title = data.title || 'this puzzle';
+    if (!IS_ADMIN) {
+        const what = IS_REVISION ? 'revision' : 'puzzle';
+        return {
+            title: `Submit this ${what} for review?`,
+            body: `"${title}" will be sent to the review queue. A reviewer will look it `
+                + `over before it's published — you won't be able to edit it after submitting.`,
+            confirm: 'Submit',
+        };
+    }
+    if (EDIT_DATA && !IS_REVISION) {
+        return {
+            title: 'Save changes to this puzzle?',
+            body: `This overwrites the existing puzzle "${data.puzzle_id}" — the previous version is replaced.`,
+            confirm: 'Save changes',
+        };
+    }
+    return {
+        title: 'Save this puzzle?',
+        body: `"${title}" will be saved to the corpus as "${data.puzzle_id}".`,
+        confirm: 'Save',
+    };
+}
+
+function openConfirmModal(data) {
+    const copy = confirmCopy(data);
+    document.getElementById('confirm-submit-title').textContent = copy.title;
+    document.getElementById('confirm-submit-body').textContent = copy.body;
+    const btn = document.getElementById('confirm-submit-btn');
+    btn.textContent = copy.confirm;
+    btn.dataset.label = copy.confirm;
+    btn.disabled = false;
+    if (!_confirmModal) {
+        const el = document.getElementById('confirm-submit-modal');
+        _confirmModal = new bootstrap.Modal(el);
+        // Block dismissal (button, ESC, backdrop) while a save is in flight.
+        el.addEventListener('hide.bs.modal', (e) => { if (_saveBusy) e.preventDefault(); });
+    }
+    _confirmModal.show();
+}
+
+// Confirm-button handler: run the save, then hand off to the acknowledgment
+// modal once the confirm modal has fully closed (so the backdrops don't stack).
+async function confirmSave() {
+    if (!pendingSaveData) return;
+    const btn = document.getElementById('confirm-submit-btn');
+    btn.disabled = true;
+    btn.textContent = 'Working…';
+    _saveBusy = true;
+
+    const result = await performSave(pendingSaveData);
+
+    _saveBusy = false;
+    btn.textContent = btn.dataset.label || 'Submit';
+    btn.disabled = false;
+
+    if (result) {
+        const el = document.getElementById('confirm-submit-modal');
+        el.addEventListener('hidden.bs.modal', () => openAckModal(result), { once: true });
+        pendingSaveData = null;
+    }
+    _confirmModal.hide();
+}
+
+// Returns the server result object on success, or null on failure (after
+// surfacing the error inline on the page).
+async function performSave(data) {
     try {
         const resp = await fetch('/api/puzzles', {
             method: 'POST',
@@ -353,11 +436,7 @@ async function savePuzzle() {
         });
         const result = await resp.json();
         if (resp.ok) {
-            if (result.status === 'submitted') {
-                showStatus('Submitted for review! Thank you.', 'success');
-            } else {
-                showStatus('Puzzle saved: ' + data.puzzle_id, 'success');
-            }
+            return result;
         } else if (resp.status === 409 && result.code === 'duplicate_id') {
             showStatus(result.error + ' Click the regenerate button or pick another ID.', 'danger');
             setIdStatus('bad', 'taken');
@@ -367,6 +446,20 @@ async function savePuzzle() {
     } catch (e) {
         showStatus('Error: ' + e.message, 'danger');
     }
+    return null;
+}
+
+function openAckModal(result) {
+    const submitted = result.status === 'submitted';
+    document.getElementById('ack-submit-title').textContent =
+        submitted ? '✓ Submitted!' : '✓ Saved';
+    document.getElementById('ack-submit-body').textContent = submitted
+        ? 'Thanks — your puzzle is now in the review queue. A reviewer will take a look soon.'
+        : `Puzzle "${result.puzzle_id}" has been saved.`;
+    if (!_ackModal) {
+        _ackModal = new bootstrap.Modal(document.getElementById('ack-submit-modal'));
+    }
+    _ackModal.show();
 }
 
 function showStatus(msg, type) {
