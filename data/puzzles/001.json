@@ -1,0 +1,190 @@
+{
+  "puzzle_id": "001",
+  "title": "Hissing Voice",
+  "narrative": "Harry Potter and Ron were walking in the corridor, but only Harry could hear a hissing voice coming from inside the walls, saying, “Kill ...”. The two of them followed the wall, at the end of the corridor, they found the entrance and went into...",
+  "sequence": [
+    {
+      "position": 0,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 1,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          2,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 2,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          5,
+          2
+        ],
+        [
+          5,
+          5,
+          5,
+          5,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 3,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    }
+  ],
+  "masked_positions": [
+    3
+  ],
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        2,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        5,
+        0
+      ],
+      [
+        5,
+        5,
+        5,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "human",
+    "created_at": "2026-05-31"
+  }
+}

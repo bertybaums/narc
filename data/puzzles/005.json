@@ -1,0 +1,236 @@
+{
+  "puzzle_id": "005",
+  "title": "Ballerina",
+  "narrative": "A ballerina collaborated with a street dance crew for a performance. The street dance crew took the stage first, constantly changing formations and movements in sync with the music. The ballerina waited at the back of the stage for her entrance. At Grid 3, she began to join the performance. At Grid 4, she performed at the center of the stage while all the street dance crew members paused and stood at the back of the stage. At Grid 5, the ballerina fully exited, and the street dance crew finished the performance at the very front of the stage in an unchanged formation.",
+  "sequence": [
+    {
+      "position": 0,
+      "grid": [
+        [
+          8,
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          8,
+          0,
+          8,
+          0
+        ],
+        [
+          0,
+          0,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 1,
+      "grid": [
+        [
+          0,
+          0,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          8,
+          0,
+          8,
+          0
+        ],
+        [
+          8,
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 2,
+      "grid": [
+        [
+          8,
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          8,
+          0,
+          0,
+          0,
+          8
+        ],
+        [
+          0,
+          2,
+          8,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 3,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    },
+    {
+      "position": 4,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    }
+  ],
+  "masked_positions": [
+    3,
+    4
+  ],
+  "answer_grids": {
+    "3": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        8,
+        8,
+        8,
+        8,
+        8
+      ]
+    ],
+    "4": [
+      [
+        8,
+        8,
+        8,
+        8,
+        8
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "human",
+    "created_at": "2026-06-01"
+  }
+}

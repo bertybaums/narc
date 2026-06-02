@@ -1,0 +1,239 @@
+{
+  "puzzle_id": "006",
+  "title": "Skating Race",
+  "narrative": "During a live short-track speed skating race, the skater in gray started in last place. In Grid 2, the gray skater found an opportunity and accelerated around the outside to overtake the skater ahead. At that moment, the two skaters were tied. In Grid 3, the gray skater completed the pass successfully. However, in Grid 4, the gray skater suddenly lost balance and fell out of the live frame. In the end, the yellow skater remained in the same position as at the start of the race.",
+  "sequence": [
+    {
+      "position": 0,
+      "grid": [
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          5,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 1,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    },
+    {
+      "position": 2,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    },
+    {
+      "position": 3,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    },
+    {
+      "position": 4,
+      "grid": [
+        [
+          0,
+          0,
+          1,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          2,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          3,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          4,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    }
+  ],
+  "masked_positions": [
+    1,
+    2,
+    3
+  ],
+  "answer_grids": {
+    "1": [
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        5,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ],
+    "2": [
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        5,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        0,
+        0
+      ]
+    ],
+    "3": [
+      [
+        0,
+        0,
+        1,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        2,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        3,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        4,
+        0,
+        0
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "human",
+    "created_at": "2026-06-01"
+  }
+}

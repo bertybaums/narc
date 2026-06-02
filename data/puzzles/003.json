@@ -1,0 +1,236 @@
+{
+  "puzzle_id": "003",
+  "title": "Christmas",
+  "narrative": "Laura arrived in this small city at Christmas. The tree outside her apartment had lost all its leaves, but the thick snow on its branches gave it a true winter feel. The hands of the clock on the wall moved as time passed, she worked hard, and has spent a year in this beautiful city. Another Christmas arrived. This time, Laura was no longer alone but surrounded by friends. The next year, she made more friends, and her life became busier yet rewarding. Finally, she celebrated her last Christmas here.",
+  "sequence": [
+    {
+      "position": 0,
+      "grid": [
+        [
+          5,
+          5,
+          5,
+          5,
+          5
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 1,
+      "grid": [
+        [
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3
+        ],
+        [
+          0,
+          0,
+          0,
+          0,
+          3
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 2,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    },
+    {
+      "position": 3,
+      "grid": [
+        [
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0
+        ],
+        [
+          3,
+          0,
+          0,
+          0,
+          0
+        ]
+      ],
+      "rows": 5,
+      "cols": 5,
+      "label": ""
+    },
+    {
+      "position": 4,
+      "grid": null,
+      "rows": 5,
+      "cols": 5,
+      "label": "",
+      "masked": true
+    }
+  ],
+  "masked_positions": [
+    2,
+    4
+  ],
+  "answer_grids": {
+    "2": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        5,
+        5,
+        5,
+        5,
+        5
+      ]
+    ],
+    "4": [
+      [
+        5,
+        5,
+        5,
+        5,
+        5
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    ]
+  },
+  "metadata": {
+    "creator": "human",
+    "created_at": "2026-06-01"
+  }
+}
