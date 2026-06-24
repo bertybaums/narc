@@ -122,6 +122,27 @@ def normalize_puzzle_input(data):
     return None, None
 
 
+def validate_puzzle_geometry(sequence, masked_positions, answer_grids):
+    """Return an error string if masked_positions / answer_grids are inconsistent
+    with the sequence, else None. Guards against stale out-of-range masked
+    positions (e.g. from shrinking the sequence after masking a later grid),
+    which otherwise crash collect with a cryptic 'list index out of range'."""
+    if not isinstance(sequence, list) or not sequence:
+        return "Sequence must be a non-empty list of grids"
+    if not isinstance(masked_positions, list) or not masked_positions:
+        return "masked_positions must be a non-empty list"
+    n = len(sequence)
+    for p in masked_positions:
+        if not isinstance(p, int) or p < 0 or p >= n:
+            return (f"Masked position {p} out of range for {n}-grid sequence "
+                    f"(valid 0-{n - 1})")
+    if isinstance(answer_grids, dict):
+        missing = [p for p in masked_positions if str(p) not in answer_grids]
+        if missing:
+            return f"answer_grids missing entries for masked positions {missing}"
+    return None
+
+
 # --- Pages ---
 
 @app.route("/")
@@ -733,6 +754,14 @@ def _save_puzzle_from_data(conn, data):
 
     masked_positions_json, answer_grids_json = normalize_puzzle_input(data)
 
+    geom_err = validate_puzzle_geometry(
+        sequence,
+        json.loads(masked_positions_json) if masked_positions_json else None,
+        json.loads(answer_grids_json) if answer_grids_json else None,
+    )
+    if geom_err:
+        raise ValueError(geom_err)
+
     tags = data.get("metadata", {}).get("tags")
     if isinstance(tags, list):
         tags = ",".join(tags)
@@ -778,6 +807,12 @@ def api_create_puzzle():
     if not all([puzzle_id, title, narrative, sequence,
                 masked_positions_json, answer_grids_json]):
         return jsonify({"error": "Missing required fields"}), 400
+
+    geom_err = validate_puzzle_geometry(
+        sequence, json.loads(masked_positions_json), json.loads(answer_grids_json)
+    )
+    if geom_err:
+        return jsonify({"error": geom_err}), 400
 
     user = current_user()
 
@@ -1007,7 +1042,11 @@ def api_approve_submission(sid):
             detail_prefix = f"Reassigned ID {proposed_id} -> {new_id}. "
         else:
             detail_prefix = ""
-        _save_puzzle_from_data(conn, payload)
+        try:
+            _save_puzzle_from_data(conn, payload)
+        except ValueError as e:
+            conn.close()
+            return jsonify({"error": f"Cannot approve: {e}"}), 400
         detail = detail_prefix + f"Approved puzzle '{payload.get('title', payload.get('puzzle_id'))}'"
     elif sub["submission_type"] == "variant":
         pid = payload.get("puzzle_id") or sub["target_puzzle_id"]

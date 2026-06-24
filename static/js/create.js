@@ -161,6 +161,11 @@ function snapshotSlots() {
 
 function buildSlots() {
     snapshotSlots();
+    // Shrinking the sequence must drop any masked slot that no longer exists,
+    // otherwise a stale out-of-range index survives into masked_positions and
+    // references a grid that isn't in the sequence (sequence[idx] -> IndexError
+    // server-side). Deleting from a Set mid-iteration is safe.
+    maskedSlots.forEach(idx => { if (idx >= numSlots) maskedSlots.delete(idx); });
     const container = document.getElementById('grid-slots');
     container.innerHTML = '';
     const prev = slotGrids;
@@ -270,7 +275,8 @@ function collectPuzzleData() {
     }
 
     const sequence = [];
-    const maskedPositions = [...maskedSlots].sort((a, b) => a - b);
+    // Defensive: never emit a masked position outside the sequence range.
+    const maskedPositions = [...maskedSlots].filter(i => i < numSlots).sort((a, b) => a - b);
     const answerGrids = {};
 
     for (let i = 0; i < numSlots; i++) {

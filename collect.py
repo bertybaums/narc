@@ -106,6 +106,19 @@ def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
 
         for row in rows:
             puzzle_data = db.puzzle_to_json(row)
+            # Pre-flight: a masked position outside the sequence (e.g. left over
+            # from shrinking the sequence after masking a later grid) would crash
+            # prompt building with a cryptic "list index out of range". Surface a
+            # clear, actionable error instead.
+            seq = puzzle_data.get("sequence") or []
+            n = len(seq)
+            bad = [p for p in puzzle_data.get("masked_positions", [])
+                   if not isinstance(p, int) or p < 0 or p >= n]
+            if bad:
+                raise ValueError(
+                    f"Puzzle {puzzle_data['puzzle_id']}: masked position(s) {bad} "
+                    f"out of range for {n}-grid sequence (valid 0-{n - 1})"
+                )
             for cond in conditions:
                 prompt_text = json.dumps(
                     prompts.build_grids_only(puzzle_data) if cond == "grids_only"
