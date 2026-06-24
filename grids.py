@@ -192,20 +192,26 @@ def parse_response_grids(response_text: str):
 
         return None, reasoning, "No output_grids or output_grid in response JSON"
 
-    # Strategy 2: ANSWER block (single grid only)
-    grid, err = _extract_answer_block(text)
-    if grid is not None:
-        return {"_single": grid}, text, None
+    # Strategies 2-4 are heuristic text scrapers. Guard them so a malformed
+    # response can never raise and kill an entire collect/review job — any
+    # unexpected error is recorded as a parse failure instead.
+    try:
+        # Strategy 2: ANSWER block (single grid only)
+        grid, err = _extract_answer_block(text)
+        if grid is not None:
+            return {"_single": grid}, text, None
 
-    # Strategy 3: Inline numeric 2D arrays — [[0,0,1],[0,1,0]]
-    result = _extract_numeric_arrays(text)
-    if result is not None:
-        return result, text, None
+        # Strategy 3: Inline numeric 2D arrays — [[0,0,1],[0,1,0]]
+        result = _extract_numeric_arrays(text)
+        if result is not None:
+            return result, text, None
 
-    # Strategy 4: Row-by-row text grids using digit sequences ("0 0 1 0 0")
-    grid = _extract_digit_grid(text)
-    if grid is not None:
-        return {"_single": grid}, text, None
+        # Strategy 4: Row-by-row text grids using digit sequences ("0 0 1 0 0")
+        grid = _extract_digit_grid(text)
+        if grid is not None:
+            return {"_single": grid}, text, None
+    except Exception as e:
+        return None, text, f"Parse error: {e}"
 
     return None, text, "Could not parse grids from response"
 
@@ -289,25 +295,30 @@ def _extract_numeric_arrays(text):
         start = text.index(og_match.group(0))
         # Find the matching close of output_grids dict
         snippet = text[start:]
-        try_json = '{"output_grids": {' + snippet.split('{', 2)[2]
-        # Find balanced braces
-        depth = 0
-        for i, ch in enumerate(try_json):
-            if ch == '{':
-                depth += 1
-            elif ch == '}':
-                depth -= 1
-                if depth == 0:
-                    data = _try_parse_json(try_json[:i + 1])
-                    if data and isinstance(data.get("output_grids"), dict):
-                        result = {}
-                        for k, v in data["output_grids"].items():
-                            grid, err = _convert_grid(v)
-                            if grid is not None:
-                                result[str(k)] = grid
-                        if result:
-                            return result
-                    break
+        # Need a second '{' (the output_grids dict body) to rebuild the JSON.
+        # Without this guard a malformed match raises IndexError, which
+        # propagates up and fails the whole collect/review job.
+        parts = snippet.split('{', 2)
+        if len(parts) >= 3:
+            try_json = '{"output_grids": {' + parts[2]
+            # Find balanced braces
+            depth = 0
+            for i, ch in enumerate(try_json):
+                if ch == '{':
+                    depth += 1
+                elif ch == '}':
+                    depth -= 1
+                    if depth == 0:
+                        data = _try_parse_json(try_json[:i + 1])
+                        if data and isinstance(data.get("output_grids"), dict):
+                            result = {}
+                            for k, v in data["output_grids"].items():
+                                grid, err = _convert_grid(v)
+                                if grid is not None:
+                                    result[str(k)] = grid
+                            if result:
+                                return result
+                        break
 
     # Find all 2D arrays in text (last one is usually the final answer)
     array_pattern = re.compile(r'\[\s*\[[\d,\s]+\](?:\s*,\s*\[[\d,\s]+\])*\s*\]')
