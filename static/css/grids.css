@@ -69,16 +69,19 @@
    data-symbol is set on every rendered .cell by setCellColor(). The numeral
    auto-scales to any cell size via container queries (cqmin), so no JS sizing
    changes are needed at the various renderGrid/feedback call sites. */
-.cell::after {
+.cell::after,
+.symbol_preview::after {
     content: attr(data-symbol);
     display: none;
 }
 
-body.show-numerals .cell {
+body.show-numerals .cell,
+body.show-numerals .symbol_preview {
     container-type: size;
 }
 
-body.show-numerals .cell::after {
+body.show-numerals .cell::after,
+body.show-numerals .symbol_preview::after {
     display: flex;
     align-items: center;
     justify-content: center;
