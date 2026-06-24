@@ -64,3 +64,39 @@
 .selected-symbol-preview {
     border: 2px solid rgb(255, 255, 255);
 }
+
+/* Color-blind aid: numeral overlay toggled via body.show-numerals.
+   data-symbol is set on every rendered .cell by setCellColor(). The numeral
+   auto-scales to any cell size via container queries (cqmin), so no JS sizing
+   changes are needed at the various renderGrid/feedback call sites. */
+.cell::after {
+    content: attr(data-symbol);
+    display: none;
+}
+
+body.show-numerals .cell {
+    container-type: size;
+}
+
+body.show-numerals .cell::after {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    font-size: 60cqmin;
+    line-height: 1;
+    font-weight: 700;
+    font-family: -apple-system, system-ui, sans-serif;
+    color: #fff;            /* default: light numeral on dark bg (0,1,2,6,9) */
+    pointer-events: none;
+}
+
+/* dark numeral on light backgrounds: green, yellow, grey, orange, azure */
+body.show-numerals .symbol_3::after,
+body.show-numerals .symbol_4::after,
+body.show-numerals .symbol_5::after,
+body.show-numerals .symbol_7::after,
+body.show-numerals .symbol_8::after {
+    color: #000;
+}

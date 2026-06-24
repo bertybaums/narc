@@ -10,6 +10,8 @@
     {% block head %}{% endblock %}
 </head>
 <body>
+    <!-- Apply color-blind numeral preference before grids render, to avoid flash. -->
+    <script>try{if(localStorage.getItem('narc_numerals')==='1')document.body.classList.add('show-numerals');}catch(e){}</script>
     <nav class="navbar navbar-expand-lg navbar-dark mb-4">
         <div class="container">
             <a class="navbar-brand fw-bold" href="/">NARC</a>
@@ -22,7 +24,12 @@
                 <a class="nav-link" href="/admin">Admin</a>
                 {% endif %}
             </div>
-            <div class="navbar-nav">
+            <div class="navbar-nav align-items-center">
+                <button id="numeral-toggle" type="button" aria-pressed="false"
+                        class="btn btn-sm btn-outline-secondary me-3"
+                        title="Show color numbers (0-9) in each cell — aids color-blind solvers">
+                    Numbers
+                </button>
                 {% if user %}
                 <span class="nav-link text-muted">{{ user.username }} ({{ user.role }})</span>
                 <a class="nav-link" href="/logout">Logout</a>
@@ -50,6 +57,25 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/static/js/grids.js"></script>
+    <script>
+    (function () {
+        const btn = document.getElementById('numeral-toggle');
+        if (!btn) return;
+        function sync(on) {
+            document.body.classList.toggle('show-numerals', on);
+            btn.classList.toggle('active', on);
+            btn.setAttribute('aria-pressed', on ? 'true' : 'false');
+        }
+        let on = false;
+        try { on = localStorage.getItem('narc_numerals') === '1'; } catch (e) {}
+        sync(on);
+        btn.addEventListener('click', function () {
+            on = !on;
+            sync(on);
+            try { localStorage.setItem('narc_numerals', on ? '1' : '0'); } catch (e) {}
+        });
+    })();
+    </script>
     {% block scripts %}{% endblock %}
 </body>
 </html>
