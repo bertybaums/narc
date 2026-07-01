@@ -79,6 +79,134 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     return trial_id, raw1, text2, reasoning, parse_error if predicted is None else None, total_latency, predicted
 
 
+def grade_prediction(puzzle_data, predicted):
+    """Grade a predicted grids dict against a puzzle_data view's answer_grids.
+    Returns (pred_mapped, correct01, cell_accuracy). puzzle_data may be a mask
+    variant view (its answer_grids/masked_positions define what is graded)."""
+    expected = puzzle_data["answer_grids"]
+    masked_positions = puzzle_data["masked_positions"]
+    pred_mapped = predicted
+    if "_single" in predicted and len(masked_positions) == 1:
+        pred_mapped = {str(masked_positions[0]): predicted["_single"]}
+    all_correct = True
+    total_cells = 0
+    matching_cells = 0
+    for pos_str, exp_grid in expected.items():
+        pred_grid = pred_mapped.get(pos_str, [])
+        c, acc = grids.compare_grids(pred_grid, exp_grid)
+        if not c:
+            all_correct = False
+        r = len(exp_grid)
+        cols = len(exp_grid[0]) if r > 0 else 0
+        n = r * cols
+        total_cells += n
+        matching_cells += int(acc * n)
+    cell_accuracy = matching_cells / total_cells if total_cells else 0
+    return pred_mapped, (1 if all_correct else 0), cell_accuracy
+
+
+def run_matrix_job(model, puzzle=None, concurrency=8, dry_run=False, log_fn=print):
+    """Run the test matrix: every enabled (narrative variant x mask variant) pair.
+
+    Each pair uses the mask variant's positions (via grids.remask, which hides
+    the chosen grids and derives their answers) and the narrative variant's clue.
+    Trials are tagged with both variant_id and mask_variant_id. Returns dict with
+    keys: pending, completed, errors.
+    """
+    config = load_config()
+    model_config = get_model_config(config, model)
+    extraction_config = get_model_config(config, "gpt-oss-120b-extract")
+    conditions = config["experiment"]["conditions"]
+
+    conn = db.init_db()
+    try:
+        if puzzle:
+            pids = [puzzle]
+        else:
+            pids = [r["puzzle_id"] for r in conn.execute(
+                "SELECT DISTINCT puzzle_id FROM variant_pairs WHERE enabled=1"
+            ).fetchall()]
+
+        # Enumerate planned trials first (no DB writes) so --dry-run is read-only.
+        planned = []  # (pid, variant_id, mask_variant_id, cond, prompt_text, view, narrative)
+        for pid in pids:
+            base_row = db.get_puzzle(conn, pid)
+            if not base_row:
+                log_fn(f"  skip {pid}: not found")
+                continue
+            base = db.puzzle_to_json(base_row)
+            view_cache = {}  # mask_variant_id -> remasked view
+            for pr in db.get_enabled_pairs(conn, pid):
+                mvid = pr["mask_variant_id"]
+                if mvid not in view_cache:
+                    view_cache[mvid] = grids.remask(base, json.loads(pr["masked_positions"]))
+                view = view_cache[mvid]
+                narrative = pr["narrative"]
+                for cond in conditions:
+                    if cond == "grids_only":
+                        msgs = prompts.build_grids_only(view)
+                    elif cond == "narrative_only":
+                        msgs = prompts.build_narrative_only(view, narrative=narrative)
+                    else:
+                        msgs = prompts.build_both(view, narrative=narrative)
+                    planned.append((pid, pr["variant_id"], mvid, cond,
+                                    json.dumps(msgs), view, narrative))
+
+        if dry_run:
+            for pid, vid, mvid, cond, _pt, _v, _n in planned:
+                log_fn(f"  would run {pid} v={vid} m={mvid} {cond}")
+            log_fn(f"Matrix planned trials: {len(planned)} across {len(pids)} puzzle(s)")
+            return {"pending": len(planned), "completed": 0, "errors": 0}
+
+        pending = []
+        for pid, vid, mvid, cond, prompt_text, view, narrative in planned:
+            tid = db.insert_trial(conn, pid, model, cond, prompt_text,
+                                  variant_id=vid, mask_variant_id=mvid)
+            row = conn.execute("SELECT * FROM trials WHERE trial_id=?", (tid,)).fetchone()
+            if row and row["response_text"] is None and row["error"] is None:
+                pending.append((row, view, narrative))
+
+        log_fn(f"Matrix pending trials: {len(pending)} across {len(pids)} puzzle(s)")
+
+        completed = 0
+        errors = 0
+
+        def process(item):
+            row, view, narrative = item
+            return run_trial(model_config, extraction_config, row, view,
+                             variant_narrative=narrative), view
+
+        with ThreadPoolExecutor(max_workers=concurrency) as executor:
+            futures = {executor.submit(process, it): it for it in pending}
+            for future in as_completed(futures):
+                row, view, narrative = futures[future]
+                try:
+                    result, view = future.result()
+                    trial_id = result[0]
+                    db.update_trial_response(conn, trial_id, result[1], result[2],
+                                             result[5], error=result[4])
+                    predicted = result[6] if len(result) > 6 else None
+                    if predicted is not None:
+                        pred_mapped, correct, acc = grade_prediction(view, predicted)
+                        db.update_trial_evaluation(conn, trial_id, json.dumps(pred_mapped),
+                                                   result[3], correct, acc)
+                        status = "correct" if correct else f"wrong ({acc:.1%})"
+                    else:
+                        status = f"parse_error: {result[4]}"
+                        errors += 1
+                    completed += 1
+                    log_fn(f"  [{completed}/{len(pending)}] {row['puzzle_id']}/"
+                           f"m{row['mask_variant_id']}/{row['condition']}: {status}")
+                except Exception as e:
+                    log_fn(f"  ERROR {row['puzzle_id']}/{row['condition']}: {e}")
+                    errors += 1
+
+        log_fn(f"\nDone: {completed} completed, {errors} errors")
+        return {"pending": len(pending), "completed": completed, "errors": errors}
+    finally:
+        conn.close()
+
+
 def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
                     dry_run=False, log_fn=print):
     """Collect responses for one model across one or all puzzles.
@@ -119,13 +247,15 @@ def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
                     f"Puzzle {puzzle_data['puzzle_id']}: masked position(s) {bad} "
                     f"out of range for {n}-grid sequence (valid 0-{n - 1})"
                 )
+            orig_mask_id = db.get_original_mask_variant_id(conn, puzzle_data["puzzle_id"])
             for cond in conditions:
                 prompt_text = json.dumps(
                     prompts.build_grids_only(puzzle_data) if cond == "grids_only"
                     else prompts.build_narrative_only(puzzle_data) if cond == "narrative_only"
                     else prompts.build_both(puzzle_data)
                 )
-                db.insert_trial(conn, puzzle_data["puzzle_id"], model, cond, prompt_text)
+                db.insert_trial(conn, puzzle_data["puzzle_id"], model, cond, prompt_text,
+                                mask_variant_id=orig_mask_id)
 
         pending = db.get_pending_trials(conn, model_name=model)
         if puzzle:

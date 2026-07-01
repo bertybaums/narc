@@ -53,6 +53,15 @@ def import_puzzles(main, source, creator="colab", stance_group_map=None):
     return imported, skipped
 
 
+def _orig_mask(main, puzzle_id):
+    """The main DB's 'original' mask_variant_id for a puzzle (None if unseeded)."""
+    r = main.execute(
+        "SELECT mask_variant_id FROM mask_variants WHERE puzzle_id=? AND label='original'",
+        (puzzle_id,),
+    ).fetchone()
+    return r["mask_variant_id"] if r else None
+
+
 def import_trials(main, source):
     """Import trials from source DB, skipping duplicates."""
     source.row_factory = sqlite3.Row
@@ -70,11 +79,12 @@ def import_trials(main, source):
         try:
             main.execute(
                 """INSERT OR IGNORE INTO trials
-                   (puzzle_id, variant_id, model_name, condition, repeat_num,
+                   (puzzle_id, variant_id, mask_variant_id, model_name, condition, repeat_num,
                     prompt_text, raw_response, response_text, response_at,
                     latency_ms, error, predicted_grids, reasoning, correct, cell_accuracy)
-                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
-                (t["puzzle_id"], None, t["model_name"], t["condition"],
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+                (t["puzzle_id"], None, _orig_mask(main, t["puzzle_id"]),
+                 t["model_name"], t["condition"],
                  t["repeat_num"], t["prompt_text"], t["raw_response"],
                  t["response_text"], t["response_at"], t["latency_ms"],
                  t["error"], t["predicted_grids"], t["reasoning"],
@@ -103,10 +113,10 @@ def import_classifications(main, source):
         try:
             main.execute(
                 """INSERT OR IGNORE INTO classifications
-                   (puzzle_id, variant_id, model_name, grids_only,
+                   (puzzle_id, variant_id, mask_variant_id, model_name, grids_only,
                     narrative_only, both, has_narc)
-                   VALUES (?, ?, ?, ?, ?, ?, ?)""",
-                (c["puzzle_id"], None, c["model_name"],
+                   VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+                (c["puzzle_id"], None, _orig_mask(main, c["puzzle_id"]), c["model_name"],
                  c["grids_only"], c["narrative_only"], c["both"], c["has_narc"]),
             )
             imported += 1

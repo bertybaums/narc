@@ -115,7 +115,10 @@ def apply_schema_changes(conn):
     # 3. Recreate classifications with updated PK
     # Check if we need to do this (if variant_id is already in PK, skip)
     row = conn.execute("SELECT sql FROM sqlite_master WHERE type='table' AND name='classifications'").fetchone()
-    if row and "PRIMARY KEY (puzzle_id, variant_id, model_name)" in row[0]:
+    if row and ("mask_variant_id" in row[0]
+                or "PRIMARY KEY (puzzle_id, variant_id, model_name)" in row[0]):
+        # Skip if the PK already includes variant_id — either the stance-era PK or
+        # the newer mask-variant PK. Rebuilding here would drop mask_variant_id.
         print("Classifications PK already updated")
     else:
         print("Recreating classifications table with updated PK...")

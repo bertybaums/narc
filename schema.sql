@@ -30,10 +30,38 @@ CREATE TABLE IF NOT EXISTS narrative_variants (
     UNIQUE(puzzle_id, variant)
 );
 
+-- Mask variants: same grids, a different choice of masked position(s). The true
+-- grid lives at every position of the puzzle's (complete) sequence, so a mask
+-- variant stores only which positions to hide; answer grids are derived.
+CREATE TABLE IF NOT EXISTS mask_variants (
+    mask_variant_id  INTEGER PRIMARY KEY AUTOINCREMENT,
+    puzzle_id        TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    label            TEXT NOT NULL DEFAULT 'original',  -- 'mask-2', 'mask-4', 'mask-2+3'
+    masked_positions TEXT NOT NULL,                     -- JSON array of ints, e.g. [3]
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(puzzle_id, label)
+);
+
+-- Test matrix: which (narrative variant x mask variant) cells the creator wants
+-- run. A row (enabled=1) means "test this narrative against this mask".
+CREATE TABLE IF NOT EXISTS variant_pairs (
+    pair_id          INTEGER PRIMARY KEY AUTOINCREMENT,
+    puzzle_id        TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+    variant_id       INTEGER NOT NULL REFERENCES narrative_variants(variant_id),
+    mask_variant_id  INTEGER NOT NULL REFERENCES mask_variants(mask_variant_id),
+    enabled          INTEGER NOT NULL DEFAULT 1,
+    created_at       TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE(variant_id, mask_variant_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_mask_variants_puzzle ON mask_variants(puzzle_id);
+CREATE INDEX IF NOT EXISTS idx_variant_pairs_puzzle ON variant_pairs(puzzle_id);
+
 CREATE TABLE IF NOT EXISTS trials (
     trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
     puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
     variant_id     INTEGER REFERENCES narrative_variants(variant_id),
+    mask_variant_id INTEGER REFERENCES mask_variants(mask_variant_id),
     model_name     TEXT NOT NULL,
     condition      TEXT NOT NULL,
     repeat_num     INTEGER DEFAULT 1,
@@ -47,18 +75,19 @@ CREATE TABLE IF NOT EXISTS trials (
     reasoning      TEXT,
     correct        INTEGER,
     cell_accuracy  REAL,
-    UNIQUE(puzzle_id, variant_id, model_name, condition, repeat_num)
+    UNIQUE(puzzle_id, variant_id, mask_variant_id, model_name, condition, repeat_num)
 );
 
 CREATE TABLE IF NOT EXISTS classifications (
     puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
     variant_id     INTEGER REFERENCES narrative_variants(variant_id),
+    mask_variant_id INTEGER REFERENCES mask_variants(mask_variant_id),
     model_name     TEXT NOT NULL,
     grids_only     INTEGER,
     narrative_only INTEGER,
     both           INTEGER,
     has_narc       INTEGER,
-    PRIMARY KEY (puzzle_id, variant_id, model_name)
+    PRIMARY KEY (puzzle_id, variant_id, mask_variant_id, model_name)
 );
 
 CREATE TABLE IF NOT EXISTS solve_attempts (

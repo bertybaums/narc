@@ -133,6 +133,82 @@ def sequence_to_text(sequence: list, masked_positions) -> str:
     return "\n\n".join(parts)
 
 
+# --- complete sequences & mask derivation ---
+#
+# A "complete" sequence carries the true grid at *every* position (no holes).
+# Once a sequence is complete, any mask is just a choice of positions: the grids
+# to hide, and the answer grids, are both derived — no per-mask answer storage.
+
+def complete_sequence(sequence, answer_grids=None):
+    """Return a copy of `sequence` with the true grid present at every position.
+
+    Stored sequences historically leave a hole (or a zero placeholder) at masked
+    positions; the authoritative masked grid lives in `answer_grids`. When
+    `answer_grids` is supplied, masked positions are filled from it and rows/cols
+    reconciled. If the sequence is already complete, pass `answer_grids=None` for
+    a plain copy. The input is never mutated.
+    """
+    ag = answer_grids or {}
+    out = []
+    for item in sequence:
+        it = dict(item)
+        key = str(it["position"])
+        if key in ag and ag[key]:
+            grid = ag[key]
+            it["grid"] = grid
+            it["rows"] = len(grid)
+            it["cols"] = len(grid[0]) if grid else it.get("cols", 0)
+        out.append(it)
+    return out
+
+
+def apply_mask(sequence, masked_positions):
+    """Derive a display sequence and answer grids for masking `masked_positions`.
+
+    `sequence` must be complete (every position has its true grid — run it
+    through `complete_sequence` first if unsure). Returns
+    ``(display_sequence, answer_grids)`` where display_sequence is a copy with
+    each item's ``masked`` flag recomputed, and answer_grids maps each masked
+    position (as a string key) to its true grid. The input is never mutated.
+    """
+    mset = set(masked_positions)
+    display = []
+    answers = {}
+    for item in sequence:
+        it = dict(item)
+        pos = it["position"]
+        it["masked"] = pos in mset
+        display.append(it)
+        if pos in mset:
+            answers[str(pos)] = it.get("grid")
+    return display, answers
+
+
+def answer_grids_for(sequence, masked_positions):
+    """Answer grids for masking `masked_positions` over a complete `sequence`."""
+    _, answers = apply_mask(sequence, masked_positions)
+    return answers
+
+
+def remask(puzzle_json, masked_positions):
+    """Return a copy of a puzzle dict re-masked at `masked_positions`.
+
+    Rebuilds a complete sequence (filling any holes from the puzzle's stored
+    answer_grids), then recomputes each item's ``masked`` flag and the derived
+    ``answer_grids`` for the requested mask. Every downstream consumer
+    (prompt builders, grading, rendering) reads ``masked_positions`` /
+    ``answer_grids`` / per-item ``masked``, so feeding them this view is all it
+    takes to evaluate a different mask. The input is not mutated.
+    """
+    seq = complete_sequence(puzzle_json["sequence"], puzzle_json.get("answer_grids"))
+    display, answers = apply_mask(seq, sorted(masked_positions))
+    out = dict(puzzle_json)
+    out["sequence"] = display
+    out["masked_positions"] = sorted(masked_positions)
+    out["answer_grids"] = answers
+    return out
+
+
 def parse_response_grids(response_text: str):
     """Parse model response to extract predicted grids and reasoning.
 

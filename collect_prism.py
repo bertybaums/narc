@@ -83,7 +83,8 @@ def main(model, concurrency, dry_run, tier):
             prompt_text = json.dumps(prompt_msgs)
             tid = db.insert_trial(
                 conn, v["puzzle_id"], model, cond, prompt_text,
-                variant_id=v["variant_id"]
+                variant_id=v["variant_id"],
+                mask_variant_id=db.get_original_mask_variant_id(conn, v["puzzle_id"])
             )
             if tid:
                 trial_map[tid] = (v, puzzle_data)

@@ -16,6 +16,7 @@ from flask import (Flask, abort, flash, g, jsonify, redirect, render_template,
 from werkzeug.security import check_password_hash, generate_password_hash
 
 import db
+import grids
 from db import get_variants, get_trials
 from collect import run_collect_job
 from classify import run_classify_job
@@ -698,6 +699,21 @@ def solve(puzzle_id):
         conn.close()
         return "Puzzle not found", 404
     puzzle = enrich_puzzle(conn, db.puzzle_to_json(row))
+
+    # Optional ?mask=<mask_variant_id>: solve a different mask over the same grids.
+    mask_variants = db.get_mask_variants(conn, puzzle_id)
+    puzzle["mask_variants"] = [
+        {"mask_variant_id": m["mask_variant_id"], "label": m["label"],
+         "masked_positions": json.loads(m["masked_positions"])}
+        for m in mask_variants
+    ]
+    active_mask_id = request.args.get("mask", type=int)
+    puzzle["active_mask_id"] = None
+    for m in mask_variants:
+        if m["mask_variant_id"] == active_mask_id and m["label"] != "original":
+            puzzle = grids.remask(puzzle, json.loads(m["masked_positions"]))
+            puzzle["active_mask_id"] = active_mask_id
+            break
     conn.close()
     return render_template("solve.html", puzzle=puzzle,
                            puzzle_json=json.dumps(puzzle))
@@ -784,6 +800,13 @@ def _save_puzzle_from_data(conn, data):
             db.upsert_variant(conn, puzzle_id, v["variant"], v["narrative"],
                               source_domain=v.get("source_domain") or v.get("variant"))
 
+    # Seed the 'original' mask variant and enable each narrative variant against
+    # it, so the test matrix is populated for new/edited puzzles (idempotent).
+    orig_mask_id = db.upsert_mask_variant(
+        conn, puzzle_id, "original", json.loads(masked_positions_json))
+    for v in db.get_variants(conn, puzzle_id):
+        db.set_variant_pair(conn, puzzle_id, v["variant_id"], orig_mask_id, enabled=1)
+
     # Export JSON
     export_path = DATA_DIR / f"{puzzle_id}.json"
     export_path.write_text(json.dumps(data, indent=2))
@@ -861,8 +884,12 @@ def api_add_variant(puzzle_id):
 
     if user and user["role"] in ("owner", "reviewer"):
         conn = get_conn()
-        db.upsert_variant(conn, puzzle_id, data["variant"], data["narrative"],
-                          source_domain=data.get("source_domain") or data.get("variant"))
+        vid = db.upsert_variant(conn, puzzle_id, data["variant"], data["narrative"],
+                                source_domain=data.get("source_domain") or data.get("variant"))
+        # Enable the new narrative variant against the original mask by default.
+        orig_mask_id = db.get_original_mask_variant_id(conn, puzzle_id)
+        if vid and orig_mask_id:
+            db.set_variant_pair(conn, puzzle_id, vid, orig_mask_id, enabled=1)
         db.log_activity(conn, user["user_id"], "add_variant", "variant",
                         puzzle_id, f"Added variant '{data['variant']}' to {puzzle_id}")
         conn.close()
@@ -880,6 +907,103 @@ def api_add_variant(puzzle_id):
                         str(sid), f"Visitor submitted variant for {puzzle_id}")
         conn.close()
         return jsonify({"status": "submitted", "submission_id": sid})
+
+
+# --- mask variants & test matrix ---
+
+@app.route("/api/puzzles/<puzzle_id>/masks", methods=["GET"])
+def api_list_masks(puzzle_id):
+    conn = get_conn()
+    masks = [
+        {"mask_variant_id": m["mask_variant_id"], "label": m["label"],
+         "masked_positions": json.loads(m["masked_positions"])}
+        for m in db.get_mask_variants(conn, puzzle_id)
+    ]
+    conn.close()
+    return jsonify({"masks": masks})
+
+
+@app.route("/api/puzzles/<puzzle_id>/masks", methods=["POST"])
+@require_role("owner", "reviewer")
+def api_add_mask(puzzle_id):
+    data = request.get_json() or {}
+    label = (data.get("label") or "").strip()
+    positions = data.get("masked_positions")
+    if not label:
+        return jsonify({"error": "Missing mask label"}), 400
+    if not isinstance(positions, list) or not positions:
+        return jsonify({"error": "masked_positions must be a non-empty list"}), 400
+
+    conn = get_conn()
+    row = db.get_puzzle(conn, puzzle_id)
+    if not row:
+        conn.close()
+        return jsonify({"error": "Puzzle not found"}), 404
+    n = len(json.loads(row["sequence_json"]))
+    if any(not isinstance(p, int) or p < 0 or p >= n for p in positions):
+        conn.close()
+        return jsonify({"error": f"masked_positions out of range for {n}-grid sequence"}), 400
+
+    mask_variant_id = db.upsert_mask_variant(conn, puzzle_id, label, sorted(set(positions)))
+    user = current_user()
+    db.log_activity(conn, user["user_id"], "add_mask_variant", "puzzle", puzzle_id,
+                    f"Added mask variant '{label}' ({sorted(set(positions))}) to {puzzle_id}")
+    conn.close()
+    return jsonify({"status": "ok", "mask_variant_id": mask_variant_id})
+
+
+@app.route("/api/puzzles/<puzzle_id>/masks/<int:mask_variant_id>", methods=["DELETE"])
+@require_role("owner", "reviewer")
+def api_delete_mask(puzzle_id, mask_variant_id):
+    conn = get_conn()
+    m = db.get_mask_variant(conn, mask_variant_id)
+    if not m or m["puzzle_id"] != puzzle_id:
+        conn.close()
+        return jsonify({"error": "Mask variant not found"}), 404
+    if m["label"] == "original":
+        conn.close()
+        return jsonify({"error": "Cannot delete the original mask variant"}), 400
+    db.delete_mask_variant(conn, mask_variant_id)
+    user = current_user()
+    db.log_activity(conn, user["user_id"], "delete_mask_variant", "puzzle", puzzle_id,
+                    f"Deleted mask variant '{m['label']}' from {puzzle_id}")
+    conn.close()
+    return jsonify({"status": "ok"})
+
+
+@app.route("/api/puzzles/<puzzle_id>/matrix", methods=["GET"])
+def api_get_matrix(puzzle_id):
+    """Narrative variants x mask variants, plus which cells are enabled."""
+    conn = get_conn()
+    narratives = [
+        {"variant_id": v["variant_id"], "variant": v["variant"],
+         "source_domain": v["source_domain"]}
+        for v in db.get_variants(conn, puzzle_id)
+    ]
+    masks = [
+        {"mask_variant_id": m["mask_variant_id"], "label": m["label"],
+         "masked_positions": json.loads(m["masked_positions"])}
+        for m in db.get_mask_variants(conn, puzzle_id)
+    ]
+    enabled = {f"{p['variant_id']}:{p['mask_variant_id']}": bool(p["enabled"])
+               for p in db.get_variant_pairs(conn, puzzle_id)}
+    conn.close()
+    return jsonify({"narratives": narratives, "masks": masks, "enabled": enabled})
+
+
+@app.route("/api/puzzles/<puzzle_id>/matrix", methods=["POST"])
+@require_role("owner", "reviewer")
+def api_toggle_matrix(puzzle_id):
+    data = request.get_json() or {}
+    variant_id = data.get("variant_id")
+    mask_variant_id = data.get("mask_variant_id")
+    enabled = 1 if data.get("enabled") else 0
+    if variant_id is None or mask_variant_id is None:
+        return jsonify({"error": "variant_id and mask_variant_id required"}), 400
+    conn = get_conn()
+    db.set_variant_pair(conn, puzzle_id, variant_id, mask_variant_id, enabled)
+    conn.close()
+    return jsonify({"status": "ok"})
 
 
 @app.route("/api/puzzles/<puzzle_id>/creator", methods=["PUT"])

@@ -41,6 +41,78 @@ def _apply_migrations(conn):
             COMMIT;
         """)
 
+    _migrate_mask_variant_id(conn)
+
+
+def _has_column(conn, table, column):
+    cols = conn.execute(f"PRAGMA table_info({table})").fetchall()
+    return any(c["name"] == column for c in cols)
+
+
+def _migrate_mask_variant_id(conn):
+    """Add mask_variant_id to trials and classifications and fold it into their
+    UNIQUE / PRIMARY KEY. SQLite can't ALTER a UNIQUE/PK, so rebuild each table.
+    Guarded by column presence — runs once, then no-ops. New rows get NULL until
+    migrate_mask_variants.py backfills them to each puzzle's 'original' mask."""
+    if not _has_column(conn, "trials", "mask_variant_id"):
+        conn.executescript("""
+            BEGIN;
+            CREATE TABLE trials_new (
+                trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+                puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+                variant_id     INTEGER REFERENCES narrative_variants(variant_id),
+                mask_variant_id INTEGER REFERENCES mask_variants(mask_variant_id),
+                model_name     TEXT NOT NULL,
+                condition      TEXT NOT NULL,
+                repeat_num     INTEGER DEFAULT 1,
+                prompt_text    TEXT NOT NULL,
+                raw_response   TEXT,
+                response_text  TEXT,
+                response_at    TEXT,
+                latency_ms     INTEGER,
+                error          TEXT,
+                predicted_grids TEXT,
+                reasoning      TEXT,
+                correct        INTEGER,
+                cell_accuracy  REAL,
+                UNIQUE(puzzle_id, variant_id, mask_variant_id, model_name, condition, repeat_num)
+            );
+            INSERT INTO trials_new
+                (trial_id, puzzle_id, variant_id, model_name, condition, repeat_num,
+                 prompt_text, raw_response, response_text, response_at, latency_ms,
+                 error, predicted_grids, reasoning, correct, cell_accuracy)
+                SELECT trial_id, puzzle_id, variant_id, model_name, condition, repeat_num,
+                       prompt_text, raw_response, response_text, response_at, latency_ms,
+                       error, predicted_grids, reasoning, correct, cell_accuracy
+                FROM trials;
+            DROP TABLE trials;
+            ALTER TABLE trials_new RENAME TO trials;
+            COMMIT;
+        """)
+
+    if not _has_column(conn, "classifications", "mask_variant_id"):
+        conn.executescript("""
+            BEGIN;
+            CREATE TABLE classifications_new (
+                puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+                variant_id     INTEGER REFERENCES narrative_variants(variant_id),
+                mask_variant_id INTEGER REFERENCES mask_variants(mask_variant_id),
+                model_name     TEXT NOT NULL,
+                grids_only     INTEGER,
+                narrative_only INTEGER,
+                both           INTEGER,
+                has_narc       INTEGER,
+                PRIMARY KEY (puzzle_id, variant_id, mask_variant_id, model_name)
+            );
+            INSERT INTO classifications_new
+                (puzzle_id, variant_id, model_name, grids_only, narrative_only, both, has_narc)
+                SELECT puzzle_id, variant_id, model_name, grids_only, narrative_only, both, has_narc
+                FROM classifications;
+            DROP TABLE classifications;
+            ALTER TABLE classifications_new RENAME TO classifications;
+            COMMIT;
+        """)
+
 
 # --- puzzles ---
 
@@ -193,31 +265,118 @@ def get_variants(conn, puzzle_id):
     ).fetchall()
 
 
+# --- mask variants ---
+
+def upsert_mask_variant(conn, puzzle_id, label, masked_positions):
+    """masked_positions: list of ints (stored as JSON). Returns mask_variant_id."""
+    if not isinstance(masked_positions, str):
+        masked_positions = json.dumps(masked_positions)
+    conn.execute(
+        """INSERT INTO mask_variants (puzzle_id, label, masked_positions)
+           VALUES (?, ?, ?)
+           ON CONFLICT(puzzle_id, label)
+           DO UPDATE SET masked_positions=excluded.masked_positions""",
+        (puzzle_id, label, masked_positions),
+    )
+    conn.commit()
+    row = conn.execute(
+        "SELECT mask_variant_id FROM mask_variants WHERE puzzle_id=? AND label=?",
+        (puzzle_id, label),
+    ).fetchone()
+    return row["mask_variant_id"] if row else None
+
+
+def get_mask_variants(conn, puzzle_id):
+    return conn.execute(
+        """SELECT * FROM mask_variants WHERE puzzle_id=?
+           ORDER BY CASE WHEN label='original' THEN 0 ELSE 1 END, mask_variant_id""",
+        (puzzle_id,),
+    ).fetchall()
+
+
+def get_mask_variant(conn, mask_variant_id):
+    return conn.execute(
+        "SELECT * FROM mask_variants WHERE mask_variant_id=?", (mask_variant_id,)
+    ).fetchone()
+
+
+def get_original_mask_variant_id(conn, puzzle_id):
+    row = conn.execute(
+        "SELECT mask_variant_id FROM mask_variants WHERE puzzle_id=? AND label='original'",
+        (puzzle_id,),
+    ).fetchone()
+    return row["mask_variant_id"] if row else None
+
+
+def delete_mask_variant(conn, mask_variant_id):
+    """Delete a mask variant and any test-matrix pairs referencing it."""
+    conn.execute("DELETE FROM variant_pairs WHERE mask_variant_id=?", (mask_variant_id,))
+    conn.execute("DELETE FROM mask_variants WHERE mask_variant_id=?", (mask_variant_id,))
+    conn.commit()
+
+
+# --- variant pairs (test matrix) ---
+
+def set_variant_pair(conn, puzzle_id, variant_id, mask_variant_id, enabled=1):
+    conn.execute(
+        """INSERT INTO variant_pairs (puzzle_id, variant_id, mask_variant_id, enabled)
+           VALUES (?, ?, ?, ?)
+           ON CONFLICT(variant_id, mask_variant_id)
+           DO UPDATE SET enabled=excluded.enabled""",
+        (puzzle_id, variant_id, mask_variant_id, 1 if enabled else 0),
+    )
+    conn.commit()
+
+
+def get_variant_pairs(conn, puzzle_id):
+    return conn.execute(
+        "SELECT * FROM variant_pairs WHERE puzzle_id=?", (puzzle_id,)
+    ).fetchall()
+
+
+def get_enabled_pairs(conn, puzzle_id):
+    """Enabled (narrative variant x mask variant) cells joined with their labels
+    and payloads. Used by collect to decide what to run."""
+    return conn.execute(
+        """SELECT vp.pair_id, vp.variant_id, vp.mask_variant_id,
+                  nv.variant AS narrative_label, nv.narrative,
+                  mv.label AS mask_label, mv.masked_positions
+           FROM variant_pairs vp
+           JOIN narrative_variants nv ON nv.variant_id = vp.variant_id
+           JOIN mask_variants mv ON mv.mask_variant_id = vp.mask_variant_id
+           WHERE vp.puzzle_id=? AND vp.enabled=1
+           ORDER BY vp.mask_variant_id, vp.variant_id""",
+        (puzzle_id,),
+    ).fetchall()
+
+
 # --- trials ---
 
 def insert_trial(conn, puzzle_id, model_name, condition, prompt_text,
-                 variant_id=None, repeat_num=1):
+                 variant_id=None, repeat_num=1, mask_variant_id=None):
     conn.execute(
         """INSERT OR IGNORE INTO trials
-           (puzzle_id, variant_id, model_name, condition, repeat_num, prompt_text)
-           VALUES (?, ?, ?, ?, ?, ?)""",
-        (puzzle_id, variant_id, model_name, condition, repeat_num, prompt_text),
+           (puzzle_id, variant_id, mask_variant_id, model_name, condition,
+            repeat_num, prompt_text)
+           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (puzzle_id, variant_id, mask_variant_id, model_name, condition,
+         repeat_num, prompt_text),
     )
     conn.commit()
-    if variant_id is not None:
-        row = conn.execute(
-            """SELECT trial_id FROM trials
-               WHERE puzzle_id=? AND variant_id=?
-                     AND model_name=? AND condition=? AND repeat_num=?""",
-            (puzzle_id, variant_id, model_name, condition, repeat_num),
-        ).fetchone()
+    # NULL-safe lookup: variant_id and mask_variant_id may each be NULL.
+    conds = ["puzzle_id=?", "model_name=?", "condition=?", "repeat_num=?"]
+    params = [puzzle_id, model_name, condition, repeat_num]
+    if variant_id is None:
+        conds.append("variant_id IS NULL")
     else:
-        row = conn.execute(
-            """SELECT trial_id FROM trials
-               WHERE puzzle_id=? AND variant_id IS NULL
-                     AND model_name=? AND condition=? AND repeat_num=?""",
-            (puzzle_id, model_name, condition, repeat_num),
-        ).fetchone()
+        conds.append("variant_id=?"); params.append(variant_id)
+    if mask_variant_id is None:
+        conds.append("mask_variant_id IS NULL")
+    else:
+        conds.append("mask_variant_id=?"); params.append(mask_variant_id)
+    row = conn.execute(
+        "SELECT trial_id FROM trials WHERE " + " AND ".join(conds), tuple(params)
+    ).fetchone()
     return row["trial_id"]
 
 
@@ -271,26 +430,30 @@ def get_trials(conn, puzzle_id, model_name=None, variant_id=None):
 # --- classifications ---
 
 def upsert_classification(conn, puzzle_id, model_name, grids_only,
-                          narrative_only, both, has_narc, variant_id=None):
-    # SQLite treats NULL variant_id values as distinct in UNIQUE constraints,
-    # so INSERT OR REPLACE doesn't dedupe. Delete first to guarantee uniqueness.
+                          narrative_only, both, has_narc, variant_id=None,
+                          mask_variant_id=None):
+    # SQLite treats NULL key values as distinct in UNIQUE/PK constraints, so
+    # INSERT OR REPLACE doesn't dedupe. Delete first to guarantee uniqueness.
+    conds = ["puzzle_id=?", "model_name=?"]
+    params = [puzzle_id, model_name]
     if variant_id is None:
-        conn.execute(
-            """DELETE FROM classifications
-               WHERE puzzle_id=? AND model_name=? AND variant_id IS NULL""",
-            (puzzle_id, model_name),
-        )
+        conds.append("variant_id IS NULL")
     else:
-        conn.execute(
-            """DELETE FROM classifications
-               WHERE puzzle_id=? AND model_name=? AND variant_id=?""",
-            (puzzle_id, model_name, variant_id),
-        )
+        conds.append("variant_id=?"); params.append(variant_id)
+    if mask_variant_id is None:
+        conds.append("mask_variant_id IS NULL")
+    else:
+        conds.append("mask_variant_id=?"); params.append(mask_variant_id)
+    conn.execute(
+        "DELETE FROM classifications WHERE " + " AND ".join(conds), tuple(params)
+    )
     conn.execute(
         """INSERT INTO classifications
-           (puzzle_id, variant_id, model_name, grids_only, narrative_only, both, has_narc)
-           VALUES (?, ?, ?, ?, ?, ?, ?)""",
-        (puzzle_id, variant_id, model_name, grids_only, narrative_only, both, has_narc),
+           (puzzle_id, variant_id, mask_variant_id, model_name,
+            grids_only, narrative_only, both, has_narc)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+        (puzzle_id, variant_id, mask_variant_id, model_name,
+         grids_only, narrative_only, both, has_narc),
     )
     conn.commit()
 

@@ -38,36 +38,55 @@ def run_classify_job(model, puzzle=None, log_fn=print):
             if not trials:
                 continue
 
-            total += 1
-            results = {}
+            # grids_only is narrative-independent — it varies only with the mask,
+            # and is stored under variant_id NULL. Narrative conditions vary with
+            # both the narrative variant and the mask. To classify a (variant,
+            # mask) cell we pair that cell's narrative results with its mask's
+            # grids_only result.
+            grids_by_mask = {}                 # mask_variant_id -> correct
+            narrative_by_cell = {}             # (variant_id, mask_variant_id) -> {cond: correct}
             for t in trials:
-                if t["correct"] is not None:
-                    results[t["condition"]] = t["correct"]
+                if t["correct"] is None:
+                    continue
+                mvid = t["mask_variant_id"]
+                if t["condition"] == "grids_only":
+                    grids_by_mask[mvid] = t["correct"]
+                else:
+                    cell = (t["variant_id"], mvid)
+                    narrative_by_cell.setdefault(cell, {})[t["condition"]] = t["correct"]
 
-            grids_only = results.get("grids_only", 0)
-            narrative_only = results.get("narrative_only", 0)
-            both = results.get("both", 0)
-            has_narc = int(grids_only == 0 and narrative_only == 0 and both == 1)
+            # Classify every cell that has narrative data, plus any mask that has
+            # only a grids_only result (so grids_sufficient is still recorded).
+            cells = set(narrative_by_cell)
+            for mvid in grids_by_mask:
+                cells.add((None, mvid))
 
-            db.upsert_classification(conn, pid, model, grids_only, narrative_only,
-                                     both, has_narc)
+            for (vid, mvid) in cells:
+                res = narrative_by_cell.get((vid, mvid), {})
+                grids_only = grids_by_mask.get(mvid, 0)
+                narrative_only = res.get("narrative_only", 0)
+                both = res.get("both", 0)
+                has_narc = int(grids_only == 0 and narrative_only == 0 and both == 1)
 
-            status = "NARC" if has_narc else "no"
-            if grids_only:
-                status = "grids_sufficient"
-            elif narrative_only:
-                status = "narrative_sufficient"
-            elif not both:
-                status = "unsolvable"
+                db.upsert_classification(conn, pid, model, grids_only, narrative_only,
+                                         both, has_narc, variant_id=vid,
+                                         mask_variant_id=mvid)
+                total += 1
+                if has_narc:
+                    narc_count += 1
 
-            if has_narc:
-                narc_count += 1
-
-            log_fn(f"  {pid}: {status} "
-                   f"(g={grids_only} n={narrative_only} b={both})")
+                status = "NARC" if has_narc else "no"
+                if grids_only:
+                    status = "grids_sufficient"
+                elif narrative_only:
+                    status = "narrative_sufficient"
+                elif not both:
+                    status = "unsolvable"
+                log_fn(f"  {pid} [v={vid} m={mvid}]: {status} "
+                       f"(g={grids_only} n={narrative_only} b={both})")
 
         log_fn(f"\nResults for {model}:")
-        log_fn(f"  Total puzzles tested: {total}")
+        log_fn(f"  Cells classified: {total}")
         log_fn(f"  NARC-verified: {narc_count}")
 
         return {"total": total, "narc": narc_count}
