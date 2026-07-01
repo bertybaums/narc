@@ -29,6 +29,9 @@
         {% elif puzzle.is_featured %}
         <span class="badge bg-warning text-dark" style="font-size:0.5em; vertical-align:middle;">★ Featured</span>
         {% endif %}
+        {% if user and user.role in ('owner', 'reviewer') %}
+        <a href="/create?edit={{ puzzle.puzzle_id }}" class="btn btn-sm btn-outline-primary ms-2">Edit</a>
+        {% endif %}
         <a href="/create?revise={{ puzzle.puzzle_id }}" class="btn btn-sm btn-outline-secondary ms-2">Copy + Revise</a>
     </h2>
     <p class="text-muted">{{ puzzle.sequence | length }} grids &middot;

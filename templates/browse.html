@@ -197,6 +197,9 @@
                     </p>
                     <div class="d-flex gap-2 mt-2 flex-wrap">
                         <a href="/solve/{{ p.puzzle_id }}" class="btn btn-sm btn-narc" onclick="event.stopPropagation()">Solve</a>
+                        {% if user and user.role in ('owner', 'reviewer') %}
+                        <a href="/create?edit={{ p.puzzle_id }}" class="btn btn-sm btn-outline-primary" onclick="event.stopPropagation()">Edit</a>
+                        {% endif %}
                         <a href="/create?revise={{ p.puzzle_id }}" class="btn btn-sm btn-outline-secondary" onclick="event.stopPropagation()">Copy + Revise</a>
                     </div>
                 </div>

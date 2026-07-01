@@ -83,6 +83,16 @@
         <!-- Mask variants & test matrix (owner/reviewer, editing a saved puzzle) -->
         {% if user and user.role in ('owner', 'reviewer') and puzzle and not revise_mode %}
         {% include '_mask_matrix.html' %}
+        {% elif user and user.role in ('owner', 'reviewer') %}
+        <div class="card mb-3 border-secondary">
+            <div class="card-header py-2"><span class="small text-muted">Mask variants &amp; test matrix</span></div>
+            <div class="card-body py-2 small text-muted">
+                Mask variants (hiding a different grid over the same sequence) attach to a
+                <strong>saved</strong> puzzle. Save this puzzle, then open it with the
+                <strong>Edit</strong> button (on its Solve or Browse card) to add mask
+                variants and toggle the test matrix.
+            </div>
+        </div>
         {% endif %}
 
         <!-- Submitter info (visitors only) -->
