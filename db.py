@@ -645,6 +645,19 @@ def update_user_password(conn, user_id, password_hash):
     conn.commit()
 
 
+def update_user_role(conn, user_id, role):
+    if role not in ("owner", "reviewer", "collaborator"):
+        raise ValueError(f"Invalid role: {role}")
+    conn.execute("UPDATE users SET role=? WHERE user_id=?", (role, user_id))
+    conn.commit()
+
+
+def count_owners(conn):
+    return conn.execute(
+        "SELECT COUNT(*) FROM users WHERE role='owner'"
+    ).fetchone()[0]
+
+
 # --- submissions ---
 
 def create_submission(conn, submission_type, payload_json, target_puzzle_id=None,

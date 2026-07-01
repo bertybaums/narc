@@ -1292,6 +1292,35 @@ def api_create_user():
     return jsonify({"status": "ok"})
 
 
+@app.route("/api/admin/users/<int:uid>/role", methods=["PUT"])
+@require_role("owner")
+def api_update_user_role(uid):
+    data = request.get_json() or {}
+    role = data.get("role")
+    if role not in ("owner", "reviewer", "collaborator"):
+        return jsonify({"error": "Role must be owner, reviewer, or collaborator"}), 400
+    conn = get_conn()
+    target = db.get_user_by_id(conn, uid)
+    if not target:
+        conn.close()
+        return jsonify({"error": "User not found"}), 404
+    if target["role"] == role:
+        conn.close()
+        return jsonify({"status": "ok", "role": role})
+    # Never leave the system without an owner.
+    if target["role"] == "owner" and role != "owner" and db.count_owners(conn) <= 1:
+        conn.close()
+        return jsonify({"error": "Cannot demote the last owner"}), 403
+    old_role = target["role"]
+    db.update_user_role(conn, uid, role)
+    user = current_user()
+    db.log_activity(conn, user["user_id"], "update_user_role", "user",
+                    target["username"],
+                    f"Changed {target['username']} role: {old_role} → {role}")
+    conn.close()
+    return jsonify({"status": "ok", "role": role})
+
+
 @app.route("/api/admin/users/<int:uid>", methods=["DELETE"])
 @require_role("owner")
 def api_delete_user(uid):
