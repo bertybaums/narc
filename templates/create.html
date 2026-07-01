@@ -80,6 +80,11 @@
             </div>
         </div>
 
+        <!-- Mask variants & test matrix (owner/reviewer, editing a saved puzzle) -->
+        {% if user and user.role in ('owner', 'reviewer') and puzzle and not revise_mode %}
+        {% include '_mask_matrix.html' %}
+        {% endif %}
+
         <!-- Submitter info (visitors only) -->
         {% if not user %}
         <div class="card mb-3">
