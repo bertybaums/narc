@@ -342,6 +342,7 @@ function savePuzzle() {
 
     // Include variants
     data.variants = collectVariants();
+    data.mask_variants = collectMaskVariants();
 
     // Include submitter info and revision flag for visitors
     if (!IS_ADMIN) {
@@ -541,6 +542,9 @@ function clearAll() {
     document.getElementById('char-count').textContent = '0';
     document.getElementById('variants-container').innerHTML =
         '<p class="text-muted small" id="no-variants-msg">No additional variants. The main narrative is saved as "original".</p>';
+    const maskContainer = document.getElementById('mask-variants-container');
+    if (maskContainer) maskContainer.innerHTML =
+        '<p class="text-muted small" id="no-mask-variants-msg">The grids you masked above are the <strong>original</strong> mask. Add a mask variant to hide different grid(s) over the same sequence.</p>';
     buildSlots();
 }
 
@@ -575,6 +579,45 @@ function loadVariants(variants) {
             addVariantField(v.source_domain || v.variant, v.narrative);
         }
     }
+}
+
+// --- Mask variant management ---
+// Additional masks (which grid[s] to hide) over the same sequence, defined at
+// creation time and persisted with the puzzle. Grid numbers are 1-indexed in the
+// UI, 0-indexed in the payload.
+
+function addMaskVariantField(label, positions) {
+    const msg = document.getElementById('no-mask-variants-msg');
+    if (msg) msg.style.display = 'none';
+    const container = document.getElementById('mask-variants-container');
+    if (!container) return;
+    const posStr = (positions && positions.length) ? positions.map(p => p + 1).join(',') : '';
+    const div = document.createElement('div');
+    div.className = 'd-flex gap-2 mb-2 mask-variant-field';
+    div.innerHTML = `
+        <input type="text" class="form-control form-control-sm mask-variant-label"
+               placeholder="label e.g. mask-4" value="${label || ''}" style="width:160px;">
+        <input type="text" class="form-control form-control-sm mask-variant-pos"
+               placeholder="grids to hide e.g. 4 or 2,3" value="${posStr}" style="width:200px;">
+        <button type="button" class="btn btn-sm btn-outline-danger"
+                onclick="this.closest('.mask-variant-field').remove()">Remove</button>
+    `;
+    container.appendChild(div);
+}
+
+function collectMaskVariants() {
+    const out = [];
+    document.querySelectorAll('.mask-variant-field').forEach(f => {
+        const label = f.querySelector('.mask-variant-label').value.trim();
+        const raw = f.querySelector('.mask-variant-pos').value.trim();
+        if (!label || label === 'original' || !raw) return;
+        const positions = [...new Set(
+            raw.split(',').map(s => parseInt(s.trim(), 10) - 1)
+               .filter(n => !isNaN(n) && n >= 0 && n < numSlots)
+        )].sort((a, b) => a - b);
+        if (positions.length) out.push({ label: label, masked_positions: positions });
+    });
+    return out;
 }
 
 function determineCreator() {

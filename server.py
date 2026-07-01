@@ -807,6 +807,21 @@ def _save_puzzle_from_data(conn, data):
     for v in db.get_variants(conn, puzzle_id):
         db.set_variant_pair(conn, puzzle_id, v["variant_id"], orig_mask_id, enabled=1)
 
+    # User-defined mask variants from the Create page: persist each and enable
+    # every narrative variant against it by default (fine-tune matrix in Edit).
+    seq_len = len(sequence) if isinstance(sequence, list) else 0
+    for mv in data.get("mask_variants", []):
+        label = (mv.get("label") or "").strip()
+        mpos = mv.get("masked_positions")
+        if not label or label == "original" or not isinstance(mpos, list) or not mpos:
+            continue
+        mpos = sorted({p for p in mpos if isinstance(p, int) and 0 <= p < seq_len})
+        if not mpos:
+            continue
+        mvid = db.upsert_mask_variant(conn, puzzle_id, label, mpos)
+        for v in db.get_variants(conn, puzzle_id):
+            db.set_variant_pair(conn, puzzle_id, v["variant_id"], mvid, enabled=1)
+
     # Export JSON
     export_path = DATA_DIR / f"{puzzle_id}.json"
     export_path.write_text(json.dumps(data, indent=2))

@@ -80,17 +80,23 @@
             </div>
         </div>
 
-        <!-- Mask variants & test matrix (owner/reviewer, editing a saved puzzle) -->
+        <!-- Mask variants. In edit mode (saved puzzle) the interactive test-matrix
+             panel replaces this input section. -->
         {% if user and user.role in ('owner', 'reviewer') and puzzle and not revise_mode %}
         {% include '_mask_matrix.html' %}
-        {% elif user and user.role in ('owner', 'reviewer') %}
-        <div class="card mb-3 border-secondary">
-            <div class="card-header py-2"><span class="small text-muted">Mask variants &amp; test matrix</span></div>
-            <div class="card-body py-2 small text-muted">
-                Mask variants (hiding a different grid over the same sequence) attach to a
-                <strong>saved</strong> puzzle. Save this puzzle, then open it with the
-                <strong>Edit</strong> button (on its Solve or Browse card) to add mask
-                variants and toggle the test matrix.
+        {% else %}
+        <div class="card mb-3">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                Mask Variants
+                <button type="button" class="btn btn-sm btn-outline-secondary" onclick="addMaskVariantField()">+ Add Mask Variant</button>
+            </div>
+            <div class="card-body" id="mask-variants-container">
+                <p class="text-muted small" id="no-mask-variants-msg">
+                    The grids you masked above are the <strong>original</strong> mask. Add a mask
+                    variant to hide different grid(s) over the same sequence — e.g. label
+                    <code>mask-4</code>, grids <code>4</code> (or <code>2,3</code> for multi-mask).
+                    Each is tested against every narrative variant; fine-tune the matrix later via <strong>Edit</strong>.
+                </p>
             </div>
         </div>
         {% endif %}
