@@ -486,7 +486,7 @@ async function loadReviewJobs() {
 
 function shortModel(m) {
     return m.replace('gpt-oss-', 'gpt')
-            .replace('qwen3.5-', 'qwen')
+            .replace(/qwen3\.\d-/, 'qwen')
             .replace('nemotron-3-super', 'nem')
             .replace('gemma-4-', 'gem');
 }

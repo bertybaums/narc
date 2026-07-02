@@ -39,6 +39,18 @@ models:
     modality: text
     role: subject
 
+  - name: qwen3.6-27b
+    provider: openai_compat
+    endpoint: "https://mindrouter.uidaho.edu/v1"
+    model_id: "qwen/qwen3.6-27b"
+    api_key_env: MINDROUTER_API_KEY
+    temperature: 0.0
+    max_tokens: 4096
+    reasoning_effort: high
+    timeout: 300.0
+    modality: text
+    role: subject
+
   - name: nemotron-3-super
     provider: openai_compat
     endpoint: "https://mindrouter.uidaho.edu/v1"
