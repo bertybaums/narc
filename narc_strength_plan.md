@@ -2,7 +2,8 @@
 
 **Date:** July 1, 2026
 **Author:** Bert Baumgaertner (with Claude Code)
-**Status:** Approved — in progress
+**Status:** Implemented & deployed (July 1, 2026). Backfill running on prod.
+Reclassify cleaned stale orphans: corpus went 1261 → **1025** real NARC cells.
 
 **Decisions (confirmed July 1, 2026):** K=3 shuffles; three-way verdict
 (strong / partial / weak); no nondeterminism control; backfill **all 6 models**, but
