@@ -38,6 +38,14 @@ def run_classify_job(model, puzzle=None, log_fn=print):
             if not trials:
                 continue
 
+            # Authoritative recompute: drop this (puzzle, model)'s existing rows so
+            # stale cells with no backing trials (orphans left by the old collapsed
+            # classifier / variant-id remaps) don't linger with a false has_narc.
+            conn.execute(
+                "DELETE FROM classifications WHERE puzzle_id=? AND model_name=?",
+                (pid, model),
+            )
+
             # grids_only is narrative-independent — it varies only with the mask,
             # and is stored under variant_id NULL. Narrative conditions vary with
             # both the narrative variant and the mask. To classify a (variant,
@@ -45,12 +53,16 @@ def run_classify_job(model, puzzle=None, log_fn=print):
             # grids_only result.
             grids_by_mask = {}                 # mask_variant_id -> correct
             narrative_by_cell = {}             # (variant_id, mask_variant_id) -> {cond: correct}
+            shuffled_by_cell = {}              # (variant_id, mask_variant_id) -> [correct, ...]
             for t in trials:
                 if t["correct"] is None:
                     continue
                 mvid = t["mask_variant_id"]
                 if t["condition"] == "grids_only":
                     grids_by_mask[mvid] = t["correct"]
+                elif t["condition"] == "both_shuffled":
+                    shuffled_by_cell.setdefault((t["variant_id"], mvid), []).append(
+                        t["correct"])
                 else:
                     cell = (t["variant_id"], mvid)
                     narrative_by_cell.setdefault(cell, {})[t["condition"]] = t["correct"]
@@ -68,9 +80,27 @@ def run_classify_job(model, puzzle=None, log_fn=print):
                 both = res.get("both", 0)
                 has_narc = int(grids_only == 0 and narrative_only == 0 and both == 1)
 
+                # Order-sensitivity (weak/strong NARC): only meaningful for NARC
+                # cells that have shuffled-order 'both' trials to judge from.
+                narc_strength = shuffle_solved = shuffle_total = None
+                if has_narc:
+                    sh = shuffled_by_cell.get((vid, mvid), [])
+                    if sh:
+                        shuffle_total = len(sh)
+                        shuffle_solved = sum(sh)
+                        if shuffle_solved == 0:
+                            narc_strength = "strong"
+                        elif shuffle_solved == shuffle_total:
+                            narc_strength = "weak"
+                        else:
+                            narc_strength = "partial"
+
                 db.upsert_classification(conn, pid, model, grids_only, narrative_only,
                                          both, has_narc, variant_id=vid,
-                                         mask_variant_id=mvid)
+                                         mask_variant_id=mvid,
+                                         narc_strength=narc_strength,
+                                         shuffle_solved=shuffle_solved,
+                                         shuffle_total=shuffle_total)
                 total += 1
                 if has_narc:
                     narc_count += 1
@@ -82,6 +112,8 @@ def run_classify_job(model, puzzle=None, log_fn=print):
                     status = "narrative_sufficient"
                 elif not both:
                     status = "unsolvable"
+                if has_narc and narc_strength:
+                    status += f"/{narc_strength}({shuffle_solved}/{shuffle_total})"
                 log_fn(f"  {pid} [v={vid} m={mvid}]: {status} "
                        f"(g={grids_only} n={narrative_only} b={both})")
 

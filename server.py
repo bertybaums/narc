@@ -18,7 +18,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import db
 import grids
 from db import get_variants, get_trials
-from collect import run_collect_job
+from collect import run_collect_job, run_sensitivity_job
 from classify import run_classify_job
 from ratelimit import mindrouter_bucket
 
@@ -207,19 +207,37 @@ def _inspect_masking(conn, models):
     """Build masking tab data: per-puzzle classification results."""
     rows = conn.execute(
         """SELECT c.puzzle_id, c.model_name, c.grids_only, c.narrative_only,
-                  c.both, c.has_narc
+                  c.both, c.has_narc, c.narc_strength, c.shuffle_solved,
+                  c.shuffle_total
            FROM classifications c
            ORDER BY c.puzzle_id, c.model_name"""
     ).fetchall()
-    # Build puzzle -> model -> result map
+    # Build puzzle -> model -> result map. A NARC cell also folds in the
+    # order-sensitivity verdict (strong/partial/weak) when it has been tested.
     cls_map = {}
     for r in rows:
-        cls_map.setdefault(r["puzzle_id"], {})[r["model_name"]] = {
+        # Collapse per-(variant,mask) rows to one per (puzzle, model): a puzzle
+        # is NARC for a model if ANY cell is; keep the strongest verdict seen.
+        cur = cls_map.setdefault(r["puzzle_id"], {}).get(r["model_name"])
+        cand = {
             "grids_only": r["grids_only"],
             "narrative_only": r["narrative_only"],
             "both": r["both"],
             "has_narc": r["has_narc"],
+            "narc_strength": r["narc_strength"],
+            "shuffle_solved": r["shuffle_solved"],
+            "shuffle_total": r["shuffle_total"],
         }
+        if cur is None:
+            cls_map[r["puzzle_id"]][r["model_name"]] = cand
+        else:
+            # Prefer a NARC row over a non-NARC one; among NARC rows prefer the
+            # one with a strength verdict (strong > partial > weak > untested).
+            _rank = {"strong": 3, "partial": 2, "weak": 1, None: 0}
+            better = (cand["has_narc"] or 0, _rank.get(cand["narc_strength"], 0))
+            current = (cur["has_narc"] or 0, _rank.get(cur["narc_strength"], 0))
+            if better > current:
+                cls_map[r["puzzle_id"]][r["model_name"]] = cand
 
     # Get puzzle info
     puzzles = []
@@ -237,6 +255,8 @@ def _inspect_masking(conn, models):
         for model, res in cls_map[pid].items():
             if res["has_narc"]:
                 statuses.add("narc")
+                if res.get("narc_strength"):
+                    statuses.add("narc_" + res["narc_strength"])
                 narc_count += 1
             elif res["grids_only"]:
                 statuses.add("grids_sufficient")
@@ -1438,6 +1458,18 @@ def _run_review_job(job_id, puzzle_id, model_name, log_path):
                 model=model_name, puzzle=puzzle_id, log_fn=log_write
             )
             log_write(f"=== classify done: {classify_result} ===")
+
+            # Order-sensitivity: shuffle-test the NARC cells just found, then
+            # re-classify so the weak/strong verdict is stored. No-op when the
+            # puzzle produced no NARC cells for this model.
+            log_write(f"=== sensitivity: model={model_name} puzzle={puzzle_id} ===")
+            sens_result = run_sensitivity_job(
+                model=model_name, puzzle=puzzle_id, log_fn=log_write
+            )
+            log_write(f"=== sensitivity done: {sens_result} ===")
+            if sens_result.get("completed"):
+                run_classify_job(model=model_name, puzzle=puzzle_id, log_fn=log_write)
+                log_write("=== reclassify (strength) done ===")
 
         conn = get_conn()
         db.set_review_job_status(conn, job_id, "done")

@@ -36,6 +36,10 @@
 .dots { display: flex; gap: 3px; }
 .dot { display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 0.7em; font-weight: 600; }
 .dot-narc { background: #134e1f; color: #2ECC40; }
+/* Order-sensitivity (weak/strong NARC) shades of the NARC badge. */
+.dot-narc-strong { background: #134e1f; color: #2ECC40; border: 1px solid #2ECC40; padding: 1px 5px; }
+.dot-narc-partial { background: #3a3000; color: #FFD700; border: 1px solid #FFD700; padding: 1px 5px; }
+.dot-narc-weak { background: transparent; color: #2ECC40; border: 1px dashed #2a7a3f; padding: 1px 5px; }
 .dot-grids { background: #0a3050; color: #0074D9; }
 .dot-narr { background: #4a3000; color: #FF851B; }
 .dot-fail { background: #2a1515; color: #666; }
@@ -122,11 +126,18 @@
         <p class="mb-1" style="color:#d0d0d0;font-size:0.9em;">
             <strong>Masking experiment:</strong> One or more grids in a sequence are hidden. The model attempts to reconstruct the masked grid(s) under three conditions: <em>grids only</em> (no narrative), <em>narrative only</em> (no grids), and <em>both</em> (grids + narrative). A puzzle has the <strong>NARC property</strong> for a given model when it is solved correctly with both but not with either alone.
         </p>
-        <p class="mb-0" style="color:#888;font-size:0.8em;">
+        <p class="mb-1" style="color:#888;font-size:0.8em;">
             <span class="dot dot-narc">N</span> = NARC (solved only with both)
             &nbsp;&nbsp;<span class="dot dot-grids">G</span> = Grids sufficient (solvable from grids alone)
             &nbsp;&nbsp;<span class="dot dot-narr">L</span> = Narrative sufficient (solvable from narrative alone)
             &nbsp;&nbsp;<span class="dot dot-fail">&times;</span> = Unsolvable (failed on all conditions)
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            <strong style="color:#aaa;">Order sensitivity:</strong> each NARC cell is re-tested with the grids in randomized order (same clue). &nbsp;
+            <span class="dot dot-narc-strong">Strong</span> = fails every shuffle (order is necessary)
+            &nbsp;&nbsp;<span class="dot dot-narc-partial">Partial</span> = solves some shuffles
+            &nbsp;&nbsp;<span class="dot dot-narc-weak">Weak</span> = solves every shuffle (order incidental).
+            A plain <span class="dot dot-narc">N</span> means order not yet tested.
         </p>
     </div>
 </div>
@@ -162,6 +173,9 @@
     <select id="status-filter" onchange="filterPuzzles()">
         <option value="">All statuses</option>
         <option value="narc">NARC only</option>
+        <option value="narc_strong">NARC — strong (order matters)</option>
+        <option value="narc_partial">NARC — partial</option>
+        <option value="narc_weak">NARC — weak (order incidental)</option>
         <option value="grids_sufficient">Grids sufficient</option>
         <option value="unsolvable">Unsolvable</option>
     </select>
@@ -200,7 +214,16 @@
             {% for model in models %}
             {% set r = p.results.get(model, {}) %}
             {% if r.get('has_narc') %}
-            <span class="dot dot-narc" title="{{ model }}: NARC">N</span>
+            {% set st = r.get('narc_strength') %}
+            {% if st == 'strong' %}
+            <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+            {% elif st == 'partial' %}
+            <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+            {% elif st == 'weak' %}
+            <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+            {% else %}
+            <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested)">N</span>
+            {% endif %}
             {% elif r.get('grids_only') %}
             <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
             {% elif r.get('narrative_only') %}
@@ -246,7 +269,16 @@
                     </td>
                     <td>
                         {% if r.has_narc %}
-                        <span class="dot dot-narc">NARC</span>
+                        {% set st = r.narc_strength %}
+                        {% if st == 'strong' %}
+                        <span class="dot dot-narc-strong" title="fails all shuffled orders — order is necessary">Strong ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
+                        {% elif st == 'partial' %}
+                        <span class="dot dot-narc-partial" title="solves some shuffled orders">Partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
+                        {% elif st == 'weak' %}
+                        <span class="dot dot-narc-weak" title="solves every shuffled order — order incidental">Weak ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
+                        {% else %}
+                        <span class="dot dot-narc" title="order not yet tested">NARC</span>
+                        {% endif %}
                         {% else %}
                         <span class="result-fail">&mdash;</span>
                         {% endif %}

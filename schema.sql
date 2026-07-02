@@ -87,6 +87,9 @@ CREATE TABLE IF NOT EXISTS classifications (
     narrative_only INTEGER,
     both           INTEGER,
     has_narc       INTEGER,
+    narc_strength  TEXT,                  -- 'strong' | 'partial' | 'weak' | NULL (order-sensitivity)
+    shuffle_solved INTEGER,               -- # shuffled-order 'both' trials solved
+    shuffle_total  INTEGER,               -- # shuffled-order 'both' trials run (K)
     PRIMARY KEY (puzzle_id, variant_id, mask_variant_id, model_name)
 );
 

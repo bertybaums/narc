@@ -90,3 +90,5 @@ experiment:
     - grids_only
     - narrative_only
     - both
+  # Order-sensitivity (weak/strong NARC): K shuffled-order 'both' re-runs per NARC cell.
+  shuffles: 3

@@ -79,10 +79,24 @@ def _narc_status(conn, puzzle_id, model_name):
     else:
         status = "unsolvable"
 
-    return status, results
+    # Order-sensitivity (weak/strong NARC) from shuffled-order 'both' trials.
+    strength = None
+    if status == "narc":
+        sh = [t["correct"] for t in trials
+              if t["condition"] == "both_shuffled" and t["correct"] is not None]
+        if sh:
+            s, k = sum(sh), len(sh)
+            strength = "strong" if s == 0 else ("weak" if s == k else "partial")
+
+    return status, results, strength
 
 
-def _status_dot(status):
+def _status_dot(status, strength=None):
+    if status == "narc" and strength:
+        cls = {"strong": "dot-narc-strong", "partial": "dot-narc-partial",
+               "weak": "dot-narc-weak"}[strength]
+        label = strength.capitalize()
+        return f'<span class="dot {cls}" title="NARC ({strength})">{label}</span>'
     cls = {"narc": "dot-narc", "grids_sufficient": "dot-grids",
            "narrative_sufficient": "dot-narr", "unsolvable": "dot-fail"}.get(status, "dot-fail")
     label = {"narc": "NARC", "grids_sufficient": "grids",
@@ -143,8 +157,9 @@ def build_inspector(conn):
 
         model_results = {}
         for m in active_models:
-            status, results = _narc_status(conn, pid, m)
-            model_results[m] = {"status": status, "results": results}
+            status, results, strength = _narc_status(conn, pid, m)
+            model_results[m] = {"status": status, "results": results,
+                                "strength": strength}
             if status == "narc":
                 narc_counts[m] += 1
 
@@ -190,6 +205,9 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
 .dots {{ display: flex; gap: 4px; }}
 .dot {{ display: inline-block; padding: 2px 6px; border-radius: 3px; font-size: 0.75em; font-weight: 600; }}
 .dot-narc {{ background: #134e1f; color: #2ECC40; }}
+.dot-narc-strong {{ background: #134e1f; color: #2ECC40; border: 1px solid #2ECC40; }}
+.dot-narc-partial {{ background: #3a3000; color: #FFD700; border: 1px solid #FFD700; }}
+.dot-narc-weak {{ background: transparent; color: #2ECC40; border: 1px dashed #2a7a3f; }}
 .dot-grids {{ background: #0a3050; color: #0074D9; }}
 .dot-narr {{ background: #4a3000; color: #FF851B; }}
 .dot-fail {{ background: #2a1515; color: #666; }}
@@ -303,7 +321,7 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
         dots_html = ""
         for m in active_models:
             mr = model_results.get(m, {})
-            dots_html += _status_dot(mr.get("status", "unsolvable"))
+            dots_html += _status_dot(mr.get("status", "unsolvable"), mr.get("strength"))
 
         diff_html = f"H{hdiff}/A{adiff}" if hdiff and adiff else ""
 
@@ -377,7 +395,7 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
             short = m.replace("gpt-oss-", "").replace("qwen3.5-", "q")
 
             html += f'<tr><td class="model-name">{short}</td>'
-            html += f'<td>{_status_dot(status)}</td>'
+            html += f'<td>{_status_dot(status, mr.get("strength"))}</td>'
             for cond in CONDITIONS:
                 html += _cond_cell(results.get(cond), answer_grids, masked_pos)
             html += '</tr>\n'

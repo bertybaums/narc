@@ -8,6 +8,7 @@ In-process (e.g., from server.py):
     run_collect_job(model="gpt-oss-120b", puzzle="narc_001", log_fn=log.write)
 """
 
+import hashlib
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
@@ -41,7 +42,9 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
         messages = prompts.build_grids_only(puzzle_data)
     elif condition == "narrative_only":
         messages = prompts.build_narrative_only(puzzle_data, narrative=variant_narrative)
-    elif condition == "both":
+    elif condition in ("both", "both_shuffled"):
+        # both_shuffled is the same prompt over a shuffled-order view (built by
+        # the caller); grading uses that view's answer_grids.
         messages = prompts.build_both(puzzle_data, narrative=variant_narrative)
     else:
         raise ValueError(f"Unknown condition: {condition}")
@@ -203,6 +206,147 @@ def run_matrix_job(model, puzzle=None, concurrency=8, dry_run=False, log_fn=prin
 
         log_fn(f"\nDone: {completed} completed, {errors} errors")
         return {"pending": len(pending), "completed": completed, "errors": errors}
+    finally:
+        conn.close()
+
+
+def _resolve_narrative(conn, base, variant_id):
+    """Narrative text for a classification cell: the variant's clue, or the base
+    puzzle narrative when variant_id is NULL."""
+    if variant_id is None:
+        return base["narrative"]
+    row = conn.execute(
+        "SELECT narrative FROM narrative_variants WHERE variant_id=?", (variant_id,)
+    ).fetchone()
+    return row["narrative"] if row and row["narrative"] else base["narrative"]
+
+
+def _factorial(n):
+    f = 1
+    for i in range(2, n + 1):
+        f *= i
+    return f
+
+
+def run_sensitivity_job(model, puzzle=None, shuffles=None, concurrency=8,
+                        dry_run=False, log_fn=print):
+    """Order-sensitivity (weak/strong NARC) test.
+
+    For every NARC cell (has_narc=1) of `model`, re-run the winning `both`
+    condition over K deterministically-shuffled grid orders (same grids, same
+    narrative). Trials are stored with condition='both_shuffled', repeat_num=1..K,
+    tagged with the cell's variant_id + mask_variant_id. classify.py then reads
+    these to label the cell strong / partial / weak. Idempotent: skips trials
+    that already have a response; --dry-run is read-only. Returns dict with keys:
+    pending, completed, errors, cells.
+    """
+    config = load_config()
+    model_config = get_model_config(config, model)
+    extraction_config = get_model_config(config, "gpt-oss-120b-extract")
+    if shuffles is None:
+        shuffles = config.get("experiment", {}).get("shuffles", 3)
+
+    conn = db.init_db()
+    try:
+        sql = ("SELECT puzzle_id, variant_id, mask_variant_id FROM classifications "
+               "WHERE has_narc=1 AND model_name=?")
+        params = [model]
+        if puzzle:
+            sql += " AND puzzle_id=?"
+            params.append(puzzle)
+        cells = conn.execute(sql, tuple(params)).fetchall()
+
+        # Enumerate planned trials first (no DB writes) so --dry-run is read-only.
+        planned = []  # (pid, vid, mvid, k, prompt_text, view, narrative)
+        base_cache = {}
+        for c in cells:
+            pid, vid, mvid = c["puzzle_id"], c["variant_id"], c["mask_variant_id"]
+            if pid not in base_cache:
+                row = db.get_puzzle(conn, pid)
+                base_cache[pid] = db.puzzle_to_json(row) if row else None
+            base = base_cache[pid]
+            if base is None:
+                log_fn(f"  skip {pid}: not found")
+                continue
+            mv = db.get_mask_variant(conn, mvid) if mvid is not None else None
+            if mvid is not None and not mv:
+                log_fn(f"  skip {pid} m={mvid}: mask variant missing")
+                continue
+            masked_positions = (json.loads(mv["masked_positions"]) if mv
+                                else base["masked_positions"])
+            narrative = _resolve_narrative(conn, base, vid)
+
+            n = len(base["sequence"])
+            k_target = min(shuffles, max(0, _factorial(n) - 1))
+            seen_orders = set()
+            k, attempt = 0, 0
+            while k < k_target and attempt < k_target * 20 + 50:
+                seed = int(hashlib.sha256(
+                    f"{pid}|{vid}|{mvid}|{attempt}".encode()).hexdigest(), 16) % (2**32)
+                view, order = grids.shuffle_view(base, masked_positions, seed)
+                attempt += 1
+                if order in seen_orders:
+                    continue
+                seen_orders.add(order)
+                k += 1
+                msgs = prompts.build_both(view, narrative=narrative)
+                planned.append((pid, vid, mvid, k, json.dumps(msgs), view, narrative))
+
+        if dry_run:
+            for pid, vid, mvid, k, _pt, _v, _n in planned:
+                log_fn(f"  would run {pid} v={vid} m={mvid} both_shuffled#{k}")
+            log_fn(f"Sensitivity planned trials: {len(planned)} across "
+                   f"{len(cells)} NARC cell(s)")
+            return {"pending": len(planned), "completed": 0, "errors": 0,
+                    "cells": len(cells)}
+
+        pending = []
+        for pid, vid, mvid, k, prompt_text, view, narrative in planned:
+            tid = db.insert_trial(conn, pid, model, "both_shuffled", prompt_text,
+                                  variant_id=vid, mask_variant_id=mvid, repeat_num=k)
+            row = conn.execute("SELECT * FROM trials WHERE trial_id=?", (tid,)).fetchone()
+            if row and row["response_text"] is None and row["error"] is None:
+                pending.append((row, view, narrative))
+
+        log_fn(f"Sensitivity pending trials: {len(pending)} across "
+               f"{len(cells)} NARC cell(s)")
+
+        completed = 0
+        errors = 0
+
+        def process(item):
+            row, view, narrative = item
+            return run_trial(model_config, extraction_config, row, view,
+                             variant_narrative=narrative), view
+
+        with ThreadPoolExecutor(max_workers=concurrency) as executor:
+            futures = {executor.submit(process, it): it for it in pending}
+            for future in as_completed(futures):
+                row, view, narrative = futures[future]
+                try:
+                    result, view = future.result()
+                    trial_id = result[0]
+                    db.update_trial_response(conn, trial_id, result[1], result[2],
+                                             result[5], error=result[4])
+                    predicted = result[6] if len(result) > 6 else None
+                    if predicted is not None:
+                        pred_mapped, correct, acc = grade_prediction(view, predicted)
+                        db.update_trial_evaluation(conn, trial_id, json.dumps(pred_mapped),
+                                                   result[3], correct, acc)
+                        status = "correct" if correct else f"wrong ({acc:.1%})"
+                    else:
+                        status = f"parse_error: {result[4]}"
+                        errors += 1
+                    completed += 1
+                    log_fn(f"  [{completed}/{len(pending)}] {row['puzzle_id']}/"
+                           f"m{row['mask_variant_id']}/shuf#{row['repeat_num']}: {status}")
+                except Exception as e:
+                    log_fn(f"  ERROR {row['puzzle_id']}/both_shuffled: {e}")
+                    errors += 1
+
+        log_fn(f"\nDone: {completed} completed, {errors} errors")
+        return {"pending": len(pending), "completed": completed, "errors": errors,
+                "cells": len(cells)}
     finally:
         conn.close()
 

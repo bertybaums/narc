@@ -42,6 +42,7 @@ def _apply_migrations(conn):
         """)
 
     _migrate_mask_variant_id(conn)
+    _migrate_narc_strength(conn)
 
 
 def _has_column(conn, table, column):
@@ -111,6 +112,19 @@ def _migrate_mask_variant_id(conn):
             DROP TABLE classifications;
             ALTER TABLE classifications_new RENAME TO classifications;
             COMMIT;
+        """)
+
+
+def _migrate_narc_strength(conn):
+    """Add order-sensitivity columns to classifications. These are not part of the
+    PRIMARY KEY, so a plain ADD COLUMN suffices (no table rebuild). Guarded by
+    column presence — runs once, then no-ops. Populated by classify.py from the
+    'both_shuffled' trials produced by collect.run_sensitivity_job."""
+    if not _has_column(conn, "classifications", "narc_strength"):
+        conn.executescript("""
+            ALTER TABLE classifications ADD COLUMN narc_strength  TEXT;
+            ALTER TABLE classifications ADD COLUMN shuffle_solved INTEGER;
+            ALTER TABLE classifications ADD COLUMN shuffle_total  INTEGER;
         """)
 
 
@@ -431,7 +445,8 @@ def get_trials(conn, puzzle_id, model_name=None, variant_id=None):
 
 def upsert_classification(conn, puzzle_id, model_name, grids_only,
                           narrative_only, both, has_narc, variant_id=None,
-                          mask_variant_id=None):
+                          mask_variant_id=None, narc_strength=None,
+                          shuffle_solved=None, shuffle_total=None):
     # SQLite treats NULL key values as distinct in UNIQUE/PK constraints, so
     # INSERT OR REPLACE doesn't dedupe. Delete first to guarantee uniqueness.
     conds = ["puzzle_id=?", "model_name=?"]
@@ -450,10 +465,12 @@ def upsert_classification(conn, puzzle_id, model_name, grids_only,
     conn.execute(
         """INSERT INTO classifications
            (puzzle_id, variant_id, mask_variant_id, model_name,
-            grids_only, narrative_only, both, has_narc)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
+            grids_only, narrative_only, both, has_narc,
+            narc_strength, shuffle_solved, shuffle_total)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, variant_id, mask_variant_id, model_name,
-         grids_only, narrative_only, both, has_narc),
+         grids_only, narrative_only, both, has_narc,
+         narc_strength, shuffle_solved, shuffle_total),
     )
     conn.commit()
 

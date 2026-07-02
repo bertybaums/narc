@@ -6,6 +6,7 @@ Ported from MARC2 grids.py with additions for NARC grid sequences.
 import base64
 import io
 import json
+import random
 import re
 from typing import List
 
@@ -207,6 +208,54 @@ def remask(puzzle_json, masked_positions):
     out["masked_positions"] = sorted(masked_positions)
     out["answer_grids"] = answers
     return out
+
+
+def shuffle_view(puzzle_json, masked_positions, seed):
+    """Return ``(view, order)`` — a copy of the puzzle with its grids shown in a
+    randomized order, used for the order-sensitivity (weak/strong NARC) test.
+
+    Same grids, same masked grid(s), but the display order is permuted:
+
+    - the complete sequence is permuted by a ``random.Random(seed)`` shuffle;
+    - grid ``position`` is renumbered to display order (0..N-1) so prompts read
+      as a clean ``Grid 1..N`` sequence with ``[MASKED]`` in the shuffled slot;
+    - ``masked_positions`` / ``answer_grids`` follow the masked grid(s) to their
+      new positions, so grading is unchanged.
+
+    The permutation is deterministic in ``seed`` and guaranteed non-identity for
+    N > 1 (a shuffle equal to the original order would just re-run canonical
+    ``both``). ``order`` is the tuple of original positions in display order, so
+    callers can require K *distinct* permutations. The input is not mutated.
+    """
+    seq = complete_sequence(puzzle_json["sequence"], puzzle_json.get("answer_grids"))
+    seq = sorted(seq, key=lambda it: it["position"])
+    n = len(seq)
+    mset = set(masked_positions)
+    rng = random.Random(seed)
+    order = list(range(n))
+    rng.shuffle(order)
+    # Deterministically avoid the identity permutation for N > 1.
+    while n > 1 and order == list(range(n)):
+        rng.shuffle(order)
+
+    display = []
+    new_masked = []
+    answers = {}
+    for new_pos, orig_idx in enumerate(order):
+        it = dict(seq[orig_idx])
+        was_masked = it["position"] in mset
+        it["position"] = new_pos
+        it["masked"] = was_masked
+        display.append(it)
+        if was_masked:
+            new_masked.append(new_pos)
+            answers[str(new_pos)] = it.get("grid")
+
+    out = dict(puzzle_json)
+    out["sequence"] = display
+    out["masked_positions"] = sorted(new_masked)
+    out["answer_grids"] = answers
+    return out, tuple(order)
 
 
 def parse_response_grids(response_text: str):
