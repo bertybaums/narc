@@ -1,8 +1,8 @@
 # Mask Variants — Design & Implementation Plan
 
-**Date:** July 1, 2026
+**Date:** July 1, 2026 (addendum July 16, 2026)
 **Author:** Bert Baumgaertner (with Claude Code)
-**Status:** Proposal / not yet started
+**Status:** Shipped — all four steps live; pipeline integration + full backfill completed July 16, 2026 (see §11)
 
 ---
 
@@ -291,3 +291,49 @@ Code deploys auto via git.
 | 4    | `variant_pairs` + test-matrix UI + solve UI  | ~1–2 days    |
 
 Total ≈ 3–4 focused days, front-loaded with the two safe/independent steps.
+
+---
+
+## 11. Completion addendum — July 16, 2026
+
+Steps 1–4 shipped July 1–2. On July 16 the feature became fully automatic and fully
+backfilled:
+
+**Pipeline integration.** AI Review jobs (`server.py:_run_review_job`) now run
+collect → **matrix** → classify → sensitivity → re-classify, so every enabled
+(narrative × mask) cell is tested the moment a puzzle is reviewed — no manual
+`collect_matrix.py` pass needed. `run_matrix_job` skips the (original × original) cell
+by default: that cell is exactly the base 3-condition run stored under `variant_id NULL`,
+so re-running it duplicated API calls and produced contradictory duplicate rows
+(`collect_matrix.py --include-original` forces it).
+
+**NULL-dedupe fix (the §4.3 gotcha struck again).** The `trials` UNIQUE constraint
+includes nullable `variant_id`/`mask_variant_id`, so SQLite never fired it for
+base-protocol rows — `INSERT OR IGNORE` re-inserted (and re-ran) every base trial on
+each full collect pass. `db.insert_trial` now does a NULL-safe lookup-before-insert,
+preferring an answered row so legacy duplicates don't shadow completed work. 213
+duplicate-shadowed pending rows were purged from prod + local.
+
+**Inspect drill-down.** The Masking tab shows the original-cell results table plus an
+expandable "Variant results (N narrative × mask cells)" table — rows = cells, columns =
+models, N/G/L/× badges with weak/strong tooltips. Header dots remain the
+best-across-cells roll-up (drives filters and summary counts).
+
+**Full-corpus backfill (completed July 16, ~6.5 h, prod container).** Per model:
+collect → collect_matrix → collect_sensitivity. Final corpus: 587 puzzles, 26,858
+trials, 7,416 classification cells, ~0.5% parse errors. Per-model cells / NARC / strong:
+
+| Model | Cells | NARC | Strong |
+|-------|-------|------|--------|
+| gpt-oss-120b | 983 | 266 | 93 |
+| gpt-oss-20b | 987 | 162 | 85 |
+| qwen3.5-122b | 992 | 229 | 128 |
+| nemotron-3-super | 992 | 265 | 109 |
+| gemma-4-26b | 993 | 197 | 96 |
+| gemma-4-31b | 993 | 199 | 117 |
+| qwen3.6-27b | 1476 | 214 | 117 |
+
+Every NARC cell (variant cells included) is order-sensitivity tested — zero untested.
+Reviewer accounts were audited for variant/mask/matrix access: full parity with owners
+already existed (all routes and UI panels gate on `('owner', 'reviewer')`); no change
+was needed.
