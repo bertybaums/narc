@@ -108,13 +108,19 @@ def grade_prediction(puzzle_data, predicted):
     return pred_mapped, (1 if all_correct else 0), cell_accuracy
 
 
-def run_matrix_job(model, puzzle=None, concurrency=8, dry_run=False, log_fn=print):
+def run_matrix_job(model, puzzle=None, concurrency=8, dry_run=False,
+                   include_original_pair=False, log_fn=print):
     """Run the test matrix: every enabled (narrative variant x mask variant) pair.
 
     Each pair uses the mask variant's positions (via grids.remask, which hides
     the chosen grids and derives their answers) and the narrative variant's clue.
     Trials are tagged with both variant_id and mask_variant_id. Returns dict with
     keys: pending, completed, errors.
+
+    The (original narrative x original mask) cell is skipped by default — it is
+    exactly the base 3-condition run that run_collect_job stores under
+    variant_id NULL, so re-running it here would duplicate those API calls.
+    Pass include_original_pair=True to force it.
     """
     config = load_config()
     model_config = get_model_config(config, model)
@@ -140,6 +146,10 @@ def run_matrix_job(model, puzzle=None, concurrency=8, dry_run=False, log_fn=prin
             base = db.puzzle_to_json(base_row)
             view_cache = {}  # mask_variant_id -> remasked view
             for pr in db.get_enabled_pairs(conn, pid):
+                if (not include_original_pair
+                        and pr["narrative_label"] == "original"
+                        and pr["mask_label"] == "original"):
+                    continue  # covered by run_collect_job under variant_id NULL
                 mvid = pr["mask_variant_id"]
                 if mvid not in view_cache:
                     view_cache[mvid] = grids.remask(base, json.loads(pr["masked_positions"]))

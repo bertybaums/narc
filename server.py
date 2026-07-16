@@ -18,7 +18,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import db
 import grids
 from db import get_variants, get_trials
-from collect import run_collect_job, run_sensitivity_job
+from collect import run_collect_job, run_matrix_job, run_sensitivity_job
 from classify import run_classify_job
 from ratelimit import mindrouter_bucket
 
@@ -208,17 +208,41 @@ def _inspect_masking(conn, models):
     rows = conn.execute(
         """SELECT c.puzzle_id, c.model_name, c.grids_only, c.narrative_only,
                   c.both, c.has_narc, c.narc_strength, c.shuffle_solved,
-                  c.shuffle_total
+                  c.shuffle_total, c.variant_id, c.mask_variant_id,
+                  nv.variant AS variant_label, mv.label AS mask_label
            FROM classifications c
+           LEFT JOIN narrative_variants nv ON nv.variant_id = c.variant_id
+           LEFT JOIN mask_variants mv ON mv.mask_variant_id = c.mask_variant_id
            ORDER BY c.puzzle_id, c.model_name"""
     ).fetchall()
-    # Build puzzle -> model -> result map. A NARC cell also folds in the
-    # order-sensitivity verdict (strong/partial/weak) when it has been tested.
+    # Three views over the same rows:
+    #   cls_map  — puzzle -> model -> best cell (drives dots, filters, summary)
+    #   orig_map — puzzle -> model -> the original x original cell only
+    #   cell_map — puzzle -> (narrative label, mask label) -> model -> result
+    # A NARC cell also folds in the order-sensitivity verdict when tested.
     cls_map = {}
+    orig_map = {}
+    cell_map = {}
+    # Prefer a NARC row over a non-NARC one; among NARC rows prefer the one
+    # with a strength verdict (strong > partial > weak > untested). Applied to
+    # all three maps so the header dots, the original table, and the variant
+    # drill-down never contradict each other (duplicate original x original
+    # rows exist where a legacy matrix run repeated the base protocol).
+    _rank = {"strong": 3, "partial": 2, "weak": 1, None: 0}
+
+    def _put_best(slot, key, cand):
+        cur = slot.get(key)
+        better = (cand["has_narc"] or 0, _rank.get(cand["narc_strength"], 0))
+        current = (cur["has_narc"] or 0,
+                   _rank.get(cur["narc_strength"], 0)) if cur else (-1, -1)
+        if better > current:
+            slot[key] = cand
+
     for r in rows:
-        # Collapse per-(variant,mask) rows to one per (puzzle, model): a puzzle
-        # is NARC for a model if ANY cell is; keep the strongest verdict seen.
-        cur = cls_map.setdefault(r["puzzle_id"], {}).get(r["model_name"])
+        # Base-protocol rows (collect.py) carry variant_id NULL; matrix rows
+        # for the same cell carry the 'original' narrative variant's id.
+        vlabel = r["variant_label"] or "original"
+        mlabel = r["mask_label"] or "original"
         cand = {
             "grids_only": r["grids_only"],
             "narrative_only": r["narrative_only"],
@@ -228,16 +252,14 @@ def _inspect_masking(conn, models):
             "shuffle_solved": r["shuffle_solved"],
             "shuffle_total": r["shuffle_total"],
         }
-        if cur is None:
-            cls_map[r["puzzle_id"]][r["model_name"]] = cand
-        else:
-            # Prefer a NARC row over a non-NARC one; among NARC rows prefer the
-            # one with a strength verdict (strong > partial > weak > untested).
-            _rank = {"strong": 3, "partial": 2, "weak": 1, None: 0}
-            better = (cand["has_narc"] or 0, _rank.get(cand["narc_strength"], 0))
-            current = (cur["has_narc"] or 0, _rank.get(cur["narc_strength"], 0))
-            if better > current:
-                cls_map[r["puzzle_id"]][r["model_name"]] = cand
+        # Collapse per-(variant,mask) rows to one per (puzzle, model): a puzzle
+        # is NARC for a model if ANY cell is; keep the strongest verdict seen.
+        _put_best(cls_map.setdefault(r["puzzle_id"], {}), r["model_name"], cand)
+        if vlabel == "original" and mlabel == "original":
+            _put_best(orig_map.setdefault(r["puzzle_id"], {}),
+                      r["model_name"], cand)
+        _put_best(cell_map.setdefault(r["puzzle_id"], {}).setdefault(
+            (vlabel, mlabel), {}), r["model_name"], cand)
 
     # Get puzzle info
     puzzles = []
@@ -249,6 +271,12 @@ def _inspect_masking(conn, models):
             continue
         pdata = db.puzzle_to_json(p)
         pdata["results"] = cls_map[pid]
+        pdata["original_results"] = orig_map.get(pid, {})
+        pdata["variant_cells"] = [
+            {"variant": v, "mask": m, "results": cell_map[pid][(v, m)]}
+            for (v, m) in sorted(cell_map.get(pid, {}),
+                                 key=lambda k: (k != ("original", "original"), k))
+        ]
         # Compute status per model
         statuses = set()
         narc_count = 0
@@ -1452,6 +1480,14 @@ def _run_review_job(job_id, puzzle_id, model_name, log_path):
                 model=model_name, puzzle=puzzle_id, log_fn=log_write
             )
             log_write(f"=== collect done: {collect_result} ===")
+
+            # Variant matrix: every enabled (narrative variant x mask variant)
+            # cell beyond the original x original one collect just covered.
+            log_write(f"=== matrix: model={model_name} puzzle={puzzle_id} ===")
+            matrix_result = run_matrix_job(
+                model=model_name, puzzle=puzzle_id, log_fn=log_write
+            )
+            log_write(f"=== matrix done: {matrix_result} ===")
 
             log_write(f"=== classify: model={model_name} puzzle={puzzle_id} ===")
             classify_result = run_classify_job(

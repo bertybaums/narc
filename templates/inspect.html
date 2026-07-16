@@ -242,6 +242,8 @@
         <div class="mb-2"><a class="text-info" style="font-size:0.8em;"
             href="/api/inspect/export/puzzle/{{ p.puzzle_id }}.json">Download this puzzle (JSON)</a></div>
         {% endif %}
+        {% if p.original_results %}
+        <div class="small text-muted mt-2">Original narrative &times; original mask</div>
         <table class="results-table">
             <thead>
                 <tr>
@@ -254,7 +256,7 @@
             </thead>
             <tbody>
                 {% for model in models %}
-                {% set r = p.results.get(model) %}
+                {% set r = p.original_results.get(model) %}
                 {% if r %}
                 <tr>
                     <td class="model-name">{{ model }}</td>
@@ -288,6 +290,61 @@
                 {% endfor %}
             </tbody>
         </table>
+        {% else %}
+        <div class="small text-muted mt-2">Original narrative not tested yet — see variant results below.</div>
+        {% endif %}
+        {% if p.variant_cells and (p.variant_cells | length > 1 or not p.original_results) %}
+        <div class="mt-3">
+            <button class="btn btn-sm btn-outline-secondary" onclick="toggleVariants('{{ p.puzzle_id }}')">
+                <span class="toggle" id="vtog-{{ p.puzzle_id }}">&#9654;</span>
+                Variant results ({{ p.variant_cells | length }} narrative &times; mask cells)
+            </button>
+            <div id="variants-{{ p.puzzle_id }}" style="display:none;" class="table-responsive mt-2">
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th style="text-align:left;">Narrative &times; Mask</th>
+                            {% for model in models %}
+                            <th>{{ model }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for cell in p.variant_cells %}
+                        <tr>
+                            <td class="model-name">{{ cell.variant }} &times; {{ cell.mask }}</td>
+                            {% for model in models %}
+                            {% set r = cell.results.get(model) %}
+                            <td>
+                                {% if not r %}
+                                <span class="result-fail" title="{{ model }}: not tested">&mdash;</span>
+                                {% elif r.has_narc %}
+                                {% set st = r.narc_strength %}
+                                {% if st == 'strong' %}
+                                <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+                                {% elif st == 'partial' %}
+                                <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+                                {% elif st == 'weak' %}
+                                <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+                                {% else %}
+                                <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested)">N</span>
+                                {% endif %}
+                                {% elif r.grids_only %}
+                                <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
+                                {% elif r.narrative_only %}
+                                <span class="dot dot-narr" title="{{ model }}: narrative sufficient">L</span>
+                                {% else %}
+                                <span class="dot dot-fail" title="{{ model }}: unsolvable">&times;</span>
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
     </div>
 </div>
 {% endfor %}
@@ -688,6 +745,18 @@ function togglePuzzle(id) {
     } else {
         body.style.display = 'block';
         tog.classList.add('open');
+    }
+}
+
+function toggleVariants(id) {
+    const el = document.getElementById('variants-' + id);
+    const tog = document.getElementById('vtog-' + id);
+    if (el.style.display === 'none') {
+        el.style.display = 'block';
+        if (tog) tog.classList.add('open');
+    } else {
+        el.style.display = 'none';
+        if (tog) tog.classList.remove('open');
     }
 }
 

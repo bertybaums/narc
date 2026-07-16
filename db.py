@@ -368,16 +368,11 @@ def get_enabled_pairs(conn, puzzle_id):
 
 def insert_trial(conn, puzzle_id, model_name, condition, prompt_text,
                  variant_id=None, repeat_num=1, mask_variant_id=None):
-    conn.execute(
-        """INSERT OR IGNORE INTO trials
-           (puzzle_id, variant_id, mask_variant_id, model_name, condition,
-            repeat_num, prompt_text)
-           VALUES (?, ?, ?, ?, ?, ?, ?)""",
-        (puzzle_id, variant_id, mask_variant_id, model_name, condition,
-         repeat_num, prompt_text),
-    )
-    conn.commit()
-    # NULL-safe lookup: variant_id and mask_variant_id may each be NULL.
+    # The UNIQUE constraint never fires when variant_id or mask_variant_id is
+    # NULL (SQLite treats NULLs as distinct), so INSERT OR IGNORE alone would
+    # duplicate base-protocol rows on every re-run. Look up NULL-safe first and
+    # only insert when the slot is genuinely missing. Prefer an answered row so
+    # duplicates left by the old behavior don't shadow completed work.
     conds = ["puzzle_id=?", "model_name=?", "condition=?", "repeat_num=?"]
     params = [puzzle_id, model_name, condition, repeat_num]
     if variant_id is None:
@@ -388,9 +383,22 @@ def insert_trial(conn, puzzle_id, model_name, condition, prompt_text,
         conds.append("mask_variant_id IS NULL")
     else:
         conds.append("mask_variant_id=?"); params.append(mask_variant_id)
-    row = conn.execute(
-        "SELECT trial_id FROM trials WHERE " + " AND ".join(conds), tuple(params)
-    ).fetchone()
+    lookup = ("SELECT trial_id FROM trials WHERE " + " AND ".join(conds) +
+              " ORDER BY (response_text IS NOT NULL OR error IS NOT NULL) DESC,"
+              " trial_id")
+    row = conn.execute(lookup, tuple(params)).fetchone()
+    if row:
+        return row["trial_id"]
+    conn.execute(
+        """INSERT OR IGNORE INTO trials
+           (puzzle_id, variant_id, mask_variant_id, model_name, condition,
+            repeat_num, prompt_text)
+           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+        (puzzle_id, variant_id, mask_variant_id, model_name, condition,
+         repeat_num, prompt_text),
+    )
+    conn.commit()
+    row = conn.execute(lookup, tuple(params)).fetchone()
     return row["trial_id"]
 
 

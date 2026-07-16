@@ -18,9 +18,12 @@ from collect import run_matrix_job
 @click.option("--puzzle", default=None, help="Single puzzle ID (default: all with enabled pairs)")
 @click.option("--concurrency", default=8, type=int, help="Max parallel requests")
 @click.option("--dry-run", is_flag=True, help="List planned trials without calling the API or writing rows")
-def main(model, puzzle, concurrency, dry_run):
+@click.option("--include-original", is_flag=True,
+              help="Also run the (original x original) cell (normally covered by collect.py)")
+def main(model, puzzle, concurrency, dry_run, include_original):
     run_matrix_job(model=model, puzzle=puzzle, concurrency=concurrency,
-                   dry_run=dry_run, log_fn=click.echo)
+                   dry_run=dry_run, include_original_pair=include_original,
+                   log_fn=click.echo)
 
 
 if __name__ == "__main__":
