@@ -43,6 +43,7 @@ def _apply_migrations(conn):
 
     _migrate_mask_variant_id(conn)
     _migrate_narc_strength(conn)
+    _migrate_narrative_dependence(conn)
 
 
 def _has_column(conn, table, column):
@@ -125,6 +126,19 @@ def _migrate_narc_strength(conn):
             ALTER TABLE classifications ADD COLUMN narc_strength  TEXT;
             ALTER TABLE classifications ADD COLUMN shuffle_solved INTEGER;
             ALTER TABLE classifications ADD COLUMN shuffle_total  INTEGER;
+        """)
+
+
+def _migrate_narrative_dependence(conn):
+    """Add narrative-sensitivity columns to classifications. Not part of the
+    PRIMARY KEY, so a plain ADD COLUMN suffices (no table rebuild). Guarded by
+    column presence — runs once, then no-ops. Populated by classify.py from the
+    'both_keywords' trials produced by collect.run_narrative_sensitivity_job."""
+    if not _has_column(conn, "classifications", "narrative_dependence"):
+        conn.executescript("""
+            ALTER TABLE classifications ADD COLUMN narrative_dependence TEXT;
+            ALTER TABLE classifications ADD COLUMN keyword_solved INTEGER;
+            ALTER TABLE classifications ADD COLUMN keyword_total  INTEGER;
         """)
 
 
@@ -454,7 +468,9 @@ def get_trials(conn, puzzle_id, model_name=None, variant_id=None):
 def upsert_classification(conn, puzzle_id, model_name, grids_only,
                           narrative_only, both, has_narc, variant_id=None,
                           mask_variant_id=None, narc_strength=None,
-                          shuffle_solved=None, shuffle_total=None):
+                          shuffle_solved=None, shuffle_total=None,
+                          narrative_dependence=None, keyword_solved=None,
+                          keyword_total=None):
     # SQLite treats NULL key values as distinct in UNIQUE/PK constraints, so
     # INSERT OR REPLACE doesn't dedupe. Delete first to guarantee uniqueness.
     conds = ["puzzle_id=?", "model_name=?"]
@@ -474,11 +490,13 @@ def upsert_classification(conn, puzzle_id, model_name, grids_only,
         """INSERT INTO classifications
            (puzzle_id, variant_id, mask_variant_id, model_name,
             grids_only, narrative_only, both, has_narc,
-            narc_strength, shuffle_solved, shuffle_total)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
+            narc_strength, shuffle_solved, shuffle_total,
+            narrative_dependence, keyword_solved, keyword_total)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, variant_id, mask_variant_id, model_name,
          grids_only, narrative_only, both, has_narc,
-         narc_strength, shuffle_solved, shuffle_total),
+         narc_strength, shuffle_solved, shuffle_total,
+         narrative_dependence, keyword_solved, keyword_total),
     )
     conn.commit()
 

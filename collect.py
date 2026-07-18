@@ -46,6 +46,9 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
         # both_shuffled is the same prompt over a shuffled-order view (built by
         # the caller); grading uses that view's answer_grids.
         messages = prompts.build_both(puzzle_data, narrative=variant_narrative)
+    elif condition == "both_keywords":
+        # Narrative-sensitivity: same grids, clue replaced by its key terms.
+        messages = prompts.build_both_keywords(puzzle_data, narrative=variant_narrative)
     else:
         raise ValueError(f"Unknown condition: {condition}")
 
@@ -352,6 +355,122 @@ def run_sensitivity_job(model, puzzle=None, shuffles=None, concurrency=8,
                            f"m{row['mask_variant_id']}/shuf#{row['repeat_num']}: {status}")
                 except Exception as e:
                     log_fn(f"  ERROR {row['puzzle_id']}/both_shuffled: {e}")
+                    errors += 1
+
+        log_fn(f"\nDone: {completed} completed, {errors} errors")
+        return {"pending": len(pending), "completed": completed, "errors": errors,
+                "cells": len(cells)}
+    finally:
+        conn.close()
+
+
+def run_narrative_sensitivity_job(model, puzzle=None, repeats=None, concurrency=8,
+                                  dry_run=False, log_fn=print):
+    """Narrative-sensitivity (lexical vs narrative NARC) test.
+
+    For every NARC cell (has_narc=1) of `model`, re-run the winning `both`
+    condition with the clue replaced by its alphabetized key terms (same grids,
+    same mask). The keyword prompt is deterministic, so the K repeats measure
+    model sampling noise only. Trials are stored with condition='both_keywords',
+    repeat_num=1..K, tagged with the cell's variant_id + mask_variant_id.
+    classify.py then reads these to label the cell narrative / partial /
+    lexical. Idempotent: skips trials that already have a response; --dry-run
+    is read-only. Returns dict with keys: pending, completed, errors, cells.
+    """
+    config = load_config()
+    model_config = get_model_config(config, model)
+    extraction_config = get_model_config(config, "gpt-oss-120b-extract")
+    if repeats is None:
+        repeats = config.get("experiment", {}).get("keyword_repeats", 3)
+
+    conn = db.init_db()
+    try:
+        sql = ("SELECT puzzle_id, variant_id, mask_variant_id FROM classifications "
+               "WHERE has_narc=1 AND model_name=?")
+        params = [model]
+        if puzzle:
+            sql += " AND puzzle_id=?"
+            params.append(puzzle)
+        cells = conn.execute(sql, tuple(params)).fetchall()
+
+        # Enumerate planned trials first (no DB writes) so --dry-run is read-only.
+        planned = []  # (pid, vid, mvid, k, prompt_text, view, narrative)
+        base_cache = {}
+        for c in cells:
+            pid, vid, mvid = c["puzzle_id"], c["variant_id"], c["mask_variant_id"]
+            if pid not in base_cache:
+                row = db.get_puzzle(conn, pid)
+                base_cache[pid] = db.puzzle_to_json(row) if row else None
+            base = base_cache[pid]
+            if base is None:
+                log_fn(f"  skip {pid}: not found")
+                continue
+            mv = db.get_mask_variant(conn, mvid) if mvid is not None else None
+            if mvid is not None and not mv:
+                log_fn(f"  skip {pid} m={mvid}: mask variant missing")
+                continue
+            masked_positions = (json.loads(mv["masked_positions"]) if mv
+                                else base["masked_positions"])
+            narrative = _resolve_narrative(conn, base, vid)
+            if not prompts.extract_keywords(narrative):
+                log_fn(f"  skip {pid} v={vid}: no keywords survive extraction")
+                continue
+            view = grids.remask(base, masked_positions)
+            msgs = prompts.build_both_keywords(view, narrative=narrative)
+            prompt_text = json.dumps(msgs)
+            for k in range(1, repeats + 1):
+                planned.append((pid, vid, mvid, k, prompt_text, view, narrative))
+
+        if dry_run:
+            for pid, vid, mvid, k, _pt, _v, _n in planned:
+                log_fn(f"  would run {pid} v={vid} m={mvid} both_keywords#{k}")
+            log_fn(f"Narrative-sensitivity planned trials: {len(planned)} across "
+                   f"{len(cells)} NARC cell(s)")
+            return {"pending": len(planned), "completed": 0, "errors": 0,
+                    "cells": len(cells)}
+
+        pending = []
+        for pid, vid, mvid, k, prompt_text, view, narrative in planned:
+            tid = db.insert_trial(conn, pid, model, "both_keywords", prompt_text,
+                                  variant_id=vid, mask_variant_id=mvid, repeat_num=k)
+            row = conn.execute("SELECT * FROM trials WHERE trial_id=?", (tid,)).fetchone()
+            if row and row["response_text"] is None and row["error"] is None:
+                pending.append((row, view, narrative))
+
+        log_fn(f"Narrative-sensitivity pending trials: {len(pending)} across "
+               f"{len(cells)} NARC cell(s)")
+
+        completed = 0
+        errors = 0
+
+        def process(item):
+            row, view, narrative = item
+            return run_trial(model_config, extraction_config, row, view,
+                             variant_narrative=narrative), view
+
+        with ThreadPoolExecutor(max_workers=concurrency) as executor:
+            futures = {executor.submit(process, it): it for it in pending}
+            for future in as_completed(futures):
+                row, view, narrative = futures[future]
+                try:
+                    result, view = future.result()
+                    trial_id = result[0]
+                    db.update_trial_response(conn, trial_id, result[1], result[2],
+                                             result[5], error=result[4])
+                    predicted = result[6] if len(result) > 6 else None
+                    if predicted is not None:
+                        pred_mapped, correct, acc = grade_prediction(view, predicted)
+                        db.update_trial_evaluation(conn, trial_id, json.dumps(pred_mapped),
+                                                   result[3], correct, acc)
+                        status = "correct" if correct else f"wrong ({acc:.1%})"
+                    else:
+                        status = f"parse_error: {result[4]}"
+                        errors += 1
+                    completed += 1
+                    log_fn(f"  [{completed}/{len(pending)}] {row['puzzle_id']}/"
+                           f"m{row['mask_variant_id']}/kw#{row['repeat_num']}: {status}")
+                except Exception as e:
+                    log_fn(f"  ERROR {row['puzzle_id']}/both_keywords: {e}")
                     errors += 1
 
         log_fn(f"\nDone: {completed} completed, {errors} errors")

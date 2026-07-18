@@ -90,6 +90,9 @@ CREATE TABLE IF NOT EXISTS classifications (
     narc_strength  TEXT,                  -- 'strong' | 'partial' | 'weak' | NULL (order-sensitivity)
     shuffle_solved INTEGER,               -- # shuffled-order 'both' trials solved
     shuffle_total  INTEGER,               -- # shuffled-order 'both' trials run (K)
+    narrative_dependence TEXT,            -- 'narrative' | 'partial' | 'lexical' | NULL (keyword ablation)
+    keyword_solved INTEGER,               -- # keyword-list 'both' trials solved
+    keyword_total  INTEGER,               -- # keyword-list 'both' trials run (K)
     PRIMARY KEY (puzzle_id, variant_id, mask_variant_id, model_name)
 );
 

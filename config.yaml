@@ -104,3 +104,6 @@ experiment:
     - both
   # Order-sensitivity (weak/strong NARC): K shuffled-order 'both' re-runs per NARC cell.
   shuffles: 3
+  # Narrative-sensitivity (lexical vs narrative NARC): K keyword-list 'both'
+  # re-runs per NARC cell (clue replaced by its alphabetized key terms).
+  keyword_repeats: 3

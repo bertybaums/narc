@@ -18,7 +18,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import db
 import grids
 from db import get_variants, get_trials
-from collect import run_collect_job, run_matrix_job, run_sensitivity_job
+from collect import (run_collect_job, run_matrix_job, run_sensitivity_job,
+                     run_narrative_sensitivity_job)
 from classify import run_classify_job
 from ratelimit import mindrouter_bucket
 
@@ -208,7 +209,8 @@ def _inspect_masking(conn, models):
     rows = conn.execute(
         """SELECT c.puzzle_id, c.model_name, c.grids_only, c.narrative_only,
                   c.both, c.has_narc, c.narc_strength, c.shuffle_solved,
-                  c.shuffle_total, c.variant_id, c.mask_variant_id,
+                  c.shuffle_total, c.narrative_dependence, c.keyword_solved,
+                  c.keyword_total, c.variant_id, c.mask_variant_id,
                   nv.variant AS variant_label, mv.label AS mask_label
            FROM classifications c
            LEFT JOIN narrative_variants nv ON nv.variant_id = c.variant_id
@@ -229,12 +231,15 @@ def _inspect_masking(conn, models):
     # drill-down never contradict each other (duplicate original x original
     # rows exist where a legacy matrix run repeated the base protocol).
     _rank = {"strong": 3, "partial": 2, "weak": 1, None: 0}
+    _dep_rank = {"narrative": 3, "partial": 2, "lexical": 1, None: 0}
 
     def _put_best(slot, key, cand):
         cur = slot.get(key)
-        better = (cand["has_narc"] or 0, _rank.get(cand["narc_strength"], 0))
+        better = (cand["has_narc"] or 0, _rank.get(cand["narc_strength"], 0),
+                  _dep_rank.get(cand["narrative_dependence"], 0))
         current = (cur["has_narc"] or 0,
-                   _rank.get(cur["narc_strength"], 0)) if cur else (-1, -1)
+                   _rank.get(cur["narc_strength"], 0),
+                   _dep_rank.get(cur["narrative_dependence"], 0)) if cur else (-1, -1, -1)
         if better > current:
             slot[key] = cand
 
@@ -251,6 +256,9 @@ def _inspect_masking(conn, models):
             "narc_strength": r["narc_strength"],
             "shuffle_solved": r["shuffle_solved"],
             "shuffle_total": r["shuffle_total"],
+            "narrative_dependence": r["narrative_dependence"],
+            "keyword_solved": r["keyword_solved"],
+            "keyword_total": r["keyword_total"],
         }
         # Collapse per-(variant,mask) rows to one per (puzzle, model): a puzzle
         # is NARC for a model if ANY cell is; keep the strongest verdict seen.
@@ -285,6 +293,8 @@ def _inspect_masking(conn, models):
                 statuses.add("narc")
                 if res.get("narc_strength"):
                     statuses.add("narc_" + res["narc_strength"])
+                if res.get("narrative_dependence"):
+                    statuses.add("dep_" + res["narrative_dependence"])
                 narc_count += 1
             elif res["grids_only"]:
                 statuses.add("grids_sufficient")
@@ -1506,6 +1516,18 @@ def _run_review_job(job_id, puzzle_id, model_name, log_path):
             if sens_result.get("completed"):
                 run_classify_job(model=model_name, puzzle=puzzle_id, log_fn=log_write)
                 log_write("=== reclassify (strength) done ===")
+
+            # Narrative-sensitivity: keyword-ablate the same NARC cells, then
+            # re-classify so the narrative/lexical verdict is stored. No-op
+            # when the puzzle produced no NARC cells for this model.
+            log_write(f"=== narrative-sensitivity: model={model_name} puzzle={puzzle_id} ===")
+            nsens_result = run_narrative_sensitivity_job(
+                model=model_name, puzzle=puzzle_id, log_fn=log_write
+            )
+            log_write(f"=== narrative-sensitivity done: {nsens_result} ===")
+            if nsens_result.get("completed"):
+                run_classify_job(model=model_name, puzzle=puzzle_id, log_fn=log_write)
+                log_write("=== reclassify (dependence) done ===")
 
         conn = get_conn()
         db.set_review_job_status(conn, job_id, "done")

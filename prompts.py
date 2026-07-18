@@ -1,6 +1,23 @@
 """Prompt templates for the NARC 3-condition testing pipeline."""
 
+import re
+
 from grids import COLOR_KEY, sequence_to_text
+
+# Function words stripped by extract_keywords. Spatial words (up, down, above,
+# below, between, through...) are deliberately NOT stopwords — in a grid puzzle
+# they carry content. Temporal/causal connectives (before, then, because...)
+# ARE stripped: they carry the narrative structure this ablation removes.
+STOPWORDS = frozenset("""
+a about after again all am an and any are as at be because been before being
+both but by can could did do does doing done during each few for from further
+had has have having he her here hers herself him himself his how i if in into
+is it its itself just me might more most must my myself no nor not now of on
+once only or other our ours ourselves own shall she should so some such than
+that the their theirs them themselves then there these they this those to too
+until upon very was we were what when where which while who whom whose why
+will with would you your yours yourself yourselves
+""".split())
 
 
 def _mask_info(puzzle):
@@ -114,6 +131,44 @@ Narrative: "{narrative}"
 
 {mask_info}
 Use the narrative and visible grids together to reconstruct the masked grid(s)."""
+
+    return [
+        {"role": "system", "content": _system_prompt(puzzle)},
+        {"role": "user", "content": user_msg},
+    ]
+
+
+def extract_keywords(narrative):
+    """Deterministic key-term extraction for the narrative-sensitivity test.
+
+    Lowercase -> tokenize (letters, digits, internal apostrophes/hyphens) ->
+    drop stopwords -> dedupe -> alphabetize. Alphabetizing matters: a list in
+    clue order would leak the narrative sequence this ablation removes.
+    """
+    tokens = re.findall(r"[a-z0-9]+(?:['-][a-z0-9]+)*", narrative.lower())
+    return sorted({t for t in tokens if t not in STOPWORDS})
+
+
+def build_both_keywords(puzzle, narrative=None):
+    """Build prompt for both_keywords condition: grids + alphabetized key terms.
+
+    Identical to build_both except the narrative clue is replaced by the bag of
+    its content words, so the contrast between the two conditions isolates
+    narrative form from lexical content. Never presented as a story or clue.
+    """
+    narrative = narrative or puzzle["narrative"]
+    keywords = extract_keywords(narrative)
+    seq_text = sequence_to_text(puzzle["sequence"], puzzle["masked_positions"])
+    mask_info = _mask_info(puzzle)
+
+    user_msg = f"""{COLOR_KEY}
+
+Key terms (unordered): {", ".join(keywords)}
+
+{seq_text}
+
+{mask_info}
+Use the key terms and visible grids together to reconstruct the masked grid(s)."""
 
     return [
         {"role": "system", "content": _system_prompt(puzzle)},

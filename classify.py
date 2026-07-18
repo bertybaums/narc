@@ -54,6 +54,7 @@ def run_classify_job(model, puzzle=None, log_fn=print):
             grids_by_mask = {}                 # mask_variant_id -> correct
             narrative_by_cell = {}             # (variant_id, mask_variant_id) -> {cond: correct}
             shuffled_by_cell = {}              # (variant_id, mask_variant_id) -> [correct, ...]
+            keywords_by_cell = {}              # (variant_id, mask_variant_id) -> [correct, ...]
             for t in trials:
                 if t["correct"] is None:
                     continue
@@ -62,6 +63,9 @@ def run_classify_job(model, puzzle=None, log_fn=print):
                     grids_by_mask[mvid] = t["correct"]
                 elif t["condition"] == "both_shuffled":
                     shuffled_by_cell.setdefault((t["variant_id"], mvid), []).append(
+                        t["correct"])
+                elif t["condition"] == "both_keywords":
+                    keywords_by_cell.setdefault((t["variant_id"], mvid), []).append(
                         t["correct"])
                 else:
                     cell = (t["variant_id"], mvid)
@@ -95,12 +99,31 @@ def run_classify_job(model, puzzle=None, log_fn=print):
                         else:
                             narc_strength = "partial"
 
+                # Narrative-sensitivity (keyword ablation): does the clue help
+                # as a narrative or merely as a bag of key terms? Only
+                # meaningful for NARC cells with 'both_keywords' trials.
+                narrative_dependence = keyword_solved = keyword_total = None
+                if has_narc:
+                    kw = keywords_by_cell.get((vid, mvid), [])
+                    if kw:
+                        keyword_total = len(kw)
+                        keyword_solved = sum(kw)
+                        if keyword_solved == 0:
+                            narrative_dependence = "narrative"
+                        elif keyword_solved == keyword_total:
+                            narrative_dependence = "lexical"
+                        else:
+                            narrative_dependence = "partial"
+
                 db.upsert_classification(conn, pid, model, grids_only, narrative_only,
                                          both, has_narc, variant_id=vid,
                                          mask_variant_id=mvid,
                                          narc_strength=narc_strength,
                                          shuffle_solved=shuffle_solved,
-                                         shuffle_total=shuffle_total)
+                                         shuffle_total=shuffle_total,
+                                         narrative_dependence=narrative_dependence,
+                                         keyword_solved=keyword_solved,
+                                         keyword_total=keyword_total)
                 total += 1
                 if has_narc:
                     narc_count += 1
@@ -114,6 +137,8 @@ def run_classify_job(model, puzzle=None, log_fn=print):
                     status = "unsolvable"
                 if has_narc and narc_strength:
                     status += f"/{narc_strength}({shuffle_solved}/{shuffle_total})"
+                if has_narc and narrative_dependence:
+                    status += f"/{narrative_dependence}({keyword_solved}/{keyword_total})"
                 log_fn(f"  {pid} [v={vid} m={mvid}]: {status} "
                        f"(g={grids_only} n={narrative_only} b={both})")
 

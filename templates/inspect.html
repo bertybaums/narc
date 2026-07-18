@@ -40,6 +40,10 @@
 .dot-narc-strong { background: #134e1f; color: #2ECC40; border: 1px solid #2ECC40; padding: 1px 5px; }
 .dot-narc-partial { background: #3a3000; color: #FFD700; border: 1px solid #FFD700; padding: 1px 5px; }
 .dot-narc-weak { background: transparent; color: #2ECC40; border: 1px dashed #2a7a3f; padding: 1px 5px; }
+/* Narrative-sensitivity (keyword ablation) badges, orange family. */
+.dot-dep-narrative { background: #4a3000; color: #FF851B; border: 1px solid #FF851B; padding: 1px 5px; }
+.dot-dep-partial { background: #3a3000; color: #FFD700; border: 1px dashed #FFD700; padding: 1px 5px; }
+.dot-dep-lexical { background: transparent; color: #FF851B; border: 1px dashed #8a5a20; padding: 1px 5px; }
 .dot-grids { background: #0a3050; color: #0074D9; }
 .dot-narr { background: #4a3000; color: #FF851B; }
 .dot-fail { background: #2a1515; color: #666; }
@@ -132,12 +136,18 @@
             &nbsp;&nbsp;<span class="dot dot-narr">L</span> = Narrative sufficient (solvable from narrative alone)
             &nbsp;&nbsp;<span class="dot dot-fail">&times;</span> = Unsolvable (failed on all conditions)
         </p>
-        <p class="mb-0" style="color:#888;font-size:0.8em;">
+        <p class="mb-1" style="color:#888;font-size:0.8em;">
             <strong style="color:#aaa;">Order sensitivity:</strong> each NARC cell is re-tested with the grids in randomized order (same clue). &nbsp;
             <span class="dot dot-narc-strong">Strong</span> = fails every shuffle (order is necessary)
             &nbsp;&nbsp;<span class="dot dot-narc-partial">Partial</span> = solves some shuffles
             &nbsp;&nbsp;<span class="dot dot-narc-weak">Weak</span> = solves every shuffle (order incidental).
             A plain <span class="dot dot-narc">N</span> means order not yet tested.
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            <strong style="color:#aaa;">Narrative sensitivity:</strong> each NARC cell is re-tested with the clue replaced by an alphabetized list of its key terms (same grids). &nbsp;
+            <span class="dot dot-dep-narrative">Narrative</span> = fails every keyword trial (narrative form is necessary)
+            &nbsp;&nbsp;<span class="dot dot-dep-partial">Partial</span> = solves some keyword trials
+            &nbsp;&nbsp;<span class="dot dot-dep-lexical">Lexical</span> = solves every keyword trial (the terms alone suffice).
         </p>
     </div>
 </div>
@@ -176,6 +186,9 @@
         <option value="narc_strong">NARC — strong (order matters)</option>
         <option value="narc_partial">NARC — partial</option>
         <option value="narc_weak">NARC — weak (order incidental)</option>
+        <option value="dep_narrative">NARC — narrative-dependent (form matters)</option>
+        <option value="dep_partial">NARC — keyword partial</option>
+        <option value="dep_lexical">NARC — lexical (terms suffice)</option>
         <option value="grids_sufficient">Grids sufficient</option>
         <option value="unsolvable">Unsolvable</option>
     </select>
@@ -215,14 +228,16 @@
             {% set r = p.results.get(model, {}) %}
             {% if r.get('has_narc') %}
             {% set st = r.get('narc_strength') %}
+            {% set dep = r.get('narrative_dependence') %}
+            {% set deptxt = ('; keywords ' ~ r.keyword_solved ~ '/' ~ r.keyword_total ~ ' — ' ~ dep) if dep else '' %}
             {% if st == 'strong' %}
-            <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+            <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
             {% elif st == 'partial' %}
-            <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+            <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
             {% elif st == 'weak' %}
-            <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+            <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
             {% else %}
-            <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested)">N</span>
+            <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested{{ deptxt }})">N</span>
             {% endif %}
             {% elif r.get('grids_only') %}
             <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
@@ -252,6 +267,7 @@
                     <th>Narrative Only</th>
                     <th>Both</th>
                     <th>NARC</th>
+                    <th>Keywords</th>
                 </tr>
             </thead>
             <tbody>
@@ -280,6 +296,22 @@
                         <span class="dot dot-narc-weak" title="solves every shuffled order — order incidental">Weak ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
                         {% else %}
                         <span class="dot dot-narc" title="order not yet tested">NARC</span>
+                        {% endif %}
+                        {% else %}
+                        <span class="result-fail">&mdash;</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if r.has_narc %}
+                        {% set dep = r.narrative_dependence %}
+                        {% if dep == 'narrative' %}
+                        <span class="dot dot-dep-narrative" title="fails every keyword-list trial — narrative form is necessary">Narrative ({{ r.keyword_solved }}/{{ r.keyword_total }})</span>
+                        {% elif dep == 'partial' %}
+                        <span class="dot dot-dep-partial" title="solves some keyword-list trials">Partial ({{ r.keyword_solved }}/{{ r.keyword_total }})</span>
+                        {% elif dep == 'lexical' %}
+                        <span class="dot dot-dep-lexical" title="solves every keyword-list trial — the key terms alone suffice">Lexical ({{ r.keyword_solved }}/{{ r.keyword_total }})</span>
+                        {% else %}
+                        <span class="result-fail" title="keywords not yet tested">&mdash;</span>
                         {% endif %}
                         {% else %}
                         <span class="result-fail">&mdash;</span>
@@ -320,14 +352,16 @@
                                 <span class="result-fail" title="{{ model }}: not tested">&mdash;</span>
                                 {% elif r.has_narc %}
                                 {% set st = r.narc_strength %}
+                                {% set dep = r.narrative_dependence %}
+                                {% set deptxt = ('; keywords ' ~ r.keyword_solved ~ '/' ~ r.keyword_total ~ ' — ' ~ dep) if dep else '' %}
                                 {% if st == 'strong' %}
-                                <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+                                <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
                                 {% elif st == 'partial' %}
-                                <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+                                <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
                                 {% elif st == 'weak' %}
-                                <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved)">N</span>
+                                <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
                                 {% else %}
-                                <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested)">N</span>
+                                <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested{{ deptxt }})">N</span>
                                 {% endif %}
                                 {% elif r.grids_only %}
                                 <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
