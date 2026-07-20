@@ -21,6 +21,7 @@ from db import get_variants, get_trials
 from collect import (run_collect_job, run_matrix_job, run_sensitivity_job,
                      run_narrative_sensitivity_job)
 from classify import run_classify_job
+from prompts import extract_keywords
 from ratelimit import mindrouter_bucket
 
 app = Flask(__name__)
@@ -269,6 +270,14 @@ def _inspect_masking(conn, models):
         _put_best(cell_map.setdefault(r["puzzle_id"], {}).setdefault(
             (vlabel, mlabel), {}), r["model_name"], cand)
 
+    # Narrative labels with a keyword-ablation verdict, per puzzle — drives the
+    # "Key terms used" drill-down (only narratives actually keyword-tested).
+    dep_labels = {}
+    for r in rows:
+        if r["narrative_dependence"]:
+            dep_labels.setdefault(r["puzzle_id"], set()).add(
+                r["variant_label"] or "original")
+
     # Get puzzle info
     puzzles = []
     for p in conn.execute(
@@ -285,6 +294,21 @@ def _inspect_masking(conn, models):
             for (v, m) in sorted(cell_map.get(pid, {}),
                                  key=lambda k: (k != ("original", "original"), k))
         ]
+        # Keyword lists shown for each keyword-tested narrative (original first).
+        labels = dep_labels.get(pid, set())
+        keyword_lists = []
+        if "original" in labels:
+            keyword_lists.append({"variant": "original",
+                                  "keywords": extract_keywords(p["narrative"])})
+        if labels - {"original"}:
+            for v in conn.execute(
+                "SELECT variant, narrative FROM narrative_variants "
+                "WHERE puzzle_id=? ORDER BY variant", (pid,)
+            ).fetchall():
+                if v["variant"] in labels and v["variant"] != "original":
+                    keyword_lists.append({"variant": v["variant"],
+                                          "keywords": extract_keywords(v["narrative"])})
+        pdata["keyword_lists"] = keyword_lists
         # Compute status per model
         statuses = set()
         narc_count = 0
