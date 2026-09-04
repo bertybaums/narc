@@ -35,7 +35,7 @@ if _secret == "dev-secret-change-in-prod":
 app.secret_key = _secret
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
-          "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
+          "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
 REVIEW_MODELS = MODELS
 
 

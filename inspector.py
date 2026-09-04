@@ -9,6 +9,7 @@ Usage:
 """
 
 import json
+import re
 from collections import defaultdict
 
 import click
@@ -22,7 +23,7 @@ from grids import grid_to_base64_png, COLOR_RGB
 # ---------------------------------------------------------------------------
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
-          "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
+          "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
 CONDITIONS = ["grids_only", "narrative_only", "both"]
 
 
@@ -268,7 +269,7 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
 
     # Summary cards per model
     for m in active_models:
-        short = m.replace("gpt-oss-", "").replace("qwen3.5-", "q")
+        short = re.sub(r"^qwen3\.\d-", "q", m.replace("gpt-oss-", ""))
         nc = narc_counts[m]
         html += f"""<div class="summary-card">
             <div class="value" style="color:#2ECC40;">{nc}</div>
@@ -393,7 +394,7 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
             mr = model_results.get(m, {})
             status = mr.get("status", "—")
             results = mr.get("results", {})
-            short = m.replace("gpt-oss-", "").replace("qwen3.5-", "q")
+            short = re.sub(r"^qwen3\.\d-", "q", m.replace("gpt-oss-", ""))
 
             html += f'<tr><td class="model-name">{short}</td>'
             html += f'<td>{_status_dot(status, mr.get("strength"))}</td>'
