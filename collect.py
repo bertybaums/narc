@@ -505,6 +505,7 @@ def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
 
         log_fn(f"Collecting: {len(rows)} puzzles x {len(conditions)} conditions on {model}")
 
+        planned_ids = set()
         for row in rows:
             puzzle_data = db.puzzle_to_json(row)
             # Pre-flight: a masked position outside the sequence (e.g. left over
@@ -527,12 +528,20 @@ def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
                     else prompts.build_narrative_only(puzzle_data) if cond == "narrative_only"
                     else prompts.build_both(puzzle_data)
                 )
-                db.insert_trial(conn, puzzle_data["puzzle_id"], model, cond, prompt_text,
-                                mask_variant_id=orig_mask_id)
+                planned_ids.add(db.insert_trial(
+                    conn, puzzle_data["puzzle_id"], model, cond, prompt_text,
+                    mask_variant_id=orig_mask_id))
 
-        pending = db.get_pending_trials(conn, model_name=model)
-        if puzzle:
-            pending = [t for t in pending if t["puzzle_id"] == puzzle]
+        # Run only the trials this job planned: the base 3-condition protocol
+        # under variant_id NULL. get_pending_trials(model) alone would also hand
+        # back pending matrix / both_shuffled / both_keywords rows, and run_trial
+        # below builds prompts from the *base* puzzle, so those would silently be
+        # answered against the wrong narrative or grid view (this bit the Sep 8,
+        # 2026 parse-error retry). They belong to run_matrix_job /
+        # run_sensitivity_job / run_narrative_sensitivity_job, which scope the
+        # same way.
+        pending = [t for t in db.get_pending_trials(conn, model_name=model)
+                   if t["trial_id"] in planned_ids]
         log_fn(f"Pending trials: {len(pending)}")
 
         if dry_run:
