@@ -9,7 +9,6 @@ Usage:
 """
 
 import json
-import re
 from collections import defaultdict
 
 import click
@@ -32,7 +31,10 @@ def _grid_img(grid, border_color="#555", max_cell=24):
     if not grid:
         return '<div class="no-grid">?</div>'
     # Clamp values to 0-9 for rendering (model predictions may exceed range)
-    clamped = [[max(0, min(9, c)) for c in row] for row in grid]
+    # Predicted grids can carry non-int cells (lenient parse of a model's
+    # output); render those as color 0 instead of crashing the export.
+    clamped = [[max(0, min(9, c)) if isinstance(c, int) and not isinstance(c, bool)
+                else 0 for c in row] for row in grid]
     b64 = grid_to_base64_png(clamped)
     return f'<img src="data:image/png;base64,{b64}" class="grid-img" style="border:2px solid {border_color};">'
 
@@ -269,7 +271,7 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
 
     # Summary cards per model
     for m in active_models:
-        short = re.sub(r"^qwen3\.\d-", "q", m.replace("gpt-oss-", ""))
+        short = m.replace("gpt-oss-", "").replace("qwen", "q")
         nc = narc_counts[m]
         html += f"""<div class="summary-card">
             <div class="value" style="color:#2ECC40;">{nc}</div>
@@ -394,7 +396,7 @@ h1 {{ color: #f59e0b; margin-bottom: 4px; }}
             mr = model_results.get(m, {})
             status = mr.get("status", "—")
             results = mr.get("results", {})
-            short = re.sub(r"^qwen3\.\d-", "q", m.replace("gpt-oss-", ""))
+            short = m.replace("gpt-oss-", "").replace("qwen", "q")
 
             html += f'<tr><td class="model-name">{short}</td>'
             html += f'<td>{_status_dot(status, mr.get("strength"))}</td>'

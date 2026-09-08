@@ -332,8 +332,27 @@ trials, 7,416 classification cells, ~0.5% parse errors. Per-model cells / NARC /
 | gemma-4-26b | 993 | 197 | 96 |
 | gemma-4-31b | 993 | 199 | 117 |
 | qwen3.6-27b | 1476 | 214 | 117 |
+| qwen3.8-27b (added Sep 2026) | 1026 | 259 | 122 |
 
 Every NARC cell (variant cells included) is order-sensitivity tested — zero untested.
 Reviewer accounts were audited for variant/mask/matrix access: full parity with owners
 already existed (all routes and UI panels gate on `('owner', 'reviewer')`); no change
 was needed.
+
+---
+
+## 12. Addendum — September 8, 2026: eighth model via `backfill_model.sh`
+
+qwen3.8-27b (`qwen/qwen3.8-27b`) was added September 4, 2026 and back-filled over the whole
+corpus with the new `backfill_model.sh` (collect → matrix → classify → order-sensitivity →
+narrative-sensitivity → retry pass → final classify) inside the prod container: 6h03m at
+concurrency 4, 4,545 trials, 2 parse errors, 0 transport errors. Every enabled non-original
+(narrative × mask) pair got a trial, and every NARC cell has both a strength and a dependence
+verdict. Corpus is now 630 puzzles, 37,829 trials, 9,092 cells; the row above uses the
+September 8 numbers (other rows are the July 16 snapshot — current values for those models are
+1076–1086 cells each, see CLAUDE.md).
+
+Two fixes fell out of the retry pass: `retry_errors.py` (HTTP-failed trials were never revisited
+by the collect scripts) and a scoping fix to `run_collect_job`, which used to pick up *any*
+pending trial for the model and answer matrix/shuffled/keyword rows against the base puzzle.
+
