@@ -20,7 +20,8 @@
 <div class="d-flex align-items-center gap-2 mb-2 flex-wrap">
     <strong class="text-muted">Sort:</strong>
     <div class="btn-group btn-group-sm flex-wrap" role="group" id="sort-modes">
-        <button class="btn btn-outline-light active" data-sort="top" onclick="setSort(this)">Top</button>
+        <button class="btn btn-outline-light active" data-sort="favorites" onclick="setSort(this)" title="Our lab's favorite puzzles to solve (🧩 in the title)">🧩 Favorites</button>
+        <button class="btn btn-outline-light" data-sort="top" onclick="setSort(this)">Top</button>
         <button class="btn btn-outline-light" data-sort="default" onclick="setSort(this)">Default</button>
         <button class="btn btn-outline-light" data-sort="new" onclick="setSort(this)">New</button>
         <button class="btn btn-outline-light" data-sort="random" onclick="setSort(this)">Random</button>
@@ -221,7 +222,7 @@
 <script>
 const activeTags = new Set();
 const activeSources = new Set();
-let currentSort = 'top';
+let currentSort = 'favorites';
 
 // --- Voter ID ---
 function getVoterId() {
@@ -336,6 +337,10 @@ function filterPuzzles() {
             item.style.display = 'none';
             return;
         }
+        if (currentSort === 'favorites' && !title.includes('🧩')) {
+            item.style.display = 'none';
+            return;
+        }
 
         const matchesSearch = !search || title.includes(search) || id.includes(search);
 
@@ -387,6 +392,7 @@ function sortPuzzles() {
         } else {
             items.sort((a, b) => {
                 switch (currentSort) {
+                    case 'favorites':   // lab favourites (🧩 in the title), best-voted first
                     case 'top':
                         return (parseFloat(b.dataset.voteNet) || 0) - (parseFloat(a.dataset.voteNet) || 0);
                     case 'new':
