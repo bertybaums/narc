@@ -54,7 +54,7 @@
         <div class="col-4"><label class="form-label">gap px</label><input type="number" class="form-control form-control-sm" id="gap" value="24" min="0" max="120"></div>
         <div class="col-4"><label class="form-label">export scale</label><input type="number" class="form-control form-control-sm" id="scale" value="3" min="1" max="6"></div>
         <div class="col-6"><label class="form-label">grid lines</label><select class="form-select form-select-sm" id="lines"><option value="thin">thin grey</option><option value="black">black</option><option value="none">none</option></select></div>
-        <div class="col-6"><label class="form-label">masked grid</label><select class="form-select form-select-sm" id="maskstyle"><option value="hatch">fine hatch</option><option value="q">question mark</option><option value="blank">blank</option></select></div>
+        <div class="col-6"><label class="form-label">masked grid</label><select class="form-select form-select-sm" id="maskstyle"><option value="q" selected>one large ? (white)</option><option value="qcell">? in every cell</option><option value="hatch">fine hatch</option><option value="dots">light dot per cell</option><option value="blank">blank white</option></select></div>
         <div class="col-6"><label class="form-label">labels</label><select class="form-select form-select-sm" id="labels"><option value="num">Grid 1 … n</option><option value="none">none</option></select></div>
         <div class="col-6"><label class="form-label">legend</label><select class="form-select form-select-sm" id="legend"><option value="none">none</option><option value="used">colours used</option><option value="all">all ten</option></select></div>
         <div class="col-12"><label class="form-label">paper</label><select class="form-select form-select-sm" id="paper"><option value="white">white</option><option value="transparent">transparent</option></select></div>
@@ -142,9 +142,11 @@ function drawStrip(canvas, grids, masked, opts){
     for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){ const cx=x+c*s, cy=y+r*s;
       if(isMasked){ ctx.fillStyle='#fff'; ctx.fillRect(cx,cy,s,s);
         if(opts.maskstyle==='hatch'){ ctx.save(); ctx.beginPath(); ctx.rect(cx,cy,s,s); ctx.clip(); ctx.strokeStyle='#999'; ctx.lineWidth=1; for(let k=-s;k<2*s;k+=Math.max(3,s/5)){ ctx.beginPath(); ctx.moveTo(cx+k,cy); ctx.lineTo(cx+k+s,cy+s); ctx.stroke(); } ctx.restore(); }
+        else if(opts.maskstyle==='qcell'){ ctx.fillStyle='#555'; ctx.font=`bold ${Math.round(s*0.62)}px Helvetica, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('?', cx+s/2, cy+s/2+s*0.03); }
+        else if(opts.maskstyle==='dots'){ ctx.fillStyle='#bbb'; ctx.beginPath(); ctx.arc(cx+s/2, cy+s/2, Math.max(1.5, s/9), 0, Math.PI*2); ctx.fill(); }
       } else fillCell(ctx,cx,cy,s,g[r][c],sc);
     }
-    if(isMasked && opts.maskstyle==='q'){ ctx.fillStyle='#444'; ctx.font=`bold ${Math.round(Math.min(rows,cols)*s*0.6)}px Helvetica, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('?', x+cols*s/2, y+rows*s/2); }
+    if(isMasked && opts.maskstyle==='q'){ const size=Math.round(Math.min(rows,cols)*s*0.62); ctx.fillStyle='#444'; ctx.font=`bold ${size}px Helvetica, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('?', x+cols*s/2, y+rows*s/2+size*0.04); }
     if(lines!=='none'){ ctx.strokeStyle = lines==='black' ? '#000' : '#999'; ctx.lineWidth = lines==='black' ? Math.max(1,s/20) : 1;
       for(let c=0;c<=cols;c++){ ctx.beginPath(); ctx.moveTo(x+c*s+0.5,y); ctx.lineTo(x+c*s+0.5,y+rows*s); ctx.stroke(); }
       for(let r=0;r<=rows;r++){ ctx.beginPath(); ctx.moveTo(x,y+r*s+0.5); ctx.lineTo(x+cols*s,y+r*s+0.5); ctx.stroke(); } }
