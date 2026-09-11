@@ -1184,6 +1184,34 @@ def api_delete_puzzle(puzzle_id):
     return jsonify({"status": "ok"})
 
 
+@app.route("/admin/grayscale")
+@require_role("owner", "reviewer")
+def admin_grayscale():
+    """Grayscale Lab: preview a puzzle under alternative grey/pattern renderings and export
+    masked + solution PNGs for print (papers, book). Admin-only; never public."""
+    conn = get_conn()
+    rows = conn.execute("SELECT puzzle_id, title, status FROM puzzles ORDER BY puzzle_id").fetchall()
+    conn.close()
+    return render_template("grayscale.html", user=current_user(),
+                           puzzles=[{"id": r["puzzle_id"], "title": r["title"] or "", "status": r["status"]} for r in rows])
+
+
+@app.route("/api/admin/puzzles/<puzzle_id>/complete", methods=["GET"])
+@require_role("owner", "reviewer")
+def api_admin_puzzle_complete(puzzle_id):
+    """Full grid sequence (answers filled in) for admin tools."""
+    conn = get_conn()
+    row = db.get_puzzle(conn, puzzle_id)
+    conn.close()
+    if not row:
+        return jsonify({"error": "Not found"}), 404
+    pj = db.puzzle_to_json(row)
+    seq = grids.complete_sequence(pj["sequence"], pj.get("answer_grids"))
+    return jsonify({"puzzle_id": pj["puzzle_id"], "title": pj["title"], "narrative": pj["narrative"],
+                    "masked_positions": pj["masked_positions"],
+                    "grids": [it.get("grid") for it in seq]})
+
+
 @app.route("/admin")
 @require_role("owner", "reviewer")
 def admin_dashboard():

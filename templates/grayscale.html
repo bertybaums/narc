@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% block title %}NARC — Grayscale Lab{% endblock %}
+{% block content %}
+<style>
+#gl .cell-table td{vertical-align:middle;padding:.25rem .4rem}
+#gl .sw{display:inline-block;width:22px;height:22px;border:1px solid #888;vertical-align:middle;border-radius:3px}
+#gl canvas{max-width:100%;height:auto;background:#fff;border:1px solid #444;border-radius:4px}
+#gl .form-label{font-size:.85rem;margin-bottom:.15rem}
+#gl .small-input{width:5.5rem}
+#gl .preview-wrap{background:#1e1e1e;padding:12px;border-radius:6px}
+</style>
+<div id="gl">
+<h2 class="mb-1">Grayscale Lab <small class="text-muted fs-6">admin only</small></h2>
+<p class="text-muted">Load a puzzle, try greyscale or pattern mappings for the ten colours, and export a masked PNG and a solution PNG for print.</p>
+
+<div class="row g-3">
+  <div class="col-lg-4">
+    <div class="card bg-dark border-secondary mb-3"><div class="card-body">
+      <label class="form-label">Puzzle</label>
+      <div class="input-group input-group-sm mb-2">
+        <input class="form-control" id="pid" list="pids" placeholder="puzzle id (type to search)" value="{{ request.args.get('puzzle_id','') }}">
+        <button class="btn btn-primary" id="load">Load</button>
+      </div>
+      <datalist id="pids">{% for p in puzzles %}<option value="{{ p.id }}">{{ p.title }}{% if p.status != 'active' %} ({{ p.status }}){% endif %}</option>{% endfor %}</datalist>
+      <div id="pinfo" class="small text-muted"></div>
+    </div></div>
+
+    <div class="card bg-dark border-secondary mb-3"><div class="card-body">
+      <label class="form-label">Preset</label>
+      <div class="d-flex flex-wrap gap-1 mb-2">
+        <button class="btn btn-sm btn-outline-light" data-preset="ramp">Grey ramp (by index)</button>
+        <button class="btn btn-sm btn-outline-light" data-preset="lum">Grey by luminance</button>
+        <button class="btn btn-sm btn-outline-light" data-preset="hatch">Hatch set</button>
+        <button class="btn btn-sm btn-outline-light" data-preset="hatchgrey">Hatch + grey</button>
+        <button class="btn btn-sm btn-outline-light" data-preset="color">Original colours</button>
+      </div>
+      <div class="row g-2">
+        <div class="col-6"><label class="form-label">Ramp dark end</label><input type="range" class="form-range" id="dark" min="0" max="255" value="30"></div>
+        <div class="col-6"><label class="form-label">Ramp light end</label><input type="range" class="form-range" id="light" min="0" max="255" value="235"></div>
+      </div>
+      <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="invert"><label class="form-check-label small" for="invert">invert ramp</label></div>
+      <div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" id="bg-white" checked><label class="form-check-label small" for="bg-white">colour 0 as white (paper)</label></div>
+    </div></div>
+
+    <div class="card bg-dark border-secondary mb-3"><div class="card-body">
+      <label class="form-label">Per colour</label>
+      <table class="table table-dark table-sm cell-table mb-0" id="ctable"><thead><tr><th>#</th><th>orig</th><th>grey</th><th>pattern</th><th>ink</th><th>preview</th></tr></thead><tbody></tbody></table>
+    </div></div>
+
+    <div class="card bg-dark border-secondary mb-3"><div class="card-body">
+      <label class="form-label">Layout</label>
+      <div class="row g-2">
+        <div class="col-4"><label class="form-label">cell px</label><input type="number" class="form-control form-control-sm" id="cell" value="28" min="8" max="80"></div>
+        <div class="col-4"><label class="form-label">gap px</label><input type="number" class="form-control form-control-sm" id="gap" value="24" min="0" max="120"></div>
+        <div class="col-4"><label class="form-label">export scale</label><input type="number" class="form-control form-control-sm" id="scale" value="3" min="1" max="6"></div>
+        <div class="col-6"><label class="form-label">grid lines</label><select class="form-select form-select-sm" id="lines"><option value="thin">thin grey</option><option value="black">black</option><option value="none">none</option></select></div>
+        <div class="col-6"><label class="form-label">masked grid</label><select class="form-select form-select-sm" id="maskstyle"><option value="hatch">fine hatch</option><option value="q">question mark</option><option value="blank">blank</option></select></div>
+        <div class="col-6"><label class="form-label">labels</label><select class="form-select form-select-sm" id="labels"><option value="num">Grid 1 … n</option><option value="none">none</option></select></div>
+        <div class="col-6"><label class="form-label">legend</label><select class="form-select form-select-sm" id="legend"><option value="none">none</option><option value="used">colours used</option><option value="all">all ten</option></select></div>
+        <div class="col-12"><label class="form-label">paper</label><select class="form-select form-select-sm" id="paper"><option value="white">white</option><option value="transparent">transparent</option></select></div>
+      </div>
+    </div></div>
+
+    <div class="d-grid gap-2">
+      <button class="btn btn-success" id="exp-masked">Export masked PNG</button>
+      <button class="btn btn-success" id="exp-solution">Export solution PNG</button>
+      <button class="btn btn-outline-success" id="exp-both">Export both</button>
+    </div>
+  </div>
+
+  <div class="col-lg-8">
+    <h5>Masked <small class="text-muted">(what a solver sees)</small></h5>
+    <div class="preview-wrap mb-3"><canvas id="cv-masked"></canvas></div>
+    <h5>Solution</h5>
+    <div class="preview-wrap mb-3"><canvas id="cv-solution"></canvas></div>
+    <p class="small text-muted">Exports are rendered at the chosen scale (3× = print quality at ~10 cm width). Filenames: <code>&lt;puzzle_id&gt;_masked.png</code>, <code>&lt;puzzle_id&gt;_solution.png</code>.</p>
+  </div>
+</div>
+</div>
+
+<script>
+const ARC = ['#000000','#0074D9','#FF4136','#2ECC40','#FFDC00','#AAAAAA','#F012BE','#FF851B','#7FDBFF','#870C25'];
+const NAMES = ['black','blue','red','green','yellow','grey','magenta','orange','azure','maroon'];
+const PATTERNS = ['solid','dots','diag','cross','horiz','vert','checker','ring','none'];
+let puzzle = null;
+// per-colour state: grey level 0-255, pattern, ink 'dark'|'light', useColor
+let map = ARC.map((c,i)=>({grey: 30 + i*(205/9), pattern:'solid', ink:'dark', color:false}));
+
+function lum(hex){ const r=parseInt(hex.slice(1,3),16),g=parseInt(hex.slice(3,5),16),b=parseInt(hex.slice(5,7),16); return 0.2126*r+0.7152*g+0.0722*b; }
+function ramp(order){ const d=+document.getElementById('dark').value, l=+document.getElementById('light').value, inv=document.getElementById('invert').checked;
+  const idx = order==='lum' ? [...Array(10).keys()].sort((a,b)=>lum(ARC[a])-lum(ARC[b])) : [...Array(10).keys()];
+  idx.forEach((c,rank)=>{ let t=rank/9; if(inv) t=1-t; map[c].grey=Math.round(d+(l-d)*t); map[c].pattern='solid'; map[c].ink='dark'; map[c].color=false; }); }
+function preset(name){
+  if(name==='ramp') ramp('index');
+  else if(name==='lum') ramp('lum');
+  else if(name==='hatch'){ const pats=['solid','dots','diag','cross','horiz','vert','checker','ring','solid','diag']; ARC.forEach((c,i)=>{ map[i]={grey: i===0?255:(i===8?200:(i===9?60:245)), pattern: i===0?'none':pats[i], ink:'dark', color:false}; }); }
+  else if(name==='hatchgrey'){ ramp('lum'); const pats=['none','dots','diag','cross','horiz','vert','checker','ring','solid','solid']; ARC.forEach((c,i)=>{ map[i].pattern=pats[i]; map[i].ink = map[i].grey<128?'light':'dark'; }); }
+  else if(name==='color'){ ARC.forEach((c,i)=>{ map[i].color=true; map[i].pattern='solid'; }); }
+  buildTable(); render();
+}
+function buildTable(){
+  const tb=document.querySelector('#ctable tbody'); tb.innerHTML='';
+  ARC.forEach((c,i)=>{ const m=map[i]; const tr=document.createElement('tr');
+    tr.innerHTML=`<td>${i}</td><td><span class="sw" style="background:${c}" title="${NAMES[i]}"></span></td>
+      <td><input type="number" class="form-control form-control-sm small-input" data-i="${i}" data-k="grey" min="0" max="255" value="${m.grey}"></td>
+      <td><select class="form-select form-select-sm" data-i="${i}" data-k="pattern">${PATTERNS.map(p=>`<option ${p===m.pattern?'selected':''}>${p}</option>`).join('')}</select></td>
+      <td><select class="form-select form-select-sm" data-i="${i}" data-k="ink"><option ${m.ink==='dark'?'selected':''} value="dark">dark</option><option ${m.ink==='light'?'selected':''} value="light">light</option></select></td>
+      <td><canvas width="28" height="28" data-prev="${i}"></canvas></td>`;
+    tb.appendChild(tr); });
+  tb.querySelectorAll('input,select').forEach(el=>el.addEventListener('input',()=>{ const i=+el.dataset.i, k=el.dataset.k; map[i][k] = k==='grey'? Math.max(0,Math.min(255,+el.value)) : el.value; if(k!=='grey') map[i].color=false; render(); }));
+}
+function fillCell(ctx,x,y,s,i,scale){
+  const m=map[i]; const bgWhite=document.getElementById('bg-white').checked;
+  let fill = m.color ? ARC[i] : `rgb(${m.grey},${m.grey},${m.grey})`;
+  if(i===0 && bgWhite && !m.color) fill='#ffffff';
+  ctx.fillStyle=fill; ctx.fillRect(x,y,s,s);
+  if(m.color || m.pattern==='solid' || m.pattern==='none' || (i===0 && bgWhite)) return;
+  const ink = m.ink==='dark' ? '#000' : '#fff';
+  ctx.save(); ctx.beginPath(); ctx.rect(x,y,s,s); ctx.clip(); ctx.strokeStyle=ink; ctx.fillStyle=ink; ctx.lineWidth=Math.max(1, s/14);
+  const step=Math.max(4, s/4);
+  if(m.pattern==='dots'){ for(let yy=y+step/2; yy<y+s; yy+=step) for(let xx=x+step/2; xx<x+s; xx+=step){ ctx.beginPath(); ctx.arc(xx,yy,Math.max(1,s/12),0,Math.PI*2); ctx.fill(); } }
+  else if(m.pattern==='diag' || m.pattern==='cross'){ for(let k=-s; k<2*s; k+=step){ ctx.beginPath(); ctx.moveTo(x+k,y); ctx.lineTo(x+k+s,y+s); ctx.stroke(); }
+    if(m.pattern==='cross'){ for(let k=-s; k<2*s; k+=step){ ctx.beginPath(); ctx.moveTo(x+k+s,y); ctx.lineTo(x+k,y+s); ctx.stroke(); } } }
+  else if(m.pattern==='horiz'){ for(let yy=y+step/2; yy<y+s; yy+=step){ ctx.beginPath(); ctx.moveTo(x,yy); ctx.lineTo(x+s,yy); ctx.stroke(); } }
+  else if(m.pattern==='vert'){ for(let xx=x+step/2; xx<x+s; xx+=step){ ctx.beginPath(); ctx.moveTo(xx,y); ctx.lineTo(xx,y+s); ctx.stroke(); } }
+  else if(m.pattern==='checker'){ const q=s/4; for(let r=0;r<4;r++) for(let c=0;c<4;c++) if((r+c)%2===0) ctx.fillRect(x+c*q,y+r*q,q,q); }
+  else if(m.pattern==='ring'){ ctx.lineWidth=Math.max(1.5,s/8); ctx.beginPath(); ctx.arc(x+s/2,y+s/2,s/3,0,Math.PI*2); ctx.stroke(); }
+  ctx.restore();
+}
+function drawStrip(canvas, grids, masked, opts){
+  const s=opts.cell, gap=opts.gap, sc=opts.scale, lines=opts.lines, labelH = opts.labels==='num' ? Math.round(s*0.9) : 0;
+  const widths=grids.map(g=>g[0].length*s), h=Math.max(...grids.map(g=>g.length))*s;
+  let legendH=0, legendItems=[];
+  if(opts.legend!=='none'){ const used=new Set(); grids.forEach((g,gi)=>{ if(!(masked.has(gi)&&!opts.solution)) g.forEach(r=>r.forEach(v=>used.add(v))); }); legendItems = opts.legend==='all' ? [...Array(10).keys()] : [...used].sort((a,b)=>a-b); legendH = Math.round(s*1.6); }
+  const W = widths.reduce((a,b)=>a+b,0) + gap*(grids.length+1), H = h + gap*2 + labelH + legendH;
+  canvas.width=W*sc; canvas.height=H*sc; canvas.style.width=W+'px';
+  const ctx=canvas.getContext('2d'); ctx.setTransform(sc,0,0,sc,0,0);
+  if(opts.paper==='white'){ ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H); } else ctx.clearRect(0,0,W,H);
+  let x=gap;
+  grids.forEach((g,gi)=>{ const y=gap; const rows=g.length, cols=g[0].length;
+    const isMasked = masked.has(gi) && !opts.solution;
+    for(let r=0;r<rows;r++) for(let c=0;c<cols;c++){ const cx=x+c*s, cy=y+r*s;
+      if(isMasked){ ctx.fillStyle='#fff'; ctx.fillRect(cx,cy,s,s);
+        if(opts.maskstyle==='hatch'){ ctx.save(); ctx.beginPath(); ctx.rect(cx,cy,s,s); ctx.clip(); ctx.strokeStyle='#999'; ctx.lineWidth=1; for(let k=-s;k<2*s;k+=Math.max(3,s/5)){ ctx.beginPath(); ctx.moveTo(cx+k,cy); ctx.lineTo(cx+k+s,cy+s); ctx.stroke(); } ctx.restore(); }
+      } else fillCell(ctx,cx,cy,s,g[r][c],sc);
+    }
+    if(isMasked && opts.maskstyle==='q'){ ctx.fillStyle='#444'; ctx.font=`bold ${Math.round(Math.min(rows,cols)*s*0.6)}px Helvetica, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText('?', x+cols*s/2, y+rows*s/2); }
+    if(lines!=='none'){ ctx.strokeStyle = lines==='black' ? '#000' : '#999'; ctx.lineWidth = lines==='black' ? Math.max(1,s/20) : 1;
+      for(let c=0;c<=cols;c++){ ctx.beginPath(); ctx.moveTo(x+c*s+0.5,y); ctx.lineTo(x+c*s+0.5,y+rows*s); ctx.stroke(); }
+      for(let r=0;r<=rows;r++){ ctx.beginPath(); ctx.moveTo(x,y+r*s+0.5); ctx.lineTo(x+cols*s,y+r*s+0.5); ctx.stroke(); } }
+    else { ctx.strokeStyle='#000'; ctx.lineWidth=1; ctx.strokeRect(x+0.5,y+0.5,cols*s,rows*s); }
+    if(labelH){ ctx.fillStyle='#000'; ctx.font=`${Math.round(s*0.5)}px Helvetica, Arial, sans-serif`; ctx.textAlign='center'; ctx.textBaseline='top'; ctx.fillText(`Grid ${gi+1}${isMasked?' (masked)':''}`, x+cols*s/2, y+rows*s+Math.round(s*0.25)); }
+    x += cols*s + gap; });
+  if(legendH){ let lx=gap; const ly=gap+h+labelH+Math.round(s*0.4);
+    legendItems.forEach(i=>{ fillCell(ctx,lx,ly,s,i,sc); ctx.strokeStyle='#000'; ctx.lineWidth=1; ctx.strokeRect(lx+0.5,ly+0.5,s,s); ctx.fillStyle='#000'; ctx.font=`${Math.round(s*0.45)}px Helvetica, Arial, sans-serif`; ctx.textAlign='left'; ctx.textBaseline='middle'; ctx.fillText(`${i} ${NAMES[i]}`, lx+s+6, ly+s/2); lx += s + 6 + ctx.measureText(`${i} ${NAMES[i]}`).width + gap; }); }
+}
+function opts(solution){ return {cell:+document.getElementById('cell').value, gap:+document.getElementById('gap').value, scale:+document.getElementById('scale').value, lines:document.getElementById('lines').value, maskstyle:document.getElementById('maskstyle').value, labels:document.getElementById('labels').value, legend:document.getElementById('legend').value, paper:document.getElementById('paper').value, solution}; }
+function render(){
+  document.querySelectorAll('[data-prev]').forEach(cv=>{ const ctx=cv.getContext('2d'); ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,28,28); fillCell(ctx,0,0,28,+cv.dataset.prev,1); ctx.strokeStyle='#666'; ctx.strokeRect(0.5,0.5,27,27); });
+  if(!puzzle) return;
+  const masked=new Set(puzzle.masked_positions);
+  drawStrip(document.getElementById('cv-masked'), puzzle.grids, masked, opts(false));
+  drawStrip(document.getElementById('cv-solution'), puzzle.grids, masked, opts(true));
+}
+async function load(){
+  const id=document.getElementById('pid').value.trim(); if(!id) return;
+  const r=await fetch(`/api/admin/puzzles/${encodeURIComponent(id)}/complete`); if(!r.ok){ document.getElementById('pinfo').textContent='Not found: '+id; return; }
+  puzzle=await r.json();
+  document.getElementById('pinfo').textContent = `${puzzle.title} — ${puzzle.grids.length} grids, masked ${puzzle.masked_positions.map(p=>p+1).join(', ')}`;
+  render();
+}
+function download(canvas, name){ canvas.toBlob(b=>{ const a=document.createElement('a'); a.href=URL.createObjectURL(b); a.download=name; a.click(); setTimeout(()=>URL.revokeObjectURL(a.href),2000); }, 'image/png'); }
+document.getElementById('load').onclick=load;
+document.getElementById('pid').addEventListener('keydown', e=>{ if(e.key==='Enter') load(); });
+document.querySelectorAll('[data-preset]').forEach(b=>b.onclick=()=>preset(b.dataset.preset));
+['dark','light','invert','bg-white','cell','gap','scale','lines','maskstyle','labels','legend','paper'].forEach(id=>document.getElementById(id).addEventListener('input',()=>{ if(['dark','light','invert'].includes(id)) { const cur = map.some(m=>m.pattern!=='solid') ? null : 'ramp'; if(cur) ramp('index'); buildTable(); } render(); }));
+document.getElementById('exp-masked').onclick=()=>{ if(puzzle) download(document.getElementById('cv-masked'), `${puzzle.puzzle_id}_masked.png`); };
+document.getElementById('exp-solution').onclick=()=>{ if(puzzle) download(document.getElementById('cv-solution'), `${puzzle.puzzle_id}_solution.png`); };
+document.getElementById('exp-both').onclick=()=>{ if(!puzzle) return; download(document.getElementById('cv-masked'), `${puzzle.puzzle_id}_masked.png`); setTimeout(()=>download(document.getElementById('cv-solution'), `${puzzle.puzzle_id}_solution.png`), 400); };
+preset('lum');
+if(document.getElementById('pid').value) load();
+</script>
+{% endblock %}
