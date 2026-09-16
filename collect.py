@@ -8,6 +8,7 @@ In-process (e.g., from server.py):
     run_collect_job(model="gpt-oss-120b", puzzle="narc_001", log_fn=log.write)
 """
 
+import functools
 import hashlib
 import json
 from concurrent.futures import ThreadPoolExecutor, as_completed
@@ -52,9 +53,22 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     else:
         raise ValueError(f"Unknown condition: {condition}")
 
+    # Tell the extraction pass which position(s) are masked (and their sizes) so it
+    # keys the grid correctly. Until September 16, 2026 it was never told, keyed
+    # lone grids "0", and the exact-key grader marked right answers wrong.
+    masked_positions = list(puzzle_data["masked_positions"])
+    try:
+        by_pos = {it["position"]: it for it in puzzle_data["sequence"]}
+        dimensions = [(by_pos[p]["rows"], by_pos[p]["cols"]) for p in masked_positions]
+    except (KeyError, TypeError):
+        dimensions = None
+    extraction_fn = functools.partial(prompts.build_extraction,
+                                      masked_positions=masked_positions,
+                                      dimensions=dimensions)
+
     try:
         raw1, reasoning, raw2, text2, total_latency = models.call_llm_two_pass(
-            model_config, messages, prompts.build_extraction, extraction_config
+            model_config, messages, extraction_fn, extraction_config
         )
     except Exception as e:
         return trial_id, None, None, None, str(e), 0
@@ -62,7 +76,10 @@ def run_trial(model_config, extraction_config, trial_row, puzzle_data, variant_n
     predicted, parsed_reasoning, parse_error = grids.parse_response_grids(text2)
 
     if predicted is None:
-        predicted, _, _ = grids.parse_response_grids(reasoning)
+        try:
+            predicted, _, _ = grids.parse_response_grids(reasoning)
+        except Exception:
+            predicted = None
 
     if predicted is None:
         try:
@@ -91,9 +108,8 @@ def grade_prediction(puzzle_data, predicted):
     variant view (its answer_grids/masked_positions define what is graded)."""
     expected = puzzle_data["answer_grids"]
     masked_positions = puzzle_data["masked_positions"]
-    pred_mapped = predicted
-    if "_single" in predicted and len(masked_positions) == 1:
-        pred_mapped = {str(masked_positions[0]): predicted["_single"]}
+    # Lone-grid / uniform-shift re-keying (September 16, 2026); strict otherwise.
+    pred_mapped = grids.normalize_prediction_keys(predicted, masked_positions)
     all_correct = True
     total_cells = 0
     matching_cells = 0
@@ -582,33 +598,13 @@ def run_collect_job(model, puzzle=None, condition=None, concurrency=8,
 
                     if predicted is not None:
                         puzzle_data = puzzle_cache[trial_row["puzzle_id"]]
-                        expected = puzzle_data["answer_grids"]
-                        masked_positions = puzzle_data["masked_positions"]
-
-                        pred_mapped = predicted
-                        if "_single" in predicted and len(masked_positions) == 1:
-                            pred_mapped = {str(masked_positions[0]): predicted["_single"]}
-
-                        all_correct = True
-                        total_cells = 0
-                        matching_cells = 0
-                        for pos_str, exp_grid in expected.items():
-                            pred_grid = pred_mapped.get(pos_str, [])
-                            c, acc = grids.compare_grids(pred_grid, exp_grid)
-                            if not c:
-                                all_correct = False
-                            r = len(exp_grid)
-                            cols = len(exp_grid[0]) if r > 0 else 0
-                            n = r * cols
-                            total_cells += n
-                            matching_cells += int(acc * n)
-
-                        cell_accuracy = matching_cells / total_cells if total_cells else 0
+                        pred_mapped, correct, cell_accuracy = grade_prediction(
+                            puzzle_data, predicted)
                         db.update_trial_evaluation(
                             conn, trial_id, json.dumps(pred_mapped), reasoning,
-                            1 if all_correct else 0, cell_accuracy
+                            correct, cell_accuracy
                         )
-                        status = "correct" if all_correct else f"wrong ({cell_accuracy:.1%})"
+                        status = "correct" if correct else f"wrong ({cell_accuracy:.1%})"
                     else:
                         status = f"parse_error: {error}"
                         errors += 1

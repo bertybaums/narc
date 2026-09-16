@@ -104,6 +104,45 @@ def compare_grids(predicted: List[List[int]], expected: List[List[int]]):
     return False, matching / total if total > 0 else 0.0
 
 
+def normalize_prediction_keys(predicted, masked_positions):
+    """Map a parsed prediction dict onto the masked positions when the mapping is
+    unambiguous. Added September 16, 2026 (grading mis-key fix; see
+    narc-iclr2027/notes/grading-miskey-assessment-2026-09-16.md).
+
+    1. ``{"_single": grid}`` (an unkeyed grid) with one masked position -> that position.
+    2. One masked position and exactly one predicted grid under any key -> that
+       position. The extraction pass used to key lone grids "0", and subject models
+       often write the 1-indexed "Grid N" label as the key; with one hidden grid and
+       one answer there is nothing to disambiguate.
+    3. Several masked positions, the same number of predicted grids, and the keys
+       shifted down by one being exactly the masked set (the 1-indexed label) -> shift
+       every key down by one. Overlap with a masked position (adjacent masks, e.g.
+       positions [2, 3] keyed "3", "4") does not block the shift: the complete +1 set
+       is the evidence.
+
+    Anything else is returned unchanged and graded strictly.
+    """
+    if not isinstance(predicted, dict) or not predicted:
+        return predicted
+    positions = [str(p) for p in masked_positions]
+    if len(positions) == 1:
+        if "_single" in predicted:
+            return {positions[0]: predicted["_single"]}
+        if len(predicted) == 1 and positions[0] not in predicted:
+            return {positions[0]: next(iter(predicted.values()))}
+        return predicted
+    if len(predicted) == len(positions) and set(predicted) != set(positions):
+        shifted = {}
+        for k, g in predicted.items():
+            try:
+                shifted[str(int(k) - 1)] = g
+            except (TypeError, ValueError):
+                return predicted
+        if set(shifted) == set(positions):
+            return shifted
+    return predicted
+
+
 def sequence_to_text(sequence: list, masked_positions) -> str:
     """Format a NARC grid sequence as text for LLM prompts.
 

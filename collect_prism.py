@@ -17,7 +17,7 @@ import db
 import grids
 import models
 import prompts
-from collect import run_trial
+from collect import grade_prediction, run_trial
 
 
 def load_config():
@@ -156,33 +156,12 @@ def main(model, concurrency, dry_run, tier):
 
                 if predicted is not None:
                     puzzle_data = puzzle_cache[trial_row["puzzle_id"]]
-                    expected = puzzle_data["answer_grids"]
-                    masked_positions = puzzle_data["masked_positions"]
-
-                    pred_mapped = predicted
-                    if "_single" in predicted and len(masked_positions) == 1:
-                        pred_mapped = {str(masked_positions[0]): predicted["_single"]}
-
-                    all_correct = True
-                    total_cells = 0
-                    matching_cells = 0
-                    for pos_str, exp_grid in expected.items():
-                        pred_grid = pred_mapped.get(pos_str, [])
-                        c, acc = grids.compare_grids(pred_grid, exp_grid)
-                        if not c:
-                            all_correct = False
-                        r = len(exp_grid)
-                        cols = len(exp_grid[0]) if r > 0 else 0
-                        n = r * cols
-                        total_cells += n
-                        matching_cells += int(acc * n)
-
-                    cell_accuracy = matching_cells / total_cells if total_cells else 0
+                    pred_mapped, correct, cell_accuracy = grade_prediction(puzzle_data, predicted)
                     db.update_trial_evaluation(
                         conn, trial_id, json.dumps(pred_mapped), reasoning,
-                        1 if all_correct else 0, cell_accuracy
+                        correct, cell_accuracy
                     )
-                    status = "correct" if all_correct else f"wrong ({cell_accuracy:.1%})"
+                    status = "correct" if correct else f"wrong ({cell_accuracy:.1%})"
                 else:
                     status = f"parse_error: {error}"
                     errors += 1

@@ -210,13 +210,9 @@ def _solve_once(view, narrative, model=None):
         out.update(parse_error=parse_error or "no grid found in the answer",
                    correct=0, cell_accuracy=0.0)
     else:
-        # The extraction pass isn't told which position is masked and often keys a
-        # lone grid "0" even when the model wrote the right key. With one hidden
-        # grid and one predicted grid there is nothing to disambiguate, so grade
-        # it at the hidden position (the raw key survives in extraction_text).
-        masked = view["masked_positions"]
-        if len(masked) == 1 and len(predicted) == 1 and str(masked[0]) not in predicted:
-            predicted = {str(masked[0]): next(iter(predicted.values()))}
+        # A lone grid under the wrong key is re-keyed inside collect.grade_prediction
+        # (grids.normalize_prediction_keys, Sep 16, 2026); the raw key survives in
+        # extraction_text.
         mapped, correct, accuracy = collect.grade_prediction(view, predicted)
         out.update(predicted_grids=json.dumps(mapped), correct=correct,
                    cell_accuracy=accuracy)

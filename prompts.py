@@ -176,18 +176,42 @@ Use the key terms and visible grids together to reconstruct the masked grid(s)."
     ]
 
 
-def build_extraction(reasoning):
-    """Build pass-2 extraction prompt from model reasoning."""
+def build_extraction(reasoning, masked_positions=None, dimensions=None):
+    """Build pass-2 extraction prompt from model reasoning.
+
+    Since September 16, 2026 the prompt names the masked position(s), their
+    dimensions and the 1-indexed "Grid N" label the text may use, when the caller
+    supplies them (collect.run_trial does). Without them the prompt is the original
+    one, which never said which position was masked: the extractor then keyed lone
+    grids "0" and the exact-key grader marked right answers wrong (fixed in
+    grids.normalize_prediction_keys; see .claude/CLAUDE.md).
+    """
+    rules = [
+        "- Output raw JSON only. No markdown, no commentary.",
+        "- Grid values are integers 0-9.",
+        "- Position keys are 0-indexed integers as strings.",
+    ]
+    if masked_positions:
+        keys = ", ".join(f'"{p}"' for p in masked_positions)
+        specs = []
+        for i, p in enumerate(masked_positions):
+            dim = ""
+            if dimensions and i < len(dimensions) and dimensions[i]:
+                dim = f" ({dimensions[i][0]} rows x {dimensions[i][1]} cols)"
+            specs.append(f'"{p}"{dim}, which the text may call "Grid {p + 1}"')
+        rules.append(f"- Use exactly these position key(s): {keys}. "
+                     f"Masked position(s): {'; '.join(specs)}.")
+        example = ("{\"output_grids\": {" +
+                   ", ".join(f'"{p}": [[int, ...], ...]' for p in masked_positions) + "}}")
+    else:
+        example = "{\"output_grids\": {\"<position>\": [[int, ...], ...]}}"
+    rules.append("- If the text contains multiple grid attempts, use the LAST one.")
     return [
         {"role": "system", "content": (
             "You are a JSON formatter. Do NOT reason, explain, or think. "
             "Read the text below and output ONLY the final answer grid as JSON.\n\n"
-            "Format: {\"output_grids\": {\"<position>\": [[int, ...], ...]}}\n\n"
-            "Rules:\n"
-            "- Output raw JSON only. No markdown, no commentary.\n"
-            "- Grid values are integers 0-9.\n"
-            "- Position keys are 0-indexed integers as strings.\n"
-            "- If the text contains multiple grid attempts, use the LAST one."
+            f"Format: {example}\n\n"
+            "Rules:\n" + "\n".join(rules)
         )},
         {"role": "user", "content": reasoning},
     ]

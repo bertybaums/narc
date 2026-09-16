@@ -19,6 +19,7 @@ import db
 import grids
 import models
 import prompts
+from collect import grade_prediction
 
 
 def load_config():
@@ -110,25 +111,8 @@ def main(model, concurrency):
 
                 if predicted is not None:
                     puzzle_data = [x for x in work if x[0] == pid][0][5]
-                    expected = puzzle_data["answer_grids"]
-                    masked_positions = puzzle_data["masked_positions"]
-
-                    pred_mapped = predicted
-                    if "_single" in predicted and len(masked_positions) == 1:
-                        pred_mapped = {str(masked_positions[0]): predicted["_single"]}
-
-                    all_correct = True
-                    total_cells = matching_cells = 0
-                    for pos_str, exp_grid in expected.items():
-                        pred_grid = pred_mapped.get(pos_str, [])
-                        c, acc = grids.compare_grids(pred_grid, exp_grid)
-                        if not c:
-                            all_correct = False
-                        n = len(exp_grid) * (len(exp_grid[0]) if exp_grid else 0)
-                        total_cells += n
-                        matching_cells += int(acc * n)
-
-                    cell_accuracy = matching_cells / total_cells if total_cells else 0
+                    _, correct, cell_accuracy = grade_prediction(puzzle_data, predicted)
+                    all_correct = bool(correct)
                     status = "correct" if all_correct else f"wrong ({cell_accuracy:.0%})"
 
                     results.append({
