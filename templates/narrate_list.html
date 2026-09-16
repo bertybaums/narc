@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}NARC — Narrate{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-baseline flex-wrap gap-2 mb-1">
+    <h2 class="me-auto mb-0">Narrate</h2>
+    {% if staff %}<a href="{{ url_for('narrate.admin') }}" class="btn btn-sm btn-outline-secondary">Narrate admin</a>{% endif %}
+</div>
+<p class="text-muted mb-4">Pick a puzzle. For each one, write a narrative that helps <code>{{ s.model }}</code> rebuild the grid it can't see.</p>
+
+{% if not cards %}
+<div class="alert alert-secondary">No puzzles are open right now. Please check back soon.</div>
+{% endif %}
+
+<div class="row g-3 mb-4">
+    {% for c in cards %}
+    <div class="col-sm-6 col-lg-4">
+        {% if c.missing %}
+        <div class="card h-100 border-danger">
+            <div class="card-body">
+                <h5 class="card-title">{{ c.puzzle_id }}</h5>
+                <p class="small text-danger mb-0">Staff: configured in config.yaml but not found in narc.db.</p>
+            </div>
+        </div>
+        {% else %}
+        <a href="{{ url_for('narrate.puzzle', puzzle_id=c.puzzle_id) }}" class="text-decoration-none">
+        <div class="card h-100 puzzle-card">
+            <div class="card-body">
+                <h5 class="card-title text-light">{{ c.title }}</h5>
+                <p class="small text-muted mb-2">{{ c.n_grids }} grids</p>
+                {% if c.solved %}
+                <span class="badge bg-success">Solved</span>
+                {% endif %}
+                {% if c.attempts %}
+                <span class="badge bg-secondary">{{ c.attempts }} narrative{{ 's' if c.attempts != 1 }} submitted</span>
+                {% else %}
+                <span class="badge bg-dark border border-secondary text-muted">Not started</span>
+                {% endif %}
+                {% if c.revealed %}
+                <span class="badge bg-warning text-dark">Viewed existing narrative</span>
+                {% endif %}
+                {% if staff %}
+                <div class="small mt-2 {{ 'text-success' if c.reference.verified else 'text-warning' }}">
+                    Staff: reference {{ c.reference.solved }}/{{ c.reference.total }} solved on {{ c.reference.model }}
+                    {% if not c.reference.verified %}&mdash; hidden from participants{% endif %}
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        </a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+
+<p class="small text-muted">Every narrative you submit is recorded.</p>
+<form method="POST" action="{{ url_for('narrate.leave') }}" class="small text-muted">
+    On a shared computer?
+    <button type="submit" class="btn btn-link btn-sm p-0 align-baseline">Sign out of Narrate on this browser</button>.
+    You'll need your invite code to come back, and your earlier narratives won't be listed.
+</form>
+{% endblock %}

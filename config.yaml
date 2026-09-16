@@ -119,3 +119,24 @@ experiment:
   # Narrative-sensitivity (lexical vs narrative NARC): K keyword-list 'both'
   # re-runs per NARC cell (clue replaced by its alphabetized key terms).
   keyword_repeats: 3
+
+# Narrate tab (/narrate): invited participants write narratives that help one
+# model solve a puzzle. Each narrative runs through the `both` condition above
+# (same prompt, two-pass protocol, grader). Data goes to narrate_data/narrate.db.
+narrate:
+  model: qwen3.8-27b
+  extraction_model: gpt-oss-120b-extract
+  max_narrative_chars: 1500
+  submissions_per_hour: 12     # per participant, all puzzles; failed runs don't count
+  submissions_per_day: 40
+  max_queue: 12                # all participants: queued + running before we say "busy"
+  workers: 2                   # model runs at once per web worker process (gunicorn runs 2)
+  reference_runs: 3            # runs per reference check
+  # A puzzle is shown to participants only after its reference narrative (the
+  # puzzle's own narrative, or reference_narrative if given) solves it at least
+  # once in a reference check on reference_model (default: model above):
+  #   flask --app server narrate verify
+  puzzles:
+    - puzzle_id: chat             # Chat: reference solves qwen3.8-27b
+    - puzzle_id: sub_118          # Playmates: reference solves gpt-oss-120b, not qwen3.8-27b
+      reference_model: gpt-oss-120b

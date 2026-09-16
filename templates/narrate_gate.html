@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}NARC — Narrate{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+<div class="col-lg-7">
+
+{% if step == 'invite' %}
+<h2 class="mb-1">Narrate</h2>
+<p class="lead" style="color:#f59e0b;">Write the story that lets an AI model solve a puzzle.</p>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <p>This part of NARC is a research study open by invitation. Enter the invite code you were given to take part.</p>
+        <form method="POST" action="{{ url_for('narrate.join') }}" class="d-flex gap-2 flex-wrap" autocomplete="off">
+            <label for="invite-code" class="visually-hidden">Invite code</label>
+            <input id="invite-code" type="text" name="code" class="form-control narrate-code-input"
+                   placeholder="Invite code" required autofocus spellcheck="false" autocapitalize="characters">
+            <button type="submit" class="btn btn-narc">Continue</button>
+        </form>
+    </div>
+</div>
+
+{% if staff %}
+<div class="card mb-4 border-secondary">
+    <div class="card-body">
+        <p class="mb-2 small text-muted">You're signed in as <strong>{{ staff }}</strong>. You can join without a code; your submissions will be marked as staff so they can be left out of the data.</p>
+        <form method="POST" action="{{ url_for('narrate.join') }}" class="d-inline">
+            <input type="hidden" name="as_staff" value="1">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">Continue as staff</button>
+        </form>
+        <a href="{{ url_for('narrate.admin') }}" class="btn btn-sm btn-outline-secondary ms-2">Narrate admin</a>
+    </div>
+</div>
+{% endif %}
+
+{% else %}
+<h2 class="mb-3">Before you start</h2>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <h5 class="card-title">What you'll do</h5>
+        <ol class="mb-3">
+            <li class="mb-2">You'll see a short sequence of colored grids that tell a story. You see <strong>all</strong> of them, including one grid the model <strong>won't</strong> see.</li>
+            <li class="mb-2">An AI model (<code>{{ s.model }}</code>) gets every other grid, plus a narrative that you write. From those alone it has to rebuild the hidden grid exactly, cell for cell.</li>
+            <li>Write a narrative that helps it do that, then test it. You'll see whether the model got it right. Revise and try again as many times as you like, whether or not your last try worked.</li>
+        </ol>
+        <p class="mb-0">Every puzzle here can be solved this way: for each one we already have a narrative that led an AI model to the right answer. You can look at it whenever you like, but try on your own first. Once you've read it, it's hard to write something that isn't shaped by it.</p>
+    </div>
+</div>
+
+<div class="card mb-3 narrate-record-card">
+    <div class="card-body">
+        <h5 class="card-title">What we record</h5>
+        <ul>
+            <li><strong>Every narrative you submit</strong>, word for word, not only your last one.</li>
+            <li>When you submitted each one, and how long you spent writing it.</li>
+            <li>Whether you had looked at the existing narrative before you submitted.</li>
+            <li>The model's full response, and whether it solved the puzzle.</li>
+        </ul>
+        <p class="mb-0 small text-muted">We don't ask for your name or email. Your submissions are linked to a random ID kept in this browser and to the invite code you used.</p>
+    </div>
+</div>
+
+<form method="POST" action="{{ url_for('narrate.acknowledge') }}" class="card mb-4">
+    <div class="card-body">
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" name="ack" value="yes" id="ack" required>
+            <label class="form-check-label" for="ack">
+                I understand that every narrative I submit is recorded.
+            </label>
+        </div>
+        <button type="submit" class="btn btn-narc">Start</button>
+    </div>
+</form>
+{% endif %}
+
+</div>
+</div>
+{% endblock %}

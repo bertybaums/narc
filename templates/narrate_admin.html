@@ -1,0 +1,136 @@
+{% extends "base.html" %}
+{% block title %}NARC — Narrate admin{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-baseline flex-wrap gap-2 mb-3">
+    <h2 class="me-auto mb-0">Narrate admin</h2>
+    <a href="{{ url_for('narrate.index') }}" class="btn btn-sm btn-outline-secondary">Participant view</a>
+    <a href="{{ url_for('narrate.admin_export') }}" class="btn btn-sm btn-outline-info">Export all (JSON)</a>
+</div>
+<p class="small text-muted">Model <code>{{ s.model }}</code> &middot; extraction <code>{{ s.extraction_model }}</code> &middot;
+    limits {{ s.submissions_per_hour }}/hour, {{ s.submissions_per_day }}/day per participant &middot;
+    queue cap {{ s.max_queue }} &middot; {{ s.workers }} runs at once per web worker.
+    Settings live under <code>narrate:</code> in config.yaml.</p>
+
+<div class="card mb-4">
+    <div class="card-header">Puzzles and reference narratives</div>
+    <div class="card-body">
+        <p class="small text-muted">A puzzle is shown to participants only after its reference narrative has solved it at least once here, so the promise on the page stays true.
+            Each check runs the reference through the same pipeline as participants ({{ s.reference_runs }} runs), on the puzzle's <code>reference_model</code> when config.yaml sets one.</p>
+        <div class="table-responsive">
+        <table class="table table-sm table-dark align-middle">
+            <thead><tr><th>Puzzle</th><th>Reference narrative</th><th>Checked on</th><th>Solved</th><th></th></tr></thead>
+            <tbody>
+            {% for p in puzzles %}
+            {% if p.missing %}
+            <tr><td>{{ p.puzzle_id }}</td><td colspan="4" class="text-danger">Not found in narc.db</td></tr>
+            {% else %}
+            <tr>
+                <td><a href="{{ url_for('narrate.puzzle', puzzle_id=p.puzzle_id) }}">{{ p.title }}</a><div class="small text-muted">{{ p.puzzle_id }}</div></td>
+                <td class="small" style="max-width:480px;">{{ p.reference }}{% if p.overridden %} <span class="badge bg-secondary">from config</span>{% endif %}</td>
+                <td><code>{{ p.state.model }}</code></td>
+                <td class="{{ 'text-success' if p.state.verified else 'text-warning' }}">
+                    {{ p.state.solved }}/{{ p.state.total }}
+                    <div class="small">{{ 'visible' if p.state.verified else 'hidden from participants' }}</div>
+                </td>
+                <td>
+                    <form method="POST" action="{{ url_for('narrate.admin_verify', puzzle_id=p.puzzle_id) }}">
+                        <button class="btn btn-sm btn-outline-warning" {{ 'disabled' if p.checking }}>
+                            {{ 'Checking…' if p.checking else 'Run check' }}
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Invite codes</div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('narrate.admin_create_invite') }}" class="row g-2 align-items-end mb-3">
+            <div class="col-md-3">
+                <label class="form-label small mb-0">Label</label>
+                <input name="label" class="form-control form-control-sm" placeholder="e.g. lab pilot">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small mb-0">Max people</label>
+                <input name="max_participants" type="number" min="1" class="form-control form-control-sm" placeholder="no cap">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small mb-0">Last valid day</label>
+                <input name="expires" type="date" class="form-control form-control-sm">
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small mb-0">Custom code (optional)</label>
+                <input name="code" class="form-control form-control-sm" placeholder="random if blank">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-sm btn-narc w-100">Create code</button>
+            </div>
+        </form>
+        <div class="table-responsive">
+        <table class="table table-sm table-dark align-middle">
+            <thead><tr><th>Code</th><th>Label</th><th>People</th><th>Narratives</th><th>Expires</th><th>Status</th><th></th></tr></thead>
+            <tbody>
+            {% for i in invites %}
+            <tr class="{{ '' if i.active else 'text-muted' }}">
+                <td><code>{{ i.display_code }}</code></td>
+                <td>{{ i.label or '' }}</td>
+                <td>{{ i.participants }}{% if i.max_participants is not none %} / {{ i.max_participants }}{% endif %}</td>
+                <td>{{ i.attempts }}</td>
+                <td class="small">{{ i.expires_at or '—' }}</td>
+                <td>{{ 'active' if i.active else 'inactive' }}</td>
+                <td>
+                    <form method="POST" action="{{ url_for('narrate.admin_toggle_invite', code=i.code) }}">
+                        <input type="hidden" name="active" value="{{ '0' if i.active else '1' }}">
+                        <button class="btn btn-sm btn-outline-secondary">{{ 'Deactivate' if i.active else 'Reactivate' }}</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="text-muted">No codes yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Recent narratives (latest 200)</div>
+    <div class="card-body">
+        <div class="table-responsive">
+        <table class="table table-sm table-dark align-middle small">
+            <thead><tr><th>When (UTC)</th><th>Participant</th><th>Puzzle</th><th>#</th><th>Narrative</th><th>Read ref?</th><th>Result</th></tr></thead>
+            <tbody>
+            {% for a in attempts %}
+            <tr>
+                <td class="text-nowrap">{{ a.created_at }}</td>
+                <td><code>{{ a.participant_id[:6] }}</code>
+                    <div class="text-muted">{{ ('staff: ' ~ a.staff_username) if a.staff_username else (a.invite_code or '') }}</div></td>
+                <td>{{ a.puzzle_id }}</td>
+                <td>{{ a.seq_num }}</td>
+                <td style="max-width:420px; white-space:pre-wrap;">{{ a.narrative }}</td>
+                <td>{{ 'yes' if a.saw_reference else 'no' }}</td>
+                <td class="text-nowrap">
+                    {% if a.status in ('queued', 'running') %}<span class="text-info">{{ a.status }}</span>
+                    {% elif a.status == 'failed' %}<span class="text-warning" title="{{ a.error }}">failed</span>
+                    {% elif a.correct %}<span class="text-success">solved</span>
+                    {% elif a.parse_error %}<span class="text-muted" title="{{ a.parse_error }}">no grid</span>
+                    {% else %}{{ '%.0f' % ((a.cell_accuracy or 0) * 100) }}% cells{% endif %}
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="7" class="text-muted">No narratives yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

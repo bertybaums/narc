@@ -10,3 +10,4 @@ narc_dump.sql
 narc_recover.sql
 .env
 logs/
+narrate_data/

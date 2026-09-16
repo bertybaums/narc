@@ -31,3 +31,6 @@ __pycache__/
 # API keys
 .env
 .claude/
+
+# Narrate study data (human submissions; own DB)
+narrate_data/

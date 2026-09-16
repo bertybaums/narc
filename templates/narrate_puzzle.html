@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+{% block title %}NARC — Narrate: {{ data.title }}{% endblock %}
+
+{% block content %}
+<div class="mb-3">
+    <a href="{{ url_for('narrate.index') }}" class="small text-muted text-decoration-none">&larr; All puzzles</a>
+    <h2 class="mt-1 mb-1">{{ data.title }}</h2>
+    <p class="text-muted mb-0">{{ data.sequence | length }} grids &middot; model: <code>{{ data.model }}</code></p>
+</div>
+
+{% if staff and not ref.verified %}
+<div class="alert alert-warning small">
+    Staff preview: the reference narrative has solved this puzzle in {{ ref.solved }} of {{ ref.total }} recorded runs on <code>{{ ref.model }}</code>,
+    so participants can't see it yet. Run a check from <a href="{{ url_for('narrate.admin') }}">Narrate admin</a>.
+</div>
+{% endif %}
+
+<!-- The puzzle: full ground truth, hidden grid marked -->
+<div class="card mb-3">
+    <div class="card-header">The whole story, including the grid the model won't see</div>
+    <div class="card-body">
+        <div id="sequence-wrapper" class="sequence-wrapper">
+            <div id="truth-sequence" class="sequence-container"></div>
+        </div>
+        <div class="narrate-model-view mt-2">
+            <div class="small text-muted mb-1">What the model gets: the same grids, with <span id="hidden-list"></span> hidden, plus your narrative.</div>
+            <div id="model-sequence" class="sequence-container model-view py-1"></div>
+        </div>
+        <p class="small text-muted mt-2 mb-0">
+            The model reads each grid as rows of letters, one per cell, with a key that names each color, so it knows the color names.
+            It has to rebuild the hidden grid exactly. It gets one try for each narrative you submit.
+        </p>
+    </div>
+</div>
+
+<!-- It can be done -->
+<div class="card mb-3 narrate-assure">
+    <div class="card-body">
+        <h5 class="card-title mb-2">It can be done</h5>
+        <p class="mb-2">
+            {% if ref.model == data.model %}
+            We already have a narrative that led <code>{{ data.model }}</code> to rebuild the hidden grid exactly, so a narrative that works exists.
+            {% else %}
+            We already have a narrative that led another AI model, <code>{{ ref.model }}</code>, to rebuild the hidden grid exactly, so a narrative that works exists.
+            It hasn't yet worked on <code>{{ data.model }}</code>, so yours could be the first.
+            {% endif %}
+            You can read it, but once you have, it's hard to write something that isn't shaped by it.
+            Every narrative you submit is marked with whether you'd read it first.</p>
+        <div id="reveal-controls">
+            <button id="btn-reveal" type="button" class="btn btn-sm btn-outline-warning">Show me the existing narrative&hellip;</button>
+        </div>
+        <div id="reveal-shown" style="display:none;">
+            <div id="reference-text" class="narrative-text visible mb-2"></div>
+            <p class="small text-muted mb-0">You've seen the existing narrative. Everything you submit for this puzzle from now on is marked as written after reading it.</p>
+        </div>
+    </div>
+</div>
+
+<!-- Write -->
+<div class="card mb-3" id="write-card">
+    <div class="card-header">Your narrative</div>
+    <div class="card-body">
+        <label for="narrative" class="form-label small text-muted">
+            Tell the story of what happens across the grids, in a way that lets the model work out the hidden one.
+            Don't spell the answer out cell by cell, or with numbers or coordinates.
+        </label>
+        <textarea id="narrative" class="form-control narrate-textarea" rows="6"
+                  maxlength="{{ data.max_chars }}" spellcheck="true"></textarea>
+        <div class="d-flex align-items-center flex-wrap gap-2 mt-2">
+            <button id="btn-submit" type="button" class="btn btn-narc">Test with the model</button>
+            <span id="char-count" class="small text-muted ms-auto"></span>
+        </div>
+        <div id="submit-error" class="alert alert-danger small mt-2 mb-0" style="display:none;"></div>
+        <p class="small text-muted mt-2 mb-0">Every narrative you submit is recorded.</p>
+    </div>
+</div>
+
+<!-- Result of the latest submission -->
+<div class="card mb-3" id="result-card" style="display:none;" aria-live="polite">
+    <div class="card-header">Result</div>
+    <div class="card-body">
+        <div id="result-pending" style="display:none;">
+            <div class="d-flex align-items-center gap-3">
+                <div class="spinner-border text-warning" role="status" aria-hidden="true"></div>
+                <div>
+                    <div id="pending-headline" class="fw-semibold">Sending your narrative to the model&hellip;</div>
+                    <div class="small text-muted"><span id="pending-elapsed">0:00</span> elapsed &middot; this usually takes under two minutes</div>
+                </div>
+            </div>
+        </div>
+        <div id="result-done" style="display:none;">
+            <div id="result-banner" class="alert mb-3"></div>
+            <div id="result-grids" class="result-grids mb-3"></div>
+            <button id="btn-again" type="button" class="btn btn-outline-warning">Write another narrative</button>
+        </div>
+    </div>
+</div>
+
+<!-- History -->
+<div class="card mb-4" id="history-card" style="display:none;">
+    <div class="card-header">Your narratives for this puzzle</div>
+    <div class="card-body py-0" id="history"></div>
+</div>
+
+<!-- Reveal confirmation -->
+<div class="modal fade" id="reveal-modal" tabindex="-1" aria-labelledby="reveal-modal-title" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="reveal-modal-title">Are you sure?</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Reading the existing narrative will very likely shape what you write next, even if you try to ignore it.</p>
+                <p class="mb-0">We'll record that you read it, and every narrative you submit for this puzzle afterwards will be marked as written after reading it. This can't be undone.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-narc" data-bs-dismiss="modal">Keep writing on my own</button>
+                <button type="button" id="btn-reveal-confirm" class="btn btn-outline-secondary">Yes, show it</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>const NARRATE = {{ data | tojson }};</script>
+<script src="/static/js/narrate.js"></script>
+{% endblock %}

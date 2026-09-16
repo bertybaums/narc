@@ -21,6 +21,7 @@ from db import get_variants, get_trials
 from collect import (run_collect_job, run_matrix_job, run_sensitivity_job,
                      run_narrative_sensitivity_job)
 from classify import run_classify_job
+from narrate import bp as narrate_bp
 from prompts import extract_keywords
 from ratelimit import mindrouter_bucket
 
@@ -33,6 +34,9 @@ _secret = os.environ.get("NARC_SECRET_KEY", "dev-secret-change-in-prod")
 if _secret == "dev-secret-change-in-prod":
     print("WARNING: Using default secret key. Set NARC_SECRET_KEY in production.")
 app.secret_key = _secret
+
+# Narrate tab (/narrate): participants write narratives for a model; own DB.
+app.register_blueprint(narrate_bp)
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
           "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
