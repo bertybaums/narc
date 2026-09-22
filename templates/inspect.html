@@ -96,6 +96,9 @@
 <p style="color:#aaa;font-size:0.9em;max-width:800px;line-height:1.6;" class="mb-3">
     NARC puzzles are designed so that neither the grid sequence nor the narrative clue is sufficient on its own — but together they uniquely determine the answer. The experiments below probe different dimensions of this narrative–visual interaction. <em>Masking</em> tests whether models can reconstruct hidden grids. <em>Ordering</em> tests whether narratives help recover temporal structure. <em>Odd-one-out</em> tests whether narratives help models recognize which grids belong together. <em>Stances</em> tests how the same visual pattern responds to different narrative framings.
 </p>
+<p style="color:#888;font-size:0.85em;max-width:800px;line-height:1.6;" class="mb-3">
+    <strong style="color:#aaa;">How to read this page.</strong> <em>Masking</em> is the documented battery: every active puzzle, all current models, order and keyword ablations; a paper on it is under review (September 2026). <em>Ordering</em>, <em>Odd-one-out</em> and <em>Stances</em> are pilot designs from spring 2026; each states its own scope and dates below. Counts are per model. The NARC property is a relation between a puzzle and a model, so a model with more NARC puzzles is not a better or worse model, and this page is not a leaderboard.
+</p>
 
 <div class="inspect-tabs">
     <a class="inspect-tab {{ 'active' if tab == 'masking' }}" href="/inspect?tab=masking">Masking</a>
@@ -149,6 +152,11 @@
             &nbsp;&nbsp;<span class="dot dot-dep-partial">Partial</span> = solves some keyword trials
             &nbsp;&nbsp;<span class="dot dot-dep-lexical">Lexical</span> = solves every keyword trial (the terms alone suffice).
         </p>
+        <p class="mb-0 mt-2" style="color:#888;font-size:0.8em;border-top:1px solid #2a2a3e;padding-top:6px;">
+            <strong style="color:#aaa;">Scope:</strong> {{ puzzles | length }} {{ 'puzzles incl. drafts' if include_drafts else 'active puzzles' }} &middot; {{ models | length }} models &middot; model results {% if data_from == data_as_of %}on {{ data_as_of }}{% else %}{{ data_from }} to {{ data_as_of }}{% endif %} &middot; {{ protocol_note }}
+            Each cell is a single sample at temperature 0; on a 34-puzzle core re-run three times, 84% of condition outcomes agreed and about one NARC verdict in six flipped, so read a puzzle's profile across models rather than a single cell.
+            {% if 'claude-fable-5-1' in models %}The <code>claude-fable-5-1</code> column is imported from a separate closed-book run (single sample, no order or keyword ablations, different harness) and is shown for comparison only.{% endif %}
+        </p>
     </div>
 </div>
 {% if highlights %}
@@ -174,9 +182,10 @@
     {% endfor %}
     <div class="summary-card">
         <div class="value">{{ puzzles | length }}</div>
-        <div class="label">Puzzles tested</div>
+        <div class="label">{{ 'Puzzles tested (incl. drafts)' if include_drafts else 'Active puzzles tested' }}</div>
     </div>
 </div>
+<p class="text-muted mb-3" style="font-size:0.8em;">Per-model counts of puzzles with the NARC property on at least one narrative &times; mask cell. Not a ranking: the property is model-relative.</p>
 
 <div class="controls">
     <input type="text" id="search" placeholder="Search title or ID..." oninput="filterPuzzles()">
@@ -411,6 +420,9 @@
         <p class="mb-0" style="color:#888;font-size:0.8em;">
             &tau; = Kendall's tau correlation &nbsp;&nbsp; Lift = &tau;(grids+narrative) &#8722; &tau;(grids only) &nbsp;&nbsp; Positive lift = narrative helps ordering
         </p>
+        <p class="mb-0 mt-2" style="color:#f59e0b;font-size:0.8em;border-top:1px solid #2a2a3e;padding-top:6px;">
+            <strong>Pilot.</strong> {{ ordering_models | length }} models, {{ puzzles | length }} puzzles with four or more grids, data collected {% if data_from == data_as_of %}on {{ data_as_of }}{% else %}{{ data_from }} to {{ data_as_of }}{% endif %}. Not re-run since and not part of the paper's claims. Report: <em>Can Narratives Help AI Recover the Order of Events?</em> (April 3, 2026, in the code repository).
+        </p>
     </div>
 </div>
 {% if highlights %}
@@ -420,7 +432,7 @@
         <div class="hl-title">{{ h.title }}</div>
         <div class="hl-pid">{{ h.puzzle_id }}</div>
         <div class="hl-stat">Narrative lift: {{ '%+.3f' | format(h.avg_lift) }} &tau;</div>
-        <div class="hl-why">Narrative dramatically improves sequence recovery</div>
+        <div class="hl-why">Largest gain in order recovery with the narrative</div>
     </div>
     {% endfor %}
 </div>
@@ -520,8 +532,11 @@
             <span style="color:#3498db;">D</span> = Design &nbsp;&nbsp;
             <span style="color:#2ecc40;">P</span> = Physical &nbsp;&nbsp;
             <span style="color:#9b59b6;">M</span> = Moral &nbsp;&nbsp;
-            N/6 = NARC count out of 6 models &nbsp;&nbsp;
+            N/{{ stance_models | length }} = NARC count out of {{ stance_models | length }} models &nbsp;&nbsp;
             G = grids only &nbsp;&nbsp; N = narrative only &nbsp;&nbsp; B = both
+        </p>
+        <p class="mb-0 mt-2" style="color:#f59e0b;font-size:0.8em;border-top:1px solid #2a2a3e;padding-top:6px;">
+            <strong>Pilot design.</strong> {{ stance_groups | length }} stance groups, {{ stance_models | length }} models. Stance narratives are stored as narrative variants, so they run through the same battery as Masking (model results {% if data_from == data_as_of %}on {{ data_as_of }}{% else %}{{ data_from }} to {{ data_as_of }}{% endif %}); the stance framing itself is a spring 2026 pilot and not part of the paper's claims.
         </p>
     </div>
 </div>
@@ -538,7 +553,7 @@
             {% endif %}
             {% endfor %}
         </div>
-        <div class="hl-why">Same grids, different narratives, dramatically different results</div>
+        <div class="hl-why">Same grids, different narratives, different results</div>
     </div>
     {% endfor %}
 </div>
@@ -641,6 +656,9 @@
             Accuracy = % of trials where distractor was correctly identified &nbsp;&nbsp;
             Lift = accuracy(+narrative) &#8722; accuracy(grids only) in percentage points &nbsp;&nbsp;
             <span style="color:#e74c3c;">Red border</span> = distractor grid
+        </p>
+        <p class="mb-0 mt-2" style="color:#f59e0b;font-size:0.8em;border-top:1px solid #2a2a3e;padding-top:6px;">
+            <strong>Pilot.</strong> {{ ooo_models | length }} models, {{ ooo_puzzles | length }} puzzles, data collected {% if data_from == data_as_of %}on {{ data_as_of }}{% else %}{{ data_from }} to {{ data_as_of }}{% endif %}. Not re-run since and not part of the paper's claims.
         </p>
     </div>
 </div>

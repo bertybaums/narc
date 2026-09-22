@@ -596,6 +596,23 @@ def get_voter_votes(conn, voter_id):
     return {r["puzzle_id"]: r["value"] for r in rows}
 
 
+def get_narc_model_counts(conn, puzzle_id=None):
+    """Per puzzle: how many models were tested and for how many of them any
+    (narrative x mask) cell is NARC. Measured from classifications; this is the
+    only public 'difficulty' signal (no predicted ratings)."""
+    sql = """SELECT puzzle_id,
+                    COUNT(DISTINCT model_name) AS tested,
+                    COUNT(DISTINCT CASE WHEN has_narc=1 THEN model_name END) AS narc
+             FROM classifications"""
+    params = ()
+    if puzzle_id is not None:
+        sql += " WHERE puzzle_id=?"
+        params = (puzzle_id,)
+    sql += " GROUP BY puzzle_id"
+    return {r["puzzle_id"]: {"narc": r["narc"], "tested": r["tested"]}
+            for r in conn.execute(sql, params).fetchall()}
+
+
 def get_puzzle_solve_stats(conn):
     rows = conn.execute(
         """SELECT puzzle_id,

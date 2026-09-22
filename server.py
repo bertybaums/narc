@@ -43,6 +43,36 @@ MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
 REVIEW_MODELS = MODELS
 
 
+SITE_UPDATED = "September 22, 2026"
+GRADING_PROTOCOL_NOTE = ("Grading protocol v2 since September 16, 2026 "
+                         "(extraction-key fix; every stored trial was rescored).")
+
+
+def _fmt_date(s):
+    """'2026-09-17 05:14:02' -> 'September 17, 2026' (None-safe)."""
+    if not s:
+        return None
+    try:
+        from datetime import date
+        return date.fromisoformat(str(s)[:10]).strftime("%B %-d, %Y")
+    except ValueError:
+        return str(s)[:10]
+
+
+def _date_span(conn, table, where=None):
+    """(first, last) response dates in a trials table, formatted."""
+    sql = f"SELECT MIN(response_at) AS a, MAX(response_at) AS b FROM {table}"
+    if where:
+        sql += " WHERE " + where
+    r = conn.execute(sql).fetchone()
+    return _fmt_date(r["a"]), _fmt_date(r["b"])
+
+
+def _hide_drafts():
+    """Anonymous visitors never see draft puzzles; any signed-in account does."""
+    return current_user() is None
+
+
 def get_conn():
     return db.init_db()
 
@@ -173,6 +203,9 @@ def about():
             draft_count += 1
         else:
             active_count += 1
+    models_tested = conn.execute(
+        "SELECT COUNT(DISTINCT model_name) AS c FROM classifications").fetchone()["c"]
+    data_as_of = _date_span(conn, "trials")[1]
     conn.close()
     stats = {
         "total_puzzles": len(puzzles),
@@ -180,8 +213,10 @@ def about():
         "draft_puzzles": draft_count,
         "total_variants": variant_count,
         "grid_sizes": len(grid_sizes),
+        "models_tested": models_tested,
+        "data_as_of": data_as_of,
     }
-    return render_template("about.html", stats=stats)
+    return render_template("about.html", stats=stats, site_updated=SITE_UPDATED)
 
 
 @app.route("/inspect")
@@ -194,22 +229,33 @@ def inspect():
         "SELECT DISTINCT model_name FROM trials ORDER BY model_name"
     ).fetchall()]
 
+    include_drafts = not _hide_drafts()
+    span = (None, None)
     if tab == "masking":
-        data = _inspect_masking(conn, models)
+        data = _inspect_masking(conn, models, include_drafts)
+        span = _date_span(conn, "trials")
     elif tab == "ordering":
-        data = _inspect_ordering(conn)
+        data = _inspect_ordering(conn, include_drafts)
+        span = _date_span(conn, "ordering_trials")
     elif tab == "stances":
-        data = _inspect_stances(conn)
+        data = _inspect_stances(conn, include_drafts)
+        span = _date_span(conn, "trials",
+                          "puzzle_id IN (SELECT puzzle_id FROM puzzles "
+                          "WHERE stance_group IS NOT NULL)")
     elif tab == "oddoneout":
-        data = _inspect_oddoneout(conn)
+        data = _inspect_oddoneout(conn, include_drafts)
+        span = _date_span(conn, "oddoneout_trials")
     else:
         data = {}
 
     conn.close()
-    return render_template("inspect.html", tab=tab, models=models, **data)
+    return render_template("inspect.html", tab=tab, models=models,
+                           include_drafts=include_drafts,
+                           data_from=span[0], data_as_of=span[1],
+                           protocol_note=GRADING_PROTOCOL_NOTE, **data)
 
 
-def _inspect_masking(conn, models):
+def _inspect_masking(conn, models, include_drafts=True):
     """Build masking tab data: per-puzzle classification results."""
     rows = conn.execute(
         """SELECT c.puzzle_id, c.model_name, c.grids_only, c.narrative_only,
@@ -290,6 +336,8 @@ def _inspect_masking(conn, models):
         pid = p["puzzle_id"]
         if pid not in cls_map:
             continue
+        if not include_drafts and p["status"] == "draft":
+            continue
         pdata = db.puzzle_to_json(p)
         pdata["results"] = cls_map[pid]
         pdata["original_results"] = orig_map.get(pid, {})
@@ -357,7 +405,7 @@ def _inspect_masking(conn, models):
     return {"puzzles": puzzles, "summary": summary, "highlights": highlights}
 
 
-def _inspect_ordering(conn):
+def _inspect_ordering(conn, include_drafts=True):
     """Build ordering tab data: per-puzzle tau scores."""
     models = [r[0] for r in conn.execute(
         "SELECT DISTINCT model_name FROM ordering_trials ORDER BY model_name"
@@ -384,6 +432,8 @@ def _inspect_ordering(conn):
     ).fetchall():
         pid = p["puzzle_id"]
         if pid not in tau_map:
+            continue
+        if not include_drafts and p["status"] == "draft":
             continue
         pdata = db.puzzle_to_json(p)
         pdata["tau_results"] = tau_map[pid]
@@ -415,12 +465,13 @@ def _inspect_ordering(conn):
             "ordering_summary": summary, "highlights": highlights}
 
 
-def _inspect_stances(conn):
+def _inspect_stances(conn, include_drafts=True):
     """Build stances tab data: grouped by stance_group, using narrative variants."""
     rows = conn.execute(
         """SELECT p.puzzle_id, p.stance_group, p.title, p.sequence_json,
                   p.masked_positions, p.answer_grids, p.creator, p.difficulty,
                   p.human_difficulty, p.ai_difficulty, p.tags, p.created_at,
+                  p.status,
                   nv.variant, nv.source_domain, nv.narrative as variant_narrative,
                   nv.variant_id,
                   c.model_name, c.grids_only, c.narrative_only,
@@ -439,6 +490,8 @@ def _inspect_stances(conn):
     # Group by stance_group, then by stance (from source_domain)
     groups = {}
     for r in rows:
+        if not include_drafts and r["status"] == "draft":
+            continue
         group = r["stance_group"]
         # Extract stance name from source_domain (e.g., "stance:intentional" -> "intentional")
         stance = r["source_domain"].replace("stance:", "") if r["source_domain"] else r["variant"]
@@ -572,7 +625,7 @@ def _reconstruct_ooo_grids(conn, puzzle_data, distractor_id):
     return all_grids, distractor_pos
 
 
-def _inspect_oddoneout(conn):
+def _inspect_oddoneout(conn, include_drafts=True):
     """Build odd-one-out tab data: per-puzzle accuracy."""
     table_exists = conn.execute(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='oddoneout_trials'"
@@ -612,6 +665,8 @@ def _inspect_oddoneout(conn):
     for p in conn.execute("SELECT * FROM puzzles ORDER BY puzzle_id").fetchall():
         pid = p["puzzle_id"]
         if pid not in acc_map:
+            continue
+        if not include_drafts and p["status"] == "draft":
             continue
         pdata = db.puzzle_to_json(p)
         pdata["ooo_results"] = acc_map[pid]
@@ -684,10 +739,13 @@ def browse():
     conn = get_conn()
     rows = db.get_all_puzzles(conn)
     puzzles = [enrich_puzzle(conn, db.puzzle_to_json(r)) for r in rows]
+    if _hide_drafts():
+        puzzles = [p for p in puzzles if not p["is_draft"]]
 
-    # Fetch vote counts and solve stats
+    # Fetch vote counts, solve stats, and measured model results
     vote_counts = db.get_vote_counts(conn)
     solve_stats = db.get_puzzle_solve_stats(conn)
+    narc_counts = db.get_narc_model_counts(conn)
     voter_id = request.cookies.get('narc_voter_id')
     voter_votes = db.get_voter_votes(conn, voter_id) if voter_id else {}
     conn.close()
@@ -702,8 +760,9 @@ def browse():
         p["my_vote"] = voter_votes.get(pid, 0)
         ss = solve_stats.get(pid, {})
         p["attempt_count"] = ss.get("attempts", 0)
-        p["solve_rate"] = ss.get("solve_rate")
-        p["narrative_lift"] = ss.get("narrative_lift")
+        nc = narc_counts.get(pid, {})
+        p["narc_models"] = nc.get("narc", 0)
+        p["models_tested"] = nc.get("tested", 0)
 
     # Compute grids: tag from actual sequence length (not stored tags)
     for p in puzzles:
@@ -727,30 +786,17 @@ def browse():
         return sorted([t for t in tag_counts if t.startswith(prefix + ":")],
                        key=lambda t: -tag_counts[t])
 
-    # Spectrum tags in logical order: human-forte → ... → ai-forte → domain-dependent
-    spectrum_order = [
-        "spectrum:human-forte", "spectrum:human-edge", "spectrum:balanced",
-        "spectrum:ai-edge", "spectrum:ai-forte", "spectrum:domain-dependent"
-    ]
-    spectrum_tags = [t for t in spectrum_order if t in tag_counts]
-
     # Suppress grid variants from browse (parent_puzzle_id set)
     browsable = [p for p in puzzles if not p.get("parent_puzzle_id")]
 
-    # Filter starter puzzles
-    starter_puzzles = [p for p in browsable
-                       if "collection:starter" in (p.get("tags") or "")]
-
     return render_template("browse.html", puzzles=browsable,
-                           starter_puzzles=starter_puzzles,
                            tag_counts=tag_counts,
                            audience_tags=tags_by_prefix("audience"),
                            arc_tags=tags_by_prefix("arc"),
                            clue_tags=tags_by_prefix("clue"),
                            domain_tags=tags_by_prefix("domain"),
                            grid_tags=sorted([t for t in tag_counts if t.startswith("grids:")],
-                                           key=lambda t: int(t.split(":")[1])),
-                           spectrum_tags=spectrum_tags)
+                                           key=lambda t: int(t.split(":")[1])))
 
 
 @app.route("/create")
@@ -764,6 +810,9 @@ def create():
     if edit_id or revise_id:
         conn = get_conn()
         row = db.get_puzzle(conn, edit_id or revise_id)
+        if row and row["status"] == "draft" and _hide_drafts():
+            conn.close()
+            return "Puzzle not found", 404
         if row:
             puzzle = enrich_puzzle(conn, db.puzzle_to_json(row))
             original_creator = puzzle.get("creator", "human")
@@ -781,10 +830,13 @@ def create():
 def solve(puzzle_id):
     conn = get_conn()
     row = db.get_puzzle(conn, puzzle_id)
-    if not row:
+    if not row or (row["status"] == "draft" and _hide_drafts()):
         conn.close()
         return "Puzzle not found", 404
     puzzle = enrich_puzzle(conn, db.puzzle_to_json(row))
+    nc = db.get_narc_model_counts(conn, puzzle_id).get(puzzle_id, {})
+    puzzle["narc_models"] = nc.get("narc", 0)
+    puzzle["models_tested"] = nc.get("tested", 0)
 
     # Optional ?mask=<mask_variant_id>: solve a different mask over the same grids.
     mask_variants = db.get_mask_variants(conn, puzzle_id)
@@ -813,6 +865,8 @@ def api_list_puzzles():
     rows = db.get_all_puzzles(conn)
     puzzles = [db.puzzle_to_json(r) for r in rows]
     conn.close()
+    if _hide_drafts():
+        puzzles = [p for p in puzzles if p.get("status") != "draft"]
     return jsonify(puzzles)
 
 
@@ -842,7 +896,7 @@ def api_get_puzzle(puzzle_id):
     conn = get_conn()
     row = db.get_puzzle(conn, puzzle_id)
     conn.close()
-    if not row:
+    if not row or (row["status"] == "draft" and _hide_drafts()):
         return jsonify({"error": "Not found"}), 404
     return jsonify(db.puzzle_to_json(row))
 

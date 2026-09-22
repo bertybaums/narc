@@ -20,9 +20,9 @@
         {% if puzzle.creator == 'claude' %}
         <span class="badge bg-info" style="font-size:0.5em; vertical-align:middle;">AI-generated</span>
         {% elif puzzle.creator == 'colab' %}
-        <span class="badge bg-success" style="font-size:0.5em; vertical-align:middle;">AI-Hum-Colab</span>
+        <span class="badge bg-success" style="font-size:0.5em; vertical-align:middle;" title="An AI draft revised by a person">AI + human</span>
         {% else %}
-        <span class="badge bg-secondary" style="font-size:0.5em; vertical-align:middle;">Hum-generated</span>
+        <span class="badge bg-secondary" style="font-size:0.5em; vertical-align:middle;">Human-written</span>
         {% endif %}
         {% if puzzle.is_draft %}
         <span class="badge bg-warning text-dark" style="font-size:0.5em; vertical-align:middle;">Draft</span>
@@ -39,6 +39,9 @@
         reconstruct grid #{{ puzzle.masked_positions[0] + 1 }}
     {% else %}
         reconstruct {{ puzzle.masked_positions | length }} grids
+    {% endif %}
+    {% if puzzle.models_tested %}
+    &middot; <a href="/inspect?tab=masking" class="text-muted" title="Measured on Inspect: on {{ puzzle.narc_models }} of {{ puzzle.models_tested }} tested models this puzzle is solved only when grids and clue are combined">NARC on {{ puzzle.narc_models }}/{{ puzzle.models_tested }} models</a>
     {% endif %}
     </p>
     {% if puzzle.mask_variants and puzzle.mask_variants | length > 1 %}
@@ -162,6 +165,7 @@ async function updateTags() {
             <button id="btn-submit" class="btn btn-narc" onclick="submitAnswer()">Submit Answer</button>
             <button class="btn btn-outline-secondary ms-2" onclick="clearAnswer()">Clear All</button>
         </div>
+        <p class="text-muted small mt-3 mb-0">Your attempts here are recorded anonymously for research (the grids you submit, whether they are correct, whether you revealed the clue, and time taken), under a random id kept in your browser. No name or email is collected. <a href="/about#records" class="text-muted">What this site records</a>.</p>
     </div>
 </div>
 

@@ -11,9 +11,9 @@
 <div class="card mb-4">
     <div class="card-body">
         <h4>What is NARC?</h4>
-        <p>NARC is a new kind of abstract reasoning puzzle. Each puzzle presents a sequence of colored grids that tell a visual "story." One or more grids in the sequence are hidden, and your goal is to reconstruct them pixel-perfectly.</p>
-        <p>The catch: <strong>the grids alone aren't enough.</strong> Each puzzle comes with a short narrative clue. Without it, the missing grid is ambiguous &mdash; multiple answers seem plausible. With the clue, exactly one answer is correct.</p>
-        <p>This is the <strong>NARC property</strong>: neither the grids nor the narrative suffice alone, but together they uniquely determine the answer.</p>
+        <p>NARC is a kind of abstract reasoning puzzle. Each puzzle presents a sequence of colored grids that tell a visual "story." One or more grids in the sequence are hidden, and your goal is to reconstruct them pixel-perfectly.</p>
+        <p>The catch: <strong>the grids alone aren't enough.</strong> Each puzzle comes with a short narrative clue. The clue never mentions grids; it helps only when read figuratively, a character as a bar, a mood as its height. Without it, the missing grid is ambiguous &mdash; several answers seem plausible. With it, one answer is right.</p>
+        <p>This is the <strong>NARC property</strong>: neither the grids nor the narrative suffice alone, but together they determine the answer. For AI models we measure it directly: a puzzle has the property <em>for a given model</em> when that model solves it with grids and clue together but not with either alone.</p>
     </div>
 </div>
 
@@ -23,18 +23,32 @@
         <ol>
             <li><strong>Look at the grid sequence.</strong> Each grid uses a 10-color palette. One or more grids are hidden, shown as a <span style="color:#f59e0b;">?</span> placeholder.</li>
             <li><strong>Try to guess</strong> what the missing grid looks like from the visual pattern alone. You can submit a guess before seeing the clue.</li>
-            <li><strong>Reveal the clue.</strong> A short narrative provides the key insight that disambiguates the puzzle.</li>
+            <li><strong>Reveal the clue.</strong> A short narrative provides the insight that disambiguates the puzzle.</li>
             <li><strong>Draw your answer.</strong> Set the colors of each cell in the missing grid and submit.</li>
         </ol>
+        <p class="mb-0 text-muted small">Color-blind? The <strong>Numbers</strong> button in the top bar prints each color's digit in every cell.</p>
     </div>
 </div>
 
 <div class="card mb-4">
     <div class="card-body">
         <h4>Why does this matter?</h4>
-        <p>NARC investigates a fundamental question: <strong>how does narrative transform visual reasoning?</strong></p>
-        <p>Abstract grid patterns that look meaningless can become instantly comprehensible when accompanied by the right story. This "narrative augmentation" works differently for humans and AI systems &mdash; and studying where they diverge reveals something deep about how each processes language and vision together.</p>
+        <p>NARC asks a narrow question: can a short story supply what a sequence of pictures leaves undetermined, and when it does, which part of the story is doing the work &mdash; its words, its order, or its form? For AI models we can test this with ablations: swap the clue for its keywords, shuffle the grids, hide a different grid, tell the same story a different way.</p>
+        <p>The human side is different. People solve puzzles on this site for fun, and we record those attempts anonymously, but we have <strong>not</strong> run a human study and make no claims about human difficulty or about how humans and models differ. That comparison is future work.</p>
         <p>NARC is a sibling project to <a href="https://bertybaums.github.io/marc2/" style="color:#f59e0b;">MARC2</a> (Metaphor Abstraction and Reasoning Corpus), which explored how figurative language helps AI solve abstract reasoning tasks from the <a href="https://arcprize.org/" style="color:#f59e0b;">ARC-AGI</a> benchmark.</p>
+    </div>
+</div>
+
+<div class="card mb-4" style="border-color:#f59e0b;">
+    <div class="card-body">
+        <h4>How much to trust what you see here</h4>
+        <p class="text-muted small">This site began as a research proof of concept and is now used by visitors as well as by our team. Not everything on it carries the same weight.</p>
+        <ul class="mb-0">
+            <li class="mb-2"><strong style="color:#2ECC40;">Documented.</strong> The <a href="/inspect?tab=masking" style="color:#f59e0b;">Masking</a> results: three conditions plus order and keyword ablations, {{ stats.models_tested }} models, every active puzzle. A paper on this battery is under review (September 2026). Verdicts are per model and single-sample; on re-runs about one NARC verdict in six flips, so read a puzzle's profile across models, not a single cell.</li>
+            <li class="mb-2"><strong style="color:#f59e0b;">Pilot.</strong> The Ordering, Odd-One-Out and Stances tabs, and the narrative-variant studies from spring 2026 (Story Prism, ABT, focalization): smaller designs, not part of the paper's claims. Each tab states its own scope and dates.</li>
+            <li class="mb-2"><strong style="color:#aaa;">Exploratory.</strong> Human solving on this site: anonymous, self-selected, uninstructed, our own team included. We show attempt counts only, never human difficulty or solve rates.</li>
+            <li><strong style="color:#666;">Retired.</strong> Early proof-of-concept fields &mdash; predicted "human difficulty" and "AI difficulty" ratings and "spectrum" tags written by the generating model &mdash; were never measured and are no longer shown. The only difficulty signal on the site is measured: on how many tested models a puzzle has the NARC property.</li>
+        </ul>
     </div>
 </div>
 
@@ -43,36 +57,37 @@
         <h4>The puzzle corpus</h4>
         <div class="row text-center my-3">
             <div class="col">
-                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.total_puzzles }}</div>
-                <div class="text-muted">Puzzles</div>
+                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.active_puzzles }}</div>
+                <div class="text-muted">Active puzzles</div>
             </div>
             <div class="col">
                 <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.total_variants }}</div>
                 <div class="text-muted">Narrative variants</div>
             </div>
             <div class="col">
-                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.grid_sizes }}</div>
-                <div class="text-muted">Unique grid sizes</div>
+                <div style="font-size:2em;font-weight:bold;color:#f59e0b;">{{ stats.models_tested }}</div>
+                <div class="text-muted">Models tested</div>
             </div>
             <div class="col">
                 <div style="font-size:2em;font-weight:bold;color:#f59e0b;">3&ndash;8</div>
                 <div class="text-muted">Grids per puzzle</div>
             </div>
         </div>
-        <p>Puzzles span literary classics (Hemingway, Kafka, Shelley), scientific concepts (natural selection, entropy, plate tectonics), philosophical thought experiments (the trolley problem, Plato's cave, the ship of Theseus), and more.</p>
-        <p>Each puzzle is rated on two axes: <strong>human difficulty</strong> and <strong>AI difficulty</strong> (1&ndash;5), creating a spectrum from puzzles that are easy for humans but hard for AI, to puzzles where AI excels but humans struggle.</p>
+        <p>Another {{ stats.draft_puzzles }} puzzles are drafts under review and visible only to the team.</p>
+        <p>Puzzles come from three sources, labelled on every card: <span class="badge bg-secondary">Human-written</span> by our team or visitors, <span class="badge bg-info">AI-generated</span> by a language model working from a strategy prompt or as an autonomous agent, or <span class="badge bg-success">AI + human</span>, an AI draft revised by a person. Every active puzzle was approved by a reviewer and then run through the model battery.</p>
+        <p class="mb-0">Puzzles span literary classics (Hemingway, Kafka, Shelley), scientific concepts (natural selection, entropy, plate tectonics), philosophical thought experiments (the trolley problem, Plato's cave, the ship of Theseus), and more.</p>
     </div>
 </div>
 
 <div class="card mb-4">
     <div class="card-body">
         <h4>Research context</h4>
-        <p>NARC draws on insights from:</p>
-        <ul>
+        <p>NARC draws on:</p>
+        <ul class="mb-0">
             <li><strong>ARC-AGI</strong> &mdash; abstract visual reasoning as an intelligence benchmark</li>
             <li><strong>MARC</strong> &mdash; figurative language as a bridge between human and machine reasoning</li>
-            <li><strong>Econarratology</strong> &mdash; Erin James's framework for how narratives construct "storyworlds" that organize spatial and temporal understanding</li>
-            <li><strong>Focalization</strong> &mdash; how the same story told from different characters' perspectives changes what information is foregrounded</li>
+            <li><strong>Econarratology and the Story Prism</strong> &mdash; Erin James's framework for how narratives construct "storyworlds," which shaped the narrative-variant pilots</li>
+            <li><strong>Focalization</strong> &mdash; how the same story told from different perspectives changes what is foregrounded; our spring 2026 pilot on this gave mixed results</li>
         </ul>
     </div>
 </div>
@@ -80,17 +95,33 @@
 <div class="card mb-4">
     <div class="card-body">
         <h4>Get involved</h4>
-        <p>You can:</p>
-        <ul>
-            <li><a href="/browse" style="color:#f59e0b;">Browse and solve</a> existing puzzles</li>
-            <li><a href="/create" style="color:#f59e0b;">Create and submit</a> your own puzzles</li>
-            <li><a href="/inspect" style="color:#f59e0b;">Inspect</a> how AI models perform across puzzles and narrative variants</li>
+        <ul class="mb-0">
+            <li><a href="/browse" style="color:#f59e0b;">Browse and solve</a> puzzles. The landing view shows our team's picks.</li>
+            <li><a href="/create" style="color:#f59e0b;">Create and submit</a> a puzzle. A reviewer looks at it, then it runs through the model battery; accepted puzzles are published here with their answers and model results.</li>
+            <li><a href="/inspect" style="color:#f59e0b;">Inspect</a> how models perform across puzzles and narrative variants.</li>
+            <li><a href="/narrate" style="color:#f59e0b;">Narrate</a> is an invited study: write the story that lets a model solve a puzzle.</li>
         </ul>
     </div>
 </div>
 
+<div class="card mb-4">
+    <div class="card-body">
+        <h4 id="records">What this site records</h4>
+        <p>When you solve a puzzle we store the grids you submit, whether they were correct, whether you had revealed the clue, and how long you took, under a random session id kept in your browser. Page actions (reveals, submits, retries) are logged the same way. Votes are stored with your IP address to limit repeat voting. We do not ask for a name or email to solve; if you enter them when submitting a puzzle, we use them only to credit you or to contact you about that puzzle.</p>
+        <p class="mb-0">These records have not been reviewed by an ethics board. We treat them as exploratory and report them only as counts. Narrate is a separate invited study with its own notice. To have your records removed, <a href="https://github.com/bertybaums/narc/issues" style="color:#f59e0b;">open an issue on GitHub</a> or contact Bert Baumgaertner at the University of Idaho.</p>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <h4>Paper, code, and data</h4>
+        <p>A paper describing the masking battery and its results is under review (September 2026). A citation and a data release will be posted here when they exist. Until then, please cite the site by URL and date.</p>
+        <p class="mb-0">Code: <a href="https://github.com/bertybaums/narc" style="color:#f59e0b;">github.com/bertybaums/narc</a>.</p>
+    </div>
+</div>
+
 <div class="text-center text-muted mb-4">
-    <small>Bert Baumgaertner &middot; University of Idaho &middot; 2026</small>
+    <small>Bert Baumgaertner &middot; University of Idaho &middot; Page updated {{ site_updated }}{% if stats.data_as_of %} &middot; Model results as of {{ stats.data_as_of }}{% endif %}</small>
 </div>
 
 </div>
