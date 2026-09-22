@@ -11,7 +11,7 @@
 
 <div class="card mb-4">
     <div class="card-body">
-        <p>This part of NARC is a research study open by invitation. Enter the invite code you were given to take part.</p>
+        <p>This part of NARC is a research study open by invitation, for adults 18 or older. Enter the invite code you were given to take part.</p>
         <form method="POST" action="{{ url_for('narrate.join') }}" class="d-flex gap-2 flex-wrap" autocomplete="off">
             <label for="invite-code" class="visually-hidden">Invite code</label>
             <input id="invite-code" type="text" name="code" class="form-control narrate-code-input"
@@ -58,6 +58,7 @@
             <li>Whether you had looked at the existing narrative before you submitted.</li>
             <li>The model's full response, and whether it solved the puzzle.</li>
         </ul>
+        <p class="mb-2">Stories you write may be published, word for word, on this site, in papers, and in public datasets, without your name or invite code.</p>
         <p class="mb-0 small text-muted">We don't ask for your name or email. Your submissions are linked to a random ID kept in this browser and to the invite code you used.</p>
     </div>
 </div>
