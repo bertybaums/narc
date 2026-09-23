@@ -34,3 +34,6 @@ __pycache__/
 
 # Narrate study data (human submissions; own DB)
 narrate_data/
+
+# IRB drafts and attachments (private)
+irb/
