@@ -645,6 +645,20 @@ def get_puzzle_solve_stats(conn):
     return stats
 
 
+VOTE_IP_RETENTION_DAYS = 30
+
+
+def purge_old_vote_ips(conn, days=VOTE_IP_RETENTION_DAYS):
+    """Null out vote IP addresses older than `days` (IRB 26-225: IPs kept only for rate limiting)."""
+    cur = conn.execute(
+        """UPDATE votes SET ip_address=NULL
+           WHERE ip_address IS NOT NULL AND created_at < datetime('now', ?)""",
+        (f"-{int(days)} days",),
+    )
+    conn.commit()
+    return cur.rowcount
+
+
 def count_recent_votes_by_ip(conn, ip_address):
     row = conn.execute(
         """SELECT COUNT(*) as cnt FROM votes

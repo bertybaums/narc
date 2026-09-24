@@ -101,23 +101,14 @@
         </div>
         {% endif %}
 
-        <!-- Submitter info (visitors only) -->
+        <!-- Credit name (visitors only; published with the puzzle, IRB 26-225) -->
         {% if not user %}
         <div class="card mb-3">
-            <div class="card-header">Your Info <small class="text-muted">(optional)</small></div>
+            <div class="card-header">Credit <small class="text-muted">(optional)</small></div>
             <div class="card-body">
-                <div class="d-flex gap-3 flex-wrap">
-                    <div>
-                        <label class="form-label">Name</label>
-                        <input type="text" id="submitter-name" class="form-control form-control-sm"
-                               placeholder="Your name" style="width: 200px;">
-                    </div>
-                    <div>
-                        <label class="form-label">Email</label>
-                        <input type="email" id="submitter-email" class="form-control form-control-sm"
-                               placeholder="your@email.com" style="width: 250px;">
-                    </div>
-                </div>
+                <label class="form-label" for="submitter-name">The name to show with your puzzle if it is published. Leave blank to contribute anonymously.</label>
+                <input type="text" id="submitter-name" class="form-control form-control-sm"
+                       placeholder="Name for credit" style="width: 250px;">
             </div>
         </div>
         {% endif %}
@@ -125,7 +116,7 @@
         <!-- Contribution and publication notice -->
         <div class="card mb-3 border-secondary">
             <div class="card-body small text-muted">
-                <strong class="text-light">Before you submit.</strong> By submitting you contribute this puzzle to the NARC research project. If a reviewer approves it, it will be published on this site with its answer and model results, and it may appear in papers and public datasets. You will be credited by the name you enter above, or as an anonymous contributor if you leave it blank. Your email is used only to contact you about this puzzle and is not published. You must be 18 or older to submit. <a href="/about#records" class="text-muted">What this site records</a>.
+                <strong class="text-light">Before you submit.</strong> By submitting you contribute this puzzle to the NARC research project. If a reviewer approves it, it will be published on this site with its answer and model results, and it may appear in papers and public datasets. If you enter a name in the Credit box above, it will be published with the puzzle; leave it blank to contribute anonymously. We do not ask for your email and will not contact you. Please do not put personal information in the puzzle or its story. You must be 18 or older to submit. <a href="/about#records" class="text-muted">What this site records</a>.
             </div>
         </div>
 

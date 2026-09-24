@@ -11,7 +11,7 @@
 
 <div class="card mb-4">
     <div class="card-body">
-        <p>This part of NARC is a research study open by invitation, for adults 18 or older. Enter the invite code you were given to take part.</p>
+        <p>This part of NARC is a research study open by invitation, for adults 18 or older. Enter the invite code from your invitation to take part. Everyone invited through the same event or mailing uses the same code.</p>
         <form method="POST" action="{{ url_for('narrate.join') }}" class="d-flex gap-2 flex-wrap" autocomplete="off">
             <label for="invite-code" class="visually-hidden">Invite code</label>
             <input id="invite-code" type="text" name="code" class="form-control narrate-code-input"
@@ -59,7 +59,7 @@
             <li>The model's full response, and whether it solved the puzzle.</li>
         </ul>
         <p class="mb-2">Stories you write may be published, word for word, on this site, in papers, and in public datasets, without your name or invite code.</p>
-        <p class="mb-0 small text-muted">We don't ask for your name or email. Your submissions are linked to a random ID kept in this browser and to the invite code you used.</p>
+        <p class="mb-0 small text-muted">We don't ask for your name or email. Your submissions are linked to a random ID kept in this browser and to the invite code, which is shared by everyone invited through the same event or mailing. Because of that, we cannot find or remove your stories after you submit them. Please do not put your name or other personal information in a story.</p>
     </div>
 </div>
 
@@ -68,7 +68,7 @@
         <div class="form-check mb-3">
             <input class="form-check-input" type="checkbox" name="ack" value="yes" id="ack" required>
             <label class="form-check-label" for="ack">
-                I understand that every narrative I submit is recorded.
+                I understand that every narrative I submit is recorded and cannot be removed afterwards.
             </label>
         </div>
         <button type="submit" class="btn btn-narc">Start</button>

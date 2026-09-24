@@ -347,9 +347,7 @@ function savePuzzle() {
     // Include submitter info and revision flag for visitors
     if (!IS_ADMIN) {
         const nameEl = document.getElementById('submitter-name');
-        const emailEl = document.getElementById('submitter-email');
         if (nameEl) data.submitter_name = nameEl.value.trim();
-        if (emailEl) data.submitter_email = emailEl.value.trim();
     }
     if (IS_REVISION) {
         data.is_revision = true;

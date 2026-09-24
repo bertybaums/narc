@@ -77,6 +77,26 @@ def get_conn():
     return db.init_db()
 
 
+# Vote IPs are kept only for rate limiting (IRB 26-225); purge old ones at most once an hour
+# per worker so they go even when nobody votes.
+_last_ip_purge = datetime.min
+
+
+@app.before_request
+def _purge_old_vote_ips():
+    global _last_ip_purge
+    now = datetime.now()
+    if now - _last_ip_purge < timedelta(hours=1):
+        return
+    _last_ip_purge = now
+    try:
+        conn = get_conn()
+        db.purge_old_vote_ips(conn)
+        conn.close()
+    except Exception:
+        app.logger.exception("vote IP purge failed")
+
+
 # --- Auth helpers ---
 
 def current_user():
@@ -1020,7 +1040,7 @@ def api_create_puzzle():
             conn, sub_type, json.dumps(data),
             target_puzzle_id=data.get("original_puzzle_id"),
             submitter_name=data.get("submitter_name"),
-            submitter_email=data.get("submitter_email"),
+            submitter_email=None,  # email no longer collected (IRB 26-225)
         )
         db.log_activity(conn, None, "submit_puzzle", "submission",
                         str(sid), f"Visitor submitted '{title}'")
@@ -1056,7 +1076,7 @@ def api_add_variant(puzzle_id):
             conn, "variant", json.dumps(payload),
             target_puzzle_id=puzzle_id,
             submitter_name=data.get("submitter_name"),
-            submitter_email=data.get("submitter_email"),
+            submitter_email=None,  # email no longer collected (IRB 26-225)
         )
         db.log_activity(conn, None, "submit_variant", "submission",
                         str(sid), f"Visitor submitted variant for {puzzle_id}")
