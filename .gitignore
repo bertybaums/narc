@@ -37,3 +37,6 @@ narrate_data/
 
 # IRB drafts and attachments (private)
 irb/
+
+# Prototype tab data (NHM simulator runs; own DB)
+proto_data/

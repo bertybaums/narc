@@ -1,0 +1,178 @@
+# Moral loops as event structure. The auto-narc sessions (S5-S8, April 2026) found that
+# "moral-stance NARC" was really "reversal against visible momentum with a spatial specifier":
+# a matched non-moral narrative selected the same grid. In NHM terms that is expected: the grid
+# denotes the ACT, the text carries the REASON, and two texts with the same event chain are
+# synonyms at the event level. This grammar makes that precise and gives the human-in-the-loop
+# both kinds of fork to work with:
+#
+#   * grid-identical forks: a gift and a grab are both TRANSFER (asked_and_given vs
+#     temptation_taken); the text alone separates them, the grids cannot, and the puzzle's
+#     answer is the same. Use these to test whether a solver reads the reason at all.
+#   * grid-distinct forks: take vs refrain (TRANSFER vs WITHDRAW), share half vs give all vs
+#     keep (SPLIT vs TRANSFER vs WITHDRAW), stay vs leave (UNWANT vs MOVE.loc). Here the moral
+#     variable HAS a denotation and the final mask asks for it.
+#
+# The WANT bubble makes desire visible, so "she wanted it and did not take it" is drawable:
+# the bubble persists over a refusal and pops over a taking. Requires a convention with
+# want=bubble (bubble, bubble_marker, enriched, table); under the baseline the WANT and
+# UNWANT events fold into their neighbours and the refusal loses its visible trace.
+name: restraint
+description: temptation, restraint, sharing and promises; moral forks with and without a grid denotation
+requires: {want: bubble}
+
+lexicon:
+  names_m: [Tim, Tom, Max, Ben, Sam, Bob, Jack, Leo, Joe, Dan]
+  names_f: [Lily, Sue, Mia, Lucy, Amy, Anna, Sara, Jane, Lila, Zoe]
+  animals: [dog, cat, bird, bunny, frog, duck, squirrel, bear]
+  objects: [cookie, cake, apple, sandwich, pie, toy, ball, kite, doll, balloon]
+  locations:
+    green: [park, garden, yard, field]
+    water: [pond, beach, lake]
+    indoor: [house, room, kitchen, school]
+    town: [town, street, village]
+
+roles: {P: person, F: person, A: animal, O: object, L1: location, L2: location}
+
+story_types:
+  # the act is the last event, so the final mask asks for the moral variable
+  temptation_taken:   {episodes: [SETUP2, HOLD_F, COVET, APPROACH, TAKE], features: [BadEnding, MoralValue]}
+  temptation_refused: {episodes: [SETUP2, HOLD_F, COVET, APPROACH, REFRAIN], features: [MoralValue]}
+  asked_and_given:    {episodes: [SETUP2, HOLD_F, COVET, APPROACH, GIFT], features: [MoralValue]}
+  sharing_half:       {episodes: [SETUP2, HOLD_BIG, OTHER_WANTS, APPROACH_F, SHARE], features: [MoralValue]}
+  sharing_all:        {episodes: [SETUP2, HOLD_BIG, OTHER_WANTS, APPROACH_F, GIVE_ALL], features: [MoralValue]}
+  hoarding:           {episodes: [SETUP2, HOLD_BIG, OTHER_WANTS, APPROACH_F, KEEP], features: [BadEnding]}
+  promise_kept:       {episodes: [SETUP2, PACT, LURE, STAY], features: [MoralValue]}
+  promise_broken:     {episodes: [SETUP2, PACT, LURE, LEAVE], features: [BadEnding]}
+
+episodes:
+  SETUP2:
+    - [[APPEAR, P], [APPEAR, F], [WITHDRAW, F, P, "@sit"]]
+    - [[APPEAR, P], [MOVE.loc, P, L1], [APPEAR, F], [WITHDRAW, F, P, "@sit"]]
+    - [[APPEAR, P], [APPEAR, F], [EMOTE, ALL, happy], [WITHDRAW, F, P, "@sit"]]
+  HOLD_F:
+    - [[ACQUIRE, F, O]]
+    - [[APPEAR.obj, O], [ACQUIRE, F, O]]
+    - [[ACQUIRE, F, O], [EMOTE, F, happy]]
+  COVET:
+    - [[WANT, P, O]]
+    - [[WANT, P, O], [EMOTE, P, sad]]
+    - [[EMOTE, P, sad], [WANT, P, O]]
+  APPROACH:
+    - [[MOVE.to, P, F, "@approach"]]
+    - [[MOVE.to, P, F, "@approach"], [EMOTE, F, sad]]
+  TAKE:
+    - [[TRANSFER, F, O, P, "@grab"]]
+    - [[TRANSFER, F, O, P, "@grab"], [EMOTE, F, sad]]
+    - [[TRANSFER, F, O, P, "@grab"], [EMOTE, P, happy]]
+  REFRAIN:
+    - [[WITHDRAW, P, F, "@refrain"]]
+    - [[WITHDRAW, P, F, "@refrain"], [EMOTE, P, happy]]
+    - [[WITHDRAW, P, F, "@refrain"], [UNWANT, P, "@letgo"]]
+  GIFT:
+    - [[TRANSFER, F, O, P, "@give"]]
+    - [[TRANSFER, F, O, P, "@give"], [EMOTE, ALL, happy]]
+    - [[TRANSFER, F, O, P, "@give"], [EMOTE, P, happy]]
+  HOLD_BIG:
+    - [[ACQUIRE, P, O, "@have"], [TRANSFORM, O, big]]
+    - [[APPEAR.obj, O], [TRANSFORM, O, big], [ACQUIRE, P, O, "@have"]]
+    - [[ACQUIRE, P, O, "@have"], [TRANSFORM, O, big], [EMOTE, P, happy]]
+  OTHER_WANTS:
+    - [[WANT, F, O]]
+    - [[WANT, F, O], [EMOTE, F, sad]]
+    - [[EMOTE, F, sad], [WANT, F, O]]
+  APPROACH_F:
+    - [[MOVE.to, F, P, "@approach"]]
+    - [[MOVE.to, F, P, "@approach"], [EMOTE, P, sad]]
+  SHARE:
+    - [[SPLIT, P, O, F]]
+    - [[SPLIT, P, O, F], [EMOTE, ALL, happy]]
+    - [[SPLIT, P, O, F], [EMOTE, F, happy]]
+  GIVE_ALL:
+    - [[TRANSFER, P, O, F, "@giveall"]]
+    - [[TRANSFER, P, O, F, "@giveall"], [EMOTE, F, happy]]
+    - [[TRANSFER, P, O, F, "@giveall"], [EMOTE, ALL, happy]]
+  KEEP:
+    - [[WITHDRAW, P, F, "@keep"]]
+    - [[WITHDRAW, P, F, "@keep"], [EMOTE, F, sad]]
+    - [[EMOTE, P, sad], [WITHDRAW, P, F, "@keep"]]
+  PACT:
+    - [[MOVE.to, F, P, "@pact"]]
+    - [[MOVE.to, F, P, "@pact"], [EMOTE, ALL, happy]]
+    - [[MOVE.to, F, P, "@pact"], [EMOTE, P, happy]]
+  LURE:
+    - [[WANT, P, O, "@lure"]]
+    - [[APPEAR.obj, O, "@far"], [WANT, P, O, "@lure"]]
+    - [[WANT, P, O, "@lure"], [EMOTE, P, sad]]
+  STAY:
+    - [[UNWANT, P, "@stay"]]
+    - [[UNWANT, P, "@stay"], [EMOTE, ALL, happy]]
+    - [[UNWANT, P, "@stay"], [EMOTE, P, happy]]
+  LEAVE:
+    - [[MOVE.loc, P, L2, "@leave"]]
+    - [[MOVE.loc, P, L2, "@leave"], [ACQUIRE, P, O]]
+    - [[MOVE.loc, P, L2, "@leave"], [EMOTE, P, sad]]
+
+clauses:
+  "APPEAR:P": ["Once upon a time, there was a little kid named {P}.", "{P} was a little kid who lived near the {L1}.", "One day, {P} went out to play."]
+  "APPEAR:F": ["{P}'s friend {F} was there too.", "{F} was there.", "{P} saw {F}."]
+  "APPEAR.obj": ["There was a {O} on the ground.", "{P} saw a {O} near a tree.", "A {O} lay in the grass."]
+  "APPEAR.obj@far": ["Far off, {P} saw a {O}.", "Then {P} noticed a {O} on the other side.", "There was a {O} over by the {L2}."]
+  "MOVE.loc": ["{X} went to the {L}.", "{X} walked to the {L}.", "{X} ran all the way to the {L}."]
+  "MOVE.loc@leave": ["{X} forgot the promise and ran off to the {L}.", "{X} left {F} behind and went to the {L}.", "{X} broke the promise. {X} went to the {L} alone."]
+  "MOVE.to@approach": ["{X} walked over to {Y}.", "{X} went right up to {Y}.", "{X} came close to {Y}."]
+  "MOVE.to@pact": ["{X} came and sat by {Y}. They promised to stay together.", "{X} sat down next to {Y}. \"Let's stay together,\" they said.", "{X} joined {Y}, and they made a promise not to leave each other."]
+  "WITHDRAW@sit": ["{X} sat down a little way off from {Y}.", "{X} was over by the tree, not next to {Y}.", "{X} stayed on the other side, away from {Y}."]
+  "WITHDRAW@refrain": ["{X} did not take it. {X} stepped back from {Y}.", "{X} wanted it, but it was not {X}'s. {X} turned and walked away from {Y}.", "{X} thought about grabbing it. {X} did not. {X} stepped back."]
+  "WITHDRAW@keep": ["{X} did not share. {X} turned away from {Y} and held on to it.", "{X} kept it all and moved away from {Y}.", "{X} said no and stepped away from {Y} with the whole thing."]
+  "ACQUIRE": ["{X} picked up the {O}.", "{X} got a {O}.", "{X} found a {O}."]
+  "ACQUIRE@have": ["{X} had a {O}.", "{X} was holding a {O}.", "{X} had brought a {O}."]
+  "TRANSFER@grab": ["{Y} grabbed the {O} out of {X}'s hands.", "{Y} snatched the {O} from {X}.", "{Y} took the {O} from {X} without asking."]
+  "TRANSFER@give": ["{Y} asked nicely, and {X} gave {Y} the {O}.", "{X} smiled and handed the {O} to {Y}.", "\"You can have it,\" said {X}, and gave {Y} the {O}."]
+  "TRANSFER@giveall": ["{X} gave the whole {O} to {Y}.", "{X} handed all of the {O} to {Y} and kept none.", "{X} did not keep any. {X} gave {Y} the whole {O}."]
+  "SPLIT": ["{X} broke the {O} in two and gave half to {Y}.", "{X} shared the {O} with {Y}, half each.", "{X} split the {O} and handed {Y} a piece."]
+  "TRANSFORM:big": ["It was a very big {O}.", "The {O} was huge.", "The {O} was big enough for two."]
+  "WANT": ["{X} wanted the {O} very much.", "{X} looked at the {O} and wished it was {X}'s.", "More than anything, {X} wanted that {O}."]
+  "WANT@lure": ["{X} thought about the {O} and wanted to go and get it.", "{X} really wanted the {O}.", "{X} kept thinking about the {O}."]
+  "UNWANT@letgo": ["{X} stopped thinking about the {O}.", "{X} let it go.", "{X} did not want it anymore."]
+  "UNWANT@stay": ["{X} remembered the promise and stayed with {F}. {X} let the {O} go.", "{X} did not go. {X} stayed by {F} and forgot about the {O}.", "{X} kept the promise. {X} stopped thinking about the {O}."]
+  "EMOTE:happy": ["{X} was very happy.", "{X} smiled.", "{X} felt proud."]
+  "EMOTE:sad": ["{X} was sad.", "{X} felt bad.", "{X} looked down."]
+  "EMOTE:ALL:happy": ["They were both happy.", "They both smiled.", "They laughed together."]
+  "EMOTE:ALL:sad": ["They were both sad.", "Nobody smiled.", "They both felt bad."]
+
+# Two more text surfaces for the same trees. `terse`: the act stated plainly, no story voice.
+# `design`: Dennett's design stance, procedure and function, no mental and no grid vocabulary;
+# note that a gift and a grab are the same procedure here, as they are the same grid.
+surfaces:
+  terse:
+    "WITHDRAW@refrain": ["{X} does not take the {O}. {X} steps back.", "{X} steps back and leaves the {O} with {Y}.", "{X} moves away without the {O}."]
+    "TRANSFER@grab": ["{Y} takes the {O} from {X}.", "The {O} goes from {X} to {Y}.", "{Y} now has the {O}."]
+    "TRANSFER@give": ["{X} gives the {O} to {Y}.", "The {O} goes from {X} to {Y}.", "{Y} now has the {O}."]
+
+  design:
+    "APPEAR:P": ["The story has one kid, {P}.", "There is {P}.", "Enter {P}."]
+    "APPEAR:F": ["A second kid, {F}, is also present.", "{F} is there as well.", "Now there are two kids: {P} and {F}."]
+    "APPEAR.obj": ["A {O} is present, on the ground.", "There is a {O} on the ground, in no one's hands.", "A {O} lies on the ground."]
+    "APPEAR.obj@far": ["A {O} is present, at a distance.", "There is a {O} some way off.", "A {O} sits off to one side."]
+    "MOVE.loc": ["{X} relocates to the {L}; whoever does not go along stays behind.", "The scene moves with {X} to the {L}.", "{X} changes place to the {L}."]
+    "MOVE.loc@leave": ["{X} relocates to the {L}; {F} stays behind.", "{X} changes place to the {L}, alone.", "The scene moves with {X} to the {L}; {F} is not in it."]
+    "MOVE.to@approach": ["{X} closes the distance and stands beside {Y}.", "{X} moves next to {Y}.", "{X} goes over to {Y}'s position."]
+    "MOVE.to@pact": ["{X} moves beside {Y}; the two now operate as a pair.", "{X} joins {Y}; from here on they are paired.", "{X} stands next to {Y}; they are linked."]
+    "WITHDRAW@sit": ["{X} takes a position apart from {Y}, with a gap between them.", "{X} is stationed a little way from {Y}.", "{X} sits apart from {Y}."]
+    "WITHDRAW@refrain": ["{X} disengages: {X} steps back from {Y}, and the {O} stays with {Y}.", "{X} moves away from {Y}; the {O} does not change hands.", "{X} backs off from {Y}. The {O} remains where it was."]
+    "WITHDRAW@keep": ["{X} moves away from {Y} with the {O} still in hand.", "{X} steps back from {Y}; the {O} stays with {X}.", "{X} disengages from {Y}, holding the whole {O}."]
+    "ACQUIRE": ["{X} takes the {O} in hand.", "The {O} goes into {X}'s hands.", "{X} picks the {O} up and holds it."]
+    "ACQUIRE@have": ["{X} holds a {O}.", "{X} has a {O} in hand.", "A {O} is in {X}'s hands."]
+    "TRANSFER@grab": ["The {O} passes from {X}'s hands to {Y}'s.", "{Y} now holds the {O}; {X} does not.", "The {O} changes hands: {X} to {Y}."]
+    "TRANSFER@give": ["The {O} passes from {X}'s hands to {Y}'s.", "{Y} now holds the {O}; {X} does not.", "The {O} changes hands: {X} to {Y}."]
+    "TRANSFER@giveall": ["The whole {O} passes from {X} to {Y}.", "{Y} now holds all of the {O}; {X} holds none.", "The {O}, entire, changes hands: {X} to {Y}."]
+    "SPLIT": ["The {O} is divided in two; {X} keeps one part and {Y} gets the other.", "The {O} splits: half stays with {X}, half goes to {Y}.", "{X} and {Y} each end up holding a piece of the {O}."]
+    "TRANSFORM:big": ["The {O} is a large one.", "The {O} is oversized.", "The {O} is big."]
+    "WANT": ["{X} is now after the {O}.", "{X}'s target is the {O}.", "{X} is set on the {O}."]
+    "WANT@lure": ["{X} is now after the {O}.", "{X} has the {O} as a target.", "{X}'s target switches to the {O}."]
+    "UNWANT@letgo": ["{X} drops the {O} as a target.", "{X} is no longer after the {O}.", "The {O} is off {X}'s list."]
+    "UNWANT@stay": ["{X} drops the {O} as a target and stays paired with {F}.", "{X} is no longer after the {O}; {X} stays beside {F}.", "The {O} is off {X}'s list; {X} remains with {F}."]
+    "EMOTE:happy": ["{X} switches to the glad state.", "{X}'s state goes to glad.", "{X} is now in the glad state."]
+    "EMOTE:sad": ["{X} switches to the low state.", "{X}'s state goes to low.", "{X} is now in the low state."]
+    "EMOTE:ALL:happy": ["Everyone present switches to glad.", "All of them go to the glad state.", "Each of them is now glad."]
+    "EMOTE:ALL:sad": ["Everyone present switches to low.", "All of them go to the low state.", "Each of them is now low."]

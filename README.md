@@ -22,6 +22,7 @@ Bert Baumgaertner, University of Idaho. A paper on the masking battery is under 
 | `collect.py`, `collect_matrix.py`, `collect_sensitivity.py`, `collect_narrative_sensitivity.py` | trial collection: base conditions, variant matrix, order shuffles, keyword ablation |
 | `classify.py` | NARC / strength / dependence verdicts per cell |
 | `narrate.py`, `narrate_db.py` | the invited Narrate study (separate database, gitignored) |
+| `proto.py`, `proto_db.py`, `nhm_vendor/`, `sync_nhm.sh` | the Prototype tab (staff only): generate puzzles from the Narrative Hierarchy Model simulator (`../nhm`, vendored for production by `sync_nhm.sh`), review, edit, rebuild, test on a model; separate database `proto_data/proto.db`, gitignored |
 | `templates/`, `static/` | Bootstrap 5 + vanilla JS front end |
 | `data/puzzles/` | puzzle JSON exports |
 | `docs/` | redirect for the old GitHub Pages export; the site lives at the URL above |

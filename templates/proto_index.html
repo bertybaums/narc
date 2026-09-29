@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}NARC — Prototype{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-baseline flex-wrap gap-2 mb-2">
+    <h2 class="me-auto mb-0">Prototype</h2>
+    <span class="small text-muted">nhmsim {{ nhm_version }} from <code>{{ nhm_root }}</code> · own database <code>proto_data/proto.db</code></span>
+</div>
+<p class="small text-muted">Generate puzzles from the Narrative Hierarchy Model with the knobs below, read them, set verdicts, edit the story or the event chain, rebuild, test on one model, export. Nothing here touches narc.db.</p>
+
+<div class="card mb-4">
+    <div class="card-header">Generate a run</div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('proto.generate') }}" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small mb-0">Grammar (T)</label>
+                <select name="grammar" class="form-select form-select-sm" id="grammar">
+                    {% for name, g in knobs.grammars %}
+                    <option value="{{ name }}" data-types="{{ g.story_types.keys()|join(',') }}" data-req="{{ g.requires }}">{{ name }} — {{ g.description }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small mb-0">Convention φ (comma list renders each story under all)</label>
+                <input name="phi" class="form-control form-control-sm" value="baseline" list="phi-list">
+                <datalist id="phi-list">
+                    {% for name, c in knobs.conventions.items() %}<option value="{{ name }}">{{ c.description }}</option>{% endfor %}
+                    <option value="baseline,marker,altitude,table">four codes</option>
+                    <option value="mood=marker,location=sky,want=bubble">channel spec</option>
+                </datalist>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small mb-0">Symmetry G</label>
+                <select name="sym" class="form-select form-select-sm">
+                    {% for s in knobs.syms %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small mb-0">Mask</label>
+                <select name="mask" class="form-select form-select-sm">
+                    {% for m in knobs.masks %}<option value="{{ m }}">{{ m }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small mb-0">Story type (blank = any)</label>
+                <input name="story_type" class="form-control form-control-sm" list="type-list" placeholder="any">
+                <datalist id="type-list"></datalist>
+            </div>
+            <div class="col-md-1">
+                <label class="form-label small mb-0">n (≤ {{ max_n }})</label>
+                <input name="n" type="number" class="form-control form-control-sm" value="20" min="1" max="{{ max_n }}">
+            </div>
+            <div class="col-md-1">
+                <label class="form-label small mb-0">seed</label>
+                <input name="seed" type="number" class="form-control form-control-sm" value="1">
+            </div>
+            <div class="col-md-1">
+                <label class="form-label small mb-0">m (1–3)</label>
+                <input name="m" type="number" class="form-control form-control-sm" value="3" min="1" max="3">
+            </div>
+            <div class="col-md-1">
+                <label class="form-label small mb-0">min alts</label>
+                <input name="min_alternatives" type="number" class="form-control form-control-sm" value="2" min="1">
+            </div>
+            <div class="col-md-2 form-check ms-2 mb-1">
+                <input class="form-check-input" type="checkbox" name="self_teaching" id="st" checked>
+                <label class="form-check-label small" for="st">require self-teaching</label>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small mb-0">Run name (optional)</label>
+                <input name="name" class="form-control form-control-sm" placeholder="auto">
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-sm btn-primary w-100">Generate</button>
+            </div>
+        </form>
+        <div class="small text-muted mt-2">Knob reference: <code>nhm/CONVENTIONS.md</code> (codes), <code>nhm/GRAMMARS.md</code> (grammars and the three stances), <code>nhm/DESIGN.md</code> (mask policies: <em>any</em> = last frame if valid else the most ambiguous later frame; <em>all</em> = one puzzle per valid position).</div>
+    </div>
+</div>
+
+<div class="card mb-4">
+    <div class="card-header">Runs</div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+        <table class="table table-sm table-dark align-middle mb-0">
+            <thead><tr><th>#</th><th>Name</th><th>Grammar</th><th>φ</th><th>G</th><th>Mask</th><th>Puzzles</th><th>Keep / drop</th><th>By</th><th>Created</th><th></th></tr></thead>
+            <tbody>
+            {% for r in runs %}
+            <tr>
+                <td>{{ r.run_id }}</td>
+                <td><a href="{{ url_for('proto.run', run_id=r.run_id) }}">{{ r.name }}</a></td>
+                <td><code>{{ r.config.grammar }}</code></td>
+                <td><code>{{ r.config.phi|join(',') }}</code></td>
+                <td><code>{{ r.config.sym }}</code></td>
+                <td><code>{{ r.config.mask }}</code></td>
+                <td>{{ r.n_puzzles }}</td>
+                <td>{{ r.n_keep }} / {{ r.n_drop }}</td>
+                <td class="small text-muted">{{ r.created_by }}</td>
+                <td class="small text-muted">{{ r.created_at }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-info" href="{{ url_for('proto.run_export', run_id=r.run_id) }}">JSON</a>
+                    <form method="POST" action="{{ url_for('proto.run_delete', run_id=r.run_id) }}" class="d-inline" onsubmit="return confirm('Delete run {{ r.run_id }} and its puzzles and trials?');">
+                        <button class="btn btn-sm btn-outline-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% else %}
+            <tr><td colspan="11" class="text-muted">No runs yet.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+    const sel = document.getElementById('grammar');
+    const dl = document.getElementById('type-list');
+    function fill() {
+        const opt = sel.options[sel.selectedIndex];
+        dl.innerHTML = '';
+        (opt.dataset.types || '').split(',').forEach(t => { const o = document.createElement('option'); o.value = t; dl.appendChild(o); });
+    }
+    sel.addEventListener('change', fill);
+    fill();
+})();
+</script>
+{% endblock %}

@@ -22,6 +22,7 @@ from collect import (run_collect_job, run_matrix_job, run_sensitivity_job,
                      run_narrative_sensitivity_job)
 from classify import run_classify_job
 from narrate import bp as narrate_bp
+from proto import bp as proto_bp
 from prompts import extract_keywords
 from ratelimit import mindrouter_bucket
 
@@ -37,6 +38,8 @@ app.secret_key = _secret
 
 # Narrate tab (/narrate): participants write narratives for a model; own DB.
 app.register_blueprint(narrate_bp)
+# Prototype tab (/proto): NHM simulator for staff; own DB (proto_data/proto.db), never narc.db.
+app.register_blueprint(proto_bp)
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
           "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]

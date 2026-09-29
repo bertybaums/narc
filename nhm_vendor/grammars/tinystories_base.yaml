@@ -1,0 +1,143 @@
+# The synthetic lane of the ICLR 2027 paper, made data. A faithful port of
+# narc-tiny-stories/nts/rhm.py (seven story types, m <= 3 synonymous event sequences per
+# episode, m <= 3 clause templates per event). Under the baseline convention WANT has no
+# denotation and folds into the next visible transition, exactly as NONVISUAL did there.
+name: tinystories_base
+description: seven TinyStories story types (quest, loss, sharing, mishap, scare); the ICLR 2027 synthetic lane
+
+lexicon:
+  names_m: [Tim, Tom, Max, Ben, Sam, Bob, Jack, Leo, Joe, Dan]
+  names_f: [Lily, Sue, Mia, Lucy, Amy, Anna, Sara, Jane, Lila, Zoe]
+  animals: [dog, cat, bird, bunny, frog, duck, squirrel, bear]
+  objects: [ball, toy, kite, hat, cake, flower, book, doll, box, apple, balloon, cookie]
+  locations:
+    green: [park, garden, forest, field, hill, yard]
+    water: [pond, beach, lake, river]
+    indoor: [house, room, school, store, kitchen]
+    town: [town, street, village]
+
+roles: {P: person, F: person, A: animal, O: object, L1: location, L2: location}
+
+story_types:
+  quest_success:  {episodes: [SETUP, WANT, SEEK, GET, JOY], features: []}
+  quest_fail:     {episodes: [SETUP, WANT, SEEK, FAIL, SORROW], features: [BadEnding]}
+  loss_recovery:  {episodes: [SETUP, HAVE, LOSE, SORROW, FIND, JOY], features: []}
+  loss_final:     {episodes: [SETUP, HAVE, LOSE, SEEK, SORROW], features: [BadEnding]}
+  sharing:        {episodes: [SETUP, HAVE, OTHER_WANTS, GIVE, JOY], features: [MoralValue]}
+  mishap_fix:     {episodes: [SETUP, HAVE, BREAK, SORROW, FIX, JOY], features: []}
+  scare_relief:   {episodes: [SETUP, GO, SCARE, FLEE, COMFORT, JOY], features: [Conflict]}
+
+episodes:
+  SETUP:
+    - [[APPEAR, P]]
+    - [[APPEAR, P], [MOVE.loc, P, L1]]
+    - [[APPEAR, P], [APPEAR, F]]
+  WANT:
+    - [[WANT, P, O]]
+  SEEK:
+    - [[MOVE.loc, P, L2]]
+    - [[MOVE.to, P, F]]
+    - [[ASCEND, P]]
+  GET:
+    - [[ACQUIRE, P, O]]
+    - [[APPEAR, F], [TRANSFER, F, O, P]]
+    - [[APPEAR.obj, O], [ACQUIRE, P, O]]
+  JOY:
+    - [[EMOTE, P, happy]]
+    - [[EMOTE, ALL, happy]]
+    - [[EMOTE, P, happy], [MOVE.loc, P, L1]]
+  FAIL:
+    - [[LOSE, P, O]]
+    - [[VANISH, F]]
+    - [[DESCEND, P]]
+  SORROW:
+    - [[EMOTE, P, sad]]
+    - [[EMOTE, ALL, sad]]
+  HAVE:
+    - [[ACQUIRE, P, O]]
+    - [[APPEAR.obj, O], [ACQUIRE, P, O]]
+    - [[ACQUIRE, P, O], [EMOTE, P, happy]]
+  LOSE:
+    - [[LOSE, P, O]]
+    - [[DROP, P, O], [LOSE, P, O]]
+    - [[TRANSFORM, O, broken]]
+  FIND:
+    - [[ACQUIRE, P, O]]
+    - [[APPEAR, F], [TRANSFER, F, O, P]]
+    - [[TRANSFORM, O, ok], [ACQUIRE, P, O]]
+  OTHER_WANTS:
+    - [[APPEAR, F], [EMOTE, F, sad]]
+    - [[APPEAR, F], [MOVE.to, F, P], [EMOTE, F, sad]]
+  GIVE:
+    - [[TRANSFER, P, O, F]]
+    - [[TRANSFER, P, O, F], [EMOTE, F, happy]]
+  BREAK:
+    - [[TRANSFORM, O, broken]]
+    - [[DROP, P, O], [TRANSFORM, O, broken]]
+  FIX:
+    - [[TRANSFORM, O, ok]]
+    - [[APPEAR, F], [TRANSFORM, O, ok]]
+    - [[TRANSFORM, O, ok], [ACQUIRE, P, O]]
+  GO:
+    - [[MOVE.loc, P, L2]]
+    - [[MOVE.loc, P, L2], [EMOTE, P, happy]]
+  SCARE:
+    - [[APPEAR, A], [EMOTE, P, sad]]
+    - [[APPEAR, A], [MOVE.to, A, P], [EMOTE, P, sad]]
+  FLEE:
+    - [[MOVE.loc, P, L1]]
+    - [[ASCEND, P]]
+    - [[VANISH, A]]
+  COMFORT:
+    - [[APPEAR, F]]
+    - [[APPEAR, F], [TRANSFER, F, O, P]]
+    - [[APPEAR, F], [MOVE.to, F, P]]
+
+clauses:
+  "APPEAR:P": ["Once upon a time, there was a little kid named {P}.", "{P} was a happy little kid.", "One day, {P} woke up early."]
+  "APPEAR:F": ["{P} saw {F} come by.", "Then {F} came to {P}.", "{F} arrived with a big smile."]
+  "APPEAR:A": ["Suddenly, a big {A} came out of the bushes.", "A {A} appeared and looked at {P}.", "Then {P} saw a big {A}."]
+  "APPEAR.obj": ["There was a {O} on the ground.", "{P} saw a {O} near a tree.", "A shiny {O} lay in the grass."]
+  "MOVE.loc": ["{X} went to the {L}.", "{X} walked to the {L}.", "{X} ran all the way to the {L}."]
+  "MOVE.to": ["{X} ran to {Y}.", "{X} went over to {Y}.", "{X} walked up to {Y}."]
+  "ASCEND": ["{X} climbed up a tall tree.", "{X} went up the big hill.", "{X} climbed up high."]
+  "DESCEND": ["{X} fell down.", "{X} slipped and fell.", "{X} came down with a bump."]
+  "ACQUIRE": ["{X} found a {O}.", "{X} picked up the {O}.", "{X} got a new {O}."]
+  "DROP": ["{X} put the {O} down.", "{X} dropped the {O}.", "{X} set the {O} on the ground."]
+  "LOSE": ["{X} lost the {O}.", "The {O} was gone.", "The wind blew the {O} away."]
+  "TRANSFER": ["{X} gave the {O} to {Y}.", "{X} shared the {O} with {Y}.", "{X} handed {Y} the {O}."]
+  "EMOTE:happy": ["{X} was very happy.", "{X} smiled and laughed.", "{X} felt so glad."]
+  "EMOTE:sad": ["{X} was very sad.", "{X} felt scared.", "{X} cried."]
+  "EMOTE:ALL:happy": ["They were all very happy.", "Everyone smiled.", "They laughed together."]
+  "EMOTE:ALL:sad": ["They were all sad.", "Everyone felt scared.", "They both cried."]
+  "VANISH": ["{X} ran away.", "{X} went home.", "{X} left."]
+  "TRANSFORM:broken": ["The {O} broke.", "The {O} was broken.", "The {O} fell and broke."]
+  "TRANSFORM:ok": ["{X} fixed the {O}.", "The {O} was fixed.", "{X} made the {O} good as new."]
+  "WANT": ["{X} wanted a {O} very much.", "{X} wished for a {O}.", "More than anything, {X} wanted a {O}."]
+
+# Dennett's design stance as a text surface: the same tree told as procedure and function,
+# no mental vocabulary (no wanting, feeling, deciding) and no grid vocabulary (no bars,
+# cells, rows). The story templates above are the intentional stance; the physical stance is
+# written by the renderer for whichever code is chosen. See GRAMMARS.md §2b.
+surfaces:
+  design:
+    "APPEAR:P": ["The story starts with one kid, {P}.", "There is a kid, {P}, and the story follows {P}.", "Enter {P}, the kid this story tracks."]
+    "APPEAR:F": ["A second kid, {F}, joins.", "{F} enters and joins {P}.", "Now there are two: {P} and {F}."]
+    "APPEAR:A": ["A {A} enters the scene.", "A {A} shows up near {P}.", "A {A} comes in."]
+    "APPEAR.obj": ["A {O} is present, on the ground.", "There is a {O} on the ground, in no one's hands.", "A {O} lies on the ground."]
+    "MOVE.loc": ["{X} relocates to the {L}; whoever does not go along stays behind.", "The scene moves with {X} to the {L}.", "{X} changes place to the {L}."]
+    "MOVE.to": ["{X} closes the distance to {Y} and stands beside {Y}.", "{X} moves next to {Y}.", "{X} goes over and stands by {Y}."]
+    "ASCEND": ["{X} goes up to a high position.", "{X} climbs; {X} is now up high.", "{X} moves from the ground to a high spot."]
+    "DESCEND": ["{X} comes down to the ground.", "{X} drops from the high spot to the ground.", "{X} is back on the ground."]
+    "ACQUIRE": ["{X} takes the {O} in hand.", "The {O} goes into {X}'s hands.", "{X} picks the {O} up and holds it."]
+    "DROP": ["{X} sets the {O} on the ground; {X} no longer holds it.", "The {O} leaves {X}'s hands and rests on the ground.", "{X} puts the {O} down."]
+    "LOSE": ["The {O} is gone from the scene.", "The {O} is no longer anywhere in the scene.", "{X} no longer has the {O}, and it is nowhere to be found."]
+    "TRANSFER": ["The {O} passes from {X}'s hands to {Y}'s.", "{X} hands over the {O}; {Y} now holds it.", "The {O} changes hands: {X} to {Y}."]
+    "EMOTE:happy": ["{X} switches to the glad state.", "{X}'s state goes to glad.", "{X} is now in the glad state."]
+    "EMOTE:sad": ["{X} switches to the low state.", "{X}'s state goes to low.", "{X} is now in the low state."]
+    "EMOTE:ALL:happy": ["Everyone present switches to glad.", "All of them go to the glad state.", "Each of them is now glad."]
+    "EMOTE:ALL:sad": ["Everyone present switches to low.", "All of them go to the low state.", "Each of them is now low."]
+    "VANISH": ["{X} exits the scene, taking whatever {X} holds.", "{X} leaves; anything in {X}'s hands leaves too.", "{X} is out of the scene."]
+    "TRANSFORM:broken": ["The {O} changes state to broken.", "The {O} is now broken.", "The {O} goes from whole to broken."]
+    "TRANSFORM:ok": ["The {O} changes state back to whole.", "The {O} is whole again.", "The {O} is repaired to its normal state."]
+    "WANT": ["{X} is now after a {O}.", "{X}'s target is a {O}.", "{X} is set on getting a {O}."]

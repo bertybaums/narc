@@ -1,0 +1,50 @@
+# The enriched tree of the ICML plan (SPINE 4c): the base grammar plus two of Zwaan and
+# Radvansky's event-indexing dimensions the baseline grid lacks. Intentionality is already in
+# the base grammar as WANT; it becomes visible under a convention with want=bubble. Time is
+# added here as TIME(night) with a sky-row denotation (time=skyrow). Under the baseline
+# convention both fold silently into their neighbours, so the same stories generate the same
+# puzzles as tinystories_base: the enrichment is priced by comparing the two.
+name: tinystories_enriched
+extends: tinystories_base
+description: base + visible WANT (bubble) + day/night (sky row); ICML 2027 instantiation 4c
+requires: {want: bubble, time: skyrow}
+
+story_types:
+  quest_success:  {episodes: [SETUP, WANT, SEEK, GET, JOY], features: []}
+  quest_fail:     {episodes: [SETUP, WANT, SEEK, FAIL, SORROW], features: [BadEnding]}
+  loss_recovery:  {episodes: [SETUP, HAVE, LOSE, SORROW, FIND, JOY], features: []}
+  loss_final:     {episodes: [SETUP, HAVE, LOSE, SEEK, SORROW], features: [BadEnding]}
+  sharing:        {episodes: [SETUP, HAVE, OTHER_WANTS, GIVE, JOY], features: [MoralValue]}
+  mishap_fix:     {episodes: [SETUP, HAVE, BREAK, SORROW, FIX, JOY], features: []}
+  scare_relief:   {episodes: [SETUP, GO, SCARE, FLEE, COMFORT, JOY], features: [Conflict]}
+  night_fright:   {episodes: [SETUP, GO, DUSK, SCARE, FLEE, DAWN], features: [Conflict]}
+  bedtime_wish:   {episodes: [SETUP, WANT, DUSK, SLEEP, DAWN, GET, JOY], features: []}
+
+episodes:
+  DUSK:
+    - [[TIME, night]]
+    - [[TIME, night], [EMOTE, P, sad]]
+  DAWN:
+    - [[TIME, day]]
+    - [[TIME, day], [EMOTE, P, happy]]
+    - [[TIME, day], [EMOTE, ALL, happy]]
+  SLEEP:
+    - [[EMOTE, P, neutral, "@sleep"]]
+    - [[EMOTE, ALL, neutral, "@sleep"]]
+  OTHER_WANTS:
+    - [[APPEAR, F], [WANT, F, O]]
+    - [[APPEAR, F], [MOVE.to, F, P], [WANT, F, O]]
+    - [[APPEAR, F], [WANT, F, O], [EMOTE, F, sad]]
+
+clauses:
+  "TIME:night": ["Then it got dark.", "The sun went down and it was night.", "Soon it was bedtime, and the sky was black."]
+  "TIME:day": ["In the morning, the sun came up.", "Then it was day again.", "When {P} woke up, it was light."]
+  "EMOTE:neutral@sleep": ["{X} lay still and went to sleep.", "{X} slept.", "{X} got quiet and fell asleep."]
+  "EMOTE:ALL:neutral@sleep": ["They all went to sleep.", "Everyone slept.", "They lay down and slept."]
+
+surfaces:
+  design:
+    "TIME:night": ["The light goes off: night.", "The scene switches to night.", "Night falls in the scene."]
+    "TIME:day": ["The light comes on: day.", "The scene switches to day.", "Day comes."]
+    "EMOTE:neutral@sleep": ["{X} goes to the neutral state and sleeps.", "{X}'s state resets to neutral.", "{X} powers down for the night."]
+    "EMOTE:ALL:neutral@sleep": ["Everyone goes to the neutral state and sleeps.", "All of them reset to neutral.", "Each of them powers down for the night."]

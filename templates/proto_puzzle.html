@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %}NARC — Prototype {{ item.id }}{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-baseline flex-wrap gap-2 mb-2">
+    <h2 class="me-auto mb-0"><a href="{{ url_for('proto.index') }}" class="text-decoration-none">Prototype</a> › <a href="{{ url_for('proto.run', run_id=run.run_id) }}" class="text-decoration-none">run {{ run.run_id }}</a> › {{ item.id }}</h2>
+    <a class="btn btn-sm btn-outline-info" href="{{ url_for('proto.puzzle_json', puzzle_id=item.id) }}">JSON</a>
+    <form method="POST" action="{{ url_for('proto.puzzle_delete', puzzle_id=item.id) }}" onsubmit="return confirm('Delete this puzzle and its trials?');">
+        <button class="btn btn-sm btn-outline-danger">Delete</button>
+    </form>
+</div>
+
+{% set full = true %}
+{% include "_proto_card.html" %}
+
+<div class="card mb-3">
+    <div class="card-header">Edit the event chain and rebuild</div>
+    <div class="card-body">
+        <p class="small text-muted mb-2">The grids are drawn from this chain (nhm/DESIGN.md §2: a person changes what happened, the renderer draws it). Edit the JSON, or leave it and change the code or the mask depth, then rebuild. The certificate re-runs; a rejected chain is not saved. Primitives: APPEAR, VANISH, MOVE (location or recipient), ASCEND, DESCEND, ACQUIRE, DROP, LOSE, TRANSFER, EMOTE (mood), TRANSFORM (state), WANT, UNWANT, WITHDRAW, SPLIT, TIME. The story text is kept as it is.</p>
+        <form method="POST" action="{{ url_for('proto.rebuild', puzzle_id=item.id) }}">
+            <textarea name="events" class="form-control form-control-sm" rows="12" style="font-family:ui-monospace,monospace;font-size:12px">{{ item.events_json }}</textarea>
+            <div class="row g-2 align-items-end mt-1">
+                <div class="col-md-3">
+                    <label class="form-label small mb-0">code φ (blank = keep {{ item.conv.name }})</label>
+                    <input name="phi" class="form-control form-control-sm" list="phi-list" placeholder="{{ item.conv.name }}">
+                    <datalist id="phi-list">{% for name, c in knobs.conventions.items() %}<option value="{{ name }}">{{ c.description }}</option>{% endfor %}</datalist>
+                </div>
+                <div class="col-md-2">
+                    <label class="form-label small mb-0">mask (blank = keep depth)</label>
+                    <select name="mask" class="form-select form-select-sm"><option value="">keep</option>{% for m in ['last', 'middle', 'first', 'any'] %}<option value="{{ m }}">{{ m }}</option>{% endfor %}</select>
+                </div>
+                <div class="col-md-3 form-check ms-2 mb-1">
+                    <input class="form-check-input" type="checkbox" name="self_teaching" id="st2" checked>
+                    <label class="form-check-label small" for="st2">require self-teaching</label>
+                </div>
+                <div class="col-md-2"><button class="btn btn-sm btn-warning w-100">Rebuild</button></div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-header">Test on a model (three conditions, the site's own harness)</div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('proto.test', puzzle_id=item.id) }}" class="row g-2 align-items-end mb-3">
+            <div class="col-md-3">
+                <label class="form-label small mb-0">model</label>
+                <select name="model" class="form-select form-select-sm">{% for m in knobs.models %}<option value="{{ m }}">{{ m }}</option>{% endfor %}</select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label small mb-0">text surface (stance)</label>
+                <select name="surface" class="form-select form-select-sm">
+                    {% for s in surfaces %}<option value="{{ s }}">{{ s }}</option>{% endfor %}
+                    <option value="all">all surfaces</option>
+                </select>
+            </div>
+            <div class="col-md-2"><button class="btn btn-sm btn-primary w-100">Run</button></div>
+            <div class="col-md-4 small text-muted">grids_only once, narrative_only and both per surface; NARC = both right, neither alone. Runs in the background through the shared MindRouter rate limit.</div>
+        </form>
+
+        <div id="cells">
+        {% if cells %}
+        <table class="table table-sm table-dark align-middle">
+            <thead><tr><th>model</th><th>surface</th><th>grids only</th><th>narrative only</th><th>both</th><th>NARC</th></tr></thead>
+            <tbody>
+            {% for c in cells %}
+            <tr><td><code>{{ c.model }}</code></td><td>{{ c.surface }}</td>
+                <td>{{ '✓' if c.grids_only == 1 else ('✗' if c.grids_only == 0 else '·') }}</td>
+                <td>{{ '✓' if c.narrative_only == 1 else ('✗' if c.narrative_only == 0 else '·') }}</td>
+                <td>{{ '✓' if c.both == 1 else ('✗' if c.both == 0 else '·') }}</td>
+                <td class="{{ 'text-success fw-bold' if c.narc == 1 else '' }}">{{ 'NARC' if c.narc == 1 else ('—' if c.narc == 0 else '') }}</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        </div>
+
+        <details {% if trials %}open{% endif %}><summary class="small">{{ trials|length }} trials</summary>
+        <div class="table-responsive">
+        <table class="table table-sm table-dark align-middle" id="trials">
+            <thead><tr><th>#</th><th>model</th><th>surface</th><th>condition</th><th>status</th><th>correct</th><th>cells</th><th>latency</th><th>error / response</th></tr></thead>
+            <tbody>
+            {% for t in trials %}
+            <tr>
+                <td>{{ t.trial_id }}</td><td><code>{{ t.model_name }}</code></td><td>{{ t.surface }}</td><td>{{ t.condition }}</td>
+                <td>{{ t.status }}</td>
+                <td>{{ '✓' if t.correct == 1 else ('✗' if t.correct == 0 else '') }}</td>
+                <td>{{ '%.2f'|format(t.cell_accuracy) if t.cell_accuracy is not none else '' }}</td>
+                <td class="small text-muted">{{ t.latency_ms }}</td>
+                <td class="small" style="max-width:520px">{% if t.error %}<span class="text-danger">{{ t.error }}</span>{% endif %}
+                    {% if t.reasoning %}<details><summary>reasoning</summary><pre class="small" style="white-space:pre-wrap">{{ t.reasoning[:6000] }}</pre></details>{% endif %}
+                    {% if t.predicted_grids %}<details><summary>predicted</summary><pre class="small">{{ t.predicted_grids }}</pre></details>{% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        </div>
+        </details>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// While trials are queued or running, reload every 8 s so results appear without a click.
+(async function () {
+    try {
+        const r = await fetch("{{ url_for('proto.trials_json', puzzle_id=item.id) }}");
+        const d = await r.json();
+        if (d.pending > 0) setTimeout(() => location.reload(), 8000);
+    } catch (e) {}
+})();
+</script>
+{% endblock %}

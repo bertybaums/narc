@@ -1,0 +1,71 @@
+{# One prototype puzzle. Expects `item` from proto.prepare(); `full` shows every panel open. #}
+<div class="card mb-3 proto-card" data-id="{{ item.id }}">
+    <div class="card-body">
+        <div class="d-flex align-items-baseline flex-wrap gap-2">
+            <h5 class="mb-0 me-auto"><a href="{{ url_for('proto.puzzle', puzzle_id=item.id) }}">{{ item.id }}</a> — {{ item.title }}</h5>
+            {% if item.verdict %}<span class="badge {{ 'bg-success' if item.verdict == 'keep' else ('bg-warning text-dark' if item.verdict == 'fix' else 'bg-danger') }}">{{ item.verdict }}</span>{% endif %}
+            <span class="badge bg-secondary">{{ item.mask.depth }} mask k={{ item.k }}/{{ item.n - 1 }}</span>
+            <span class="badge bg-secondary">{{ item.mask.alternatives }} alternatives</span>
+            <span class="badge {{ 'bg-success' if item.mask.self_taught else 'bg-danger' }}">{{ 'self-taught' if item.mask.self_taught else 'untaught: ' ~ item.mask.missing|join(', ') }}</span>
+        </div>
+        <div class="small text-muted mt-1">
+            <b>{{ item.story_type }}</b> {{ item.features }} · m={{ item.m }} · masked event <b>{{ item.mask.event }}</b> ·
+            φ <b>{{ item.conv.name }}</b> ({{ item.conv_text }}) · G <b>{{ item.sym }}</b> ({{ item.sym_text }})
+            · other valid masks: {% for a in item.other_masks %}{% if a.position != item.k %}k={{ a.position }} ({{ a.depth }}, {{ a.alternatives }}{% if not a.self_taught %}, untaught{% endif %}) {% endif %}{% endfor %}
+        </div>
+
+        <div class="d-flex flex-wrap gap-2 align-items-end my-2">
+            {% for fr in item.frames %}
+            <div class="text-center small text-muted">{{ fr.svg|safe }}<br>{{ fr.label }}{% if fr.masked %} <b>(masked)</b>{% endif %}</div>
+            {% endfor %}
+        </div>
+
+        <div class="p-2 rounded" style="background:#1f2428;white-space:pre-wrap;">{{ item.story }}</div>
+
+        <details class="mt-2" {% if full %}open{% endif %}><summary class="small">answer</summary>
+            <div class="mt-1 small text-muted">{{ item.answer.svg|safe }}<br>{{ item.answer.label }}</div>
+        </details>
+        <details class="mt-1" {% if full %}open{% endif %}><summary class="small">{{ item.alts|length }} of {{ item.mask.alternatives }} alternatives from the grids alone</summary>
+            <div class="d-flex flex-wrap gap-2 mt-1">
+                {% for a in item.alts %}<div class="text-center small text-muted">{{ a.svg|safe }}<br>{{ a.event }}</div>{% endfor %}
+            </div>
+        </details>
+        <details class="mt-1" {% if full %}open{% endif %}><summary class="small">event chain and tree</summary>
+            <ol class="small mb-1" style="font-family:ui-monospace,monospace">
+                {% for c in item.chain %}<li><b>{{ c.label }}</b>{% if not c.atomic %} <i>(spans: {% for e in c.spanned_events %}{{ e.label }}{% if not loop.last %}, {% endif %}{% endfor %})</i>{% endif %}{% if c.text %} &lt;{{ c.text }}&gt;{% endif %}</li>{% endfor %}
+            </ol>
+            <div class="small text-muted">tree: {% for n in item.tree %}{{ n.episode }}[{{ n.choice + 1 }}/{{ n.of }}]{% if not loop.last %} → {% endif %}{% endfor %}</div>
+        </details>
+        {% for t in item.texts %}{% if t.variant != 'story' %}
+        <details class="mt-1" {% if full %}open{% endif %}><summary class="small">{{ t.variant }} text</summary>
+            <div class="p-2 rounded small" style="background:#1f2428;white-space:pre-wrap;">{{ t.text }}</div>
+        </details>
+        {% endif %}{% endfor %}
+        <details class="mt-1"><summary class="small">explicit conventions (the code, stated)</summary>
+            <div class="p-2 rounded small" style="background:#1f2428;white-space:pre-wrap;">{{ item.conventions_text }}</div>
+        </details>
+
+        <form class="review-form mt-2 border-top pt-2" method="POST" action="{{ url_for('proto.review', puzzle_id=item.id) }}">
+            <div class="row g-2 align-items-end">
+                <div class="col-auto">
+                    <label class="form-label small mb-0">verdict</label>
+                    <select name="verdict" class="form-select form-select-sm">
+                        {% for v in ['', 'keep', 'fix', 'drop'] %}<option value="{{ v }}" {% if item.verdict == v %}selected{% endif %}>{{ v or '—' }}</option>{% endfor %}
+                    </select>
+                </div>
+                <div class="col">
+                    <label class="form-label small mb-0">notes</label>
+                    <input name="notes" class="form-control form-control-sm" value="{{ item.notes }}">
+                </div>
+                <div class="col-12">
+                    <label class="form-label small mb-0">story (edit freely; the grids come from the event chain)</label>
+                    <textarea name="narrative" class="form-control form-control-sm" rows="3">{{ item.story }}</textarea>
+                </div>
+                <div class="col-auto">
+                    <button class="btn btn-sm btn-outline-primary">Save review</button>
+                    {% if item.updated_at %}<span class="small text-muted ms-2">saved {{ item.updated_at }}</span>{% endif %}
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

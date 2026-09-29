@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}NARC — Prototype run {{ run.run_id }}{% endblock %}
+
+{% block content %}
+<div class="d-flex align-items-baseline flex-wrap gap-2 mb-2">
+    <h2 class="me-auto mb-0"><a href="{{ url_for('proto.index') }}" class="text-decoration-none">Prototype</a> › run {{ run.run_id }}</h2>
+    <a class="btn btn-sm btn-outline-info" href="{{ url_for('proto.run_export', run_id=run.run_id) }}">Export all (JSON)</a>
+    <a class="btn btn-sm btn-outline-success" href="{{ url_for('proto.run_export', run_id=run.run_id, verdict='keep') }}">Export kept</a>
+</div>
+<div class="small text-muted mb-2">{{ run.name }} · by {{ run.created_by }} · {{ run.created_at }} · config <code>{{ run.config }}</code></div>
+<div class="small text-muted mb-3">summary: {{ run.summary.puzzles }} puzzles from {{ run.summary.samples_tried }} samples · depth {{ run.summary.depth }} · masked events {{ run.summary.masked_event }} · rejections {{ run.summary.reasons }}</div>
+
+<div class="mb-3">
+    filter:
+    {% for v, label in [(None, 'all'), ('', 'unreviewed'), ('keep', 'keep'), ('fix', 'fix'), ('drop', 'drop')] %}
+    <a class="btn btn-sm {{ 'btn-secondary' if verdict == v else 'btn-outline-secondary' }}" href="{{ url_for('proto.run', run_id=run.run_id, **({'verdict': v} if v is not none else {})) }}">{{ label }}</a>
+    {% endfor %}
+    <span class="small text-muted ms-2">{{ items|length }} shown</span>
+</div>
+
+{% for item in items %}
+    {% include "_proto_card.html" %}
+{% else %}
+<p class="text-muted">No puzzles match.</p>
+{% endfor %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Save reviews in place (no page reload) so a pass through a run is quick.
+document.querySelectorAll('form.review-form').forEach(f => {
+    f.addEventListener('submit', async ev => {
+        ev.preventDefault();
+        const body = Object.fromEntries(new FormData(f).entries());
+        const btn = f.querySelector('button');
+        btn.disabled = true;
+        try {
+            const r = await fetch(f.action, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
+            btn.textContent = r.ok ? 'Saved' : 'Failed';
+            const card = f.closest('.proto-card');
+            const badge = card.querySelector('.badge');
+            if (r.ok && body.verdict) { badge.textContent = body.verdict; badge.className = 'badge ' + (body.verdict === 'keep' ? 'bg-success' : body.verdict === 'fix' ? 'bg-warning text-dark' : 'bg-danger'); }
+        } catch (e) { btn.textContent = 'Failed'; }
+        setTimeout(() => { btn.textContent = 'Save review'; btn.disabled = false; }, 1200);
+    });
+});
+</script>
+{% endblock %}
