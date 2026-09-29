@@ -141,3 +141,7 @@ surfaces:
     "TRANSFORM:broken": ["The {O} changes state to broken.", "The {O} is now broken.", "The {O} goes from whole to broken."]
     "TRANSFORM:ok": ["The {O} changes state back to whole.", "The {O} is whole again.", "The {O} is repaired to its normal state."]
     "WANT": ["{X} is now after a {O}.", "{X}'s target is a {O}.", "{X} is set on getting a {O}."]
+  # The moral stance, only where the base grammar has a morally loaded event (sharing); every
+  # other event falls back to the story template, so moral and story differ at the act alone.
+  moral:
+    "TRANSFER": ["{X} was kind and gave the {O} to {Y}.", "{X} shared the {O} with {Y}; sharing is right.", "{X} did a good thing: {X} handed {Y} the {O}."]

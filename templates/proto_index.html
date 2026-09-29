@@ -99,9 +99,11 @@
                 <td class="small text-muted">{{ r.created_at }}</td>
                 <td class="text-end">
                     <a class="btn btn-sm btn-outline-info" href="{{ url_for('proto.run_export', run_id=r.run_id) }}">JSON</a>
+                    {% if user.role in ('owner', 'reviewer') or user.username == r.created_by %}
                     <form method="POST" action="{{ url_for('proto.run_delete', run_id=r.run_id) }}" class="d-inline" onsubmit="return confirm('Delete run {{ r.run_id }} and its puzzles and trials?');">
                         <button class="btn btn-sm btn-outline-danger">Delete</button>
                     </form>
+                    {% endif %}
                 </td>
             </tr>
             {% else %}

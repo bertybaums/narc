@@ -21,8 +21,10 @@
                 <a class="nav-link" href="/create">Create</a>
                 <a class="nav-link" href="/inspect">Inspect</a>
                 <a class="nav-link" href="/narrate">Narrate</a>
-                {% if user and user.role in ('owner', 'reviewer') %}
+                {% if user %}
                 <a class="nav-link" href="/proto">Prototype</a>
+                {% endif %}
+                {% if user and user.role in ('owner', 'reviewer') %}
                 <a class="nav-link" href="/admin">Admin</a>
                 {% endif %}
             </div>

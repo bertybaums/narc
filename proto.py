@@ -1,6 +1,7 @@
 """Prototype: generate NARC puzzles from the Narrative Hierarchy Model simulator, review and
 edit them, rebuild the certificate, and test them on one model, all on a separate database
-(proto_data/proto.db, see proto_db.py). Owner/reviewer only.
+(proto_data/proto.db, see proto_db.py). Any logged-in account; anonymous visitors are sent to
+login. Deleting a run is for owners, reviewers, or the run's creator.
 
 The simulator is `nhmsim` from ../nhm (the sibling repository). It is imported from
 NHM_PATH, else from ../nhm when present (local development), else from ./nhm_vendor
@@ -65,9 +66,10 @@ SYMS = ["identity", "pal", "mirror", "vflip", "shift", "pal+mirror", "pal+mirror
 CONDITIONS = ["grids_only", "narrative_only", "both"]
 
 
-# --- auth (same rule as the Admin tab; no import from server.py to avoid a cycle) ---------
+# --- auth: any logged-in account (Bert, September 28, 2026); no import from server.py ------
 
 def _staff():
+    """The logged-in user (any role), cached per request; None for anonymous visitors."""
     if "proto_staff" not in g:
         g.proto_staff = None
         uid = session.get("user_id")
@@ -77,9 +79,14 @@ def _staff():
                 row = db.get_user_by_id(conn, uid)
             finally:
                 conn.close()
-            if row and row["role"] in ("owner", "reviewer"):
+            if row:
                 g.proto_staff = dict(row)
     return g.proto_staff
+
+
+def _can_delete_run(run):
+    u = _staff()
+    return u is not None and (u["role"] in ("owner", "reviewer") or u["username"] == run.get("created_by"))
 
 
 @bp.before_request
@@ -87,7 +94,7 @@ def _gate():
     if _staff() is None:
         if request.is_json or request.path.endswith(".json"):
             return jsonify({"error": "Unauthorized"}), 403
-        flash("The Prototype tab is for owners and reviewers.", "warning")
+        flash("Log in to use the Prototype tab.", "warning")
         return redirect(url_for("login"))
     if not NHM_AVAILABLE:
         return Response(f"nhmsim is not importable ({NHM_IMPORT_ERROR}); set NHM_PATH or run sync_nhm.sh", 500)
@@ -296,6 +303,12 @@ def run(run_id):
 def run_delete(run_id):
     conn = _conn()
     try:
+        r = proto_db.get_run(conn, run_id)
+        if not r:
+            abort(404)
+        if not _can_delete_run(r):
+            flash("Only owners, reviewers, or the run's creator can delete a run.", "warning")
+            return redirect(url_for("proto.index"))
         proto_db.delete_run(conn, run_id)
     finally:
         conn.close()
