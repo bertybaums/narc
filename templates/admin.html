@@ -185,6 +185,8 @@
                                 <option value="human" {{ 'selected' if p.creator == 'human' }}>Hum-generated</option>
                                 <option value="claude" {{ 'selected' if p.creator == 'claude' }}>AI-generated</option>
                                 <option value="colab" {{ 'selected' if p.creator == 'colab' }}>AI-Hum-Colab</option>
+                                <option value="nhm" {{ 'selected' if p.creator == 'nhm' }}>Generated (NHM)</option>
+                                <option value="narc-tiny" {{ 'selected' if p.creator == 'narc-tiny' }}>Generated (NARC-tiny)</option>
                             </select>
                         </td>
                         <td><span id="creator-status-{{ p.puzzle_id }}" class="text-success small"></span></td>

@@ -94,10 +94,10 @@
 {% block content %}
 <h2 class="mb-2" style="color:#f59e0b;">NARC Inspector</h2>
 <p style="color:#aaa;font-size:0.9em;max-width:800px;line-height:1.6;" class="mb-3">
-    NARC puzzles are designed so that neither the grid sequence nor the narrative clue is sufficient on its own — but together they uniquely determine the answer. The experiments below probe different dimensions of this narrative–visual interaction. <em>Masking</em> tests whether models can reconstruct hidden grids. <em>Ordering</em> tests whether narratives help recover temporal structure. <em>Odd-one-out</em> tests whether narratives help models recognize which grids belong together. <em>Stances</em> tests how the same visual pattern responds to different narrative framings.
+    NARC puzzles are designed so that neither the grid sequence nor the narrative clue is sufficient on its own — but together they uniquely determine the answer. The experiments below probe different dimensions of this narrative–visual interaction. <em>Masking</em> tests whether models can reconstruct hidden grids. <em>Ordering</em> tests whether narratives help recover temporal structure. <em>Odd-one-out</em> tests whether narratives help models recognize which grids belong together. <em>Stances</em> tests how the same visual pattern responds to different narrative framings. <em>NARC-tiny</em> runs the masking test on puzzles that a program generated from children's stories.
 </p>
 <p style="color:#888;font-size:0.85em;max-width:800px;line-height:1.6;" class="mb-3">
-    <strong style="color:#aaa;">How to read this page.</strong> <em>Masking</em> is the documented battery: every active puzzle, all current models, order and keyword ablations; a paper on it is under review (September 2026). <em>Ordering</em>, <em>Odd-one-out</em> and <em>Stances</em> are pilot designs from spring 2026; each states its own scope and dates below. Counts are per model. The NARC property is a relation between a puzzle and a model, so a model with more NARC puzzles is not a better or worse model, and this page is not a leaderboard.
+    <strong style="color:#aaa;">How to read this page.</strong> <em>Masking</em> is the documented battery: every active puzzle, all current models, order and keyword ablations; a paper on it is under review (September 2026). <em>Ordering</em>, <em>Odd-one-out</em> and <em>Stances</em> are pilot designs from spring 2026; each states its own scope and dates below. <em>NARC-tiny</em> is a separate set of generated puzzles with the same battery; it is not counted in the Masking tab. Counts are per model. The NARC property is a relation between a puzzle and a model, so a model with more NARC puzzles is not a better or worse model, and this page is not a leaderboard.
 </p>
 
 <div class="inspect-tabs">
@@ -105,6 +105,7 @@
     <a class="inspect-tab {{ 'active' if tab == 'ordering' }}" href="/inspect?tab=ordering">Ordering</a>
     <a class="inspect-tab {{ 'active' if tab == 'oddoneout' }}" href="/inspect?tab=oddoneout">Odd-One-Out</a>
     <a class="inspect-tab {{ 'active' if tab == 'stances' }}" href="/inspect?tab=stances">Stances</a>
+    <a class="inspect-tab {{ 'active' if tab == 'narctiny' }}" href="/inspect?tab=narctiny">NARC-tiny</a>
 </div>
 
 {% if user %}
@@ -187,230 +188,7 @@
 </div>
 <p class="text-muted mb-3" style="font-size:0.8em;">Per-model counts of puzzles with the NARC property on at least one narrative &times; mask cell. Not a ranking: the property is model-relative.</p>
 
-<div class="controls">
-    <input type="text" id="search" placeholder="Search title or ID..." oninput="filterPuzzles()">
-    <select id="status-filter" onchange="filterPuzzles()">
-        <option value="">All statuses</option>
-        <option value="narc">NARC only</option>
-        <option value="narc_strong">NARC — strong (order matters)</option>
-        <option value="narc_partial">NARC — partial</option>
-        <option value="narc_weak">NARC — weak (order incidental)</option>
-        <option value="dep_narrative">NARC — narrative-dependent (form matters)</option>
-        <option value="dep_partial">NARC — keyword partial</option>
-        <option value="dep_lexical">NARC — lexical (terms suffice)</option>
-        <option value="grids_sufficient">Grids sufficient</option>
-        <option value="unsolvable">Unsolvable</option>
-    </select>
-    <select id="origin-filter" onchange="filterPuzzles()">
-        <option value="">All origins</option>
-        <option value="human">Hum-generated</option>
-        <option value="claude">AI-generated</option>
-        <option value="colab">AI-Hum-Colab</option>
-    </select>
-    <span class="count" id="count-display"></span>
-</div>
-
-<div id="puzzle-list">
-{% for p in puzzles %}
-<div class="puzzle" data-statuses="{{ p.statuses | join(' ') }}" data-pid="{{ p.puzzle_id }}"
-     data-title="{{ p.title | lower }}" data-creator="{{ p.creator or 'claude' }}">
-    <div class="puzzle-header" onclick="togglePuzzle('{{ p.puzzle_id }}')">
-        {% if user %}
-        <input type="checkbox" class="puzzle-select" data-pid="{{ p.puzzle_id }}"
-               onclick="event.stopPropagation(); updateSelection()"
-               title="Select for bundle download">
-        {% endif %}
-        <span class="toggle" id="tog-{{ p.puzzle_id }}">&#9654;</span>
-        <span class="pid">{{ p.puzzle_id }}</span>
-        <span class="title">
-            {{ p.title }}
-            {% if p.creator == 'human' %}
-            <span class="origin-badge badge bg-secondary">Hum</span>
-            {% elif p.creator == 'colab' %}
-            <span class="origin-badge badge bg-success">Colab</span>
-            {% elif p.creator == 'nhm' %}
-            <span class="origin-badge badge bg-primary" title="Generated by the NHM simulator">NHM</span>
-            {% else %}
-            <span class="origin-badge badge bg-info">AI</span>
-            {% endif %}
-        </span>
-        <div class="dots">
-            {% for model in models %}
-            {% set r = p.results.get(model, {}) %}
-            {% if r.get('has_narc') %}
-            {% set st = r.get('narc_strength') %}
-            {% set dep = r.get('narrative_dependence') %}
-            {% set deptxt = ('; keywords ' ~ r.keyword_solved ~ '/' ~ r.keyword_total ~ ' — ' ~ dep) if dep else '' %}
-            {% if st == 'strong' %}
-            <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
-            {% elif st == 'partial' %}
-            <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
-            {% elif st == 'weak' %}
-            <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
-            {% else %}
-            <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested{{ deptxt }})">N</span>
-            {% endif %}
-            {% elif r.get('grids_only') %}
-            <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
-            {% elif r.get('narrative_only') %}
-            <span class="dot dot-narr" title="{{ model }}: narrative sufficient">L</span>
-            {% elif r %}
-            <span class="dot dot-fail" title="{{ model }}: unsolvable">&times;</span>
-            {% endif %}
-            {% endfor %}
-        </div>
-    </div>
-    <div class="puzzle-body" id="body-{{ p.puzzle_id }}">
-        <div class="sequence-container mb-3" id="seq-{{ p.puzzle_id }}"></div>
-        <script type="application/json" id="seq-data-{{ p.puzzle_id }}">{{ {"seq": p.sequence, "masked": p.masked_positions, "answers": p.answer_grids} | tojson }}</script>
-        <div class="narrative">{{ p.narrative }}</div>
-        {% if user %}
-        <div class="mb-2"><a class="text-info" style="font-size:0.8em;"
-            href="/api/inspect/export/puzzle/{{ p.puzzle_id }}.json">Download this puzzle (JSON)</a></div>
-        {% endif %}
-        {% if p.original_results %}
-        <div class="small text-muted mt-2">Original narrative &times; original mask</div>
-        <table class="results-table">
-            <thead>
-                <tr>
-                    <th>Model</th>
-                    <th>Grids Only</th>
-                    <th>Narrative Only</th>
-                    <th>Both</th>
-                    <th>NARC</th>
-                    <th>Keywords</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for model in models %}
-                {% set r = p.original_results.get(model) %}
-                {% if r %}
-                <tr>
-                    <td class="model-name">{{ model }}</td>
-                    <td class="{{ 'result-pass' if r.grids_only else 'result-fail' }}">
-                        {{ '&#10003;' | safe if r.grids_only else '&times;' | safe }}
-                    </td>
-                    <td class="{{ 'result-pass' if r.narrative_only else 'result-fail' }}">
-                        {{ '&#10003;' | safe if r.narrative_only else '&times;' | safe }}
-                    </td>
-                    <td class="{{ 'result-pass' if r.both else 'result-fail' }}">
-                        {{ '&#10003;' | safe if r.both else '&times;' | safe }}
-                    </td>
-                    <td>
-                        {% if r.has_narc %}
-                        {% set st = r.narc_strength %}
-                        {% if st == 'strong' %}
-                        <span class="dot dot-narc-strong" title="fails all shuffled orders — order is necessary">Strong ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
-                        {% elif st == 'partial' %}
-                        <span class="dot dot-narc-partial" title="solves some shuffled orders">Partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
-                        {% elif st == 'weak' %}
-                        <span class="dot dot-narc-weak" title="solves every shuffled order — order incidental">Weak ({{ r.shuffle_solved }}/{{ r.shuffle_total }})</span>
-                        {% else %}
-                        <span class="dot dot-narc" title="order not yet tested">NARC</span>
-                        {% endif %}
-                        {% else %}
-                        <span class="result-fail">&mdash;</span>
-                        {% endif %}
-                    </td>
-                    <td>
-                        {% if r.has_narc %}
-                        {% set dep = r.narrative_dependence %}
-                        {% if dep == 'narrative' %}
-                        <span class="dot dot-dep-narrative" title="fails every keyword-list trial — narrative form is necessary">Narrative ({{ r.keyword_solved }}/{{ r.keyword_total }})</span>
-                        {% elif dep == 'partial' %}
-                        <span class="dot dot-dep-partial" title="solves some keyword-list trials">Partial ({{ r.keyword_solved }}/{{ r.keyword_total }})</span>
-                        {% elif dep == 'lexical' %}
-                        <span class="dot dot-dep-lexical" title="solves every keyword-list trial — the key terms alone suffice">Lexical ({{ r.keyword_solved }}/{{ r.keyword_total }})</span>
-                        {% else %}
-                        <span class="result-fail" title="keywords not yet tested">&mdash;</span>
-                        {% endif %}
-                        {% else %}
-                        <span class="result-fail">&mdash;</span>
-                        {% endif %}
-                    </td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-            </tbody>
-        </table>
-        {% else %}
-        <div class="small text-muted mt-2">Original narrative not tested yet — see variant results below.</div>
-        {% endif %}
-        {% if p.variant_cells and (p.variant_cells | length > 1 or not p.original_results) %}
-        <div class="mt-3">
-            <button class="btn btn-sm btn-outline-secondary" onclick="toggleVariants('{{ p.puzzle_id }}')">
-                <span class="toggle" id="vtog-{{ p.puzzle_id }}">&#9654;</span>
-                Variant results ({{ p.variant_cells | length }} narrative &times; mask cells)
-            </button>
-            <div id="variants-{{ p.puzzle_id }}" style="display:none;" class="table-responsive mt-2">
-                <table class="results-table">
-                    <thead>
-                        <tr>
-                            <th style="text-align:left;">Narrative &times; Mask</th>
-                            {% for model in models %}
-                            <th>{{ model }}</th>
-                            {% endfor %}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for cell in p.variant_cells %}
-                        <tr>
-                            <td class="model-name">{{ cell.variant }} &times; {{ cell.mask }}</td>
-                            {% for model in models %}
-                            {% set r = cell.results.get(model) %}
-                            <td>
-                                {% if not r %}
-                                <span class="result-fail" title="{{ model }}: not tested">&mdash;</span>
-                                {% elif r.has_narc %}
-                                {% set st = r.narc_strength %}
-                                {% set dep = r.narrative_dependence %}
-                                {% set deptxt = ('; keywords ' ~ r.keyword_solved ~ '/' ~ r.keyword_total ~ ' — ' ~ dep) if dep else '' %}
-                                {% if st == 'strong' %}
-                                <span class="dot dot-narc-strong" title="{{ model }}: strong NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
-                                {% elif st == 'partial' %}
-                                <span class="dot dot-narc-partial" title="{{ model }}: partial ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
-                                {% elif st == 'weak' %}
-                                <span class="dot dot-narc-weak" title="{{ model }}: weak NARC ({{ r.shuffle_solved }}/{{ r.shuffle_total }} shuffles solved{{ deptxt }})">N</span>
-                                {% else %}
-                                <span class="dot dot-narc" title="{{ model }}: NARC (order not yet tested{{ deptxt }})">N</span>
-                                {% endif %}
-                                {% elif r.grids_only %}
-                                <span class="dot dot-grids" title="{{ model }}: grids sufficient">G</span>
-                                {% elif r.narrative_only %}
-                                <span class="dot dot-narr" title="{{ model }}: narrative sufficient">L</span>
-                                {% else %}
-                                <span class="dot dot-fail" title="{{ model }}: unsolvable">&times;</span>
-                                {% endif %}
-                            </td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-        </div>
-        {% endif %}
-        {% if p.keyword_lists %}
-        <div class="mt-3">
-            <button class="btn btn-sm btn-outline-secondary" onclick="toggleKeywords('{{ p.puzzle_id }}')">
-                <span class="toggle" id="ktog-{{ p.puzzle_id }}">&#9654;</span>
-                Key terms used ({{ p.keyword_lists | length }} narrative{{ 's' if p.keyword_lists | length != 1 }})
-            </button>
-            <div id="keywords-{{ p.puzzle_id }}" style="display:none;" class="mt-2">
-                <div class="small text-muted mb-1">Alphabetized key terms substituted for each clue in the keyword-ablation test</div>
-                {% for kl in p.keyword_lists %}
-                <div class="mb-2" style="font-size:0.85em;">
-                    <span style="color:#888;font-weight:600;">{{ kl.variant }}:</span>
-                    <span style="color:#FF851B;font-family:monospace;">{{ kl.keywords | join(', ') }}</span>
-                </div>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-    </div>
-</div>
-{% endfor %}
-</div>
+{% with tiny = false %}{% include "_inspect_masking_list.html" %}{% endwith %}
 
 {% elif tab == 'ordering' %}
 <!-- ==================== ORDERING TAB ==================== -->
@@ -775,6 +553,102 @@
 </div>
 {% endif %}
 
+{% elif tab == 'narctiny' %}
+<!-- ==================== NARC-TINY TAB ==================== -->
+{% macro span_text(span) %}{% if not span[0] %}not yet run{% elif span[0] == span[1] %}on {{ span[0] }}{% else %}{{ span[0] }} to {{ span[1] }}{% endif %}{% endmacro %}
+<div class="card mb-3" style="background:#1a1a2e;border-color:#2a2a3e;">
+    <div class="card-body" style="padding:12px 16px;">
+        <p class="mb-2" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>NARC-tiny</strong> is a set of puzzles made by a program, not written by hand. The program read 98,113 stories from TinyStories, a public corpus of short children's stories written by language models (Eldan and Li, 2023). From each story it kept the events that can be drawn on a grid: someone or something appears, leaves, moves, goes up, comes down, is picked up, dropped, lost or handed over, a mood changes, a thing is transformed. A grammar then writes that chain of events twice, once as grids and once as plain sentences.
+        </p>
+        <p class="mb-2" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>The grids.</strong> Each event is the change from one grid to the next. A character is a coloured bar, and its height is its mood: one cell sad, two neutral, three happy. An object is one cell, two if it is big, and grey if it is broken. The bottom row is the ground, and its colour is the place. One grid is hidden. The program hides a grid only where the visible grids leave several one-event completions open (at least three in this sample), the story picks one of them, and every drawing convention the answer needs is shown in another grid.
+        </p>
+        <p class="mb-2" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>The two texts.</strong> Each puzzle is tested with two clues. The <em>story</em> is the TinyStory as written. The <em>grammar text</em> is the same chain of events written back as plain sentences by the grammar's templates, so it agrees with the grids by construction.
+        </p>
+        <p class="mb-2" style="color:#d0d0d0;font-size:0.9em;">
+            <strong>The sample.</strong> The program produced 21,864 puzzles. Three models (qwen3.8-27b, gemma-4-31b, gpt-oss-120b) judged whether every extracted event is asserted by its story, and all three passed 11,049 puzzles. The {{ puzzles | length }} puzzles here come from those 11,049: four to seven grids, 8 to 33 puzzles for each of the eleven kinds of hidden event. The sample covers the kinds of hidden event about evenly. The full set does not: in the 11,049, four of five puzzles hide a mood change.
+        </p>
+        <p class="mb-1" style="color:#888;font-size:0.8em;">
+            <span class="dot dot-narc">N</span> = NARC (solved only with both)
+            &nbsp;&nbsp;<span class="dot dot-grids">G</span> = Grids sufficient
+            &nbsp;&nbsp;<span class="dot dot-narr">L</span> = Text sufficient
+            &nbsp;&nbsp;<span class="dot dot-fail">&times;</span> = Unsolved.
+            The dots in each row show the better of the two texts for each model; open a row for both.
+        </p>
+        <p class="mb-1" style="color:#888;font-size:0.8em;">
+            <strong style="color:#aaa;">Order sensitivity:</strong> each NARC cell is re-tested with the grids in three shuffled orders (same text). &nbsp;
+            <span class="dot dot-narc-strong">Strong</span> = fails every shuffle
+            &nbsp;&nbsp;<span class="dot dot-narc-partial">Partial</span> = solves some
+            &nbsp;&nbsp;<span class="dot dot-narc-weak">Weak</span> = solves every shuffle.
+        </p>
+        <p class="mb-0" style="color:#888;font-size:0.8em;">
+            <strong style="color:#aaa;">Narrative sensitivity:</strong> each NARC cell is re-tested three times with the text replaced by an alphabetized list of its key terms (same grids). &nbsp;
+            <span class="dot dot-dep-narrative">Narrative</span> = fails every keyword trial
+            &nbsp;&nbsp;<span class="dot dot-dep-partial">Partial</span> = solves some
+            &nbsp;&nbsp;<span class="dot dot-dep-lexical">Lexical</span> = solves every keyword trial.
+        </p>
+        <p class="mb-0 mt-2" style="color:#888;font-size:0.8em;border-top:1px solid #2a2a3e;padding-top:6px;">
+            <strong style="color:#aaa;">Scope:</strong> {{ puzzles | length }} puzzles &middot; {{ tiny_models | length }} models &middot; one sample per cell at temperature 0.
+            Grids only, story alone, story + grids and grammar text + grids: {{ span_text(tiny_spans.masking) }}. Shuffled orders: {{ span_text(tiny_spans.shuffles) }}. Both were run by a separate script that uses this site's prompts and grader; it kept the last few hundred characters of each response and counted an answer with no readable grid as not solved.
+            Grammar text alone: {{ span_text(tiny_spans.grammar_alone) }}. Keyword lists: {{ span_text(tiny_spans.keywords) }}. These two use this site's pipeline, which leaves an unreadable answer ungraded.
+            The puzzles and the first two sets of runs are part of the paper under review (September 2026). The stories are from TinyStories (CDLA-Sharing-1.0 licence).
+        </p>
+    </div>
+</div>
+
+<div class="table-responsive mb-2">
+<table class="results-table" style="font-size:0.8em;">
+    <thead>
+        <tr>
+            <th rowspan="2" style="text-align:left;">Model</th>
+            <th colspan="5">Solved, of {{ puzzles | length }} puzzles</th>
+            <th colspan="3" style="border-left:1px solid #333;">NARC with the story</th>
+            <th colspan="3" style="border-left:1px solid #333;">NARC with the grammar text</th>
+        </tr>
+        <tr>
+            <th>Grids only</th>
+            <th>Story alone</th>
+            <th>Story + grids</th>
+            <th>Grammar text alone</th>
+            <th>Grammar text + grids</th>
+            <th style="border-left:1px solid #333;">Puzzles</th>
+            <th title="strong / partial / weak">Order: S / P / W</th>
+            <th title="narrative / partial / lexical">Keywords: N / P / L</th>
+            <th style="border-left:1px solid #333;">Puzzles</th>
+            <th title="strong / partial / weak">Order: S / P / W</th>
+            <th title="narrative / partial / lexical">Keywords: N / P / L</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for model in tiny_models %}
+        {% set c = tiny_counts.get(model, {}) %}
+        <tr>
+            <td class="model-name">{{ model }}</td>
+            {% for key in ('grids_only', 'story_narrative_only', 'story_both', 'grammar_narrative_only', 'grammar_both') %}
+            {% set k = c.get(key) %}
+            <td>{% if k %}{{ k.solved }}{% if k.n != puzzles | length %}<span class="text-muted" title="{{ k.n }} graded answers"> /{{ k.n }}</span>{% endif %}{% else %}<span class="result-fail" title="not run">&mdash;</span>{% endif %}</td>
+            {% endfor %}
+            {% for text in ('story', 'grammar') %}
+            {% set v = tiny_verdicts.get(model, {}).get(text) %}
+            {% if v %}
+            <td style="border-left:1px solid #333;color:#2ECC40;font-weight:600;">{{ v.narc }}</td>
+            <td>{{ v.strong }} / {{ v.partial }} / {{ v.weak }}{% if v.order_untested %} <span class="text-muted" title="not yet tested">(+{{ v.order_untested }})</span>{% endif %}</td>
+            <td>{% if v.dep_untested == v.narc %}<span class="result-fail" title="not yet run">&mdash;</span>{% else %}{{ v.dep_narrative }} / {{ v.dep_partial }} / {{ v.dep_lexical }}{% if v.dep_untested %} <span class="text-muted" title="not yet tested">(+{{ v.dep_untested }})</span>{% endif %}{% endif %}</td>
+            {% else %}
+            <td style="border-left:1px solid #333;">0</td><td>&mdash;</td><td>&mdash;</td>
+            {% endif %}
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<p class="text-muted mb-3" style="font-size:0.8em;">Counts per model. Not a ranking: the NARC property is a relation between a puzzle and a model. In the imported runs a readable grid came back in 28 to 49 of 200 answers per condition for gpt-oss-20b and 146 to 198 for gpt-oss-120b, against 178 or more for the other six models, so the counts for those two are lower bounds.</p>
+
+{% with tiny = true %}{% include "_inspect_masking_list.html" %}{% endwith %}
+
 {% endif %}
 {% endblock %}
 
@@ -924,6 +798,8 @@ function filterPuzzles() {
     const originFilter = document.getElementById('origin-filter');
     const status = statusFilter ? statusFilter.value : '';
     const origin = originFilter ? originFilter.value : '';
+    const eventFilter = document.getElementById('event-filter');
+    const hiddenEvent = eventFilter ? eventFilter.value : '';
     const items = document.querySelectorAll('.puzzle');
     let shown = 0;
 
@@ -936,8 +812,9 @@ function filterPuzzles() {
         const matchSearch = !search || title.includes(search) || pid.includes(search);
         const matchStatus = !status || statuses.includes(status);
         const matchOrigin = !origin || creator === origin;
+        const matchEvent = !hiddenEvent || item.dataset.event === hiddenEvent;
 
-        if (matchSearch && matchStatus && matchOrigin) {
+        if (matchSearch && matchStatus && matchOrigin && matchEvent) {
             item.style.display = '';
             shown++;
         } else {

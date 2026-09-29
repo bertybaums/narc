@@ -280,7 +280,11 @@ def run_sensitivity_job(model, puzzle=None, shuffles=None, concurrency=8,
         sql = ("SELECT puzzle_id, variant_id, mask_variant_id FROM classifications "
                "WHERE has_narc=1 AND model_name=?")
         params = [model]
-        if puzzle:
+        if isinstance(puzzle, (list, tuple, set)):
+            # A set of puzzles (e.g. collect_narc_tiny.py); ids are few enough to bind.
+            sql += " AND puzzle_id IN (%s)" % ",".join("?" * len(puzzle))
+            params.extend(sorted(puzzle))
+        elif puzzle:
             sql += " AND puzzle_id=?"
             params.append(puzzle)
         cells = conn.execute(sql, tuple(params)).fetchall()
@@ -404,7 +408,11 @@ def run_narrative_sensitivity_job(model, puzzle=None, repeats=None, concurrency=
         sql = ("SELECT puzzle_id, variant_id, mask_variant_id FROM classifications "
                "WHERE has_narc=1 AND model_name=?")
         params = [model]
-        if puzzle:
+        if isinstance(puzzle, (list, tuple, set)):
+            # A set of puzzles (e.g. collect_narc_tiny.py); ids are few enough to bind.
+            sql += " AND puzzle_id IN (%s)" % ",".join("?" * len(puzzle))
+            params.extend(sorted(puzzle))
+        elif puzzle:
             sql += " AND puzzle_id=?"
             params.append(puzzle)
         cells = conn.execute(sql, tuple(params)).fetchall()

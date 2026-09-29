@@ -45,8 +45,14 @@ MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
           "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
 REVIEW_MODELS = MODELS
 
+# NARC-tiny: puzzles generated from TinyStories by the Narrative Hierarchy Model and imported
+# with their results (import_narc_tiny.py). A separate set: its own Inspect tab and Browse
+# view, left out of the hand-authored corpus counts and of the Masking tab.
+NARC_TINY = "narc-tiny"
+_TINY_PUZZLES = "(SELECT puzzle_id FROM puzzles WHERE creator='narc-tiny')"
 
-SITE_UPDATED = "September 22, 2026"
+
+SITE_UPDATED = "September 29, 2026"
 GRADING_PROTOCOL_NOTE = ("Grading protocol v2 since September 16, 2026 "
                          "(extraction-key fix; every stored trial was rescored).")
 
@@ -214,11 +220,18 @@ def index():
 def about():
     conn = get_conn()
     puzzles = db.get_all_puzzles(conn)
-    variant_count = conn.execute("SELECT COUNT(*) as c FROM narrative_variants").fetchone()["c"]
+    variant_count = conn.execute(
+        "SELECT COUNT(*) as c FROM narrative_variants "
+        f"WHERE puzzle_id NOT IN {_TINY_PUZZLES}").fetchone()["c"]
     grid_sizes = set()
     active_count = 0
     draft_count = 0
+    tiny_count = 0
     for p in puzzles:
+        if p["creator"] == NARC_TINY:
+            if p["status"] != "draft":
+                tiny_count += 1
+            continue
         pdata = db.puzzle_to_json(p)
         for item in pdata["sequence"]:
             grid_sizes.add((item["rows"], item["cols"]))
@@ -231,7 +244,8 @@ def about():
     data_as_of = _date_span(conn, "trials")[1]
     conn.close()
     stats = {
-        "total_puzzles": len(puzzles),
+        "total_puzzles": active_count + draft_count,
+        "tiny_puzzles": tiny_count,
         "active_puzzles": active_count,
         "draft_puzzles": draft_count,
         "total_variants": variant_count,
@@ -256,7 +270,10 @@ def inspect():
     span = (None, None)
     if tab == "masking":
         data = _inspect_masking(conn, models, include_drafts)
-        span = _date_span(conn, "trials")
+        span = _date_span(conn, "trials", f"puzzle_id NOT IN {_TINY_PUZZLES}")
+    elif tab == "narctiny":
+        data = _inspect_narctiny(conn, models, include_drafts)
+        span = _date_span(conn, "trials", f"puzzle_id IN {_TINY_PUZZLES}")
     elif tab == "ordering":
         data = _inspect_ordering(conn, include_drafts)
         span = _date_span(conn, "ordering_trials")
@@ -278,8 +295,9 @@ def inspect():
                            protocol_note=GRADING_PROTOCOL_NOTE, **data)
 
 
-def _inspect_masking(conn, models, include_drafts=True):
-    """Build masking tab data: per-puzzle classification results."""
+def _inspect_masking(conn, models, include_drafts=True, tiny=False):
+    """Build masking tab data: per-puzzle classification results. tiny=True builds the
+    same view over the NARC-tiny puzzles only; the default leaves them out."""
     rows = conn.execute(
         """SELECT c.puzzle_id, c.model_name, c.grids_only, c.narrative_only,
                   c.both, c.has_narc, c.narc_strength, c.shuffle_solved,
@@ -359,6 +377,8 @@ def _inspect_masking(conn, models, include_drafts=True):
         pid = p["puzzle_id"]
         if pid not in cls_map:
             continue
+        if (p["creator"] == NARC_TINY) != tiny:
+            continue
         if not include_drafts and p["status"] == "draft":
             continue
         pdata = db.puzzle_to_json(p)
@@ -426,6 +446,75 @@ def _inspect_masking(conn, models, include_drafts=True):
             highlights.append(p)
             seen_creators.add(creator)
     return {"puzzles": puzzles, "summary": summary, "highlights": highlights}
+
+
+def _inspect_narctiny(conn, models, include_drafts=True):
+    """Build the NARC-tiny tab: the masking view over the generated puzzles, each with its
+    two texts (the TinyStory and the grammar text), plus per-model counts and run dates."""
+    data = _inspect_masking(conn, models, include_drafts, tiny=True)
+    puzzles = data["puzzles"]
+    grammar = {r["puzzle_id"]: r["narrative"] for r in conn.execute(
+        f"SELECT puzzle_id, narrative FROM narrative_variants "
+        f"WHERE variant='grammar' AND puzzle_id IN {_TINY_PUZZLES}")}
+    events = set()
+    for p in puzzles:
+        p["grammar_text"] = grammar.get(p["puzzle_id"])
+        p["event"] = next((t.split(":", 1)[1] for t in (p.get("tags") or "").split(",")
+                           if t.startswith("event:")), "")
+        events.add(p["event"])
+        p["grammar_results"] = next((c["results"] for c in p["variant_cells"]
+                                     if c["variant"] == "grammar"), {})
+    shown = {p["puzzle_id"] for p in puzzles}
+    alone_run = {(r["puzzle_id"], r["model_name"]) for r in conn.execute(
+        f"""SELECT puzzle_id, model_name FROM trials
+            WHERE puzzle_id IN {_TINY_PUZZLES} AND condition='narrative_only'
+              AND variant_id IS NOT NULL
+              AND (response_text IS NOT NULL OR error IS NOT NULL)""")}
+    for p in puzzles:
+        for model, r in p["grammar_results"].items():
+            r["alone_not_run"] = (p["puzzle_id"], model) not in alone_run
+
+    # Per model: solved / graded trials per condition and text, then the verdicts.
+    counts = {}
+    for r in conn.execute(
+        f"""SELECT puzzle_id, model_name, condition, variant_id IS NOT NULL AS is_grammar, correct
+            FROM trials
+            WHERE puzzle_id IN {_TINY_PUZZLES} AND correct IS NOT NULL
+              AND condition IN ('grids_only', 'narrative_only', 'both')"""):
+        if r["puzzle_id"] not in shown:
+            continue
+        key = r["condition"] if r["condition"] == "grids_only" else (
+            ("grammar_" if r["is_grammar"] else "story_") + r["condition"])
+        c = counts.setdefault(r["model_name"], {}).setdefault(key, {"n": 0, "solved": 0})
+        c["n"] += 1
+        c["solved"] += r["correct"]
+    verdicts = {}
+    for p in puzzles:
+        for text, results in (("story", p["original_results"]), ("grammar", p["grammar_results"])):
+            for model, r in results.items():
+                if not r["has_narc"]:
+                    continue
+                v = verdicts.setdefault(model, {}).setdefault(text, {
+                    "narc": 0, "strong": 0, "partial": 0, "weak": 0, "order_untested": 0,
+                    "dep_narrative": 0, "dep_partial": 0, "dep_lexical": 0, "dep_untested": 0})
+                v["narc"] += 1
+                v[r["narc_strength"] or "order_untested"] += 1
+                v["dep_" + (r["narrative_dependence"] or "untested")] += 1
+    tiny_models = [m for m in models if m in counts]
+
+    spans = {}
+    for name, where in (
+            ("masking", "condition IN ('grids_only', 'narrative_only', 'both') "
+                        "AND NOT (condition='narrative_only' AND variant_id IS NOT NULL)"),
+            ("grammar_alone", "condition='narrative_only' AND variant_id IS NOT NULL"),
+            ("shuffles", "condition='both_shuffled'"),
+            ("keywords", "condition='both_keywords'")):
+        spans[name] = _date_span(conn, "trials",
+                                 f"puzzle_id IN {_TINY_PUZZLES} AND {where}")
+    data.update({"tiny_models": tiny_models, "tiny_counts": counts, "tiny_verdicts": verdicts,
+                 "tiny_spans": spans, "tiny_events": sorted(e for e in events if e)})
+    data.pop("highlights", None)
+    return data
 
 
 def _inspect_ordering(conn, include_drafts=True):
@@ -796,9 +885,13 @@ def browse():
         tag_parts.append(grid_tag)
         p["tags"] = ",".join(tag_parts)
 
-    # Collect tag counts by prefix for filter buttons
+    # Collect tag counts by prefix for filter buttons (hand-authored corpus only;
+    # the NARC-tiny set has its own view and its tags are generator labels)
     tag_counts = {}
     for p in puzzles:
+        p["is_tiny"] = (p.get("creator") == NARC_TINY)
+        if p["is_tiny"]:
+            continue
         tags = (p.get("tags") or "").split(",") if isinstance(p.get("tags"), str) else []
         for t in tags:
             t = t.strip()
@@ -813,6 +906,8 @@ def browse():
     browsable = [p for p in puzzles if not p.get("parent_puzzle_id")]
 
     return render_template("browse.html", puzzles=browsable,
+                           tiny_count=sum(1 for p in browsable
+                                          if p["is_tiny"] and not p["is_draft"]),
                            tag_counts=tag_counts,
                            audience_tags=tags_by_prefix("audience"),
                            arc_tags=tags_by_prefix("arc"),
@@ -1189,7 +1284,7 @@ def api_toggle_matrix(puzzle_id):
 def api_update_creator(puzzle_id):
     data = request.get_json()
     creator = data.get("creator") if data else None
-    if creator not in ("human", "claude", "colab", "nhm"):
+    if creator not in ("human", "claude", "colab", "nhm", NARC_TINY):
         return jsonify({"error": "Invalid creator value"}), 400
     conn = get_conn()
     row = db.get_puzzle(conn, puzzle_id)
@@ -1915,6 +2010,18 @@ def api_export_masking():
     data.pop("highlights", None)
     return _json_download("narc_masking", {"experiment": "masking",
                                            "models": models, **data})
+
+
+@app.route("/api/inspect/export/narctiny.json")
+@require_role(*DATA_ROLES)
+def api_export_narctiny():
+    conn = get_conn()
+    models = [r[0] for r in conn.execute(
+        "SELECT DISTINCT model_name FROM trials ORDER BY model_name"
+    ).fetchall()]
+    data = _inspect_narctiny(conn, models)
+    conn.close()
+    return _json_download("narc_tiny", {"experiment": "narc-tiny", **data})
 
 
 @app.route("/api/inspect/export/ordering.json")
