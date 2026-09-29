@@ -13,7 +13,8 @@
 #   contagion   fear spreads P -> F -> (G?)      tell: G is UP A TREE (visible, unexplained until the text)
 #   turn-taking one character changes, the other holds  no tell (attention is not drawable)
 #   spree       cups break one by one            tell: the last cup is BIG (visible: it is tin)
-#   gathering   objects appear one by one        no tell (the gust is not drawable)
+#   gathering   objects appear one by one        no tell (the gust is not drawable); the twin ends with P sitting down, since a
+#                                               fourth object of a never-shown colour cannot pass self-teaching
 #
 # The tell is a visible inconsistency with the trend reading: one entity differs from the others
 # in a way the trend does not explain. Whether it matters (the climber is spared; the tin cup
@@ -36,7 +37,7 @@ lexicon:
     indoor: [house, room, kitchen, school]
     town: [town, street, village]
 
-roles: {P: person, F: person, G: person, O: object, O2: object, O3: object, O4: object, T: threats, E: embers, S: sticks, L1: location}
+roles: {P: person, F: person, G: person, O: object, O2: object, O3: object, T: threats, E: embers, S: sticks, L1: location}
 
 story_types:
   # contagion: fear spreads from P to F; does it reach G?
@@ -54,7 +55,7 @@ story_types:
   spree_plain:            {episodes: [SETUP_CUPS, WHISTLE, KNOCK1, KNOCK2, KNOCK3], features: [BadEnding]}
   # gathering: things appear one by one; then?
   gather_then_gust:       {episodes: [SETUP1, FIND1, FIND2, FIND3, GUST], features: [Twist]}
-  gather_more:            {episodes: [SETUP1, FIND1, FIND2, FIND3, FIND4], features: []}
+  gather_tired:           {episodes: [SETUP1, FIND1, FIND2, FIND3, TIRED], features: []}
   # ember: the fire shrinks frame by frame; P holds a bundle of sticks (the tell)
   ember_flares:           {episodes: [SETUP_FIRE, STICKS, DIM1, DIM2, FLARE], features: [Twist]}
   ember_saved:            {episodes: [SETUP_FIRE, STICKS, DIM1, DIM2, OUT], features: [BadEnding]}
@@ -66,7 +67,7 @@ episodes:
   SETUP2:
     - [[APPEAR, P, "@two"], [APPEAR, F, "@silent"]]
   SETUP1:
-    - [[APPEAR, P, "@alone"], [MOVE.loc, P, L1, "@walk"]]
+    - [[APPEAR, P, "@alone"], [MOVE.loc, P, L1, "@walk"], [EMOTE, P, happy, "@cheerful"]]
   SETUP_CUPS:
     - [[APPEAR, P, "@cups"], [APPEAR.obj, O, "@silent"], [APPEAR.obj, O2, "@silent"], [APPEAR.obj, O3, "@silent"]]
   PLAY:
@@ -124,8 +125,8 @@ episodes:
     - [[APPEAR.obj, O2, "@find2"]]
   FIND3:
     - [[APPEAR.obj, O3, "@find3"]]
-  FIND4:
-    - [[APPEAR.obj, O4, "@find4"]]
+  TIRED:
+    - [[EMOTE, P, neutral, "@tired"]]
   GUST:
     - [[LOSE, P, O3, "@gust"]]
   SETUP_FIRE:
@@ -180,7 +181,8 @@ clauses:
   "APPEAR.obj@find": ["{X} found a {O} and set it down on the path.", "{X} spotted a {O} and laid it on the ground.", "{X} picked out a {O} and put it down to keep."]
   "APPEAR.obj@find2": ["Then {X} found a {O} and put it next to the first.", "A {O} came next; {X} set it beside the other.", "{X} added a {O} to the row."]
   "APPEAR.obj@find3": ["Then a {O} joined the row.", "{X} found a {O} too and lined it up.", "A {O} made three."]
-  "APPEAR.obj@find4": ["And then a {O}, making four.", "{X} found a {O} as well and added it.", "A fourth thing, a {O}, went in the row."]
+  "EMOTE:happy@cheerful": ["{X} was in a cheerful mood.", "{X} hummed happily.", "It was a fine morning and {X} was glad of it."]
+  "EMOTE:neutral@tired": ["Then {X} sat down, tired but content, and looked at the row.", "{X} was done collecting and sat down quietly.", "{X} rested and looked at the three in a row."]
   "APPEAR:P@fire": ["{P} sat by the {E} as night came on.", "It was late, and {P} was watching the {E}.", "{P} had the {E} going well."]
   "TRANSFORM:huge@blaze": [""]
   "ACQUIRE@sticks": ["{X} had a {S} ready beside {X}.", "{X} was holding a {S}.", "{X} had gathered a {S} earlier."]

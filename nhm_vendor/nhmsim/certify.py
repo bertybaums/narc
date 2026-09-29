@@ -20,6 +20,7 @@ from __future__ import annotations
 
 import json
 import random
+import re
 from collections import Counter
 from dataclasses import dataclass
 from datetime import date
@@ -495,3 +496,58 @@ def _conv_name(spec: dict) -> str:
         except KeyError:
             pass
     return ",".join(f"{k}={spec[k]}" for k in ("mood", "location", "held", "want", "time"))
+
+# ------------------------------------------------------------------------------------------
+def event_from_spec(spec: str, roles: Dict[str, str]) -> Event:
+    """'EMOTE.sad(g)' / 'TRANSFORM.hidden(e)' / 'LOSE(p, o3)' over role letters -> an Event over
+    the puzzle's fillers (used to name a trend's continuation independently of the sample)."""
+    m = re.match(r"^([A-Z]+)(?:\.([a-z]+))?\((.*)\)$", spec.strip())
+    if not m:
+        raise ValueError(f"bad event spec {spec!r}")
+    prim, arg, inner = m.group(1), m.group(2), m.group(3)
+    parts = [x.strip() for x in inner.split(",") if x.strip()]
+    fill = {k.lower(): v for k, v in roles.items()}
+
+    def f(letter):
+        return fill.get(letter, letter).lower() if letter in fill else letter
+
+    if prim == "EMOTE":
+        return Event("EMOTE", [f(x) for x in parts], mood=arg)
+    if prim == "TRANSFORM":
+        return Event("TRANSFORM", [], theme=fill.get(parts[0], parts[0]), state=arg)
+    if prim in ("ACQUIRE", "DROP", "LOSE", "WANT"):
+        return Event(prim, [f(parts[0])], theme=fill.get(parts[1], parts[1]) if len(parts) > 1 else None)
+    if prim in ("ASCEND", "DESCEND", "VANISH", "APPEAR", "UNWANT"):
+        return Event(prim, [f(x) for x in parts])
+    if prim in ("TRANSFER", "SPLIT"):
+        return Event(prim, [f(parts[0])], theme=fill.get(parts[1], parts[1]), recipient=f(parts[2]))
+    if prim in ("MOVE", "WITHDRAW"):
+        return Event(prim, [f(parts[0])], recipient=f(parts[1]))
+    raise ValueError(f"unsupported spec {spec!r}")
+
+
+def continuation_grid(pz: dict, event: Event) -> Optional[Grid]:
+    """The grid the masked frame would show if ``event`` (instead of the true event) had happened
+    after the frame before the mask, rendered under the puzzle's own code and symmetry. None if the
+    event does not apply there. Two different events can give the same grid (a held object hides
+    another in the one held cell), which is why trend checks compare grids rather than labels."""
+    m = pz["metadata"]
+    conv = get_convention(_conv_name(m["convention"]))
+    sym = S.Symmetry.from_spec(m["symmetry"])
+    events = [Event.from_dict(e) for e in m["events"]]
+    initial = Scene.from_dict(m["initial_scene"]) if m.get("initial_scene") else None
+    setup, steps = simulate(events, conv, initial)
+    all_scenes = [setup] + [st.scene for st in steps]
+    frame_idx = m.get("frame_indices") or list(range(len(all_scenes)))
+    k = pz["masked_positions"][0]
+    if k == 0:
+        return None
+    prev = all_scenes[frame_idx[k - 1]]
+    nxt = apply(prev, event)
+    if nxt is None:
+        return None
+    width = len(pz["sequence"][0]["grid"] or pz["answer_grids"][str(k)][0]) if pz["sequence"][0]["grid"] is not None else len(pz["answer_grids"][str(k)][0])
+    width = len(next(it["grid"] for it in pz["sequence"] if it["grid"] is not None)[0])
+    if sym.parts() and "shift" in sym.parts():
+        width -= int(sym.params.get("k", 1))
+    return S.render(conv, nxt, width, sym)
