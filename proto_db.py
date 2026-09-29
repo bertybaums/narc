@@ -190,15 +190,22 @@ def get_trials(conn, puzzle_id):
 
 
 def verdicts_by_cell(trials):
-    """(model, surface) -> {grids_only, narrative_only, both, narc} from finished trials."""
+    """(model, surface) -> {grids_only, narrative_only, both, narc} from finished trials.
+    grids_only does not depend on the text, so it is stored once per model (surface '-')
+    and applied to every surface of that model; the latest finished trial wins."""
+    grids_only = {}
     cells = {}
     for t in trials:
         if t["status"] != "done":
             continue
-        key = (t["model_name"], t["surface"])
-        cells.setdefault(key, {})[t["condition"]] = t["correct"]
+        if t["condition"] == "grids_only":
+            grids_only[t["model_name"]] = t["correct"]
+            continue
+        cells.setdefault((t["model_name"], t["surface"]), {})[t["condition"]] = t["correct"]
     out = {}
     for key, c in cells.items():
+        if key[0] in grids_only:
+            c["grids_only"] = grids_only[key[0]]
         if all(k in c for k in ("grids_only", "narrative_only", "both")):
             c["narc"] = int(c["both"] == 1 and c["grids_only"] == 0 and c["narrative_only"] == 0)
         out[key] = c
