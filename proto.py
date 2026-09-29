@@ -164,22 +164,29 @@ def _generate(cfg, created_by):
     g_ = grammar.load(cfg["grammar"])
     convs = [get_convention(p) for p in cfg["phi"]]
     rng = random.Random(cfg["seed"])
+    families = list(g_.families.items()) if cfg.get("pairs") and g_.families else []
     puzzles, reasons, produced, i = [], {c.name: {} for c in convs}, 0, 0
     while produced < cfg["n"] and i < cfg["n"] * 20:
         i += 1
-        smp = grammar.sample(g_, rng, m=cfg["m"], story_type=cfg.get("story_type") or None)
+        seed_i = rng.randrange(1 << 30)
+        if families:
+            fam, types = families[rng.randrange(len(families))]
+            samples = [grammar.sample(g_, random.Random(seed_i), m=cfg["m"], story_type=t) for t in types]   # same roles
+        else:
+            samples = [grammar.sample(g_, random.Random(seed_i), m=cfg["m"], story_type=cfg.get("story_type") or None)]
         sym = S.sample(cfg["sym"], rng)
         any_ok = False
-        for conv in convs:
-            pid = f"p{cfg['seed']}-{i:04d}" + (f"-{conv.name}" if len(convs) > 1 else "")
-            pzs, why = certify.build_puzzles(smp, conv, cfg["sym"], rng, mask=cfg["mask"],
-                                             min_alternatives=cfg["min_alternatives"],
-                                             require_self_taught=cfg["self_teaching"], store_alts=8,
-                                             puzzle_id=pid, sym=sym)
-            reasons[conv.name][why] = reasons[conv.name].get(why, 0) + 1
-            if pzs:
-                any_ok = True
-                puzzles.extend(pzs)
+        for smp in samples:
+            for conv in convs:
+                pid = f"p{cfg['seed']}-{i:04d}" + (f"-{smp.story_type}" if len(samples) > 1 else "") + (f"-{conv.name}" if len(convs) > 1 else "")
+                pzs, why = certify.build_puzzles(smp, conv, cfg["sym"], rng, mask=cfg["mask"],
+                                                 min_alternatives=cfg["min_alternatives"],
+                                                 require_self_taught=cfg["self_teaching"], store_alts=8,
+                                                 puzzle_id=pid, sym=sym)
+                reasons[conv.name][why] = reasons[conv.name].get(why, 0) + 1
+                if pzs:
+                    any_ok = True
+                    puzzles.extend(pzs)
         if any_ok:
             produced += 1
     summary = {"samples_tried": i, "puzzles": len(puzzles), "reasons": reasons,
@@ -270,6 +277,7 @@ def generate():
             "min_alternatives": max(1, int(f.get("min_alternatives", 2))),
             "self_teaching": f.get("self_teaching", "on") == "on",
             "surfaces": f.getlist("surfaces") or None,          # variants enabled by default; None = all
+            "pairs": f.get("pairs") == "on",                    # every story type of one family per seed (same roles)
         }
         for p in cfg["phi"]:
             get_convention(p)

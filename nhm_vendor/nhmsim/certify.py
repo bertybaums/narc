@@ -441,6 +441,7 @@ def _puzzle(pid, events, setup, conv, sym, scenes, steps, spanned, grids, frame_
         "metadata": {
             "creator": "nhm-sim", "generator_version": GENERATOR_VERSION, "created_at": date.today().isoformat(),
             "grammar": meta.get("grammar"), "story_type": meta.get("story_type"), "story_features": meta.get("features", []),
+            "story_id": meta.get("story_id") or pid.split("_k")[0],        # Lane B splits by story id
             "roles": meta.get("roles", {}), "m": meta.get("m"), "tree": meta.get("tree", []),
             "primitives": sorted(meta.get("primitives") or []), "states": sorted(meta.get("states") or []),
             "convention": conv.spec(), "symmetry": sym.spec(), "symmetry_text": S.describe(sym),

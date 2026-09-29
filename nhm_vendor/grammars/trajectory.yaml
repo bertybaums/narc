@@ -42,6 +42,16 @@ lexicon:
 
 roles: {P: person, F: person, G: person, O: object, O2: object, O3: object, T: threats, E: embers, S: sticks, B: baskets, W: flowers, L1: location}
 
+# twist/twin families: generating every type of a family from one seed gives the same people,
+# objects and place, so the puzzles differ only where the types differ (a matched pair, or triple)
+families:
+  contagion: [fright_spares_climber, fright_reaches_climber, fright_spreads, spider_lover]
+  chat: [chat_joins, chat_solo, chat_bored]
+  spree: [spree_tin_rolls, spree_tin_cracks, spree_plain]
+  gather: [gather_then_gust, gather_tired]
+  ember: [ember_flares, ember_saved, ember_dies]
+  bloom: [bloom_picked, bloom_left, bloom_admired]
+
 story_types:
   # contagion: fear spreads from P to F; does it reach G?
   fright_spares_climber:  {episodes: [SETUP3, PLAY, CLIMB, THREAT, WAVE_P, WAVE_F, SPARED], features: [Twist, Conflict]}

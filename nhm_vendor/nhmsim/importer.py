@@ -137,7 +137,8 @@ def import_puzzle(nts: dict, conv: Optional[BaseConvention] = None, sym: Optiona
         texts[v["variant"]] = v["narrative"]
     meta = {"grammar": "nts-import", "story_type": None, "features": nts["metadata"].get("story_features", []),
             "roles": {}, "m": None, "tree": [], "texts": texts, "primitives": NTS_PRIMITIVES,
-            "source_puzzle_id": nts["puzzle_id"], "source_generator": nts["metadata"].get("generator_version")}
+            "source_puzzle_id": nts["puzzle_id"], "source_generator": nts["metadata"].get("generator_version"),
+            "story_id": nts["metadata"].get("story_id")}
 
     def fidelity_of(initial):
         ref, why = _build(events, initial, base, S.Symmetry(), "all", 1, False, 4, 0, nts["puzzle_id"], dict(meta))

@@ -67,22 +67,35 @@ def cmd_gen(a):
     groups = []
     produced = 0
     i = 0
+    families = list(g.families.items()) if a.pairs and g.families else []
+    if a.pairs and not families:
+        print(f"warning: grammar {g.name} defines no families; --pairs ignored", file=sys.stderr)
     while produced < a.n and i < a.n * a.max_tries:
         i += 1
-        sample = grammar.sample(g, rng, m=a.m, story_type=a.story_type)
+        seed_i = rng.randrange(1 << 30)
+        if families:
+            fam, types = families[rng.randrange(len(families))]
+            samples = [grammar.sample(g, random.Random(seed_i), m=a.m, story_type=t) for t in types]   # same roles per seed
+        else:
+            samples = [grammar.sample(g, random.Random(seed_i), m=a.m, story_type=a.story_type)]
         sym = S.sample(a.sym, rng)
         rows = []
         any_ok = False
-        for conv in convs:
-            _, pzs, why = _gen_one(g, conv, a.sym, rng, a, i, sample=sample, sym=sym)
-            reasons[conv.name][why] += 1
-            if pzs:
-                any_ok = True
-                puzzles[conv.name].extend(pzs)
-            rows.append({"conv": conv.name, "puzzle": pzs[0] if pzs else None, "reason": why})
+        for sample in samples:
+            for conv in convs:
+                pid_suffix = f"_{sample.story_type}" if len(samples) > 1 else ""
+                pid = f"nhm_{g.name}_{a.seed}-{i:05d}{pid_suffix}" + (f"_{conv.name}" if "," in a.phi else "")
+                pzs, why = certify.build_puzzles(sample, conv, a.sym, rng, mask=a.mask, min_alternatives=a.min_alternatives,
+                                                 require_self_taught=not a.no_self_teaching, store_alts=a.store_alts, puzzle_id=pid, sym=sym)
+                reasons[conv.name][why] += 1
+                if pzs:
+                    any_ok = True
+                    puzzles[conv.name].extend(pzs)
+                rows.append({"conv": conv.name + (f" · {sample.story_type}" if len(samples) > 1 else ""), "puzzle": pzs[0] if pzs else None, "reason": why})
         if any_ok:
             produced += 1
-            groups.append({"key": f"sample {i}: {sample.story_type} ({', '.join(f'{k}={v}' for k, v in sample.roles.items())})",
+            sample = samples[0]
+            groups.append({"key": f"sample {i}: {sample.story_type if len(samples) == 1 else fam + ' family'} ({', '.join(f'{k}={v}' for k, v in sample.roles.items())})",
                            "story": sample.texts["story"], "rows": rows})
     config = vars(a).copy()
     config.pop("func", None)
@@ -101,7 +114,7 @@ def cmd_gen(a):
                               "story_types": dict(Counter(p["metadata"]["story_type"] for p in pz))}
         gallery.write_gallery(pz, out / ("gallery.html" if len(convs) == 1 else f"gallery_{conv.name}.html"),
                               f"nhm {g.name} · {conv.name} · sym {a.sym} · mask {a.mask}", config, summary[conv.name])
-    if len(convs) > 1 or a.compare:
+    if len(convs) > 1 or a.compare or a.pairs:
         gallery.write_compare(groups, out / "compare.html", f"nhm {g.name}: {', '.join(c.name for c in convs)}")
     _write_json(out / "config.json", config)
     _write_json(out / "summary.json", summary)
@@ -257,6 +270,7 @@ def main(argv=None):
     p.add_argument("--no-self-teaching", action="store_true")
     p.add_argument("--store-alts", type=int, default=8)
     p.add_argument("--compare", action="store_true", help="also write compare.html (automatic with several --phi)")
+    p.add_argument("--pairs", action="store_true", help="per seed, generate every story type of one family (same roles): twist and twins side by side")
     p.add_argument("--out", required=True)
     p.set_defaults(func=cmd_gen)
 

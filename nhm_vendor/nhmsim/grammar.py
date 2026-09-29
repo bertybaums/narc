@@ -60,6 +60,7 @@ class Grammar:
     clauses: Dict[str, List[str]]
     surfaces: Dict[str, Dict[str, List[str]]] = field(default_factory=dict)
     requires: Dict[str, str] = field(default_factory=dict)     # e.g. {want: bubble}
+    families: Dict[str, List[str]] = field(default_factory=dict)  # twist/twin groups sharing a prefix
     path: Optional[str] = None
 
     def location_classes(self) -> Dict[str, List[str]]:
@@ -114,7 +115,7 @@ def load(name_or_path: str) -> Grammar:
     g = Grammar(name=raw["name"], description=raw.get("description", ""), lexicon=raw["lexicon"],
                 roles=raw["roles"], story_types=raw["story_types"], episodes=raw["episodes"],
                 clauses=raw["clauses"], surfaces=raw.get("surfaces", {}) or {},
-                requires=raw.get("requires", {}) or {}, path=str(path))
+                requires=raw.get("requires", {}) or {}, families=raw.get("families", {}) or {}, path=str(path))
     register_locations(g.location_classes())
     validate(g)
     return g
@@ -123,7 +124,7 @@ def load(name_or_path: str) -> Grammar:
 def _as_raw(g: Grammar) -> Dict:
     return {"name": g.name, "description": g.description, "lexicon": g.lexicon, "roles": g.roles,
             "story_types": g.story_types, "episodes": g.episodes, "clauses": g.clauses,
-            "surfaces": g.surfaces, "requires": g.requires}
+            "surfaces": g.surfaces, "requires": g.requires, "families": g.families}
 
 
 def available() -> List[str]:
@@ -135,6 +136,10 @@ KINDS = {"APPEAR", "APPEAR.obj", "VANISH", "MOVE.loc", "MOVE.to", "WITHDRAW", "A
 
 
 def validate(g: Grammar) -> None:
+    for fam, types in g.families.items():
+        for t in types:
+            if t not in g.story_types:
+                raise ValueError(f"{g.name}: family {fam} names unknown story type {t}")
     for st, spec in g.story_types.items():
         for ep in spec["episodes"]:
             if ep not in g.episodes:
