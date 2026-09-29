@@ -76,6 +76,7 @@ class Char:
     mood: str = "neutral"
     elevated: bool = False
     wants: Optional[str] = None
+    seen: bool = False         # has ever been drawn (a registered-but-unseen character can still be introduced retroactively)
 
 
 @dataclass
@@ -204,6 +205,9 @@ def apply(scene: Scene, ev: Event) -> Optional[Scene]:
         for o in s.objs.values():
             if o.present:
                 o.seen = True
+        for c in s.chars.values():
+            if c.present:
+                c.seen = True
     return s
 
 

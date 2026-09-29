@@ -76,18 +76,21 @@ def simulate(events: List[Event], conv: BaseConvention, initial: Optional[Scene]
 
     def introduce_char(name):
         nonlocal cur
-        if name in cur.chars:
-            return                       # known (present, or absent: only APPEAR brings them back)
-        c = cur.get_char(name)
+        if name in cur.chars and (cur.chars[name].seen or cur.chars[name].present):
+            return                       # known (present, or gone: only APPEAR brings them back)
+        c = cur.get_char(name)           # new, or registered from a legend but never drawn
         if c is None:
             return
-        c.present = True
+        c.present = c.seen = True
         for s in snaps[last_loc:]:
             if name not in s.chars:
                 s.chars[name] = type(c)(**vars(c))
                 s.n_slots = max(s.n_slots, cur.n_slots)
 
-    materialised = {o.name for o in cur.objs.values() if o.present}
+    materialised = {o.name for o in cur.objs.values() if o.present or o.seen}
+    for c in cur.chars.values():
+        if c.present:
+            c.seen = True
 
     def introduce_obj(name, holder=None):
         nonlocal cur

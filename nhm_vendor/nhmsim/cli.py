@@ -203,6 +203,39 @@ def cmd_yields(a):
         print(f"{conv.name:64s} {ok:4d} {depth['first']:5d} {depth['middle']:4d} {depth['final']:5d}  {bad}")
 
 
+def cmd_import_nts(a):
+    from . import importer
+    files = importer.load_sources(a.src, a.limit)
+    convs = [get_convention(p) for p in a.phi.split(",")]
+    out = Path(a.out)
+    rng = random.Random(a.seed)
+    stats = {c.name: Counter() for c in convs}
+    fidelity = Counter()
+    puzzles = {c.name: [] for c in convs}
+    for f in files:
+        nts = json.loads(f.read_text())
+        sym = S.sample(a.sym, rng)
+        for conv in convs:
+            pz, why, fid = importer.import_puzzle(nts, conv=conv, sym=sym, keep_mask=not a.remask, store_alts=a.store_alts)
+            stats[conv.name][why] += 1
+            if conv is convs[0]:
+                fidelity["exact" if fid["frames_equal"] else ("partial" if fid["n_equal"] else "none")] += 1
+                fidelity["mask_kept"] += int(fid["mask_kept"])
+            if pz:
+                puzzles[conv.name].append(pz)
+    for conv in convs:
+        sub = out / "puzzles" if len(convs) == 1 else out / "puzzles" / conv.name
+        for pz in puzzles[conv.name]:
+            _write_json(sub / f"{pz['puzzle_id']}.json", pz)
+        gallery.write_gallery(puzzles[conv.name], out / ("gallery.html" if len(convs) == 1 else f"gallery_{conv.name}.html"),
+                              f"nhm import from {a.src} · {conv.name}", {"src": a.src, "phi": conv.name, "sym": a.sym},
+                              {"n": len(puzzles[conv.name]), "reasons": dict(stats[conv.name]), "fidelity": dict(fidelity)})
+        print(f"{conv.name:14s} {len(puzzles[conv.name]):5d} of {len(files)} imported; reasons {dict(stats[conv.name])}")
+    print(f"fidelity under the baseline code (re-render vs original, all frames): {dict(fidelity)}")
+    _write_json(out / "summary.json", {"src": a.src, "n_files": len(files), "phi": [c.name for c in convs], "sym": a.sym,
+                                      "reasons": {k: dict(v) for k, v in stats.items()}, "fidelity": dict(fidelity)})
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="nhmsim", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     sub = ap.add_subparsers(dest="cmd", required=True)
@@ -249,6 +282,17 @@ def main(argv=None):
     p.add_argument("run")
     p.add_argument("--apply", required=True)
     p.set_defaults(func=cmd_review)
+
+    p = sub.add_parser("import-nts", help="import narc-tiny-stories puzzles (setup read from the first grid, events from the chain) and rebuild under codes")
+    p.add_argument("src", help="a puzzle JSON, a directory of them, or a glob")
+    p.add_argument("--limit", type=int, default=None)
+    p.add_argument("--phi", default="baseline")
+    p.add_argument("--sym", default="identity")
+    p.add_argument("--seed", type=int, default=1)
+    p.add_argument("--remask", action="store_true", help="choose the mask afresh instead of keeping the original position")
+    p.add_argument("--store-alts", type=int, default=8)
+    p.add_argument("--out", required=True)
+    p.set_defaults(func=cmd_import_nts)
 
     p = sub.add_parser("yields", help="certificate yield per convention on one sample set (phase-0 gate of the metaphor brief)")
     p.add_argument("--grammar", default="tinystories_base")
