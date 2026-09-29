@@ -19,14 +19,18 @@ import os
 import random
 import sys
 import threading
+from datetime import datetime
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from flask import (Blueprint, Response, abort, flash, g, jsonify, redirect,
                    render_template, request, session, url_for)
 
+import classify
 import collect
 import db
+import grids
+import prompts
 import proto_db
 
 # --- locate nhmsim -------------------------------------------------------------------------
@@ -59,6 +63,7 @@ except Exception as e:  # pragma: no cover
     NHM_IMPORT_ERROR = repr(e)
 
 bp = Blueprint("proto", __name__, url_prefix="/proto")
+DATA_DIR = _HERE / "data" / "puzzles"
 
 MAX_N = 60
 MASKS = ["any", "last", "middle", "first", "all"]
@@ -149,6 +154,7 @@ def prepare(pz, row=None):
         "sym": m["symmetry"]["name"], "sym_text": m.get("symmetry_text", ""),
         "conventions_text": m.get("conventions_text", ""), "tags": m.get("tags", []),
         "events_json": json.dumps(m.get("events", []), indent=1),
+        "promoted_to": m.get("promoted_to"),
         "verdict": (row or {}).get("verdict", ""), "notes": (row or {}).get("notes", ""),
         "updated_at": (row or {}).get("updated_at"),
     }
@@ -304,7 +310,7 @@ def run(run_id):
     r["config"] = json.loads(r["config_json"])
     r["summary"] = json.loads(r["summary_json"] or "{}")
     items = [prepare(json.loads(row["puzzle_json"]), row) for row in rows]
-    return render_template("proto_run.html", run=r, items=items, verdict=verdict, knobs=_knobs())
+    return render_template("proto_run.html", run=r, items=items, verdict=verdict, knobs=_knobs(), is_staff=_is_staff())
 
 
 @bp.route("/run/<int:run_id>/delete", methods=["POST"])
@@ -359,7 +365,8 @@ def puzzle(puzzle_id):
     cells = proto_db.verdicts_by_cell(trials)
     cell_rows = [{"model": k[0], "surface": k[1], **v} for k, v in sorted(cells.items())]
     return render_template("proto_puzzle.html", item=item, run=r, trials=trials, cells=cell_rows,
-                           knobs=_knobs(), surfaces=[t["variant"] for t in item["texts"] if t["enabled"]])
+                           knobs=_knobs(), surfaces=[t["variant"] for t in item["texts"] if t["enabled"]],
+                           is_staff=_is_staff(), default_target=_default_target_id(puzzle_id))
 
 
 @bp.route("/puzzle/<puzzle_id>.json")
@@ -560,3 +567,152 @@ def puzzle_delete(puzzle_id):
     finally:
         conn.close()
     return redirect(url_for("proto.run", run_id=row["run_id"]))
+
+# --- promote: copy a prototype into narc.db the way the Create page saves a puzzle -----------
+
+def _is_staff():
+    u = _staff()
+    return u is not None and u["role"] in ("owner", "reviewer")
+
+
+def _promote_one(pconn, nconn, row, target_id, status, carry_trials, user):
+    """Write one prototype into narc.db (puzzle, narrative variants, original mask variant and
+    pairs, the data/puzzles export, an activity-log entry with the full prototype JSON as the
+    provenance snapshot) and, optionally, its finished trials followed by a reclassification.
+    Returns (target_id, n_trials, models) or raises ValueError."""
+    pz = json.loads(row["puzzle_json"])
+    m = pz["metadata"]
+    if db.puzzle_exists(nconn, target_id):
+        raise ValueError(f"puzzle id {target_id!r} already exists in narc.db")
+    k = pz["masked_positions"][0]
+    complete = grids.complete_sequence(pz["sequence"], pz["answer_grids"])
+    display, answers = grids.apply_mask(complete, pz["masked_positions"])
+    variants = [v for v in pz.get("narrative_variants", []) if v.get("enabled", True) and v["variant"] != "story_original"]
+    prov = {"source": "nhm", "proto_puzzle_id": pz["puzzle_id"], "proto_run_id": row["run_id"],
+            "grammar": m.get("grammar"), "story_type": m.get("story_type"), "story_features": m.get("story_features"),
+            "convention": m.get("convention"), "symmetry": m.get("symmetry"), "m": m.get("m"),
+            "generator_version": m.get("generator_version"), "mask_depth": m.get("mask_analysis", {}).get("depth"),
+            "alternatives": m.get("mask_analysis", {}).get("alternatives"), "review": {"verdict": row["verdict"], "notes": row["notes"]},
+            "promoted_by": user["username"], "promoted_at": datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")}
+    tags = [t for t in m.get("tags", []) if not t.startswith(("phi:", "sym:"))]
+    tags += ["source:nhm", f"nhm-grammar:{m.get('grammar')}", f"nhm-type:{m.get('story_type')}",
+             f"nhm-phi:{m.get('convention', {}).get('name')}", f"nhm-sym:{m.get('symmetry', {}).get('name')}"]
+    if "Twist" in (m.get("story_features") or []):
+        tags.append("arc:subversion")
+    tags = sorted(set(tags))
+    data = {"puzzle_id": target_id, "title": pz["title"], "narrative": pz["narrative"], "sequence": display,
+            "masked_positions": pz["masked_positions"], "answer_grids": answers,
+            "variants": [{"variant": v["variant"], "narrative": v["narrative"], "source_domain": "nhm"} for v in variants],
+            "metadata": {**{k2: v2 for k2, v2 in m.items() if k2 not in ("alternatives", "all_mask_analyses")},
+                         "creator": "nhm", "tags": tags, "provenance": prov}}
+    db.upsert_puzzle(nconn, target_id, pz["title"], pz["narrative"], json.dumps(display),
+                     json.dumps(pz["masked_positions"]), json.dumps(answers), creator="nhm", tags=",".join(tags))
+    db.set_puzzle_status(nconn, target_id, status)
+    db.upsert_variant(nconn, target_id, "original", pz["narrative"], generator="nhm-sim")
+    var_ids = {}
+    for v in variants:
+        var_ids[v["variant"]] = db.upsert_variant(nconn, target_id, v["variant"], v["narrative"], source_domain="nhm", generator="nhm-sim")
+    orig_mask_id = db.upsert_mask_variant(nconn, target_id, "original", pz["masked_positions"])
+    for v in db.get_variants(nconn, target_id):
+        db.set_variant_pair(nconn, target_id, v["variant_id"], orig_mask_id, enabled=1)
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    (DATA_DIR / f"{target_id}.json").write_text(json.dumps(data, indent=2))
+    db.log_activity(nconn, user["user_id"], "promote_from_proto", "puzzle", target_id,
+                    f"Promoted prototype {pz['puzzle_id']} (run {row['run_id']}, {m.get('grammar')}/{m.get('story_type')}, "
+                    f"phi {m.get('convention', {}).get('name')}, sym {m.get('symmetry', {}).get('name')}) as {status}",
+                    snapshot_json=json.dumps({"prototype": pz, "review": {"verdict": row["verdict"], "notes": row["notes"]}}))
+    n_trials, models = 0, set()
+    if carry_trials:
+        view = {"puzzle_id": target_id, "narrative": pz["narrative"], "sequence": pz["sequence"],
+                "masked_positions": pz["masked_positions"], "answer_grids": pz["answer_grids"]}
+        for t in proto_db.get_trials(pconn, pz["puzzle_id"]):
+            if t["status"] != "done":
+                continue
+            if t["condition"] == "grids_only":
+                vid, messages = None, prompts.build_grids_only(view)
+            else:
+                surf = t["surface"]
+                if surf != "story" and surf not in var_ids:
+                    continue                                   # a disabled surface's trials stay behind
+                vid = None if surf == "story" else var_ids[surf]
+                builder = prompts.build_narrative_only if t["condition"] == "narrative_only" else prompts.build_both
+                messages = builder(view, narrative=t["narrative"])
+            tid = db.insert_trial(nconn, target_id, t["model_name"], t["condition"], json.dumps(messages),
+                                  variant_id=vid, repeat_num=1, mask_variant_id=orig_mask_id)
+            db.update_trial_response(nconn, tid, t["raw_response"], t["response_text"], t["latency_ms"], error=t["error"])
+            db.update_trial_evaluation(nconn, tid, t["predicted_grids"], t["reasoning"], t["correct"], t["cell_accuracy"])
+            n_trials += 1
+            models.add(t["model_name"])
+    pz["metadata"]["promoted_to"] = {"puzzle_id": target_id, "status": status, "trials": n_trials,
+                                     "at": prov["promoted_at"], "by": user["username"]}
+    proto_db.update_puzzle_json(pconn, pz["puzzle_id"], pz)
+    return target_id, n_trials, sorted(models)
+
+
+def _default_target_id(pid):
+    return "nhm_" + pid.replace("-", "_")
+
+
+@bp.route("/puzzle/<puzzle_id>/promote", methods=["POST"])
+def promote(puzzle_id):
+    if not _is_staff():
+        flash("Only owners and reviewers can promote a prototype into the benchmark database.", "warning")
+        return redirect(url_for("proto.puzzle", puzzle_id=puzzle_id))
+    f = request.form
+    target_id = (f.get("target_id") or "").strip() or _default_target_id(puzzle_id)
+    status = f.get("status", "draft")
+    if status not in ("draft", "active"):
+        status = "draft"
+    carry = f.get("carry_trials") == "on"
+    pconn, nconn = _conn(), db.init_db()
+    try:
+        row = proto_db.get_puzzle(pconn, puzzle_id)
+        if not row:
+            abort(404)
+        try:
+            tid, n_trials, models = _promote_one(pconn, nconn, row, target_id, status, carry, _staff())
+        except ValueError as e:
+            flash(str(e), "danger")
+            return redirect(url_for("proto.puzzle", puzzle_id=puzzle_id))
+    finally:
+        pconn.close()
+        nconn.close()
+    for mname in models:
+        classify.run_classify_job(mname, puzzle=tid, log_fn=lambda *a: None)
+    flash(f"Promoted as {tid} ({status}); {n_trials} trials carried over"
+          + (f", classified for {', '.join(models)}" if models else "") + ".", "success")
+    return redirect(url_for("proto.puzzle", puzzle_id=puzzle_id))
+
+
+@bp.route("/run/<int:run_id>/promote_kept", methods=["POST"])
+def promote_kept(run_id):
+    if not _is_staff():
+        flash("Only owners and reviewers can promote prototypes.", "warning")
+        return redirect(url_for("proto.run", run_id=run_id))
+    carry = request.form.get("carry_trials") == "on"
+    status = request.form.get("status", "draft")
+    if status not in ("draft", "active"):
+        status = "draft"
+    pconn, nconn = _conn(), db.init_db()
+    done, skipped, models = [], [], set()
+    try:
+        for row in proto_db.get_puzzles(pconn, run_id, verdict="keep"):
+            pz = json.loads(row["puzzle_json"])
+            if pz["metadata"].get("promoted_to"):
+                skipped.append(pz["puzzle_id"])
+                continue
+            try:
+                tid, n, ms = _promote_one(pconn, nconn, row, _default_target_id(pz["puzzle_id"]), status, carry, _staff())
+                done.append((tid, n))
+                models |= set(ms)
+            except ValueError as e:
+                skipped.append(f"{pz['puzzle_id']} ({e})")
+    finally:
+        pconn.close()
+        nconn.close()
+    for tid, n in done:
+        if n:
+            for mname in models:
+                classify.run_classify_job(mname, puzzle=tid, log_fn=lambda *a: None)
+    flash(f"Promoted {len(done)} kept puzzles as {status}" + (f"; skipped {len(skipped)}: {', '.join(skipped)[:300]}" if skipped else "") + ".", "success")
+    return redirect(url_for("proto.run", run_id=run_id))

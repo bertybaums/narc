@@ -3,6 +3,7 @@
     <div class="card-body">
         <div class="d-flex align-items-baseline flex-wrap gap-2">
             <h5 class="mb-0 me-auto"><a href="{{ url_for('proto.puzzle', puzzle_id=item.id) }}">{{ item.id }}</a> — {{ item.title }}</h5>
+            {% if item.promoted_to %}<a class="badge bg-primary text-decoration-none" href="/solve/{{ item.promoted_to.puzzle_id }}">promoted → {{ item.promoted_to.puzzle_id }}</a>{% endif %}
             <span class="badge verdict-badge {{ 'bg-success' if item.verdict == 'keep' else ('bg-warning text-dark' if item.verdict == 'fix' else ('bg-danger' if item.verdict == 'drop' else 'bg-secondary')) }}">{{ item.verdict or 'unreviewed' }}</span>
             <span class="badge bg-secondary">{{ item.mask.depth }} mask k={{ item.k }}/{{ item.n - 1 }}</span>
             <span class="badge bg-secondary">{{ item.mask.alternatives }} alternatives</span>

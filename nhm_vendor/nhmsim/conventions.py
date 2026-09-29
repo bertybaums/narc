@@ -35,7 +35,7 @@ from __future__ import annotations
 from dataclasses import dataclass, replace
 from typing import Dict, List, Optional, Set, Tuple
 
-from .state import (BROKEN_COLOR, COLOR_NAMES, GROUND_COLOR, H, MOODS, Char, Event, Obj, Scene)
+from .state import (BROKEN_COLOR, COLOR_NAMES, GROUND_COLOR, H, MOODS, OBJ_SIZE, Char, Event, Obj, Scene)
 
 STAND_ROW = 5
 ELEVATED_ROW = 2
@@ -214,7 +214,7 @@ class Convention(BaseConvention):
                     g[r][x] = MARKER_COLOR[c.mood]
         for o in scene.present_objs():
             col = BROKEN_COLOR if o.state == "broken" else o.color
-            cells = 2 if o.state == "big" else 1
+            cells = OBJ_SIZE.get(o.state, 1)
             holder = scene.chars.get(o.holder) if o.holder else None
             if holder is not None and holder.present:
                 if self.held == "right":
@@ -349,7 +349,7 @@ class Convention(BaseConvention):
             "right": f"Held, it sits just {w['right']} of its holder at hand height; on the ground, it sits at the {w['bottom']} of the holder's area.",
             "above": f"Held, it sits {w['on top of']} its holder's head; on the ground, it sits at the {w['bottom']} of the holder's area.",
         }[self.held])
-        s.append("A big object is two cells tall. A broken object is grey. An object that is gone is not drawn.")
+        s.append("A big object is two cells tall and a huge one three. A broken object is grey. An object that is gone is not drawn.")
         if self.want == "bubble":
             row = f"second row from the {w['top']}" if self._top_row_used() else f"{w['top']} row"
             s.append(f"When a character wants an object, that object's colour appears in the {row} {w['above']} the character.")
@@ -431,8 +431,8 @@ class Convention(BaseConvention):
                 return _sent(f"{cell(ev.theme)} disappeared")
             if o and o.state == "broken":
                 return _sent(f"{cell(ev.theme)} turned grey")
-            if o and o.state == "big":
-                return _sent(f"{cell(ev.theme)} became two cells tall")
+            if o and o.state in ("big", "huge"):
+                return _sent(f"{cell(ev.theme)} became {OBJ_SIZE[o.state]} cells tall")
             return _sent(f"{cell(ev.theme)} turned {cname(o.color)} and one cell tall" if o else "a cell changed")
         if p == "WANT":
             return _sent(f"{_a(cname(nxt.objs[ev.theme].color))} cell appeared in the {w['top']} row {w['above']} {bar(ev.agents[0])}")
@@ -463,7 +463,7 @@ class Convention(BaseConvention):
             parts.append(f"{_a(cname(c.color))} bar {m}" + (f" near the {w['top']}" if c.elevated else ""))
         for o in scene.present_objs():
             col = "grey" if o.state == "broken" else cname(o.color)
-            size = "two cells tall" if o.state == "big" else "one cell"
+            size = {"big": "two cells tall", "huge": "three cells tall"}.get(o.state, "one cell")
             if o.holder and o.holder in scene.chars and scene.chars[o.holder].present:
                 where = f"{'just ' + w['right'] + ' of' if self.held == 'right' else w['on top of']} the {cname(scene.chars[o.holder].color)} bar"
             else:
@@ -532,7 +532,7 @@ class TableConvention(BaseConvention):
             else:
                 if e.state == "broken":
                     g[r][1] = BROKEN_COLOR
-                elif e.state == "big":
+                elif e.state in ("big", "huge"):
                     g[r][1] = e.color
                 if e.holder and e.holder in scene.chars and scene.chars[e.holder].present:
                     g[r][3] = scene.chars[e.holder].color

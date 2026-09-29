@@ -34,6 +34,8 @@ BROKEN_COLOR = 5
 GROUND_COLOR = {"green": 3, "water": 8, "indoor": 5, "town": 9, "sky": 4, "none": 0}
 MOODS = ("sad", "neutral", "happy")
 OBJ_STATES = ("ok", "big", "broken", "hidden")
+EXTRA_STATES = ("huge",)              # only in the neighbourhood of grammars that use them
+OBJ_SIZE = {"ok": 1, "big": 2, "huge": 3, "broken": 1}
 TIMES = ("day", "night")
 
 PRIMITIVES = ("APPEAR", "VANISH", "MOVE", "ASCEND", "DESCEND", "ACQUIRE", "DROP", "LOSE", "TRANSFER",
@@ -83,7 +85,7 @@ class Obj:
     present: bool = False
     holder: Optional[str] = None
     ground_slot: Optional[int] = None
-    state: str = "ok"          # ok | big | broken | hidden
+    state: str = "ok"          # ok | big | huge | broken | hidden
     seen: bool = False         # has ever been drawn (registered-but-unseen objects are not in the neighbourhood)
 
 
@@ -413,6 +415,8 @@ def _apply(scene: Scene, ev: Event) -> Optional[Scene]:
         if not o:
             return None
         st = ev.state or "broken"
+        if st not in OBJ_STATES + EXTRA_STATES + ("open", "recolor", "closed", "small"):
+            return None
         if st in ("open", "recolor", "closed"):
             st = {"open": "big", "recolor": "ok", "closed": "ok"}[st]
         if st == "small":

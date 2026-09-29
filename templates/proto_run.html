@@ -6,6 +6,13 @@
     <h2 class="me-auto mb-0"><a href="{{ url_for('proto.index') }}" class="text-decoration-none">Prototype</a> › run {{ run.run_id }}</h2>
     <a class="btn btn-sm btn-outline-info" href="{{ url_for('proto.run_export', run_id=run.run_id) }}">Export all (JSON)</a>
     <a class="btn btn-sm btn-outline-success" href="{{ url_for('proto.run_export', run_id=run.run_id, verdict='keep') }}">Export kept</a>
+    {% if is_staff %}
+    <form method="POST" action="{{ url_for('proto.promote_kept', run_id=run.run_id) }}" class="d-inline-flex align-items-center gap-1" onsubmit="return confirm('Promote every puzzle marked keep (not yet promoted) into narc.db?');">
+        <select name="status" class="form-select form-select-sm" style="width:auto"><option value="draft">draft</option><option value="active">active</option></select>
+        <label class="small mb-0"><input type="checkbox" name="carry_trials" checked> carry trials</label>
+        <button class="btn btn-sm btn-success">Promote kept</button>
+    </form>
+    {% endif %}
 </div>
 <div class="small text-muted mb-2">{{ run.name }} · by {{ run.created_by }} · {{ run.created_at }} · config <code>{{ run.config }}</code></div>
 <div class="small text-muted mb-3">summary: {{ run.summary.puzzles }} puzzles from {{ run.summary.samples_tried }} samples · depth {{ run.summary.depth }} · masked events {{ run.summary.masked_event }} · rejections {{ run.summary.reasons }}</div>

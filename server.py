@@ -1189,7 +1189,7 @@ def api_toggle_matrix(puzzle_id):
 def api_update_creator(puzzle_id):
     data = request.get_json()
     creator = data.get("creator") if data else None
-    if creator not in ("human", "claude", "colab"):
+    if creator not in ("human", "claude", "colab", "nhm"):
         return jsonify({"error": "Invalid creator value"}), 400
     conn = get_conn()
     row = db.get_puzzle(conn, puzzle_id)

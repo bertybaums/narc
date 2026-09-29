@@ -29,7 +29,7 @@ from . import symmetries as S
 from .conventions import BaseConvention
 from .conventions import get as get_convention
 from .grammar import Sample
-from .state import GROUND_COLOR, MOODS, OBJ_STATES, TIMES, Event, Scene, apply
+from .state import EXTRA_STATES, GROUND_COLOR, MOODS, OBJ_STATES, TIMES, Event, Scene, apply
 
 GENERATOR_VERSION = "0.1.0"
 MAX_GRIDS = 8
@@ -57,7 +57,13 @@ def simulate(events: List[Event], conv: BaseConvention, initial: Optional[Scene]
     i = 0
     if initial is None:
         # leading APPEARs without a location define the setup silently ("once upon a time there was")
-        while i < len(events) and events[i].prim == "APPEAR" and not events[i].location:
+        # ... plus one state-setting TRANSFORM per object introduced there ("the fire was blazing")
+        state_set = set()
+        while i < len(events) and ((events[i].prim == "APPEAR" and not events[i].location)
+                                   or (i > 0 and events[i].prim == "TRANSFORM" and events[i].theme in cur.objs
+                                       and cur.objs[events[i].theme].present and events[i].theme not in state_set)):
+            if events[i].prim == "TRANSFORM":
+                state_set.add(events[i].theme)
             new = apply(cur, events[i])
             if new is not None:
                 cur = new
@@ -164,11 +170,12 @@ ALL_PRIMS = frozenset(("APPEAR", "VANISH", "MOVE", "ASCEND", "DESCEND", "ACQUIRE
                        "EMOTE", "TRANSFORM", "WANT", "UNWANT", "WITHDRAW", "SPLIT", "TIME"))
 
 
-def candidate_events(scene: Scene, known_locs: List[str], conv: BaseConvention, prims=None) -> List[Event]:
+def candidate_events(scene: Scene, known_locs: List[str], conv: BaseConvention, prims=None, states=None) -> List[Event]:
     """Every single-primitive event applicable in ``scene``: the grammar's one-step neighbourhood.
     ``prims`` restricts the neighbourhood to the grammar's own primitives (an alternative must be
     something the grammar could have generated)."""
     prims = frozenset(prims) if prims else ALL_PRIMS
+    obj_states = tuple(OBJ_STATES) + tuple(st for st in EXTRA_STATES if states and st in states)
     C: List[Event] = []
     present = scene.present_chars()
     absent = [c for c in scene.chars.values() if not c.present]
@@ -215,7 +222,7 @@ def candidate_events(scene: Scene, known_locs: List[str], conv: BaseConvention, 
                     mk("MOVE", [c.name], recipient=d.name)
                     mk("WITHDRAW", [c.name], recipient=d.name)
     for o in objs:
-        for st in OBJ_STATES:
+        for st in obj_states:
             mk("TRANSFORM", [], theme=o.name, state=st)
     if conv.renders_time():
         for t in TIMES:
@@ -224,9 +231,9 @@ def candidate_events(scene: Scene, known_locs: List[str], conv: BaseConvention, 
     return C
 
 
-def _successors(scene: Scene, known_locs, conv, width, prims=None) -> Dict[str, Tuple[Grid, Scene, Event]]:
+def _successors(scene: Scene, known_locs, conv, width, prims=None, states=None) -> Dict[str, Tuple[Grid, Scene, Event]]:
     out: Dict[str, Tuple[Grid, Scene, Event]] = {}
-    for c in candidate_events(scene, known_locs, conv, prims):
+    for c in candidate_events(scene, known_locs, conv, prims, states):
         s2 = apply(scene, c)
         if s2 is None:
             continue
@@ -238,17 +245,17 @@ def _successors(scene: Scene, known_locs, conv, width, prims=None) -> Dict[str, 
 
 
 def analyse_mask(scenes: List[Scene], steps: List[Optional[Step]], grids: List[Grid], k: int,
-                 conv: BaseConvention, width: int, known_locs: List[str], store: int = 8, prims=None) -> dict:
+                 conv: BaseConvention, width: int, known_locs: List[str], store: int = 8, prims=None, states=None) -> dict:
     """Alternatives count and self-teaching verdict for masking frame ``k`` (0 = the setup)."""
     answer = grids[k]
     alts: Dict[str, Tuple[Scene, str]] = {}
     if k == 0:
         nxt = scenes[1]
-        for key, (g0, s0, c) in _successors(nxt, known_locs, conv, width, prims).items():
+        for key, (g0, s0, c) in _successors(nxt, known_locs, conv, width, prims, states).items():
             if g0 == answer or g0 == grids[1]:
                 continue
             # a predecessor must reach frame 1 in one primitive
-            if any(g == grids[1] for g, _, _ in _successors(s0, known_locs, conv, width, prims).values()):
+            if any(g == grids[1] for g, _, _ in _successors(s0, known_locs, conv, width, prims, states).values()):
                 alts[key] = (s0, f"before: {c.label()}")
         vis: Set = set()
         for i, s in enumerate(scenes):
@@ -263,13 +270,13 @@ def analyse_mask(scenes: List[Scene], steps: List[Optional[Step]], grids: List[G
     else:
         prev = scenes[k - 1]
         nxt_grid = grids[k + 1] if k + 1 < len(grids) else None
-        for key, (g2, s2, c) in _successors(prev, known_locs, conv, width, prims).items():
+        for key, (g2, s2, c) in _successors(prev, known_locs, conv, width, prims, states).items():
             if g2 == answer or g2 == grids[k - 1]:
                 continue
             if nxt_grid is not None:
                 if g2 == nxt_grid:
                     continue
-                if not any(g == nxt_grid for g, _, _ in _successors(s2, known_locs, conv, width, prims).values()):
+                if not any(g == nxt_grid for g, _, _ in _successors(s2, known_locs, conv, width, prims, states).values()):
                     continue
             alts[key] = (s2, c.label())
         vis = set()
@@ -310,7 +317,7 @@ def build_puzzles(sample: Sample, conv: BaseConvention, sym_spec: str = "identit
 def meta_from_sample(sample: Sample) -> dict:
     return {"grammar": sample.grammar, "story_type": sample.story_type, "features": sample.features,
             "roles": sample.roles, "m": sample.m, "tree": sample.tree, "texts": sample.texts,
-            "primitives": sample.primitives}
+            "primitives": sample.primitives, "states": sample.states}
 
 
 def _build(events: List[Event], initial: Optional[Scene], conv: BaseConvention, sym: S.Symmetry, mask: str,
@@ -338,7 +345,8 @@ def _build(events: List[Event], initial: Optional[Scene], conv: BaseConvention, 
     if steps[0] is not None:
         positions = [0] + positions
     prims = meta.get('primitives') or None
-    analyses = [analyse_mask(scenes, steps, grids, k, conv, width, known_locs, store=store_alts, prims=prims) for k in positions]
+    states = meta.get('states') or None
+    analyses = [analyse_mask(scenes, steps, grids, k, conv, width, known_locs, store=store_alts, prims=prims, states=states) for k in positions]
     if not analyses:
         return [], "no_atomic_mask_position"
     valid = [a for a in analyses if (a["self_taught"] or not require_self_taught) and a["alternatives"] >= min_alternatives]
@@ -430,7 +438,7 @@ def _puzzle(pid, events, setup, conv, sym, scenes, steps, spanned, grids, frame_
             "creator": "nhm-sim", "generator_version": GENERATOR_VERSION, "created_at": date.today().isoformat(),
             "grammar": meta.get("grammar"), "story_type": meta.get("story_type"), "story_features": meta.get("features", []),
             "roles": meta.get("roles", {}), "m": meta.get("m"), "tree": meta.get("tree", []),
-            "primitives": sorted(meta.get("primitives") or []),
+            "primitives": sorted(meta.get("primitives") or []), "states": sorted(meta.get("states") or []),
             "convention": conv.spec(), "symmetry": sym.spec(), "symmetry_text": S.describe(sym),
             "initial_scene": setup.to_dict(), "events": [_ev_dict(e) for e in events],
             "n_grids": len(grids), "n_states_total": n_states_total, "frame_indices": frame_idx,
@@ -468,7 +476,7 @@ def rebuild(puzzle: dict, conv: Optional[BaseConvention] = None, sym: Optional[S
     if mask is None:
         mask = "first" if k == 0 else ("last" if k == m["n_grids"] - 1 else "middle")
     meta = {"grammar": m.get("grammar"), "story_type": m.get("story_type"), "features": m.get("story_features", []),
-            "roles": m.get("roles", {}), "m": m.get("m"), "tree": m.get("tree", []), "primitives": m.get("primitives") or None,
+            "roles": m.get("roles", {}), "m": m.get("m"), "tree": m.get("tree", []), "primitives": m.get("primitives") or None, "states": m.get("states") or None,
             "texts": {"story": puzzle["narrative"], **{v["variant"]: v["narrative"] for v in puzzle.get("narrative_variants", []) if v["variant"] != "physical"}}}
     pzs, why = _build(events, initial, conv, sym, mask, min_alternatives, require_self_taught, 3, store_alts,
                       puzzle["puzzle_id"], meta)

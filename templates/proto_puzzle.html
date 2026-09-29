@@ -13,6 +13,34 @@
 {% set full = true %}
 {% include "_proto_card.html" %}
 
+{% if item.promoted_to %}
+<div class="alert alert-success py-2">Promoted to <a href="/solve/{{ item.promoted_to.puzzle_id }}">{{ item.promoted_to.puzzle_id }}</a>
+    ({{ item.promoted_to.status }}, {{ item.promoted_to.trials }} trials carried over, by {{ item.promoted_to.by }} at {{ item.promoted_to.at }} UTC).
+    The provenance (grammar, story type, code, symmetry, seed, the full prototype JSON) is in the activity log and in <code>data/puzzles/{{ item.promoted_to.puzzle_id }}.json</code>.</div>
+{% elif is_staff %}
+<div class="card mb-3">
+    <div class="card-header">Promote into the benchmark database (narc.db)</div>
+    <div class="card-body">
+        <form method="POST" action="{{ url_for('proto.promote', puzzle_id=item.id) }}" class="row g-2 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label small mb-0">puzzle id in narc.db</label>
+                <input name="target_id" class="form-control form-control-sm" value="{{ default_target }}">
+            </div>
+            <div class="col-md-2">
+                <label class="form-label small mb-0">status</label>
+                <select name="status" class="form-select form-select-sm"><option value="draft">draft</option><option value="active">active</option></select>
+            </div>
+            <div class="col-md-3 form-check ms-2 mb-1">
+                <input class="form-check-input" type="checkbox" name="carry_trials" id="ct" checked>
+                <label class="form-check-label small" for="ct">carry finished trials over (then reclassify)</label>
+            </div>
+            <div class="col-md-2"><button class="btn btn-sm btn-success w-100" onclick="return confirm('Write this prototype into narc.db as {{ default_target }}?');">Promote</button></div>
+            <div class="col-12 small text-muted">Saves the puzzle the way the Create page does (creator <code>nhm</code>, tags <code>source:nhm</code>, <code>nhm-grammar:…</code>, <code>nhm-type:…</code>, <code>nhm-phi:…</code>, <code>nhm-sym:…</code>), the story as the narrative, every ticked text as a narrative variant, the original mask variant and its pairs, an activity-log entry holding the full prototype JSON, and the export under <code>data/puzzles/</code>. Carried trials are keyed to the original mask and to each variant, so Inspect shows them after reclassification.</div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
 <div class="card mb-3">
     <div class="card-header">Edit the event chain and rebuild</div>
     <div class="card-body">

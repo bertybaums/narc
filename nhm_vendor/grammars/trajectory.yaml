@@ -1,0 +1,192 @@
+# Trajectory puzzles: the visible frames establish a trend that invites one continuation; the
+# text says what happened instead, and says WHY, using something the grid cannot denote (a
+# preference, a cause, a material, attention). Bert, September 29, 2026: "the sequence of grids
+# suggests one answer, but the text suggests another, and the grids + text combo make it clear
+# why the grids-only answer would be mistaken because of a certain kind of inconsistency in the
+# grids that is resolved by the text". Hand-made ancestors: the site's "chat" (one bar changes
+# three times, the other holds still, then the still one moves) and "The Ember".
+#
+# Every trend comes in a family: a TWIST type where the trend breaks, and one or two TWIN
+# types where the trend holds (or breaks the other way), so the grids alone cannot tell them
+# apart and the twist is never itself predictable. Four trends:
+#
+#   contagion   fear spreads P -> F -> (G?)      tell: G is UP A TREE (visible, unexplained until the text)
+#   turn-taking one character changes, the other holds  no tell (attention is not drawable)
+#   spree       cups break one by one            tell: the last cup is BIG (visible: it is tin)
+#   gathering   objects appear one by one        no tell (the gust is not drawable)
+#
+# The tell is a visible inconsistency with the trend reading: one entity differs from the others
+# in a way the trend does not explain. Whether it matters (the climber is spared; the tin cup
+# rolls instead of breaking) is fixed only by the text. The twin types with the same tell and no
+# twist keep the tell from becoming a rule.
+name: trajectory
+description: trend-then-break stories (contagion, turn-taking, breaking spree, gathering), each with twins where the trend holds; twist types carry the Twist feature
+
+lexicon:
+  names_m: [Tim, Tom, Max, Ben, Sam, Bob, Jack, Leo, Joe, Dan]
+  names_f: [Lily, Sue, Mia, Lucy, Amy, Anna, Sara, Jane, Lila, Zoe]
+  animals: [dog, cat, bird, bunny, frog, duck, squirrel, bear]
+  objects: [cup, plate, jar, bowl, mug, flower, shell, feather, pebble, leaf]
+  threats: [spider, wasp, snake, rat, beetle]
+  embers: [fire, campfire, bonfire]
+  sticks: [bundle of sticks, armful of wood, pile of twigs]
+  locations:
+    green: [park, garden, yard, field]
+    water: [pond, beach, lake]
+    indoor: [house, room, kitchen, school]
+    town: [town, street, village]
+
+roles: {P: person, F: person, G: person, O: object, O2: object, O3: object, O4: object, T: threats, E: embers, S: sticks, L1: location}
+
+story_types:
+  # contagion: fear spreads from P to F; does it reach G?
+  fright_spares_climber:  {episodes: [SETUP3, PLAY, CLIMB, THREAT, WAVE_P, WAVE_F, SPARED], features: [Twist, Conflict]}
+  fright_reaches_climber: {episodes: [SETUP3, PLAY, CLIMB, THREAT, WAVE_P, WAVE_F, REACHED], features: [Conflict]}
+  fright_spreads:         {episodes: [SETUP3, PLAY, THREAT, WAVE_P, WAVE_F, WAVE_G], features: [Conflict]}
+  spider_lover:           {episodes: [SETUP3, PLAY, TOY, THREAT, WAVE_P, WAVE_F, LOVES], features: [Twist]}
+  # turn-taking: P's mood moves three times while F holds still; then?
+  chat_joins:             {episodes: [SETUP2, TALK1, TALK2, TALK3, JOIN], features: [Twist, Dialogue]}
+  chat_solo:              {episodes: [SETUP2, TALK1, TALK2, TALK3, DONE], features: [Dialogue]}
+  chat_bored:             {episodes: [SETUP2, TALK1, TALK2, TALK3, BORED], features: [Dialogue, BadEnding]}
+  # spree: cups break one after another; the last one is big (tin)
+  spree_tin_rolls:        {episodes: [SETUP_CUPS, WHISTLE, TIN, KNOCK1, KNOCK2, ROLLS], features: [Twist]}
+  spree_tin_cracks:       {episodes: [SETUP_CUPS, WHISTLE, TIN, KNOCK1, KNOCK2, CRACKS], features: [BadEnding]}
+  spree_plain:            {episodes: [SETUP_CUPS, WHISTLE, KNOCK1, KNOCK2, KNOCK3], features: [BadEnding]}
+  # gathering: things appear one by one; then?
+  gather_then_gust:       {episodes: [SETUP1, FIND1, FIND2, FIND3, GUST], features: [Twist]}
+  gather_more:            {episodes: [SETUP1, FIND1, FIND2, FIND3, FIND4], features: []}
+  # ember: the fire shrinks frame by frame; P holds a bundle of sticks (the tell)
+  ember_flares:           {episodes: [SETUP_FIRE, STICKS, DIM1, DIM2, FLARE], features: [Twist]}
+  ember_saved:            {episodes: [SETUP_FIRE, STICKS, DIM1, DIM2, OUT], features: [BadEnding]}
+  ember_dies:             {episodes: [SETUP_FIRE, DIM1, DIM2, OUT_PLAIN], features: [BadEnding]}
+
+episodes:
+  SETUP3:
+    - [[APPEAR, P, "@three"], [APPEAR, F, "@silent"], [APPEAR, G, "@silent"]]
+  SETUP2:
+    - [[APPEAR, P, "@two"], [APPEAR, F, "@silent"]]
+  SETUP1:
+    - [[APPEAR, P, "@alone"], [MOVE.loc, P, L1, "@walk"]]
+  SETUP_CUPS:
+    - [[APPEAR, P, "@cups"], [APPEAR.obj, O, "@silent"], [APPEAR.obj, O2, "@silent"], [APPEAR.obj, O3, "@silent"]]
+  PLAY:
+    - [[EMOTE, P, happy, "@play"]]
+    - [[EMOTE, P, happy, "@play"], [EMOTE, F, happy, "@play2"]]
+  TOY:
+    - [[ACQUIRE, F, O, "@toy"]]
+    - [[ACQUIRE, P, O, "@toy"]]
+  CLIMB:
+    - [[ASCEND, G, "@lookout"]]
+  THREAT:
+    - [[APPEAR.obj, T, "@threat"]]
+  WAVE_P:
+    - [[EMOTE, P, sad, "@scared"]]
+  WAVE_F:
+    - [[EMOTE, F, sad, "@scared2"]]
+  WAVE_G:
+    - [[EMOTE, G, sad, "@scared3"]]
+  SPARED:
+    - [[EMOTE, G, happy, "@spared"]]
+  REACHED:
+    - [[EMOTE, G, sad, "@reached"]]
+  LOVES:
+    - [[ACQUIRE, G, T, "@loves"]]
+    - [[EMOTE, G, happy, "@loves2"]]
+  TALK1:
+    - [[EMOTE, P, happy, "@joke"]]
+  TALK2:
+    - [[EMOTE, P, sad, "@sadpart"]]
+  TALK3:
+    - [[EMOTE, P, happy, "@ending"]]
+  JOIN:
+    - [[EMOTE, F, happy, "@laughs"]]
+  DONE:
+    - [[EMOTE, P, neutral, "@done"]]
+  BORED:
+    - [[EMOTE, F, sad, "@bored"]]
+  WHISTLE:
+    - [[EMOTE, P, happy, "@whistle"]]
+  TIN:
+    - [[TRANSFORM, O3, big, "@tin"]]
+  KNOCK1:
+    - [[TRANSFORM, O, broken, "@knock"]]
+  KNOCK2:
+    - [[TRANSFORM, O2, broken, "@knock2"]]
+  KNOCK3:
+    - [[TRANSFORM, O3, broken, "@knock3"]]
+  CRACKS:
+    - [[TRANSFORM, O3, broken, "@cracks"]]
+  ROLLS:
+    - [[LOSE, P, O3, "@rolls"]]
+  FIND1:
+    - [[APPEAR.obj, O, "@find"]]
+  FIND2:
+    - [[APPEAR.obj, O2, "@find2"]]
+  FIND3:
+    - [[APPEAR.obj, O3, "@find3"]]
+  FIND4:
+    - [[APPEAR.obj, O4, "@find4"]]
+  GUST:
+    - [[LOSE, P, O3, "@gust"]]
+  SETUP_FIRE:
+    - [[APPEAR, P, "@fire"], [APPEAR.obj, E, "@silent"], [TRANSFORM, E, huge, "@blaze"]]
+  STICKS:
+    - [[ACQUIRE, P, S, "@sticks"]]
+  DIM1:
+    - [[TRANSFORM, E, big, "@dim"]]
+  DIM2:
+    - [[TRANSFORM, E, ok, "@dimmer"]]
+  FLARE:
+    - [[TRANSFORM, E, huge, "@flare"]]
+  OUT:
+    - [[TRANSFORM, E, hidden, "@out"]]
+  OUT_PLAIN:
+    - [[TRANSFORM, E, hidden, "@out_plain"]]
+
+clauses:
+  "APPEAR:P@three": ["{P}, {F} and {G} were out in the {L1}.", "One day {P}, {F} and {G} went to the {L1} together.", "{P} was at the {L1} with {F} and {G}."]
+  "APPEAR:P@two": ["{P} and {F} sat together on the step.", "{P} and {F} were sitting side by side.", "One evening {P} and {F} sat down together."]
+  "APPEAR:P@alone": ["{P} went out alone one morning.", "One morning {P} set off by {P}self.", "{P} had the whole morning to {P}self."]
+  "APPEAR:P@cups": ["{P} was clearing the table. Three cups stood in a row.", "There were three cups on the table, and {P} was tidying up.", "{P} had three cups to put away."]
+  "APPEAR:F@silent": [""]
+  "APPEAR:G@silent": [""]
+  "APPEAR.obj@silent": [""]
+  "MOVE.loc@walk": ["{X} walked down to the {L}.", "{X} wandered to the {L}.", "{X} went to the {L} to look around."]
+  "EMOTE:happy@play": ["{X} was laughing at a game.", "{X} was having a wonderful time.", "{X} giggled at something silly."]
+  "EMOTE:happy@play2": ["{X} laughed too.", "{X} was just as happy.", "{X} joined in the fun."]
+  "ACQUIRE@toy": ["{X} was holding a {O}.", "{X} had brought a {O} along.", "{X} picked up a {O} to play with."]
+  "ASCEND@lookout": ["{X} climbed the big tree to look for birds.", "{X} went up the tree to see farther.", "{X} scrambled up into the branches."]
+  "APPEAR.obj@threat": ["Suddenly a big {T} crawled out of the grass.", "Then a {T} came out right in front of them.", "A {T} appeared on the ground."]
+  "EMOTE:sad@scared": ["{X} was scared and went very quiet.", "{X} froze with fright.", "{X} did not like the {T} at all."]
+  "EMOTE:sad@scared2": ["Then {X} got scared too.", "{X} was frightened as well.", "The fright spread to {X}."]
+  "EMOTE:sad@scared3": ["And {X} was scared like the others.", "{X} was frightened too.", "It got to {X} as well."]
+  "EMOTE:happy@spared": ["Up in the tree, {X} was safe, and {X} laughed at the whole thing.", "The {T} could not reach {X} up there. {X} thought it was funny.", "{X} was high above it all and just grinned."]
+  "EMOTE:sad@reached": ["The {T} started up the tree, and {X} was scared too.", "Even up in the tree {X} was afraid it would climb.", "{X} was frightened the {T} would come up after {X}."]
+  "ACQUIRE@loves": ["But {X} loved {T}s. {X} picked it right up.", "{X} was not scared at all. {X} liked {T}s, and picked it up gently.", "{X} thought the {T} was wonderful and scooped it up."]
+  "EMOTE:happy@loves2": ["But {X} loved {T}s and was delighted.", "{X} was not scared. {X} liked {T}s.", "{X} thought the {T} was the best thing all day."]
+  "EMOTE:happy@joke": ["{X} started a funny story and laughed at the first part.", "{X} told a joke and giggled.", "{X} began a story, laughing already."]
+  "EMOTE:sad@sadpart": ["Then {X} got to the sad part and looked down.", "The story took a sad turn, and {X} was quiet.", "{X} told the sad middle of the story."]
+  "EMOTE:happy@ending": ["Then came the happy ending, and {X} beamed.", "At the end {X} laughed again.", "{X} finished with the funny ending."]
+  "EMOTE:happy@laughs": ["{X} had been listening the whole time. Now {X} laughed too.", "{X} got the joke at last and laughed out loud.", "{X} finally laughed along."]
+  "EMOTE:neutral@done": ["{P} was done and sat quietly.", "The story was over. {P} settled down.", "{P} finished and went quiet."]
+  "EMOTE:sad@bored": ["{X} did not think it was funny at all, and looked away.", "{X} had not liked the story one bit.", "{X} was bored and unhappy."]
+  "EMOTE:happy@whistle": ["{X} was whistling.", "{X} was in a good mood.", "{X} hummed while working."]
+  "TRANSFORM:big@tin": ["One of the cups was a big tin one.", "The last cup was big and made of tin.", "The biggest cup was tin, not china."]
+  "TRANSFORM:broken@knock": ["{X} knocked the first cup off the table and it broke.", "The first cup slipped from {X}'s hand and smashed.", "{X} bumped the first cup and it shattered."]
+  "TRANSFORM:broken@knock2": ["Then the second cup fell and broke too.", "{X} knocked the second one off as well. It broke.", "The second cup went the same way."]
+  "TRANSFORM:broken@knock3": ["And the third cup broke like the others.", "{X} dropped the last cup too, and it smashed.", "The third one broke as well."]
+  "TRANSFORM:broken@cracks": ["Even the tin cup cracked when it hit the floor.", "The big tin cup broke too, with a clang.", "The tin one dented and split open."]
+  "LOSE@rolls": ["The tin cup fell too, but it did not break. It rolled away under the couch.", "The big cup hit the floor with a clang and rolled out of sight. Tin does not break.", "The tin cup bounced, rolled away, and was gone under the chair. Not a crack."]
+  "APPEAR.obj@find": ["{X} found a {O} and set it down on the path.", "{X} spotted a {O} and laid it on the ground.", "{X} picked out a {O} and put it down to keep."]
+  "APPEAR.obj@find2": ["Then {X} found a {O} and put it next to the first.", "A {O} came next; {X} set it beside the other.", "{X} added a {O} to the row."]
+  "APPEAR.obj@find3": ["Then a {O} joined the row.", "{X} found a {O} too and lined it up.", "A {O} made three."]
+  "APPEAR.obj@find4": ["And then a {O}, making four.", "{X} found a {O} as well and added it.", "A fourth thing, a {O}, went in the row."]
+  "APPEAR:P@fire": ["{P} sat by the {E} as night came on.", "It was late, and {P} was watching the {E}.", "{P} had the {E} going well."]
+  "TRANSFORM:huge@blaze": [""]
+  "ACQUIRE@sticks": ["{X} had a {S} ready beside {X}.", "{X} was holding a {S}.", "{X} had gathered a {S} earlier."]
+  "TRANSFORM:big@dim": ["The {E} burned lower.", "Slowly the {E} died down.", "The flames sank."]
+  "TRANSFORM:ok@dimmer": ["It sank to a small glow.", "Soon only a little of the {E} was left.", "The {E} was down to embers."]
+  "TRANSFORM:huge@flare": ["Then {P} threw the {S} on, and the {E} roared up bigger than before.", "{P} fed it the {S}. The {E} blazed high again.", "With the {S} on it, the {E} leapt back to life."]
+  "TRANSFORM:hidden@out": ["{P} kept the {S} for the morning, and the {E} went out.", "{P} did not add the {S}. The {E} died to nothing.", "{P} saved the {S}; the last glow faded and the {E} was out."]
+  "TRANSFORM:hidden@out_plain": ["Then the {E} went out.", "The last glow faded and the {E} was gone.", "The {E} died to nothing."]
+  "LOSE@gust": ["Then a gust of wind came and blew the last one away.", "A puff of wind lifted the {O} and carried it off.", "The wind took the {O} before {X} could grab it."]

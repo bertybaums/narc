@@ -65,6 +65,17 @@ class Grammar:
     def location_classes(self) -> Dict[str, List[str]]:
         return self.lexicon.get("locations", {})
 
+    def states(self):
+        """Object states the grammar's TRANSFORM events use (extra sizes enter the neighbourhood only here)."""
+        out = set()
+        for alts in self.episodes.values():
+            for seq in alts:
+                for ev in seq:
+                    ev0 = _split_tag(ev)[0]
+                    if ev0[0] == "TRANSFORM":
+                        out.add(ev0[2])
+        return sorted(out)
+
     def primitives(self):
         prims = set()
         for alts in self.episodes.values():
@@ -174,6 +185,7 @@ class Sample:
     texts: Dict[str, str]          # surface -> text; always has "story" and "grammar"
     m: int = 3
     primitives: List[str] = field(default_factory=list)
+    states: List[str] = field(default_factory=list)
 
 
 def _fill_roles(g: Grammar, rng: random.Random) -> Dict[str, str]:
@@ -221,7 +233,7 @@ def _event_core(ev: list, roles: Dict[str, str], si: int):
     if kind == "APPEAR":
         return Event("APPEAR", [ident(ev[1])], sent_idx=si, verb="appear"), {"X": R(ev[1])}
     if kind == "APPEAR.obj":
-        return Event("APPEAR", [], theme=R(ev[1]), sent_idx=si, verb="see"), {"O": R(ev[1])}
+        return Event("APPEAR", [], theme=R(ev[1]), sent_idx=si, verb="see"), {"O": R(ev[1]), "X": R("P")}
     if kind == "VANISH":
         return Event("VANISH", [ident(ev[1])], sent_idx=si, verb="leave"), {"X": R(ev[1])}
     if kind == "MOVE.loc":
@@ -263,6 +275,8 @@ def _event_core(ev: list, roles: Dict[str, str], si: int):
 
 def realise(template: str, roles: Dict[str, str], kw: Dict[str, str]) -> str:
     d = dict(roles)
+    d.setdefault("X", roles.get("P", ""))        # an agentless event's clause may still name the protagonist
+    d.setdefault("L", roles.get("L1", ""))
     d.update(kw)
     return template.format(**d)
 
@@ -305,4 +319,4 @@ def sample(g: Grammar, rng: random.Random, m: int = 3, story_type: Optional[str]
         if e.agents == ["ALL"]:
             e.agents = list(present) or [roles["P"].lower()]
     return Sample(g.name, st, list(spec.get("features", [])), roles, tree, events,
-                  {k: " ".join(v) for k, v in texts.items()}, m=m, primitives=g.primitives())
+                  {k: " ".join(x for x in v if x) for k, v in texts.items()}, m=m, primitives=g.primitives(), states=g.states())
