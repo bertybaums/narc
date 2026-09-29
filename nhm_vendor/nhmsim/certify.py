@@ -399,15 +399,18 @@ def _puzzle(pid, events, setup, conv, sym, scenes, steps, spanned, grids, frame_
         if len(sp) > 1:
             d["spanned_events"] = [{**_ev_dict(e), "label": e.label()} for e in sp]
         chain_meta.append(d)
-    physical = [conv_describe_scene(conv, setup)]
+    def rc(sc):                                   # the physical text describes the rendered grid
+        return S.recolor(sc, sym)
+    physical = [conv_describe_scene(conv, rc(setup), sym)]
     for prev, st in zip(all_scenes, all_steps):
-        physical.append(conv.describe(prev, st.scene, st.event))
+        physical.append(conv.describe(rc(prev), rc(st.scene), st.event, sym=sym))
     texts = meta.get("texts", {})
     protagonist = next((c.name for c in sorted(setup.chars.values(), key=lambda c: c.slot)), "story")
     ev_label = chosen["event"]
+    last = rc(scenes[-1])
     legend = {"ground": {lc: GROUND_COLOR[lc] for lc in known_locs},
-              "chars": {c.name: c.color for c in scenes[-1].chars.values()},
-              "objs": {o.name: o.color for o in scenes[-1].objs.values()}}
+              "chars": {c.name: c.color for c in last.chars.values()},
+              "objs": {o.name: o.color for o in last.objs.values()}}
     variants = [{"variant": "grammar", "narrative": texts.get("grammar", ""), "generator": f"nhm-sim-{GENERATOR_VERSION}"},
                 {"variant": "physical", "narrative": " ".join(physical), "generator": f"nhm-sim-{GENERATOR_VERSION}:{conv.name}"}]
     for sname, t in texts.items():
@@ -437,7 +440,7 @@ def _puzzle(pid, events, setup, conv, sym, scenes, steps, spanned, grids, frame_
             "mask_variants": [a["position"] for a in valid],
             "alternatives": alternatives,
             "legend": legend,
-            "conventions_text": conv.legend(known_locs),
+            "conventions_text": conv.legend(known_locs, sym),
             "review": {"verdict": "", "notes": ""},
             "tags": ["audience:general", f"domain:{meta.get('grammar')}", f"grids:{len(grids)}", "size:uniform", "mask:single",
                      f"depth:{chosen['depth']}", f"event:{ev_label.split('(')[0].lower()}", f"phi:{conv.name}", f"sym:{sym.name}"],
@@ -445,9 +448,9 @@ def _puzzle(pid, events, setup, conv, sym, scenes, steps, spanned, grids, frame_
     }
 
 
-def conv_describe_scene(conv: BaseConvention, scene: Scene) -> str:
+def conv_describe_scene(conv: BaseConvention, scene: Scene, sym=None) -> str:
     fn = getattr(conv, "describe_scene", None)
-    return fn(scene) if fn else ""
+    return fn(scene, sym=sym) if fn else ""
 
 
 # ------------------------------------------------------------------------------------------

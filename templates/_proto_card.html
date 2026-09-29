@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="d-flex align-items-baseline flex-wrap gap-2">
             <h5 class="mb-0 me-auto"><a href="{{ url_for('proto.puzzle', puzzle_id=item.id) }}">{{ item.id }}</a> — {{ item.title }}</h5>
-            {% if item.verdict %}<span class="badge {{ 'bg-success' if item.verdict == 'keep' else ('bg-warning text-dark' if item.verdict == 'fix' else 'bg-danger') }}">{{ item.verdict }}</span>{% endif %}
+            <span class="badge verdict-badge {{ 'bg-success' if item.verdict == 'keep' else ('bg-warning text-dark' if item.verdict == 'fix' else ('bg-danger' if item.verdict == 'drop' else 'bg-secondary')) }}">{{ item.verdict or 'unreviewed' }}</span>
             <span class="badge bg-secondary">{{ item.mask.depth }} mask k={{ item.k }}/{{ item.n - 1 }}</span>
             <span class="badge bg-secondary">{{ item.mask.alternatives }} alternatives</span>
             <span class="badge {{ 'bg-success' if item.mask.self_taught else 'bg-danger' }}">{{ 'self-taught' if item.mask.self_taught else 'untaught: ' ~ item.mask.missing|join(', ') }}</span>
@@ -20,8 +20,6 @@
             {% endfor %}
         </div>
 
-        <div class="p-2 rounded" style="background:#1f2428;white-space:pre-wrap;">{{ item.story }}</div>
-
         <details class="mt-2" {% if full %}open{% endif %}><summary class="small">answer</summary>
             <div class="mt-1 small text-muted">{{ item.answer.svg|safe }}<br>{{ item.answer.label }}</div>
         </details>
@@ -36,11 +34,6 @@
             </ol>
             <div class="small text-muted">tree: {% for n in item.tree %}{{ n.episode }}[{{ n.choice + 1 }}/{{ n.of }}]{% if not loop.last %} → {% endif %}{% endfor %}</div>
         </details>
-        {% for t in item.texts %}{% if t.variant != 'story' %}
-        <details class="mt-1" {% if full %}open{% endif %}><summary class="small">{{ t.variant }} text</summary>
-            <div class="p-2 rounded small" style="background:#1f2428;white-space:pre-wrap;">{{ t.text }}</div>
-        </details>
-        {% endif %}{% endfor %}
         <details class="mt-1"><summary class="small">explicit conventions (the code, stated)</summary>
             <div class="p-2 rounded small" style="background:#1f2428;white-space:pre-wrap;">{{ item.conventions_text }}</div>
         </details>
@@ -58,8 +51,22 @@
                     <input name="notes" class="form-control form-control-sm" value="{{ item.notes }}">
                 </div>
                 <div class="col-12">
-                    <label class="form-label small mb-0">story (edit freely; the grids come from the event chain)</label>
+                    <label class="form-label small mb-0"><b>story</b> (the puzzle's narrative; always included){% if item.texts[0].edited %} <span class="badge bg-info text-dark">edited</span>{% endif %}</label>
                     <textarea name="narrative" class="form-control form-control-sm" rows="3">{{ item.story }}</textarea>
+                </div>
+                <div class="col-12">
+                    <details {% if full %}open{% endif %}>
+                        <summary class="small">text variants ({{ item.texts|length - 1 }}; tick to include as a narrative variant, edit freely)</summary>
+                        {% for t in item.texts %}{% if t.variant != 'story' %}
+                        <div class="mt-2">
+                            <div class="form-check form-check-inline mb-0">
+                                <input class="form-check-input" type="checkbox" name="variant_on[{{ t.variant }}]" id="{{ item.id }}-on-{{ t.variant }}" {% if t.enabled %}checked{% endif %}>
+                                <label class="form-check-label small" for="{{ item.id }}-on-{{ t.variant }}"><b>{{ t.variant }}</b>{% if t.edited %} <span class="badge bg-info text-dark">edited</span>{% endif %}{% if t.variant == 'physical' %} <span class="text-muted">(regenerated from the chain on rebuild)</span>{% endif %}</label>
+                            </div>
+                            <textarea name="variant_text[{{ t.variant }}]" class="form-control form-control-sm" rows="2">{{ t.text }}</textarea>
+                        </div>
+                        {% endif %}{% endfor %}
+                    </details>
                 </div>
                 <div class="col-auto">
                     <button class="btn btn-sm btn-outline-primary">Save review</button>

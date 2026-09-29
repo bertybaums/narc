@@ -31,15 +31,25 @@
 document.querySelectorAll('form.review-form').forEach(f => {
     f.addEventListener('submit', async ev => {
         ev.preventDefault();
-        const body = Object.fromEntries(new FormData(f).entries());
+        const fd = new FormData(f);
+        const body = {variants: {}};
+        for (const [k, v] of fd.entries()) {
+            let m = k.match(/^variant_text\[(.+)\]$/);
+            if (m) { (body.variants[m[1]] = body.variants[m[1]] || {}).text = v; continue; }
+            m = k.match(/^variant_on\[(.+)\]$/);
+            if (m) { (body.variants[m[1]] = body.variants[m[1]] || {}).enabled = true; continue; }
+            body[k] = v;
+        }
+        // an unticked checkbox is absent from FormData: every text field without a tick is off
+        for (const name of Object.keys(body.variants)) if (body.variants[name].enabled === undefined) body.variants[name].enabled = false;
         const btn = f.querySelector('button');
         btn.disabled = true;
         try {
             const r = await fetch(f.action, {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(body)});
             btn.textContent = r.ok ? 'Saved' : 'Failed';
             const card = f.closest('.proto-card');
-            const badge = card.querySelector('.badge');
-            if (r.ok && body.verdict) { badge.textContent = body.verdict; badge.className = 'badge ' + (body.verdict === 'keep' ? 'bg-success' : body.verdict === 'fix' ? 'bg-warning text-dark' : 'bg-danger'); }
+            const badge = card.querySelector('.verdict-badge');
+            if (r.ok && badge) { badge.textContent = body.verdict || 'unreviewed'; badge.className = 'badge verdict-badge ' + (body.verdict === 'keep' ? 'bg-success' : body.verdict === 'fix' ? 'bg-warning text-dark' : body.verdict === 'drop' ? 'bg-danger' : 'bg-secondary'); }
         } catch (e) { btn.textContent = 'Failed'; }
         setTimeout(() => { btn.textContent = 'Save review'; btn.disabled = false; }, 1200);
     });

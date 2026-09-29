@@ -130,8 +130,13 @@ def prepare(pz, row=None):
               for i, g in enumerate(grids)]
     answer = {"svg": gallery.svg_grid(grids[k]), "label": labels[k] if k < len(labels) else str(k)}
     alts = [{"svg": gallery.svg_grid(a["grid"]), "event": a["event"]} for a in m.get("alternatives", {}).get(str(k), [])]
-    texts = [{"variant": "story", "text": pz["narrative"]}] + \
-            [{"variant": v["variant"], "text": v["narrative"]} for v in pz.get("narrative_variants", [])]
+    originals = m.get("original_texts", {})
+    texts = [{"variant": "story", "text": pz["narrative"], "enabled": True, "edited": "story" in originals}]
+    for v in pz.get("narrative_variants", []):
+        if v["variant"] == "story_original":
+            continue
+        texts.append({"variant": v["variant"], "text": v["narrative"], "enabled": v.get("enabled", True),
+                      "edited": v["variant"] in originals})
     ma = m["mask_analysis"]
     conv = m["convention"]
     return {
@@ -258,6 +263,7 @@ def generate():
             "story_type": f.get("story_type", "").strip(),
             "min_alternatives": max(1, int(f.get("min_alternatives", 2))),
             "self_teaching": f.get("self_teaching", "on") == "on",
+            "surfaces": f.getlist("surfaces") or None,          # variants enabled by default; None = all
         }
         for p in cfg["phi"]:
             get_convention(p)
@@ -274,6 +280,8 @@ def generate():
         run_id = proto_db.insert_run(conn, name, cfg, summary, getattr(nhmsim, "__version__", "?"), _staff()["username"])
         for p in puzzles:
             p["puzzle_id"] = f"r{run_id}-{p['puzzle_id']}"
+            for v in p.get("narrative_variants", []):
+                v["enabled"] = cfg["surfaces"] is None or v["variant"] in cfg["surfaces"]
             proto_db.insert_puzzle(conn, run_id, p)
         conn.commit()
     finally:
@@ -328,6 +336,8 @@ def run_export(run_id):
     for row in rows:
         pz = json.loads(row["puzzle_json"])
         pz["metadata"]["review"] = {"verdict": row["verdict"], "notes": row["notes"]}
+        pz["narrative_variants"] = [{k: v for k, v in var.items() if k != "enabled"} for var in pz.get("narrative_variants", [])
+                                    if var.get("enabled", True) and var["variant"] != "story_original"]
         out.append(pz)
     return Response(json.dumps(out, indent=1), mimetype="application/json",
                     headers={"Content-Disposition": f"attachment; filename=proto_run{run_id}.json"})
@@ -349,7 +359,7 @@ def puzzle(puzzle_id):
     cells = proto_db.verdicts_by_cell(trials)
     cell_rows = [{"model": k[0], "surface": k[1], **v} for k, v in sorted(cells.items())]
     return render_template("proto_puzzle.html", item=item, run=r, trials=trials, cells=cell_rows,
-                           knobs=_knobs(), surfaces=[t["variant"] for t in item["texts"]])
+                           knobs=_knobs(), surfaces=[t["variant"] for t in item["texts"] if t["enabled"]])
 
 
 @bp.route("/puzzle/<puzzle_id>.json")
@@ -366,12 +376,38 @@ def puzzle_json(puzzle_id):
     return jsonify(pz)
 
 
+def _parse_variants(data):
+    """{variant: {"text": str|None, "enabled": bool|None}} from a JSON body ({"variants": {...}})
+    or from form fields variant_text[NAME] / variant_on[NAME] (an absent checkbox means off
+    whenever a text field for that variant was posted)."""
+    if hasattr(data, "getlist") or not isinstance(data.get("variants"), dict):
+        out = {}
+        for k in data.keys():
+            if k.startswith("variant_text[") and k.endswith("]"):
+                name = k[len("variant_text["):-1]
+                out.setdefault(name, {})["text"] = data.get(k)
+                out[name]["enabled"] = data.get(f"variant_on[{name}]") is not None
+        return out
+    out = {}
+    for name, v in data["variants"].items():
+        if isinstance(v, dict):
+            out[name] = {"text": v.get("text"), "enabled": v.get("enabled")}
+    return out
+
+
+def _stash_original(pz, name, current):
+    orig = pz["metadata"].setdefault("original_texts", {})
+    if name not in orig:
+        orig[name] = current
+
+
 @bp.route("/puzzle/<puzzle_id>/review", methods=["POST"])
 def review(puzzle_id):
     data = request.get_json(silent=True) or request.form
     verdict = data.get("verdict")
     notes = data.get("notes")
     narrative = data.get("narrative")
+    variants = _parse_variants(data)
     if verdict is not None and verdict not in ("", "keep", "fix", "drop"):
         return jsonify({"error": "bad verdict"}), 400
     conn = _conn()
@@ -380,18 +416,30 @@ def review(puzzle_id):
         if not row:
             abort(404)
         proto_db.update_review(conn, puzzle_id, verdict, notes)
-        if narrative is not None:
-            pz = json.loads(row["puzzle_json"])
-            if narrative.strip() and narrative != pz["narrative"]:
-                if not any(v["variant"] == "story_original" for v in pz.get("narrative_variants", [])):
-                    pz.setdefault("narrative_variants", []).append(
-                        {"variant": "story_original", "narrative": pz["narrative"], "generator": "nhm-sim"})
-                pz["narrative"] = narrative
-                proto_db.update_puzzle_json(conn, puzzle_id, pz)
+        pz = json.loads(row["puzzle_json"])
+        changed = False
+        if narrative is not None and narrative.strip() and narrative != pz["narrative"]:
+            _stash_original(pz, "story", pz["narrative"])
+            pz["narrative"] = narrative
+            changed = True
+        for var in pz.get("narrative_variants", []):
+            upd = variants.get(var["variant"])
+            if not upd:
+                continue
+            if upd.get("enabled") is not None and bool(upd["enabled"]) != var.get("enabled", True):
+                var["enabled"] = bool(upd["enabled"])
+                changed = True
+            t = upd.get("text")
+            if t is not None and t.strip() and t != var["narrative"]:
+                _stash_original(pz, var["variant"], var["narrative"])
+                var["narrative"] = t
+                changed = True
+        if changed:
+            proto_db.update_puzzle_json(conn, puzzle_id, pz)
     finally:
         conn.close()
     if request.is_json:
-        return jsonify({"ok": True})
+        return jsonify({"ok": True, "changed": changed})
     flash("Saved.", "success")
     return redirect(request.referrer or url_for("proto.puzzle", puzzle_id=puzzle_id))
 
@@ -428,6 +476,16 @@ def rebuild(puzzle_id):
         new = pzs[0]
         new["puzzle_id"] = puzzle_id
         new["narrative"] = pz["narrative"]                 # the story is the person's, keep it
+        old_vars = {v["variant"]: v for v in pz.get("narrative_variants", [])}
+        originals = pz["metadata"].get("original_texts", {})
+        for v in new.get("narrative_variants", []):
+            o = old_vars.get(v["variant"])
+            if o is not None:
+                v["enabled"] = o.get("enabled", True)
+                if v["variant"] in originals and v["variant"] != "physical":
+                    v["narrative"] = o["narrative"]     # an edited text survives; physical is regenerated from the chain
+        if originals:
+            new["metadata"]["original_texts"] = originals
         old = pz["metadata"]["mask_analysis"]
         nw = new["metadata"]["mask_analysis"]
         proto_db.update_puzzle_json(conn, puzzle_id, new)
@@ -455,7 +513,8 @@ def test(puzzle_id):
             abort(404)
         pz = json.loads(row["puzzle_json"])
         texts = {"story": pz["narrative"]}
-        texts.update({v["variant"]: v["narrative"] for v in pz.get("narrative_variants", []) if v["variant"] != "story_original"})
+        texts.update({v["variant"]: v["narrative"] for v in pz.get("narrative_variants", [])
+                      if v["variant"] != "story_original" and v.get("enabled", True)})
         surfaces = list(texts) if surface == "all" else [surface]
         if any(s not in texts for s in surfaces):
             flash("Unknown surface.", "danger")

@@ -66,6 +66,15 @@
                 <input class="form-check-input" type="checkbox" name="self_teaching" id="st" checked>
                 <label class="form-check-label small" for="st">require self-teaching</label>
             </div>
+            <div class="col-12 small">
+                <span class="me-2">text variants to include by default (the story is always the narrative; untick to generate but leave out):</span>
+                {% for sname in ['grammar', 'physical', 'design', 'moral', 'terse'] %}
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" name="surfaces" value="{{ sname }}" id="sf-{{ sname }}" checked>
+                    <label class="form-check-label" for="sf-{{ sname }}">{{ sname }}</label>
+                </div>
+                {% endfor %}
+            </div>
             <div class="col-md-3">
                 <label class="form-label small mb-0">Run name (optional)</label>
                 <input name="name" class="form-control form-control-sm" placeholder="auto">
@@ -74,6 +83,7 @@
                 <button class="btn btn-sm btn-primary w-100">Generate</button>
             </div>
         </form>
+        <div class="small text-muted mt-2">Codes with a <em>time</em> channel (<code>daylight</code>, <code>enriched</code>, <code>table</code>) draw a yellow top row by day; the base grammar never emits a TIME event, so under those codes the top row is yellow in every frame. Pick <code>baseline</code> (or any code without <code>time=skyrow</code>) if you do not want that row.</div>
         <div class="small text-muted mt-2">Knob reference: <code>nhm/CONVENTIONS.md</code> (codes), <code>nhm/GRAMMARS.md</code> (grammars and the three stances), <code>nhm/DESIGN.md</code> (mask policies: <em>any</em> = last frame if valid else the most ambiguous later frame; <em>all</em> = one puzzle per valid position).</div>
     </div>
 </div>

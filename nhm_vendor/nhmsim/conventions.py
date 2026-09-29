@@ -21,8 +21,11 @@ product of channel choices gives a family of codes rather than three hand-writte
 Every convention exposes the same five methods the certificate needs:
 ``render``, ``facts`` (which conventions a scene exhibits), ``needs`` (which conventions a
 transition relies on), ``legend`` (the explicit statement of the code, for the
-conventions-only control) and ``describe`` (a physical-stance sentence for a transition,
-the literal text surface that names grid features rather than events).
+conventions-only control) and ``describe`` / ``describe_scene`` (physical-stance sentences,
+the literal text surface that names grid features rather than events). The text methods take
+the puzzle's symmetry so that colours and directions describe the grid as rendered: under a
+palette permutation the scene is recoloured first (``symmetries.recolor``), under ``mirror``
+"right" reads "left", under ``vflip`` "top" reads "bottom".
 
 ``TableConvention`` is the non-iconic pole (SPINE 4a, "the metaphor priced at zero"): one
 row per entity, one column per attribute; adjacency has no denotation there.
@@ -51,6 +54,31 @@ def cname(c: int) -> str:
     return COLOR_NAMES[c]
 
 
+_CANON = {"right": "right", "left": "left", "up": "up", "down": "down", "top": "top", "bottom": "bottom",
+          "above": "above", "below": "below", "on top of": "on top of", "underneath": "underneath",
+          "higher": "higher", "lower": "lower"}
+
+
+def words(sym=None) -> Dict[str, str]:
+    """Direction words for the physical-stance text and the legend, under a symmetry: a mirrored
+    grid puts the held object left of its holder, a flipped grid has its ground row at the top."""
+    w = dict(_CANON)
+    parts = sym.parts() if sym is not None and hasattr(sym, "parts") else []
+
+    def swap(a, b):
+        w[a], w[b] = w[b], w[a]
+
+    if "mirror" in parts:
+        swap("right", "left")
+    if "vflip" in parts:
+        swap("up", "down")
+        swap("top", "bottom")
+        swap("above", "below")
+        swap("on top of", "underneath")
+        swap("higher", "lower")
+    return w
+
+
 class BaseConvention:
     name: str = "base"
     max_width: int = 13
@@ -73,10 +101,13 @@ class BaseConvention:
     def needs(self, prev: Scene, nxt: Scene, ev: Event) -> Set[Fact]:
         raise NotImplementedError
 
-    def legend(self, known_locs: List[str]) -> str:
+    def legend(self, known_locs: List[str], sym=None) -> str:
         raise NotImplementedError
 
-    def describe(self, prev: Scene, nxt: Scene, ev: Event) -> str:
+    def describe(self, prev: Scene, nxt: Scene, ev: Event, sym=None) -> str:
+        raise NotImplementedError
+
+    def describe_scene(self, scene: Scene, sym=None) -> str:
         raise NotImplementedError
 
     def spec(self) -> Dict:
@@ -156,6 +187,10 @@ class Convention(BaseConvention):
 
     def _top_of_bar(self, c: Char) -> int:
         return min(r for r, _ in self._bar_cells(c))
+
+    def _row_phrase(self, w: Dict[str, str]) -> str:
+        return {"ground": f"the {w['bottom']} row", "sky": f"the {w['top']} row",
+                "band": f"the {w['top']} and {w['bottom']} rows"}[self.location]
 
     # ---- render ---------------------------------------------------------------------------
     def render(self, scene: Scene, width: int) -> Grid:
@@ -296,33 +331,38 @@ class Convention(BaseConvention):
         return n
 
     # ---- the explicit statement of the code ------------------------------------------------
-    def legend(self, known_locs: List[str]) -> str:
+    def legend(self, known_locs: List[str], sym=None) -> str:
+        w = words(sym)
         loc_words = ", ".join(f"{cname(GROUND_COLOR[l])} = {LOC_WORD.get(l, l)}" for l in known_locs if l in GROUND_COLOR and l != "none")
-        loc_row = {"ground": "The bottom row", "sky": "The top row", "band": "The top and bottom rows"}[self.location]
+        loc_row = self._row_phrase(w)
+        loc_row = loc_row[0].upper() + loc_row[1:]
         s = [f"Each grid has {H} rows.", f"{loc_row} is coloured by the place: {loc_words}." if loc_words else f"{loc_row} is coloured by the place."]
         s.append("A character is a vertical bar of one colour, and keeps its colour in every grid.")
         s.append({
             "height": "The bar's height is the character's mood: 1 cell sad, 2 neutral, 3 happy.",
-            "marker": "The bar is 2 cells tall. The cell above its head shows the mood: grey sad, yellow happy, nothing neutral.",
+            "marker": f"The bar is 2 cells tall. The cell {w['above']} its head shows the mood: grey sad, yellow happy, nothing neutral.",
             "width": "The bar is 2 cells tall. Its width is the mood: 1 cell sad, 2 neutral, 3 happy.",
-            "altitude": "The bar is 2 cells tall. It stands higher the happier the character is: sad rests on the second row from the bottom, neutral one row up, happy two rows up.",
+            "altitude": f"The bar is 2 cells tall. It stands {w['higher']} the happier the character is: sad rests on the second row from the {w['bottom']}, neutral one row {w['up']}, happy two rows {w['up']}.",
         }[self.mood])
-        s.append("A character who has climbed up stands near the top of the grid.")
+        s.append(f"A character who has climbed up stands near the {w['top']} of the grid.")
         s.append("An object is one cell of one colour. " + {
-            "right": "Held, it sits just right of its holder at hand height; on the ground, it sits at the bottom of the holder's area.",
-            "above": "Held, it sits on its holder's head; on the ground, it sits at the bottom of the holder's area.",
+            "right": f"Held, it sits just {w['right']} of its holder at hand height; on the ground, it sits at the {w['bottom']} of the holder's area.",
+            "above": f"Held, it sits {w['on top of']} its holder's head; on the ground, it sits at the {w['bottom']} of the holder's area.",
         }[self.held])
         s.append("A big object is two cells tall. A broken object is grey. An object that is gone is not drawn.")
         if self.want == "bubble":
-            row = "second" if self._top_row_used() else "top"
-            s.append(f"When a character wants an object, that object's colour appears in the {row} row above the character.")
+            row = f"second row from the {w['top']}" if self._top_row_used() else f"{w['top']} row"
+            s.append(f"When a character wants an object, that object's colour appears in the {row} {w['above']} the character.")
         if self.time == "skyrow":
-            s.append("The top row is yellow by day and black at night.")
+            s.append(f"The {w['top']} row is yellow by day and black at night.")
         return " ".join(s)
 
     # ---- physical-stance surface ----------------------------------------------------------
-    def describe(self, prev: Scene, nxt: Scene, ev: Event) -> str:
+    def describe(self, prev: Scene, nxt: Scene, ev: Event, sym=None) -> str:
+        """One sentence naming what the grid does. Pass scenes already recoloured under the
+        symmetry (symmetries.recolor); directions follow the symmetry."""
         p = ev.prim
+        w = words(sym)
 
         def bar(name):
             c = nxt.chars.get(name) or prev.chars.get(name)
@@ -342,31 +382,31 @@ class Convention(BaseConvention):
                     h = MOOD_HEIGHT[c.mood]
                     out.append(f"{bar(a)} became {h} cell{'s' if h > 1 else ''} tall")
                 elif self.mood == "width":
-                    w = MOOD_WIDTH[c.mood]
-                    out.append(f"{bar(a)} became {w} cell{'s' if w > 1 else ''} wide")
+                    wd = MOOD_WIDTH[c.mood]
+                    out.append(f"{bar(a)} became {wd} cell{'s' if wd > 1 else ''} wide")
                 elif self.mood == "marker":
                     if c.mood in MARKER_COLOR:
-                        out.append(f"a {cname(MARKER_COLOR[c.mood])} cell appeared above {bar(a)}")
+                        out.append(f"{_a(cname(MARKER_COLOR[c.mood]))} cell appeared {w['above']} {bar(a)}")
                     else:
-                        out.append(f"the cell above {bar(a)} went away")
+                        out.append(f"the cell {w['above']} {bar(a)} went away")
                 else:
                     was = prev.chars[a].mood if a in prev.chars else "neutral"
                     d = MOOD_BASE[was] - MOOD_BASE[c.mood]
-                    out.append(f"{bar(a)} moved {'up' if d > 0 else 'down'} {abs(d)} row{'s' if abs(d) > 1 else ''}")
+                    out.append(f"{bar(a)} moved {w['up'] if d > 0 else w['down']} {abs(d)} row{'s' if abs(d) > 1 else ''}")
             return _sent("; ".join(out))
         if p == "MOVE" and nxt.location != prev.location:
-            row = {"ground": "the bottom row", "sky": "the top row", "band": "the top and bottom rows"}[self.location]
             gone = [bar(c.name) for c in prev.present_chars() if not nxt.chars[c.name].present]
-            s = f"{row} turned {cname(GROUND_COLOR[nxt.location])}"
+            s = f"{self._row_phrase(w)} turned {cname(GROUND_COLOR[nxt.location])}"
             if gone:
-                s += ", and " + ", ".join(gone) + (" went away" if len(gone) == 1 else " went away")
+                s += ", and " + ", ".join(gone) + " went away"
             return _sent(s)
         if p == "MOVE":
-            return _sent(f"{bar(ev.agents[0])} moved to stand right next to {bar(ev.recipient)}")
+            return _sent(f"{bar(ev.agents[0])} moved to stand next to {bar(ev.recipient)}")
         if p == "WITHDRAW":
             return _sent(f"{bar(ev.agents[0])} moved away from {bar(ev.recipient)}, leaving a gap")
         if p in ("ASCEND", "DESCEND"):
-            return _sent(f"{bar(ev.agents[0])} moved {'up' if p == 'ASCEND' else 'down'} to {'near the top' if p == 'ASCEND' else 'the bottom'} of the grid")
+            where = f"near the {w['top']}" if p == "ASCEND" else f"the {w['bottom']}"
+            return _sent(f"{bar(ev.agents[0])} moved {w['up'] if p == 'ASCEND' else w['down']} to {where} of the grid")
         if p == "APPEAR":
             parts = [f"{bar(a)} appeared" for a in ev.agents]
             if ev.theme:
@@ -375,10 +415,10 @@ class Convention(BaseConvention):
         if p == "VANISH":
             return _sent(" and ".join(f"{bar(a)} disappeared" for a in ev.agents))
         if p == "ACQUIRE":
-            where = "just right of" if self.held == "right" else "on top of"
+            where = f"just {w['right']} of" if self.held == "right" else w["on top of"]
             return _sent(f"{cell(ev.theme)} moved {where} {bar(ev.agents[0])}")
         if p == "DROP":
-            return _sent(f"{cell(ev.theme)} moved down to the ground beside {bar(ev.agents[0])}")
+            return _sent(f"{cell(ev.theme)} moved {w['down']} to the ground beside {bar(ev.agents[0])}")
         if p == "LOSE":
             return _sent(f"{cell(ev.theme)} disappeared")
         if p == "TRANSFER":
@@ -395,52 +435,57 @@ class Convention(BaseConvention):
                 return _sent(f"{cell(ev.theme)} became two cells tall")
             return _sent(f"{cell(ev.theme)} turned {cname(o.color)} and one cell tall" if o else "a cell changed")
         if p == "WANT":
-            return _sent(f"a {cname(nxt.objs[ev.theme].color)} cell appeared in the top row above {bar(ev.agents[0])}")
+            return _sent(f"{_a(cname(nxt.objs[ev.theme].color))} cell appeared in the {w['top']} row {w['above']} {bar(ev.agents[0])}")
         if p == "UNWANT":
-            return _sent(f"the cell in the top row above {bar(ev.agents[0])} went away")
+            return _sent(f"the cell in the {w['top']} row {w['above']} {bar(ev.agents[0])} went away")
         if p == "TIME":
-            return _sent("the top row turned yellow" if nxt.time == "day" else "the top row turned black")
+            return _sent(f"the {w['top']} row turned yellow" if nxt.time == "day" else f"the {w['top']} row turned black")
         return _sent("something changed")
 
-
-    def describe_scene(self, scene: Scene) -> str:
-        """The setup, in the physical stance: what the first grid shows."""
+    def describe_scene(self, scene: Scene, sym=None) -> str:
+        """The setup, in the physical stance: what the first grid shows (scene already recoloured)."""
+        w = words(sym)
         parts = []
-        row = {"ground": "the bottom row", "sky": "the top row", "band": "the top and bottom rows"}[self.location]
         if scene.location != "none":
-            parts.append(f"{row} is {cname(GROUND_COLOR[scene.location])}")
+            parts.append(f"{self._row_phrase(w)} is {cname(GROUND_COLOR[scene.location])}")
         for c in scene.present_chars():
             if self.mood == "height":
                 h = MOOD_HEIGHT[c.mood]
                 m = f"{h} cell{'s' if h > 1 else ''} tall"
             elif self.mood == "width":
-                w = MOOD_WIDTH[c.mood]
-                m = f"{w} cell{'s' if w > 1 else ''} wide"
+                wd = MOOD_WIDTH[c.mood]
+                m = f"{wd} cell{'s' if wd > 1 else ''} wide"
             elif self.mood == "marker":
-                m = f"with a {cname(MARKER_COLOR[c.mood])} cell above it" if c.mood in MARKER_COLOR else "with nothing above it"
+                m = f"with {_a(cname(MARKER_COLOR[c.mood]))} cell {w['above']} it" if c.mood in MARKER_COLOR else f"with nothing {w['above']} it"
             else:
-                m = f"standing {MOOD_BASE['sad'] - MOOD_BASE[c.mood]} row{'s' if MOOD_BASE['sad'] - MOOD_BASE[c.mood] != 1 else ''} up"
-            parts.append(f"a {cname(c.color)} bar {m}" + (" near the top" if c.elevated else ""))
+                n = MOOD_BASE["sad"] - MOOD_BASE[c.mood]
+                m = f"standing {n} row{'s' if n != 1 else ''} {w['up']}"
+            parts.append(f"{_a(cname(c.color))} bar {m}" + (f" near the {w['top']}" if c.elevated else ""))
         for o in scene.present_objs():
             col = "grey" if o.state == "broken" else cname(o.color)
             size = "two cells tall" if o.state == "big" else "one cell"
             if o.holder and o.holder in scene.chars and scene.chars[o.holder].present:
-                where = f"{'right of' if self.held == 'right' else 'on top of'} the {cname(scene.chars[o.holder].color)} bar"
+                where = f"{'just ' + w['right'] + ' of' if self.held == 'right' else w['on top of']} the {cname(scene.chars[o.holder].color)} bar"
             else:
                 where = "on the ground"
-            parts.append(f"a {col} cell ({size}) {where}")
+            parts.append(f"{_a(col)} cell ({size}) {where}")
         if self.want == "bubble":
             for c in scene.present_chars():
                 if c.wants and c.wants in scene.objs:
-                    parts.append(f"a {cname(scene.objs[c.wants].color)} cell in the top row above the {cname(c.color)} bar")
+                    parts.append(f"{_a(cname(scene.objs[c.wants].color))} cell in the {w['top']} row {w['above']} the {cname(c.color)} bar")
         if self.time == "skyrow":
-            parts.append("the top row is yellow" if scene.time == "day" else "the top row is black")
+            parts.append(f"the {w['top']} row is yellow" if scene.time == "day" else f"the {w['top']} row is black")
         return _sent("at first " + ", ".join(parts)) if parts else "At first the grid is empty."
 
 
 def _sent(s: str) -> str:
     s = s.strip()
     return (s[0].upper() + s[1:] + ".") if s else ""
+
+
+def _a(word: str) -> str:
+    """Indefinite article: an orange bar, a blue bar."""
+    return ("an " if word[:1] in "aeiou" else "a ") + word
 
 
 # ------------------------------------------------------------------------------------------
@@ -491,8 +536,6 @@ class TableConvention(BaseConvention):
                     g[r][1] = e.color
                 if e.holder and e.holder in scene.chars and scene.chars[e.holder].present:
                     g[r][3] = scene.chars[e.holder].color
-        if scene.time == "night":
-            pass  # night: no mark (day has none either at this pole; time is dropped)
         return g
 
     def facts(self, scene: Scene) -> Set[Fact]:
@@ -519,19 +562,21 @@ class TableConvention(BaseConvention):
         n.discard(("time", "night"))
         return n
 
-    def legend(self, known_locs):
+    def legend(self, known_locs, sym=None):
+        w = words(sym)
         loc_words = ", ".join(f"{cname(GROUND_COLOR[l])} = {LOC_WORD.get(l, l)}" for l in known_locs if l in GROUND_COLOR and l != "none")
-        return ("Each grid is a table with one row per character or object and five columns. Column 1 is the entity's colour, "
+        return (f"Each grid is a table with one row per character or object and five columns, counting columns from the {w['left']} "
+                f"and rows from the {w['top']}. Column 1 is the entity's colour, "
                 "and stays the same in every grid; a black row means the entity is not there. For a character, column 2 is the mood "
                 "(grey sad, yellow happy, black neutral), column 3 is the place (" + loc_words + "), column 4 is yellow if the character "
                 "has climbed up, and column 5 shows the colour of an object the character wants. For an object, column 2 is grey if it "
                 "is broken and repeats its colour if it is big, and column 4 shows the colour of the character holding it (black if it is on the ground).")
 
-    def describe(self, prev, nxt, ev):
-        return Convention.describe(_PROXY_TABLE, prev, nxt, ev)
+    def describe(self, prev, nxt, ev, sym=None):
+        return Convention.describe(_PROXY_TABLE, prev, nxt, ev, sym=sym)
 
-    def describe_scene(self, scene):
-        return Convention.describe_scene(_PROXY_TABLE, scene)
+    def describe_scene(self, scene, sym=None):
+        return Convention.describe_scene(_PROXY_TABLE, scene, sym=sym)
 
 
 _PROXY = Convention(name="_proxy", want="bubble", time="skyrow")
@@ -549,8 +594,8 @@ PRESETS: Dict[str, BaseConvention] = {
     "above": Convention("above", held="above", description="held object on the head instead of at the hand"),
     "bubble": Convention("bubble", want="bubble", description="baseline + thought bubble for WANT (ICML 4c)"),
     "bubble_marker": Convention("bubble_marker", mood="marker", want="bubble", description="marker mood + thought bubble"),
-    "daylight": Convention("daylight", time="skyrow", description="baseline + sky row for day/night (ICML 4c)"),
-    "enriched": Convention("enriched", want="bubble", time="skyrow", description="baseline + bubble + sky row: the full enriched tree"),
+    "daylight": Convention("daylight", time="skyrow", description="baseline + sky row for day/night (ICML 4c): top row yellow by day"),
+    "enriched": Convention("enriched", want="bubble", time="skyrow", description="baseline + bubble + sky row (yellow by day): the full enriched tree"),
     "table": TableConvention(),
 }
 
