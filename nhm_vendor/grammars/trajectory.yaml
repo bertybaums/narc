@@ -13,6 +13,7 @@
 #   contagion   fear spreads P -> F -> (G?)      tell: G is UP A TREE (visible, unexplained until the text)
 #   turn-taking one character changes, the other holds  no tell (attention is not drawable)
 #   spree       cups break one by one            tell: the last cup is BIG (visible: it is tin)
+#   bloom       a flower grows small -> big -> huge  tell: F HOLDS A BASKET (to pick it, or just for lunch)
 #   gathering   objects appear one by one        no tell (the gust is not drawable); the twin ends with P sitting down, since a
 #                                               fourth object of a never-shown colour cannot pass self-teaching
 #
@@ -31,13 +32,15 @@ lexicon:
   threats: [spider, wasp, snake, rat, beetle]
   embers: [fire, campfire, bonfire]
   sticks: [bundle of sticks, armful of wood, pile of twigs]
+  baskets: [basket, bag, pail]
+  flowers: [sunflower, rose, tulip, daisy]
   locations:
     green: [park, garden, yard, field]
     water: [pond, beach, lake]
     indoor: [house, room, kitchen, school]
     town: [town, street, village]
 
-roles: {P: person, F: person, G: person, O: object, O2: object, O3: object, T: threats, E: embers, S: sticks, L1: location}
+roles: {P: person, F: person, G: person, O: object, O2: object, O3: object, T: threats, E: embers, S: sticks, B: baskets, W: flowers, L1: location}
 
 story_types:
   # contagion: fear spreads from P to F; does it reach G?
@@ -60,6 +63,10 @@ story_types:
   ember_flares:           {episodes: [SETUP_FIRE, STICKS, DIM1, DIM2, FLARE], features: [Twist]}
   ember_saved:            {episodes: [SETUP_FIRE, STICKS, DIM1, DIM2, OUT], features: [BadEnding]}
   ember_dies:             {episodes: [SETUP_FIRE, DIM1, DIM2, OUT_PLAIN], features: [BadEnding]}
+  # bloom: a flower grows small -> big -> huge over the frames; F holds a basket (the tell)
+  bloom_picked:           {episodes: [SETUP_GARDEN, BASKET, SPROUT, GROW1, GROW2, PICKED], features: [Twist]}
+  bloom_left:             {episodes: [SETUP_GARDEN, BASKET, SPROUT, GROW1, GROW2, LEFT], features: []}
+  bloom_admired:          {episodes: [SETUP_GARDEN, SPROUT, GROW1, GROW2, ADMIRED], features: []}
 
 episodes:
   SETUP3:
@@ -143,6 +150,22 @@ episodes:
     - [[TRANSFORM, E, hidden, "@out"]]
   OUT_PLAIN:
     - [[TRANSFORM, E, hidden, "@out_plain"]]
+  SETUP_GARDEN:
+    - [[APPEAR, P, "@garden"], [APPEAR, F, "@silent"], [MOVE.loc, ALL, L1, "@garden_walk"], [EMOTE, P, happy, "@glad"]]
+  BASKET:
+    - [[ACQUIRE, F, B, "@basket"]]
+  SPROUT:
+    - [[APPEAR.obj, W, "@sprout"]]
+  GROW1:
+    - [[TRANSFORM, W, big, "@grow"]]
+  GROW2:
+    - [[TRANSFORM, W, huge, "@grow2"]]
+  PICKED:
+    - [[ACQUIRE, F, W, "@picked"]]
+  LEFT:
+    - [[VANISH, F, "@left"]]
+  ADMIRED:
+    - [[EMOTE, ALL, happy, "@admired"]]
 
 clauses:
   "APPEAR:P@three": ["{P}, {F} and {G} were out in the {L1}.", "One day {P}, {F} and {G} went to the {L1} together.", "{P} was at the {L1} with {F} and {G}."]
@@ -191,4 +214,14 @@ clauses:
   "TRANSFORM:huge@flare": ["Then {P} threw the {S} on, and the {E} roared up bigger than before.", "{P} fed it the {S}. The {E} blazed high again.", "With the {S} on it, the {E} leapt back to life."]
   "TRANSFORM:hidden@out": ["{P} kept the {S} for the morning, and the {E} went out.", "{P} did not add the {S}. The {E} died to nothing.", "{P} saved the {S}; the last glow faded and the {E} was out."]
   "TRANSFORM:hidden@out_plain": ["Then the {E} went out.", "The last glow faded and the {E} was gone.", "The {E} died to nothing."]
+  "APPEAR:P@garden": ["{P} and {F} spent the spring in the {L1}.", "{P} and {F} kept a corner of the {L1}.", "Every day {P} and {F} came out to the {L1}."]
+  "EMOTE:happy@glad": ["{X} loved it there.", "{X} was always glad to be there.", "Nothing made {X} happier."]
+  "MOVE.loc@garden_walk": ["They went out to the {L} together.", "Off they went to the {L}.", "They walked to the {L}."]
+  "ACQUIRE@basket": ["{X} carried a {B}.", "{X} had a {B} on {X}'s arm.", "{X} brought a {B} along."]
+  "APPEAR.obj@sprout": ["A {W} came up out of the ground.", "A little {W} sprouted.", "A {W} poked up through the soil."]
+  "TRANSFORM:big@grow": ["Day by day the {W} grew.", "The {W} got bigger.", "It grew taller."]
+  "TRANSFORM:huge@grow2": ["Soon it was the tallest {W} in the {L1}.", "It grew and grew, taller than {P}'s knee.", "The {W} was huge now."]
+  "ACQUIRE@picked": ["That was what the {B} was for. {F} picked the {W} and put it in.", "{F} had waited for this. {F} cut the {W} and laid it in the {B}.", "{F} picked the {W} for the {B}."]
+  "VANISH@left": ["The {B} was only for {F}'s lunch. {F} left the {W} where it was and went home.", "{F} did not pick it. {F} went off with the {B}, and the {W} stayed.", "{F} looked at the {W}, then left it growing and went away."]
+  "EMOTE:ALL:happy@admired": ["They both stood and admired it.", "{P} and {F} were delighted with it.", "They were proud of the {W}."]
   "LOSE@gust": ["Then a gust of wind came and blew the last one away.", "A puff of wind lifted the {O} and carried it off.", "The wind took the {O} before {X} could grab it."]

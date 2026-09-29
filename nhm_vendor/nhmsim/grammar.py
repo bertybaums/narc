@@ -228,7 +228,7 @@ def _event(ev: list, roles: Dict[str, str], si: int):
 def _event_core(ev: list, roles: Dict[str, str], si: int):
     kind = ev[0]
     R = lambda r: roles.get(r, r)          # noqa: E731
-    ident = lambda r: R(r).lower()         # noqa: E731
+    ident = lambda r: "ALL" if r == "ALL" else R(r).lower()   # noqa: E731  (ALL expands to everyone present later)
     kw: Dict[str, str] = {}
     if kind == "APPEAR":
         return Event("APPEAR", [ident(ev[1])], sent_idx=si, verb="appear"), {"X": R(ev[1])}
