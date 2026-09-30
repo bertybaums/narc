@@ -157,6 +157,7 @@
             <strong style="color:#aaa;">Scope:</strong> {{ puzzles | length }} {{ 'puzzles incl. drafts' if include_drafts else 'active puzzles' }} &middot; {{ models | length }} models &middot; model results {% if data_from == data_as_of %}on {{ data_as_of }}{% else %}{{ data_from }} to {{ data_as_of }}{% endif %} &middot; {{ protocol_note }}
             Each cell is a single sample at temperature 0; on a 34-puzzle core re-run three times, 84% of condition outcomes agreed and about one NARC verdict in six flipped, so read a puzzle's profile across models rather than a single cell.
             {% if 'claude-fable-5-1' in models %}The <code>claude-fable-5-1</code> column is imported from a separate closed-book run (single sample, no order or keyword ablations, different harness) and is shown for comparison only.{% endif %}
+            {% if 'glm-5.3-flash' in models %}The <code>glm-5.3-flash</code> column is partial: MindRouter withdrew the model on September 30, 2026 while its run was in progress. Every narrative &times; mask cell has its three conditions; order sensitivity covers 237 of its 294 NARC cells; no keyword ablation; not in Ordering or Odd-one-out.{% endif %}
         </p>
     </div>
 </div>

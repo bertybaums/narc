@@ -26,6 +26,23 @@ from ratelimit import mindrouter_bucket
 STREAM = True
 STREAM_IDLE_TIMEOUT = 180.0
 
+# A model whose backend is down gets HTTP 503 ("temporarily unavailable — no healthy
+# backend is currently serving it") on every request, instantly. Without a pause a
+# backfill lane sprints through all its phases on errors and logs a false DONE
+# (glm-5.3-flash, September 30, 2026: 942 errors in 20 minutes). So a 503 waits and
+# retries — one probe a minute, for up to BACKEND_WAIT_MAX seconds — before it counts
+# as a transport failure. Set to 0 to fail fast.
+BACKEND_WAIT_MAX = 2 * 3600
+BACKEND_WAIT_STEP = 60
+
+
+def _wait_for_backend(resp_status, waited, model_id):
+    """Return the new total wait after sleeping, or raise when the wait is exhausted."""
+    if resp_status != 503 or waited >= BACKEND_WAIT_MAX:
+        return None
+    time.sleep(BACKEND_WAIT_STEP)
+    return waited + BACKEND_WAIT_STEP
+
 
 class StreamEndedEarly(RuntimeError):
     """The SSE stream stopped before finish_reason/[DONE]: MindRouter documents that a
@@ -54,19 +71,26 @@ def call_llm(model_config, messages, stream=None):
     if stream is None:
         stream = model_config.get("stream", STREAM)
 
-    mindrouter_bucket.acquire()
-
-    start = time.monotonic()
-    if not stream:
-        with httpx.Client(timeout=model_config.get("timeout", 300.0)) as client:
-            resp = client.post(url, json=body, headers=headers)
-            resp.raise_for_status()
-        latency_ms = int((time.monotonic() - start) * 1000)
-        raw = resp.text
-        data = resp.json()
-        msg = data["choices"][0]["message"]
-        text = msg.get("content") or msg.get("reasoning_content") or ""
-        return raw, text, latency_ms
+    waited = 0
+    while True:  # loops only to wait out a 503 (backend down); see BACKEND_WAIT_MAX
+        mindrouter_bucket.acquire()
+        start = time.monotonic()
+        if not stream:
+            with httpx.Client(timeout=model_config.get("timeout", 300.0)) as client:
+                resp = client.post(url, json=body, headers=headers)
+                if resp.status_code == 503:
+                    w = _wait_for_backend(503, waited, model_config["model_id"])
+                    if w is not None:
+                        waited = w
+                        continue
+                resp.raise_for_status()
+            latency_ms = int((time.monotonic() - start) * 1000)
+            raw = resp.text
+            data = resp.json()
+            msg = data["choices"][0]["message"]
+            text = msg.get("content") or msg.get("reasoning_content") or ""
+            return raw, text, latency_ms
+        break
 
     body["stream"] = True
     body["stream_options"] = {"include_usage": True}
@@ -79,35 +103,45 @@ def call_llm(model_config, messages, stream=None):
                                                                STREAM_IDLE_TIMEOUT),
                             write=30.0, pool=30.0)
     with httpx.Client(timeout=timeout) as client:
-        with client.stream("POST", url, json=body, headers=headers) as resp:
-            if resp.status_code >= 400:
-                resp.read()  # so the error body is available in the exception message
-            resp.raise_for_status()
-            for line in resp.iter_lines():
-                if not line.startswith("data:"):
-                    continue
-                payload = line[5:].strip()
-                if payload == "[DONE]":
-                    done = True
-                    break
-                try:
-                    ev = json.loads(payload)
-                except ValueError:
-                    continue
-                if not meta and ev.get("id"):
-                    meta = {"id": ev.get("id"), "model": ev.get("model"),
-                            "created": ev.get("created")}
-                if ev.get("usage"):
-                    usage = ev["usage"]
-                for ch in ev.get("choices") or []:
-                    delta = ch.get("delta") or {}
-                    if delta.get("content"):
-                        content.append(delta["content"])
-                    r = delta.get("reasoning_content") or delta.get("reasoning")
-                    if r:
-                        reasoning.append(r)
-                    if ch.get("finish_reason"):
-                        finish = ch["finish_reason"]
+        while True:  # one attempt per pass; loops only to wait out a 503
+            with client.stream("POST", url, json=body, headers=headers) as resp:
+                if resp.status_code == 503:
+                    resp.read()
+                    w = _wait_for_backend(503, waited, model_config["model_id"])
+                    if w is not None:
+                        waited = w
+                        mindrouter_bucket.acquire()
+                        start = time.monotonic()
+                        continue
+                if resp.status_code >= 400:
+                    resp.read()  # so the error body is available in the exception message
+                resp.raise_for_status()
+                for line in resp.iter_lines():
+                    if not line.startswith("data:"):
+                        continue
+                    payload = line[5:].strip()
+                    if payload == "[DONE]":
+                        done = True
+                        break
+                    try:
+                        ev = json.loads(payload)
+                    except ValueError:
+                        continue
+                    if not meta and ev.get("id"):
+                        meta = {"id": ev.get("id"), "model": ev.get("model"),
+                                "created": ev.get("created")}
+                    if ev.get("usage"):
+                        usage = ev["usage"]
+                    for ch in ev.get("choices") or []:
+                        delta = ch.get("delta") or {}
+                        if delta.get("content"):
+                            content.append(delta["content"])
+                        r = delta.get("reasoning_content") or delta.get("reasoning")
+                        if r:
+                            reasoning.append(r)
+                        if ch.get("finish_reason"):
+                            finish = ch["finish_reason"]
+            break
     latency_ms = int((time.monotonic() - start) * 1000)
     if not done and finish is None:
         raise StreamEndedEarly(
