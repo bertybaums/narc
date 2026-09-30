@@ -84,10 +84,18 @@ def grid_to_base64_png(grid: List[List[int]]) -> str:
     return base64.b64encode(grid_to_png_bytes(grid)).decode("ascii")
 
 
+def _is_grid(x):
+    return isinstance(x, list) and all(isinstance(r, list) for r in x)
+
+
 def compare_grids(predicted: List[List[int]], expected: List[List[int]]):
-    """Compare two grids. Returns (correct: bool, cell_accuracy: float)."""
+    """Compare two grids. Returns (correct: bool, cell_accuracy: float).
+    A prediction that is not a list of rows (a bare int, a string, a dict — seen from
+    glm-5.3-flash, September 29, 2026) is simply wrong, not an exception."""
     if predicted == expected:
         return True, 1.0
+    if not _is_grid(predicted):
+        return False, 0.0
     total = 0
     matching = 0
     max_rows = max(len(predicted), len(expected))
