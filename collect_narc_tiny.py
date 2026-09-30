@@ -4,8 +4,11 @@ The imported runs cover grids_only, the story alone, story + grids, grammar text
 the K shuffled orders of every NARC cell. This script runs what they left out, for one model
 or all, on the NARC-tiny puzzles only:
 
-  1. narrative_only on the grammar text (the imported runs tested the story alone, never the
-     grammar text alone), stored under the grammar variant and the original mask;
+  1. the grammar-text cell: narrative_only and both on the grammar text, stored under the
+     grammar variant and the original mask. The import brought `both` for the eight matrix
+     models but never the grammar text alone; a model added later (glm, mimo) has neither,
+     and collect_matrix.py will not run this cell because its variant_pairs row is disabled
+     (see import_narc_tiny.py). Rows that already have an answer are skipped;
   2. classify;
   3. order-sensitivity for any NARC cell without its K shuffles (a no-op after the import);
   4. narrative-sensitivity (keyword ablation), K repeats per NARC cell;
@@ -37,14 +40,20 @@ def tiny_puzzle_ids(conn):
         "SELECT puzzle_id FROM puzzles WHERE creator=? ORDER BY puzzle_id", (CREATOR,))]
 
 
-def run_grammar_narrative_only(model, concurrency=8, dry_run=False, log_fn=print):
-    """narrative_only on the grammar text for every NARC-tiny puzzle."""
+GRAMMAR_CONDITIONS = ("narrative_only", "both")
+
+
+def run_grammar_conditions(model, conditions=GRAMMAR_CONDITIONS, concurrency=8,
+                           dry_run=False, log_fn=print):
+    """narrative_only and both on the grammar text for every NARC-tiny puzzle, under the
+    grammar variant and the original mask. grids_only is not run here: classify.py keys it
+    by mask alone, so the base run's grids_only (collect.py) serves this cell too."""
     config = load_config()
     model_config = get_model_config(config, model)
     extraction_config = get_model_config(config, "gpt-oss-120b-extract")
     conn = db.init_db()
     try:
-        planned = []  # (pid, variant_id, mask_variant_id, prompt_text, view, narrative)
+        planned = []  # (pid, variant_id, mask_variant_id, cond, prompt_text, view, narrative)
         for pid in tiny_puzzle_ids(conn):
             view = db.puzzle_to_json(db.get_puzzle(conn, pid))
             v = conn.execute(
@@ -54,21 +63,28 @@ def run_grammar_narrative_only(model, concurrency=8, dry_run=False, log_fn=print
             if not v or mvid is None:
                 log_fn(f"  skip {pid}: grammar variant or original mask missing")
                 continue
-            msgs = prompts.build_narrative_only(view, narrative=v["narrative"])
-            planned.append((pid, v["variant_id"], mvid, json.dumps(msgs), view, v["narrative"]))
+            for cond in conditions:
+                if cond == "narrative_only":
+                    msgs = prompts.build_narrative_only(view, narrative=v["narrative"])
+                elif cond == "both":
+                    msgs = prompts.build_both(view, narrative=v["narrative"])
+                else:
+                    raise ValueError(f"grammar cell does not take condition {cond}")
+                planned.append((pid, v["variant_id"], mvid, cond, json.dumps(msgs), view,
+                                v["narrative"]))
 
         if dry_run:
-            log_fn(f"Grammar narrative_only planned trials: {len(planned)}")
+            log_fn(f"Grammar-cell planned trials: {len(planned)} ({', '.join(conditions)})")
             return {"pending": len(planned), "completed": 0, "errors": 0}
 
         pending = []
-        for pid, vid, mvid, prompt_text, view, narrative in planned:
-            tid = db.insert_trial(conn, pid, model, "narrative_only", prompt_text,
+        for pid, vid, mvid, cond, prompt_text, view, narrative in planned:
+            tid = db.insert_trial(conn, pid, model, cond, prompt_text,
                                   variant_id=vid, mask_variant_id=mvid)
             row = conn.execute("SELECT * FROM trials WHERE trial_id=?", (tid,)).fetchone()
             if row and row["response_text"] is None and row["error"] is None:
                 pending.append((row, view, narrative))
-        log_fn(f"Grammar narrative_only pending trials: {len(pending)} of {len(planned)}")
+        log_fn(f"Grammar-cell pending trials: {len(pending)} of {len(planned)}")
 
         completed = 0
         errors = 0
@@ -98,9 +114,9 @@ def run_grammar_narrative_only(model, concurrency=8, dry_run=False, log_fn=print
                         errors += 1
                     completed += 1
                     log_fn(f"  [{completed}/{len(pending)}] {row['puzzle_id']}/"
-                           f"grammar/narrative_only: {status}")
+                           f"grammar/{row['condition']}: {status}")
                 except Exception as e:
-                    log_fn(f"  ERROR {row['puzzle_id']}/grammar/narrative_only: {e}")
+                    log_fn(f"  ERROR {row['puzzle_id']}/grammar/{row['condition']}: {e}")
                     errors += 1
 
         log_fn(f"\nDone: {completed} completed, {errors} errors")
@@ -123,11 +139,14 @@ def classify_tiny(model, pids, log_fn=print):
 @click.option("--all-models", is_flag=True,
               help="Every model with trials on the NARC-tiny puzzles (overrides --model)")
 @click.option("--concurrency", default=8, type=int, help="Max parallel requests")
-@click.option("--skip-narrative-only", is_flag=True,
-              help="Skip step 1 (grammar text alone)")
+@click.option("--skip-grammar", "--skip-narrative-only", "skip_grammar", is_flag=True,
+              help="Skip step 1 (the grammar-text cell: narrative_only and both)")
+@click.option("--grammar-only", is_flag=True,
+              help="Run step 1 only (backfill_model.sh does classify and the sensitivity "
+                   "jobs corpus-wide itself)")
 @click.option("--dry-run", is_flag=True,
               help="List planned trials without calling the API or writing rows")
-def main(model, all_models, concurrency, skip_narrative_only, dry_run):
+def main(model, all_models, concurrency, skip_grammar, grammar_only, dry_run):
     conn = db.init_db()
     pids = tiny_puzzle_ids(conn)
     if all_models:
@@ -143,11 +162,13 @@ def main(model, all_models, concurrency, skip_narrative_only, dry_run):
         return
     for m in targets:
         click.echo(f"\n===== {m} =====")
-        if not skip_narrative_only:
-            click.echo(f"----- grammar text alone {m} -----")
-            res = run_grammar_narrative_only(m, concurrency=concurrency, dry_run=dry_run,
-                                             log_fn=click.echo)
-            click.echo(f"  grammar narrative_only: {res}")
+        if not skip_grammar:
+            click.echo(f"----- grammar-text cell {m} -----")
+            res = run_grammar_conditions(m, concurrency=concurrency, dry_run=dry_run,
+                                         log_fn=click.echo)
+            click.echo(f"  grammar cell: {res}")
+        if grammar_only:
+            continue
         if not dry_run:
             classify_tiny(m, pids, log_fn=click.echo)
         click.echo(f"----- order sensitivity {m} -----")

@@ -21,6 +21,8 @@ services:
     environment:
       - NARC_SECRET_KEY=${NARC_SECRET_KEY}
       - MINDROUTER_API_KEY=${MINDROUTER_API_KEY}
+      # Agreed MindRouter working limit (ceiling 300/min; 100/min kept as buffer)
+      - MINDROUTER_RATE_LIMIT_PER_MIN=200
     networks:
       - narc-net
     restart: unless-stopped

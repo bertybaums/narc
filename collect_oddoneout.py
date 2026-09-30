@@ -7,11 +7,19 @@ Two conditions: grids_only, grids_and_narrative.
 
 Puzzle selection: puzzles that are NARC on >= 1 model, plus a representative
 sample of stance puzzles. Distractors are chosen from different puzzles with
-similar grid dimensions.
+similar grid dimensions. NARC-tiny puzzles (a separate set) are never candidates
+or distractor sources.
+
+--replicate reuses the (puzzle, distractor puzzle) pairs already in oddoneout_trials
+instead of re-sampling, so a model added later runs the same set as the April 2026
+pilot (the sampler ranks by current NARC counts and shuffles a candidate pool that
+has since grown, so a fresh draw would differ). The distractor grid is picked from
+the stored distractor puzzle by the same rule; only its slot (A-D) is drawn afresh.
 
 Usage:
     python collect_oddoneout.py --model gpt-oss-120b
     python collect_oddoneout.py --model gpt-oss-120b --puzzle narc_042
+    python collect_oddoneout.py --model gpt-oss-120b --replicate
     python collect_oddoneout.py --model gpt-oss-120b --dry-run
 """
 
@@ -32,6 +40,7 @@ import models
 import prompts_oddoneout as prompts_ooo
 
 CONDITIONS = ["grids_only", "grids_and_narrative"]
+NARC_TINY = "narc-tiny"
 
 
 def load_config():
@@ -57,10 +66,11 @@ def get_candidate_puzzles(conn):
                COALESCE(SUM(c.has_narc), 0) as narc_count
         FROM puzzles p
         LEFT JOIN classifications c ON p.puzzle_id = c.puzzle_id
+        WHERE COALESCE(p.creator, '') != ?
         GROUP BY p.puzzle_id
         HAVING narc_count >= 1
         ORDER BY narc_count DESC
-    """).fetchall()
+    """, (NARC_TINY,)).fetchall()
 
     # Separate stance vs non-stance
     non_stance = []
@@ -116,6 +126,35 @@ def get_candidate_puzzles(conn):
             selected.append(p["puzzle_id"])
 
     return selected
+
+
+def distractor_from(conn, puzzle_data, dist_pid):
+    """The grid pick_distractor would take from `dist_pid` for this puzzle: first visible
+    grid with the reference dimensions, else the first visible grid. (None if none.)"""
+    seq = puzzle_data["sequence"]
+    masked = set(puzzle_data["masked_positions"])
+    visible = [item for item in seq if item["position"] not in masked]
+    if not visible:
+        return None
+    ref_rows, ref_cols = visible[0]["rows"], visible[0]["cols"]
+    row = db.get_puzzle(conn, dist_pid)
+    if not row:
+        return None
+    cand = db.puzzle_to_json(row)
+    cand_masked = set(cand["masked_positions"])
+    items = [it for it in cand["sequence"]
+             if it["position"] not in cand_masked and it.get("grid")]
+    for it in items:
+        if it["rows"] == ref_rows and it["cols"] == ref_cols:
+            return it["grid"]
+    return items[0]["grid"] if items else None
+
+
+def existing_pairs(conn):
+    """(puzzle_id, distractor_id) pairs already run by any model, oldest first."""
+    return [(r[0], r[1]) for r in conn.execute(
+        """SELECT puzzle_id, distractor_id FROM oddoneout_trials
+           GROUP BY puzzle_id, distractor_id ORDER BY MIN(rowid)""").fetchall()]
 
 
 def pick_distractor(conn, puzzle_data, all_puzzle_ids, rng):
@@ -290,7 +329,9 @@ def run_oddoneout_trial(model_config, extraction_config, puzzle_data,
 @click.option("--condition", default=None, type=click.Choice(CONDITIONS))
 @click.option("--concurrency", default=8, type=int)
 @click.option("--dry-run", is_flag=True)
-def main(model, puzzle, condition, concurrency, dry_run):
+@click.option("--replicate", is_flag=True,
+              help="Reuse the (puzzle, distractor) pairs already in oddoneout_trials")
+def main(model, puzzle, condition, concurrency, dry_run, replicate):
     config = load_config()
     model_config = get_model_config(config, model)
     extraction_config = get_model_config(config, "gpt-oss-120b-extract")
@@ -299,13 +340,22 @@ def main(model, puzzle, condition, concurrency, dry_run):
     conn = db.init_db()
 
     # Get candidate puzzles
+    fixed_distractor = {}  # puzzle_id -> distractor puzzle id (replicate mode)
     if puzzle:
         candidate_ids = [puzzle]
+    elif replicate:
+        for pid, dist in existing_pairs(conn):
+            fixed_distractor.setdefault(pid, dist)
+        candidate_ids = list(fixed_distractor)
+        if not candidate_ids:
+            click.echo("No existing odd-one-out trials to replicate; sampling instead.")
+            candidate_ids = get_candidate_puzzles(conn)
     else:
         candidate_ids = get_candidate_puzzles(conn)
 
-    # Load puzzle data
-    all_puzzle_ids = [r["puzzle_id"] for r in db.get_all_puzzles(conn)]
+    # Load puzzle data (distractor pool: hand-authored puzzles only)
+    all_puzzle_ids = [r["puzzle_id"] for r in db.get_all_puzzles(conn)
+                      if r["creator"] != NARC_TINY]
     puzzles_data = []
     for pid in candidate_ids:
         row = db.get_puzzle(conn, pid)
@@ -323,8 +373,12 @@ def main(model, puzzle, condition, concurrency, dry_run):
         rng = random.Random(hashlib.md5(pid.encode()).hexdigest())
 
         # Pick distractor
-        distractor_grid, distractor_pid = pick_distractor(
-            conn, pdata, all_puzzle_ids, rng)
+        if pid in fixed_distractor:
+            distractor_pid = fixed_distractor[pid]
+            distractor_grid = distractor_from(conn, pdata, distractor_pid)
+        else:
+            distractor_grid, distractor_pid = pick_distractor(
+                conn, pdata, all_puzzle_ids, rng)
         if distractor_grid is None:
             skipped += 1
             continue

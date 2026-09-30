@@ -42,7 +42,8 @@ app.register_blueprint(narrate_bp)
 app.register_blueprint(proto_bp)
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
-          "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
+          "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b",
+          "glm-5.3-flash", "mimo-v2.6-flash"]
 REVIEW_MODELS = MODELS
 
 # NARC-tiny: puzzles generated from TinyStories by the Narrative Hierarchy Model and imported
@@ -54,7 +55,9 @@ _TINY_PUZZLES = "(SELECT puzzle_id FROM puzzles WHERE creator='narc-tiny')"
 
 SITE_UPDATED = "September 29, 2026"
 GRADING_PROTOCOL_NOTE = ("Grading protocol v2 since September 16, 2026 "
-                         "(extraction-key fix; every stored trial was rescored).")
+                         "(extraction-key fix; every stored trial was rescored); "
+                         "v2.1 since September 29, 2026 (the extraction pass also sees "
+                         "the model's final message, not only its reasoning trace).")
 
 
 def _fmt_date(s):

@@ -4,7 +4,8 @@ Two conditions:
   - grids_only: shuffled grids, no narrative
   - grids_and_narrative: shuffled grids + narrative clue
 
-Eligible puzzles: active (not draft), 4+ grids.
+Eligible puzzles: active (not draft), 4+ grids, hand-authored (NARC-tiny puzzles are a
+separate set with their own Inspect tab and are left out; --include-tiny overrides).
 
 Usage:
     python collect_ordering.py --model gpt-oss-120b
@@ -75,8 +76,11 @@ def get_active_puzzle_ids(conn):
     return [r["puzzle_id"] for r in rows]
 
 
-def get_eligible_puzzles(conn, single_puzzle=None):
-    """Return active puzzles with 4+ grids."""
+NARC_TINY = "narc-tiny"
+
+
+def get_eligible_puzzles(conn, single_puzzle=None, include_tiny=False):
+    """Return active puzzles with 4+ grids (hand-authored unless include_tiny)."""
     active_ids = set(get_active_puzzle_ids(conn))
 
     if single_puzzle:
@@ -94,6 +98,8 @@ def get_eligible_puzzles(conn, single_puzzle=None):
     all_puzzles = db.get_all_puzzles(conn)
     eligible = []
     for row in all_puzzles:
+        if not include_tiny and row["creator"] == NARC_TINY:
+            continue
         pdata = db.puzzle_to_json(row)
         if pdata["puzzle_id"] not in active_ids:
             continue
@@ -251,7 +257,9 @@ def run_ordering_trial(model_config, extraction_config, puzzle_data, condition):
               help="Single condition (default: both)")
 @click.option("--concurrency", default=8, type=int, help="Max parallel requests")
 @click.option("--dry-run", is_flag=True, help="Show what would be done")
-def main(model, puzzle, condition, concurrency, dry_run):
+@click.option("--include-tiny", is_flag=True,
+              help="Also run the NARC-tiny puzzles (kept out by default: separate set)")
+def main(model, puzzle, condition, concurrency, dry_run, include_tiny):
     config = load_config()
     model_config = get_model_config(config, model)
     extraction_config = get_model_config(config, "gpt-oss-120b-extract")
@@ -261,7 +269,7 @@ def main(model, puzzle, condition, concurrency, dry_run):
     ensure_ordering_tables(conn)
 
     # Get eligible puzzles
-    eligible = get_eligible_puzzles(conn, single_puzzle=puzzle)
+    eligible = get_eligible_puzzles(conn, single_puzzle=puzzle, include_tiny=include_tiny)
     click.echo(f"Ordering experiment: {len(eligible)} puzzles x {len(conditions)} "
                f"conditions on {model}")
 

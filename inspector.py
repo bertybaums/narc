@@ -22,7 +22,8 @@ from grids import grid_to_base64_png, COLOR_RGB
 # ---------------------------------------------------------------------------
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
-          "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b"]
+          "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b",
+          "glm-5.3-flash", "mimo-v2.6-flash"]
 CONDITIONS = ["grids_only", "narrative_only", "both"]
 
 

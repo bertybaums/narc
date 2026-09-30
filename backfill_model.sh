@@ -4,15 +4,18 @@
 #   ./backfill_model.sh MODEL [CONCURRENCY]      (default concurrency 4)
 #
 # Mirrors what an AI Review job does per puzzle (server._run_review_job), but
-# corpus-wide and sequential: collect -> matrix -> classify -> order-sensitivity
-# -> narrative-sensitivity, then one retry pass at concurrency 1 for trials that
-# failed at the HTTP layer, then a final classify. Every step is resumable —
+# corpus-wide and sequential: collect -> matrix -> NARC-tiny grammar cell ->
+# classify -> order-sensitivity -> narrative-sensitivity, then one retry pass at
+# concurrency 1 for trials that failed at the HTTP layer, then a final classify,
+# then the two pilot experiments (ordering on every eligible hand-authored puzzle,
+# odd-one-out on the pilot's puzzle/distractor pairs). Every step is resumable —
 # the collect scripts only run trials that have no answer yet — so killing and
 # relaunching this script just picks up where it left off.
 #
 # Rate limits: all requests go through the shared SQLite token bucket
-# (ratelimit.py, 95 req/min across every process using this narc.db), so the
-# backfill and live review jobs can't jointly exceed MindRouter's ceiling.
+# (ratelimit.py, 200 req/min across every process using this narc.db), so the
+# backfill and live review jobs can't jointly exceed the agreed MindRouter limit.
+# Two backfills side by side share that same bucket.
 #
 # Run on prod from inside the container so it uses the live DB + key:
 #   ssh devops@bbaum.insight.uidaho.edu \
@@ -44,6 +47,7 @@ echo "$MODEL START concurrency=$CONC $(date -u)" >> "$LOGDIR/_status.log"
 
 phase "collect"               "$PY" collect.py --model "$MODEL" --concurrency "$CONC"
 phase "matrix"                "$PY" collect_matrix.py --model "$MODEL" --concurrency "$CONC"
+phase "tiny-grammar"          "$PY" collect_narc_tiny.py --model "$MODEL" --grammar-only --concurrency "$CONC"
 phase "classify"              "$PY" classify.py --model "$MODEL"
 phase "sensitivity"           "$PY" collect_sensitivity.py --model "$MODEL" --concurrency "$CONC"
 phase "narrative-sensitivity" "$PY" collect_narrative_sensitivity.py --model "$MODEL" --concurrency "$CONC"
@@ -52,10 +56,18 @@ phase "narrative-sensitivity" "$PY" collect_narrative_sensitivity.py --model "$M
 phase "retry-reset"           "$PY" retry_errors.py --model "$MODEL"
 phase "retry-collect"         "$PY" collect.py --model "$MODEL" --concurrency 1
 phase "retry-matrix"          "$PY" collect_matrix.py --model "$MODEL" --concurrency 1
+phase "retry-tiny-grammar"    "$PY" collect_narc_tiny.py --model "$MODEL" --grammar-only --concurrency 1
 phase "retry-sensitivity"     "$PY" collect_sensitivity.py --model "$MODEL" --concurrency 1
 phase "retry-narrative-sens"  "$PY" collect_narrative_sensitivity.py --model "$MODEL" --concurrency 1
 
 phase "final-classify"        "$PY" classify.py --model "$MODEL"
+
+# Pilot experiments (own tables, own Inspect tabs). Both skip finished trials, so a
+# second pass is the retry.
+phase "ordering"              "$PY" collect_ordering.py --model "$MODEL" --concurrency "$CONC"
+phase "oddoneout"             "$PY" collect_oddoneout.py --model "$MODEL" --concurrency "$CONC" --replicate
+phase "retry-ordering"        "$PY" collect_ordering.py --model "$MODEL" --concurrency 1
+phase "retry-oddoneout"       "$PY" collect_oddoneout.py --model "$MODEL" --concurrency 1 --replicate
 
 echo "===== $MODEL done ($(date -u '+%Y-%m-%d %H:%M:%S UTC')) =====" >> "$LOG"
 echo "$MODEL DONE $(date -u)" >> "$LOGDIR/_status.log"

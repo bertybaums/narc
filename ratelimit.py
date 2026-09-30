@@ -6,8 +6,11 @@ independently grant the full per-minute allowance, effectively multiplying
 the rate by the worker count. Persisting state in SQLite with an IMMEDIATE
 transaction makes the bucket truly global across processes.
 
-Configured via env var MINDROUTER_RATE_LIMIT_PER_MIN (default 95 — under
-MindRouter's 100/min ceiling).
+Configured via env var MINDROUTER_RATE_LIMIT_PER_MIN (default 200). MindRouter's
+ceiling is 300/min; 200 is the agreed working limit and the other 100 is buffer for
+everything else that shares the key (September 29, 2026; was 95 under the old
+100/min ceiling). The bucket is per narc.db, so it coordinates every process in one
+deployment (web workers, review jobs, backfills) but not other machines or projects.
 """
 
 import os
@@ -119,7 +122,7 @@ class SqliteTokenBucket:
                 "rate_per_min": self.rate_per_sec * 60.0}
 
 
-_DEFAULT_RATE = int(os.environ.get("MINDROUTER_RATE_LIMIT_PER_MIN", "95"))
+_DEFAULT_RATE = int(os.environ.get("MINDROUTER_RATE_LIMIT_PER_MIN", "200"))
 mindrouter_bucket = SqliteTokenBucket(
     db_path=DB_PATH,
     name="mindrouter",

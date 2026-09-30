@@ -57,6 +57,16 @@ def call_llm_two_pass(model_config, messages, extraction_prompt_fn,
     raw1_data = json.loads(raw1) if isinstance(raw1, str) else raw1
     msg = raw1_data.get("choices", [{}])[0].get("message", {})
     reasoning = msg.get("reasoning_content") or text1 or ""
+    # Models that split their turn into reasoning_content + content (gpt-oss, Nemotron,
+    # GLM) put the final answer in content. Until September 29, 2026 only
+    # reasoning_content reached the extractor; gpt-oss repeats its grid there, so it
+    # rarely mattered (audit: 2 of 400 trials), but GLM's reasoning_content is a
+    # one-line summary, so the extractor never saw its answer and guessed. Append
+    # the final message so the tail (below) ends with the answer. Content-only models
+    # are unchanged (content is already `reasoning`).
+    content = msg.get("content") or ""
+    if content and content != reasoning:
+        reasoning = reasoning + "\n\n" + content
 
     pass2_config = extraction_model_config or model_config
     # Truncate reasoning to last 4000 chars for extraction — conclusions are at the end
