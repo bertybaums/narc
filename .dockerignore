@@ -11,3 +11,5 @@ narc_recover.sql
 .env
 logs/
 narrate_data/
+# DB snapshots (bind-mounted at runtime via ./data; 4 GB baked into every image before Sep 29, 2026)
+data/backups/
