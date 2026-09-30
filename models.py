@@ -14,7 +14,25 @@ import httpx
 from ratelimit import mindrouter_bucket
 
 
-def call_llm(model_config, messages):
+# Streaming (September 29, 2026, protocol v3). MindRouter aborts a non-streaming backend
+# attempt after 180 s ("Backend attempt exceeded 180s; use streaming or reduce
+# max_tokens"), retries up to 3x and returns 504 at 300 s — a wall-clock cap in place of
+# the token cap v3 removed. A streamed request is exempt: measured 269 s and 323 s
+# generations to completion. The SSE deltas are reassembled into the same response
+# shape the non-streaming path returned (choices[0].message.{content,reasoning_content},
+# choices[0].finish_reason, usage), so everything downstream — grading, db.STANDS_SQL,
+# audits over raw_response — is unchanged. STREAM_IDLE_TIMEOUT bounds the silence
+# between chunks, not the whole generation.
+STREAM = True
+STREAM_IDLE_TIMEOUT = 180.0
+
+
+class StreamEndedEarly(RuntimeError):
+    """The SSE stream stopped before finish_reason/[DONE]: MindRouter documents that a
+    backend failure after the first chunk ends the stream with no error event."""
+
+
+def call_llm(model_config, messages, stream=None):
     """Call an LLM. Returns (raw_response_json, response_text, latency_ms)."""
     api_key = _get_api_key(model_config)
     endpoint = model_config["endpoint"].rstrip("/")
@@ -33,20 +51,77 @@ def call_llm(model_config, messages):
         body["max_tokens"] = model_config["max_tokens"]
     if "reasoning_effort" in model_config:
         body["reasoning_effort"] = model_config["reasoning_effort"]
+    if stream is None:
+        stream = model_config.get("stream", STREAM)
 
     mindrouter_bucket.acquire()
 
     start = time.monotonic()
-    with httpx.Client(timeout=model_config.get("timeout", 300.0)) as client:
-        resp = client.post(url, json=body, headers=headers)
-        resp.raise_for_status()
-    latency_ms = int((time.monotonic() - start) * 1000)
+    if not stream:
+        with httpx.Client(timeout=model_config.get("timeout", 300.0)) as client:
+            resp = client.post(url, json=body, headers=headers)
+            resp.raise_for_status()
+        latency_ms = int((time.monotonic() - start) * 1000)
+        raw = resp.text
+        data = resp.json()
+        msg = data["choices"][0]["message"]
+        text = msg.get("content") or msg.get("reasoning_content") or ""
+        return raw, text, latency_ms
 
-    raw = resp.text
-    data = resp.json()
-    msg = data["choices"][0]["message"]
-    text = msg.get("content") or msg.get("reasoning_content") or ""
-    return raw, text, latency_ms
+    body["stream"] = True
+    body["stream_options"] = {"include_usage": True}
+    content, reasoning = [], []
+    finish = None
+    usage = None
+    meta = {}
+    done = False
+    timeout = httpx.Timeout(connect=30.0, read=model_config.get("stream_idle_timeout",
+                                                               STREAM_IDLE_TIMEOUT),
+                            write=30.0, pool=30.0)
+    with httpx.Client(timeout=timeout) as client:
+        with client.stream("POST", url, json=body, headers=headers) as resp:
+            if resp.status_code >= 400:
+                resp.read()  # so the error body is available in the exception message
+            resp.raise_for_status()
+            for line in resp.iter_lines():
+                if not line.startswith("data:"):
+                    continue
+                payload = line[5:].strip()
+                if payload == "[DONE]":
+                    done = True
+                    break
+                try:
+                    ev = json.loads(payload)
+                except ValueError:
+                    continue
+                if not meta and ev.get("id"):
+                    meta = {"id": ev.get("id"), "model": ev.get("model"),
+                            "created": ev.get("created")}
+                if ev.get("usage"):
+                    usage = ev["usage"]
+                for ch in ev.get("choices") or []:
+                    delta = ch.get("delta") or {}
+                    if delta.get("content"):
+                        content.append(delta["content"])
+                    r = delta.get("reasoning_content") or delta.get("reasoning")
+                    if r:
+                        reasoning.append(r)
+                    if ch.get("finish_reason"):
+                        finish = ch["finish_reason"]
+    latency_ms = int((time.monotonic() - start) * 1000)
+    if not done and finish is None:
+        raise StreamEndedEarly(
+            f"stream ended early after {latency_ms} ms without finish_reason "
+            f"({len(reasoning)} reasoning / {len(content)} content chunks)")
+
+    message = {"role": "assistant", "content": "".join(content) or None}
+    if reasoning:
+        message["reasoning_content"] = "".join(reasoning)
+    data = {**meta, "object": "chat.completion",
+            "choices": [{"index": 0, "message": message, "finish_reason": finish}],
+            "usage": usage, "streamed": True}
+    text = message.get("content") or message.get("reasoning_content") or ""
+    return json.dumps(data), text, latency_ms
 
 
 def call_llm_two_pass(model_config, messages, extraction_prompt_fn,

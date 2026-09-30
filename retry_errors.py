@@ -32,6 +32,8 @@ TRANSPORT_PATTERNS = [
     "Bad Gateway",
     "Service Unavailable",
     "Environment variable",  # MINDROUTER_API_KEY missing at run time
+    "stream ended early",    # models.StreamEndedEarly: backend failed mid-stream
+    "Backend attempt exceeded",  # MindRouter 504 body (non-streaming path)
 ]
 
 PARSE_PATTERNS = [
