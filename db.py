@@ -8,9 +8,29 @@ from pathlib import Path
 SCHEMA_PATH = Path(__file__).parent / "schema.sql"
 DB_PATH = "narc.db"
 
+# Collection protocol written on every new trial (trials.protocol, ordering_trials,
+# oddoneout_trials). v2: explicit max_tokens cap, until September 29, 2026. v3: no cap.
+# Older rows are never changed. A trial "stands" when the cap did not decide it — a chat
+# completion whose finish_reason is not "length" — and then no newer-protocol row is
+# planned for that slot: same prompt, temperature 0, the answer would be the same.
+# Rows that hit the cap, rows imported as a response tail (NARC-tiny, `imported_from`)
+# and rows never answered get a fresh row under the current protocol. classify.py then
+# merges protocols per cell with OR: a model that solved it under either counts as
+# having solved it (benefit of the doubt), and the older record stays for our own use.
+PROTOCOL = "v3"
+# CASE, not AND: SQLite may reorder AND terms and call json_type on a row whose
+# raw_response is not JSON (the imported claude-fable-5-1 rows), which raises.
+STANDS_SQL = ("(CASE WHEN raw_response IS NULL THEN 0"
+              " WHEN NOT json_valid(raw_response) THEN 0"
+              " WHEN json_type(raw_response, '$.choices') IS NOT 'array' THEN 0"
+              " WHEN json_extract(raw_response, '$.choices[0].finish_reason') IS 'length' THEN 0"
+              " ELSE 1 END) = 1")
+
 
 def init_db(path=DB_PATH):
-    conn = sqlite3.connect(path)
+    # 30 s busy timeout: several backfill processes plus the web workers write to one
+    # WAL database, and a checkpoint of a 1 GB file can hold the lock for seconds.
+    conn = sqlite3.connect(path, timeout=30.0)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA journal_mode=WAL")
     conn.executescript(SCHEMA_PATH.read_text())
@@ -44,11 +64,128 @@ def _apply_migrations(conn):
     _migrate_mask_variant_id(conn)
     _migrate_narc_strength(conn)
     _migrate_narrative_dependence(conn)
+    _migrate_protocol(conn)
 
 
 def _has_column(conn, table, column):
     cols = conn.execute(f"PRAGMA table_info({table})").fetchall()
     return any(c["name"] == column for c in cols)
+
+
+# Protocol v3 (September 29, 2026): add `protocol` to the three trial tables and fold it
+# into their UNIQUE keys, tagging every existing row 'v2'. Columns other than protocol
+# are copied one to one; the row count is unchanged. Each rebuild is one IMMEDIATE
+# transaction with the column check inside it, so two processes starting together
+# (gunicorn workers, a backfill) cannot both rebuild. On a 1 GB trials table this takes
+# a minute or two: run it once by hand (docker exec ... python -c "import db; db.init_db()")
+# before the web app takes requests, since a request-time run would sit inside
+# gunicorn's 120 s worker timeout.
+_PROTOCOL_TABLES = {
+    "trials": ("""
+        CREATE TABLE trials_new (
+            trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+            puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+            variant_id     INTEGER REFERENCES narrative_variants(variant_id),
+            mask_variant_id INTEGER REFERENCES mask_variants(mask_variant_id),
+            model_name     TEXT NOT NULL,
+            condition      TEXT NOT NULL,
+            repeat_num     INTEGER DEFAULT 1,
+            prompt_text    TEXT NOT NULL,
+            raw_response   TEXT,
+            response_text  TEXT,
+            response_at    TEXT,
+            latency_ms     INTEGER,
+            error          TEXT,
+            predicted_grids TEXT,
+            reasoning      TEXT,
+            correct        INTEGER,
+            cell_accuracy  REAL,
+            protocol       TEXT NOT NULL DEFAULT 'v3',
+            UNIQUE(puzzle_id, variant_id, mask_variant_id, model_name, condition, repeat_num, protocol)
+        )""",
+        ["trial_id", "puzzle_id", "variant_id", "mask_variant_id", "model_name", "condition",
+         "repeat_num", "prompt_text", "raw_response", "response_text", "response_at",
+         "latency_ms", "error", "predicted_grids", "reasoning", "correct", "cell_accuracy"]),
+    "oddoneout_trials": ("""
+        CREATE TABLE oddoneout_trials_new (
+            trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+            puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+            distractor_id  TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+            model_name     TEXT NOT NULL,
+            condition      TEXT NOT NULL,
+            repeat_num     INTEGER DEFAULT 1,
+            prompt_text    TEXT,
+            raw_response   TEXT,
+            response_text  TEXT,
+            response_at    TEXT,
+            latency_ms     INTEGER,
+            error          TEXT,
+            predicted_odd  INTEGER,
+            correct_odd    INTEGER NOT NULL,
+            correct        INTEGER,
+            reasoning      TEXT,
+            protocol       TEXT NOT NULL DEFAULT 'v3',
+            UNIQUE(puzzle_id, distractor_id, model_name, condition, repeat_num, protocol)
+        )""",
+        ["trial_id", "puzzle_id", "distractor_id", "model_name", "condition", "repeat_num",
+         "prompt_text", "raw_response", "response_text", "response_at", "latency_ms", "error",
+         "predicted_odd", "correct_odd", "correct", "reasoning"]),
+    "ordering_trials": ("""
+        CREATE TABLE ordering_trials_new (
+            trial_id       INTEGER PRIMARY KEY AUTOINCREMENT,
+            puzzle_id      TEXT NOT NULL REFERENCES puzzles(puzzle_id),
+            model_name     TEXT NOT NULL,
+            condition      TEXT NOT NULL,
+            repeat_num     INTEGER DEFAULT 1,
+            prompt_text    TEXT,
+            correct_order  TEXT NOT NULL,
+            raw_response   TEXT,
+            response_text  TEXT,
+            response_at    TEXT,
+            latency_ms     INTEGER,
+            error          TEXT,
+            predicted_order TEXT,
+            reasoning      TEXT,
+            exact_match    INTEGER,
+            kendall_tau    REAL,
+            protocol       TEXT NOT NULL DEFAULT 'v3',
+            UNIQUE(puzzle_id, model_name, condition, repeat_num, protocol)
+        )""",
+        ["trial_id", "puzzle_id", "model_name", "condition", "repeat_num", "prompt_text",
+         "correct_order", "raw_response", "response_text", "response_at", "latency_ms",
+         "error", "predicted_order", "reasoning", "exact_match", "kendall_tau"]),
+}
+
+
+def _migrate_protocol(conn):
+    """Rebuild each trial table with the protocol column (see _PROTOCOL_TABLES).
+    Existing rows are tagged 'v2'. Idempotent; skips tables that do not exist yet
+    (ordering_trials is created by collect_ordering.ensure_ordering_tables)."""
+    for table, (create_sql, cols) in _PROTOCOL_TABLES.items():
+        exists = conn.execute(
+            "SELECT 1 FROM sqlite_master WHERE type='table' AND name=?", (table,)).fetchone()
+        if not exists or _has_column(conn, table, "protocol"):
+            continue
+        conn.execute("BEGIN IMMEDIATE")
+        try:
+            if _has_column(conn, table, "protocol"):   # another process got here first
+                conn.execute("ROLLBACK")
+                continue
+            before = conn.execute(f"SELECT COUNT(*) FROM {table}").fetchone()[0]
+            conn.execute(f"DROP TABLE IF EXISTS {table}_new")
+            conn.execute(create_sql)
+            col_list = ", ".join(cols)
+            conn.execute(f"INSERT INTO {table}_new ({col_list}, protocol) "
+                         f"SELECT {col_list}, 'v2' FROM {table}")
+            after = conn.execute(f"SELECT COUNT(*) FROM {table}_new").fetchone()[0]
+            if after != before:
+                raise RuntimeError(f"{table}: copied {after} of {before} rows; aborting")
+            conn.execute(f"DROP TABLE {table}")
+            conn.execute(f"ALTER TABLE {table}_new RENAME TO {table}")
+            conn.execute("COMMIT")
+        except Exception:
+            conn.execute("ROLLBACK")
+            raise
 
 
 def _migrate_mask_variant_id(conn):
@@ -381,12 +518,17 @@ def get_enabled_pairs(conn, puzzle_id):
 # --- trials ---
 
 def insert_trial(conn, puzzle_id, model_name, condition, prompt_text,
-                 variant_id=None, repeat_num=1, mask_variant_id=None):
-    # The UNIQUE constraint never fires when variant_id or mask_variant_id is
-    # NULL (SQLite treats NULLs as distinct), so INSERT OR IGNORE alone would
-    # duplicate base-protocol rows on every re-run. Look up NULL-safe first and
-    # only insert when the slot is genuinely missing. Prefer an answered row so
-    # duplicates left by the old behavior don't shadow completed work.
+                 variant_id=None, repeat_num=1, mask_variant_id=None, protocol=PROTOCOL):
+    """Return the trial_id that stands for this slot under `protocol`, inserting a
+    pending row only when nothing does.
+
+    Order of preference: a row of this protocol (answered before pending); a standing
+    row of an older protocol (see STANDS_SQL: the cap did not decide it, so it is the
+    answer under any protocol); else a new pending row of this protocol.
+
+    The UNIQUE constraint never fires when variant_id or mask_variant_id is NULL
+    (SQLite treats NULLs as distinct), so INSERT OR IGNORE alone would duplicate
+    base-protocol rows on every re-run; the NULL-safe lookup comes first."""
     conds = ["puzzle_id=?", "model_name=?", "condition=?", "repeat_num=?"]
     params = [puzzle_id, model_name, condition, repeat_num]
     if variant_id is None:
@@ -397,22 +539,27 @@ def insert_trial(conn, puzzle_id, model_name, condition, prompt_text,
         conds.append("mask_variant_id IS NULL")
     else:
         conds.append("mask_variant_id=?"); params.append(mask_variant_id)
-    lookup = ("SELECT trial_id FROM trials WHERE " + " AND ".join(conds) +
-              " ORDER BY (response_text IS NOT NULL OR error IS NOT NULL) DESC,"
-              " trial_id")
-    row = conn.execute(lookup, tuple(params)).fetchone()
+    where = " AND ".join(conds)
+    lookup = (f"SELECT trial_id FROM trials WHERE {where} AND protocol=?"
+              " ORDER BY (response_text IS NOT NULL OR error IS NOT NULL) DESC, trial_id")
+    row = conn.execute(lookup, tuple(params) + (protocol,)).fetchone()
     if row:
         return row["trial_id"]
+    standing = conn.execute(
+        f"SELECT trial_id FROM trials WHERE {where} AND protocol != ? AND {STANDS_SQL}"
+        " ORDER BY trial_id DESC", tuple(params) + (protocol,)).fetchone()
+    if standing:
+        return standing["trial_id"]
     conn.execute(
         """INSERT OR IGNORE INTO trials
            (puzzle_id, variant_id, mask_variant_id, model_name, condition,
-            repeat_num, prompt_text)
-           VALUES (?, ?, ?, ?, ?, ?, ?)""",
+            repeat_num, prompt_text, protocol)
+           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
         (puzzle_id, variant_id, mask_variant_id, model_name, condition,
-         repeat_num, prompt_text),
+         repeat_num, prompt_text, protocol),
     )
     conn.commit()
-    row = conn.execute(lookup, tuple(params)).fetchone()
+    row = conn.execute(lookup, tuple(params) + (protocol,)).fetchone()
     return row["trial_id"]
 
 

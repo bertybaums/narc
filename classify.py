@@ -51,25 +51,31 @@ def run_classify_job(model, puzzle=None, log_fn=print):
             # both the narrative variant and the mask. To classify a (variant,
             # mask) cell we pair that cell's narrative results with its mask's
             # grids_only result.
+            # Protocols merge with OR (benefit of the doubt, September 29, 2026): a
+            # slot — (variant, mask, condition, repeat) — that any protocol's trial
+            # solved counts as solved. v2 rows (capped) stay in the table for the
+            # record; v3 rows exist only where the cap decided the v2 trial.
+            best = {}                          # (variant_id, mask_variant_id, condition, repeat_num) -> correct
+            for t in trials:
+                if t["correct"] is None:
+                    continue
+                slot = (t["variant_id"], t["mask_variant_id"], t["condition"], t["repeat_num"])
+                best[slot] = max(best.get(slot, 0), t["correct"])
+
             grids_by_mask = {}                 # mask_variant_id -> correct
             narrative_by_cell = {}             # (variant_id, mask_variant_id) -> {cond: correct}
             shuffled_by_cell = {}              # (variant_id, mask_variant_id) -> [correct, ...]
             keywords_by_cell = {}              # (variant_id, mask_variant_id) -> [correct, ...]
-            for t in trials:
-                if t["correct"] is None:
-                    continue
-                mvid = t["mask_variant_id"]
-                if t["condition"] == "grids_only":
-                    grids_by_mask[mvid] = t["correct"]
-                elif t["condition"] == "both_shuffled":
-                    shuffled_by_cell.setdefault((t["variant_id"], mvid), []).append(
-                        t["correct"])
-                elif t["condition"] == "both_keywords":
-                    keywords_by_cell.setdefault((t["variant_id"], mvid), []).append(
-                        t["correct"])
+            for (vid, mvid, condition, _rep), correct in sorted(
+                    best.items(), key=lambda kv: (str(kv[0][0]), str(kv[0][1]), kv[0][2], kv[0][3])):
+                if condition == "grids_only":
+                    grids_by_mask[mvid] = max(grids_by_mask.get(mvid, 0), correct)
+                elif condition == "both_shuffled":
+                    shuffled_by_cell.setdefault((vid, mvid), []).append(correct)
+                elif condition == "both_keywords":
+                    keywords_by_cell.setdefault((vid, mvid), []).append(correct)
                 else:
-                    cell = (t["variant_id"], mvid)
-                    narrative_by_cell.setdefault(cell, {})[t["condition"]] = t["correct"]
+                    narrative_by_cell.setdefault((vid, mvid), {})[condition] = correct
 
             # Classify every cell that has narrative data, plus any mask that has
             # only a grids_only result (so grids_sufficient is still recorded).

@@ -54,10 +54,15 @@ _TINY_PUZZLES = "(SELECT puzzle_id FROM puzzles WHERE creator='narc-tiny')"
 
 
 SITE_UPDATED = "September 29, 2026"
-GRADING_PROTOCOL_NOTE = ("Grading protocol v2 since September 16, 2026 "
-                         "(extraction-key fix; every stored trial was rescored); "
-                         "v2.1 since September 29, 2026 (the extraction pass also sees "
-                         "the model's final message, not only its reasoning trace).")
+GRADING_PROTOCOL_NOTE = ("Protocol v2 since September 16, 2026 (extraction-key fix; every "
+                         "stored trial was rescored); v2.1 since September 29, 2026 (the "
+                         "extraction pass also sees the model's final message). "
+                         "Protocol v3, September 29, 2026: no completion-token cap. Until "
+                         "then the reasoning models hit the cap on most trials and were "
+                         "graded on a cut-off trace. Every cap-hit trial is being re-run "
+                         "without the cap; a slot solved under either protocol counts as "
+                         "solved, so counts can only rise while the re-run continues. "
+                         "claude-fable-5-1 results are imported and stay at v2.")
 
 
 def _fmt_date(s):
@@ -526,11 +531,16 @@ def _inspect_ordering(conn, include_drafts=True):
         "SELECT DISTINCT model_name FROM ordering_trials ORDER BY model_name"
     ).fetchall()]
 
+    # Best across protocols per slot (benefit of the doubt, see db.PROTOCOL), then
+    # the mean over repeats.
     rows = conn.execute(
         """SELECT puzzle_id, model_name, condition,
-                  AVG(kendall_tau) as avg_tau, COUNT(*) as n
-           FROM ordering_trials
-           WHERE kendall_tau IS NOT NULL
+                  AVG(tau) as avg_tau, COUNT(*) as n
+           FROM (SELECT puzzle_id, model_name, condition, repeat_num,
+                        MAX(kendall_tau) AS tau
+                 FROM ordering_trials
+                 WHERE kendall_tau IS NOT NULL
+                 GROUP BY puzzle_id, model_name, condition, repeat_num)
            GROUP BY puzzle_id, model_name, condition"""
     ).fetchall()
 
@@ -752,11 +762,15 @@ def _inspect_oddoneout(conn, include_drafts=True):
         "SELECT DISTINCT model_name FROM oddoneout_trials ORDER BY model_name"
     ).fetchall()]
 
+    # Best across protocols per slot (benefit of the doubt, see db.PROTOCOL).
     rows = conn.execute(
         """SELECT puzzle_id, model_name, condition,
-                  COUNT(*) as n, SUM(correct) as correct_count
-           FROM oddoneout_trials
-           WHERE correct IS NOT NULL
+                  COUNT(*) as n, SUM(c) as correct_count
+           FROM (SELECT puzzle_id, model_name, condition, distractor_id, repeat_num,
+                        MAX(correct) AS c
+                 FROM oddoneout_trials
+                 WHERE correct IS NOT NULL
+                 GROUP BY puzzle_id, model_name, condition, distractor_id, repeat_num)
            GROUP BY puzzle_id, model_name, condition"""
     ).fetchall()
 

@@ -63,7 +63,8 @@ def ensure_ordering_tables(conn):
             reasoning      TEXT,
             exact_match    INTEGER,
             kendall_tau    REAL,
-            UNIQUE(puzzle_id, model_name, condition, repeat_num)
+            protocol       TEXT NOT NULL DEFAULT 'v3',   -- see trials.protocol in schema.sql
+            UNIQUE(puzzle_id, model_name, condition, repeat_num, protocol)
         );
     """)
 
@@ -279,11 +280,14 @@ def main(model, puzzle, condition, concurrency, dry_run, include_tiny):
         pid = pdata["puzzle_id"]
         for cond in conditions:
             # Check if already done
+            # Done when this protocol answered, or an older protocol's answer stands
+            # (the cap did not decide it — db.STANDS_SQL).
             existing = conn.execute(
-                """SELECT trial_id FROM ordering_trials
+                f"""SELECT trial_id FROM ordering_trials
                    WHERE puzzle_id=? AND model_name=? AND condition=?
-                         AND predicted_order IS NOT NULL""",
-                (pid, model, cond),
+                         AND predicted_order IS NOT NULL
+                         AND (protocol=? OR {db.STANDS_SQL})""",
+                (pid, model, cond, db.PROTOCOL),
             ).fetchone()
             if existing:
                 continue
@@ -335,14 +339,14 @@ def main(model, puzzle, condition, concurrency, dry_run, include_tiny):
                        (puzzle_id, model_name, condition, correct_order,
                         raw_response, response_text, reasoning,
                         predicted_order, error, latency_ms,
-                        exact_match, kendall_tau, response_at)
+                        exact_match, kendall_tau, response_at, protocol)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                               ?, ?, datetime('now'))""",
+                               ?, ?, datetime('now'), ?)""",
                     (pid, model, cond, json.dumps(correct_order),
                      result["raw_response"], result["response_text"],
                      result["reasoning"], json.dumps(predicted) if predicted else None,
                      error, result["latency_ms"],
-                     exact, tau),
+                     exact, tau, db.PROTOCOL),
                 )
                 conn.commit()
 

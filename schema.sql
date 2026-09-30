@@ -75,7 +75,12 @@ CREATE TABLE IF NOT EXISTS trials (
     reasoning      TEXT,
     correct        INTEGER,
     cell_accuracy  REAL,
-    UNIQUE(puzzle_id, variant_id, mask_variant_id, model_name, condition, repeat_num)
+    -- Protocol the trial ran under (see db.PROTOCOL). v2: explicit max_tokens cap
+    -- (until September 29, 2026); v3: no cap. Rows of older protocols are never
+    -- changed; a v3 row is added only where the older one hit the cap. classify.py
+    -- merges protocols per cell with OR (benefit of the doubt).
+    protocol       TEXT NOT NULL DEFAULT 'v3',
+    UNIQUE(puzzle_id, variant_id, mask_variant_id, model_name, condition, repeat_num, protocol)
 );
 
 CREATE TABLE IF NOT EXISTS classifications (
@@ -162,7 +167,8 @@ CREATE TABLE IF NOT EXISTS oddoneout_trials (
     correct_odd    INTEGER NOT NULL,          -- 0-3 index of actual distractor
     correct        INTEGER,                   -- 1 if predicted == correct
     reasoning      TEXT,
-    UNIQUE(puzzle_id, distractor_id, model_name, condition, repeat_num)
+    protocol       TEXT NOT NULL DEFAULT 'v3',     -- see trials.protocol
+    UNIQUE(puzzle_id, distractor_id, model_name, condition, repeat_num, protocol)
 );
 
 -- Voting

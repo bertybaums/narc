@@ -388,11 +388,14 @@ def main(model, puzzle, condition, concurrency, dry_run, replicate):
 
         for cond in conditions:
             # Skip if already done
+            # Done when this protocol answered, or an older protocol's answer stands
+            # (the cap did not decide it — db.STANDS_SQL).
             existing = conn.execute(
-                """SELECT trial_id FROM oddoneout_trials
+                f"""SELECT trial_id FROM oddoneout_trials
                    WHERE puzzle_id=? AND distractor_id=? AND model_name=?
-                         AND condition=? AND predicted_odd IS NOT NULL""",
-                (pid, distractor_pid, model, cond),
+                         AND condition=? AND predicted_odd IS NOT NULL
+                         AND (protocol=? OR {db.STANDS_SQL})""",
+                (pid, distractor_pid, model, cond, db.PROTOCOL),
             ).fetchone()
             if existing:
                 continue
@@ -445,14 +448,14 @@ def main(model, puzzle, condition, concurrency, dry_run, replicate):
                        (puzzle_id, distractor_id, model_name, condition,
                         prompt_text, raw_response, response_text, reasoning,
                         predicted_odd, correct_odd, correct, error,
-                        latency_ms, response_at)
+                        latency_ms, response_at, protocol)
                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,
-                               datetime('now'))""",
+                               datetime('now'), ?)""",
                     (pid, dist_pid, model, cond,
                      result.get("prompt_text"), result.get("raw_response"),
                      result.get("response_text"), result.get("reasoning"),
                      predicted_idx, correct_idx, is_correct,
-                     result.get("error"), result.get("latency_ms")),
+                     result.get("error"), result.get("latency_ms"), db.PROTOCOL),
                 )
                 conn.commit()
 
