@@ -37,8 +37,11 @@ BACKEND_WAIT_STEP = 60
 
 
 def _wait_for_backend(resp_status, waited, model_id):
-    """Return the new total wait after sleeping, or raise when the wait is exhausted."""
-    if resp_status != 503 or waited >= BACKEND_WAIT_MAX:
+    """Return the new total wait after sleeping, or None when the wait is exhausted
+    (or the status is not one we wait on). 503 = this model's backend is down;
+    None = the gateway itself could not be reached (httpx connect error), e.g.
+    MindRouter restarting (September 30, 2026, 23:50 UTC)."""
+    if resp_status not in (503, None) or waited >= BACKEND_WAIT_MAX:
         return None
     time.sleep(BACKEND_WAIT_STEP)
     return waited + BACKEND_WAIT_STEP
@@ -77,7 +80,14 @@ def call_llm(model_config, messages, stream=None):
         start = time.monotonic()
         if not stream:
             with httpx.Client(timeout=model_config.get("timeout", 300.0)) as client:
-                resp = client.post(url, json=body, headers=headers)
+                try:
+                    resp = client.post(url, json=body, headers=headers)
+                except httpx.ConnectError:
+                    w = _wait_for_backend(None, waited, model_config["model_id"])
+                    if w is not None:
+                        waited = w
+                        continue
+                    raise
                 if resp.status_code == 503:
                     w = _wait_for_backend(503, waited, model_config["model_id"])
                     if w is not None:
@@ -103,45 +113,54 @@ def call_llm(model_config, messages, stream=None):
                                                                STREAM_IDLE_TIMEOUT),
                             write=30.0, pool=30.0)
     with httpx.Client(timeout=timeout) as client:
-        while True:  # one attempt per pass; loops only to wait out a 503
-            with client.stream("POST", url, json=body, headers=headers) as resp:
-                if resp.status_code == 503:
-                    resp.read()
-                    w = _wait_for_backend(503, waited, model_config["model_id"])
-                    if w is not None:
-                        waited = w
-                        mindrouter_bucket.acquire()
-                        start = time.monotonic()
-                        continue
-                if resp.status_code >= 400:
-                    resp.read()  # so the error body is available in the exception message
-                resp.raise_for_status()
-                for line in resp.iter_lines():
-                    if not line.startswith("data:"):
-                        continue
-                    payload = line[5:].strip()
-                    if payload == "[DONE]":
-                        done = True
-                        break
-                    try:
-                        ev = json.loads(payload)
-                    except ValueError:
-                        continue
-                    if not meta and ev.get("id"):
-                        meta = {"id": ev.get("id"), "model": ev.get("model"),
-                                "created": ev.get("created")}
-                    if ev.get("usage"):
-                        usage = ev["usage"]
-                    for ch in ev.get("choices") or []:
-                        delta = ch.get("delta") or {}
-                        if delta.get("content"):
-                            content.append(delta["content"])
-                        r = delta.get("reasoning_content") or delta.get("reasoning")
-                        if r:
-                            reasoning.append(r)
-                        if ch.get("finish_reason"):
-                            finish = ch["finish_reason"]
-            break
+        while True:  # one attempt per pass; loops only to wait out a 503 / gateway down
+            try:
+                with client.stream("POST", url, json=body, headers=headers) as resp:
+                    if resp.status_code == 503:
+                        resp.read()
+                        w = _wait_for_backend(503, waited, model_config["model_id"])
+                        if w is not None:
+                            waited = w
+                            mindrouter_bucket.acquire()
+                            start = time.monotonic()
+                            continue
+                    if resp.status_code >= 400:
+                        resp.read()  # so the error body is available in the exception message
+                    resp.raise_for_status()
+                    for line in resp.iter_lines():
+                        if not line.startswith("data:"):
+                            continue
+                        payload = line[5:].strip()
+                        if payload == "[DONE]":
+                            done = True
+                            break
+                        try:
+                            ev = json.loads(payload)
+                        except ValueError:
+                            continue
+                        if not meta and ev.get("id"):
+                            meta = {"id": ev.get("id"), "model": ev.get("model"),
+                                    "created": ev.get("created")}
+                        if ev.get("usage"):
+                            usage = ev["usage"]
+                        for ch in ev.get("choices") or []:
+                            delta = ch.get("delta") or {}
+                            if delta.get("content"):
+                                content.append(delta["content"])
+                            r = delta.get("reasoning_content") or delta.get("reasoning")
+                            if r:
+                                reasoning.append(r)
+                            if ch.get("finish_reason"):
+                                finish = ch["finish_reason"]
+                break
+            except httpx.ConnectError:
+                w = _wait_for_backend(None, waited, model_config["model_id"])
+                if w is not None:
+                    waited = w
+                    mindrouter_bucket.acquire()
+                    start = time.monotonic()
+                    continue
+                raise
     latency_ms = int((time.monotonic() - start) * 1000)
     if not done and finish is None:
         raise StreamEndedEarly(
