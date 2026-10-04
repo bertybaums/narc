@@ -23,11 +23,13 @@ PY="${PYTHON:-python}"
 LOGDIR="data/backfill_logs"
 LOG="$LOGDIR/$MODEL-priority.log"
 mkdir -p "$LOGDIR"
-PUZZLES=$("$PY" -c "import json,sys; print(' '.join(json.load(open(sys.argv[1]))))" "$LIST")
-N=$(echo "$PUZZLES" | wc -w | tr -d ' ')
+# One id per line: puzzle ids may contain spaces ("Ballerina 4"), so no word-splitting.
+PUZZLES=$("$PY" -c "import json,sys; print('\n'.join(json.load(open(sys.argv[1]))))" "$LIST")
+N=$(printf '%s\n' "$PUZZLES" | grep -c .)
 echo "$MODEL PRIORITY START $N puzzles concurrency=$CONC $(date -u)" >> "$LOGDIR/_status.log"
 i=0
-for p in $PUZZLES; do
+while IFS= read -r p; do
+    [ -z "$p" ] && continue
     i=$((i+1))
     echo "===== $MODEL priority $i/$N $p ($(date -u '+%Y-%m-%d %H:%M:%S UTC')) =====" >> "$LOG"
     "$PY" collect.py --model "$MODEL" --puzzle "$p" --concurrency "$CONC" >> "$LOG" 2>&1
@@ -36,5 +38,5 @@ for p in $PUZZLES; do
     "$PY" collect_sensitivity.py --model "$MODEL" --puzzle "$p" --concurrency "$CONC" >> "$LOG" 2>&1
     "$PY" collect_narrative_sensitivity.py --model "$MODEL" --puzzle "$p" --concurrency "$CONC" >> "$LOG" 2>&1
     "$PY" classify.py --model "$MODEL" --puzzle "$p" >> "$LOG" 2>&1
-done
+done <<< "$PUZZLES"
 echo "$MODEL PRIORITY DONE $(date -u)" >> "$LOGDIR/_status.log"
