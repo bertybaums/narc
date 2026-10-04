@@ -119,6 +119,21 @@ models:
     modality: text
     role: subject
 
+  # Added October 4, 2026 (glm and mimo were withdrawn from MindRouter on October 1 after
+  # their runs completed; their config blocks stay for the record). Kimi returns reasoning
+  # in `reasoning_content` and the answer in `content`; levels low/high/max, default max —
+  # we use high like every other model.
+  - name: kimi-k3
+    provider: openai_compat
+    endpoint: "https://mindrouter.uidaho.edu/v1"
+    model_id: "moonshotai/kimi-k3"
+    api_key_env: MINDROUTER_API_KEY
+    temperature: 0.0
+    reasoning_effort: high
+    timeout: 300.0
+    modality: text
+    role: subject
+
   - name: gpt-oss-120b-extract
     provider: openai_compat
     endpoint: "https://mindrouter.uidaho.edu/v1"

@@ -43,8 +43,11 @@ app.register_blueprint(proto_bp)
 
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
           "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b",
-          "glm-5.3-flash", "mimo-v2.6-flash"]
-REVIEW_MODELS = MODELS
+          "glm-5.3-flash", "mimo-v2.6-flash", "kimi-k3"]
+# Withdrawn from MindRouter (October 1, 2026) after their runs completed: their results stay
+# on the site, but new AI Review jobs must not queue requests to them.
+WITHDRAWN_MODELS = {"glm-5.3-flash", "mimo-v2.6-flash"}
+REVIEW_MODELS = [m for m in MODELS if m not in WITHDRAWN_MODELS]
 
 # NARC-tiny: puzzles generated from TinyStories by the Narrative Hierarchy Model and imported
 # with their results (import_narc_tiny.py). A separate set: its own Inspect tab and Browse
