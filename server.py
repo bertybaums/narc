@@ -1813,8 +1813,11 @@ def _queue_review_job(conn, puzzle_id, model_name, user_id, rerun=False):
     return job_id
 
 
-# Recover any jobs left in queued/running when this process died.
-_recover_review_jobs()
+# Jobs left queued/running by a restart are recovered by the web server only: gunicorn.conf.py
+# (first worker, once per server start) or the dev server below. Not at import: every
+# `flask --app server ...` CLI command imports this module, and recovering there re-submitted
+# live jobs into a process that exited at once (they failed; Oct 21, 2026). With two workers,
+# import-time recovery also ran every interrupted job twice.
 
 
 @app.route("/api/admin/review-jobs", methods=["GET"])
@@ -2306,5 +2309,8 @@ def seed_owner(username, password):
 if __name__ == "__main__":
     conn = get_conn()
     conn.close()
+    # debug=True runs this block in the reloader's parent and child; recover in the child only.
+    if os.environ.get("WERKZEUG_RUN_MAIN") == "true":
+        _recover_review_jobs()
     print("NARC server starting on http://localhost:8000")
     app.run(debug=True, port=8000)
