@@ -18,7 +18,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import db
 import grids
 from db import get_variants, get_trials
-from collect import (run_collect_job, run_matrix_job, run_sensitivity_job,
+from collect import (load_config, run_collect_job, run_matrix_job, run_sensitivity_job,
                      run_narrative_sensitivity_job)
 from classify import run_classify_job
 from narrate import bp as narrate_bp
@@ -44,9 +44,10 @@ app.register_blueprint(proto_bp)
 MODELS = ["gpt-oss-120b", "gpt-oss-20b", "qwen3.5-122b", "qwen3.6-27b",
           "qwen3.8-27b", "nemotron-3-super", "gemma-4-26b", "gemma-4-31b",
           "glm-5.3-flash", "mimo-v2.6-flash", "kimi-k3"]
-# Withdrawn from MindRouter (October 1, 2026) after their runs completed: their results stay
-# on the site, but new AI Review jobs must not queue requests to them.
-WITHDRAWN_MODELS = {"glm-5.3-flash", "mimo-v2.6-flash"}
+# Withdrawn from MindRouter (glm and mimo, October 1, 2026) after their runs completed: their
+# results stay on the site, but new AI Review jobs must not queue requests to them. Marked
+# `withdrawn:` in config.yaml, which the collectors honor too (collect.get_model_config).
+WITHDRAWN_MODELS = {m["name"] for m in load_config()["models"] if m.get("withdrawn")}
 REVIEW_MODELS = [m for m in MODELS if m not in WITHDRAWN_MODELS]
 
 # NARC-tiny: puzzles generated from TinyStories by the Narrative Hierarchy Model and imported
@@ -1871,10 +1872,18 @@ def api_list_review_jobs():
             "total": r["total"], "completed": r["completed"]
         }
 
+    # Models that solved each puzzle in grids_only or both (any variant, mask, or protocol).
+    # Publishing is a person's call; this only tells them a draft is solvable.
+    solved_by = {r["puzzle_id"]: r["n"] for r in conn.execute(
+        """SELECT puzzle_id, COUNT(DISTINCT model_name) AS n FROM trials
+           WHERE correct=1 AND condition IN ('grids_only', 'both')
+           GROUP BY puzzle_id""")}
+
     # Build coverage: every puzzle × REVIEW_MODELS
     all_puzzles = db.get_all_puzzles(conn)
     coverage = []
     untested_info = []
+    complete = []
     for p in all_puzzles:
         pid = p["puzzle_id"]
         p_presence = presence.get(pid, {})
@@ -1896,6 +1905,8 @@ def api_list_review_jobs():
             "puzzle_id": pid,
             "title": p["title"],
             "created_at": p["created_at"],
+            "status": p["status"],
+            "solved_by": solved_by.get(pid, 0),
             "models": models_status,
             "tested_count": tested_count,
         }
@@ -1903,11 +1914,21 @@ def api_list_review_jobs():
             untested_info.append(row)
         elif tested_count < len(REVIEW_MODELS):
             coverage.append(row)
+        else:
+            complete.append(row)
     conn.close()
+    # Newest first, so a puzzle just reviewed is at the top of "Fully tested"
+    complete.sort(key=lambda r: r["created_at"] or "", reverse=True)
+    ready = sorted((r for r in coverage + complete
+                    if r["status"] == "draft" and r["solved_by"]),
+                   key=lambda r: r["created_at"] or "", reverse=True)
     return jsonify({
         "jobs": jobs,
         "untested": untested_info,
         "coverage": coverage,
+        "complete": complete,
+        "ready": [{k: r[k] for k in ("puzzle_id", "title", "created_at", "solved_by")}
+                  for r in ready],
         "models": REVIEW_MODELS,
     })
 

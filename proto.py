@@ -117,7 +117,8 @@ def _knobs():
         "conventions": PRESETS,
         "syms": SYMS,
         "masks": MASKS,
-        "models": [m["name"] for m in collect.load_config()["models"] if m.get("role") == "subject"],
+        "models": [m["name"] for m in collect.load_config()["models"]
+                   if m.get("role") == "subject" and not collect.is_withdrawn(m)],
     }
 
 

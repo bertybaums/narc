@@ -17,14 +17,14 @@ import click
 
 import db
 from classify import run_classify_job
-from collect import load_config, run_sensitivity_job
+from collect import callable_model_names, load_config, run_sensitivity_job
 
 
 def _narc_models():
     """Models with at least one NARC cell that are also configured in config.yaml.
-    Imported results (e.g. claude-fable-5-1, no MindRouter config) are skipped, since
-    the sensitivity jobs need a callable model."""
-    configured = {m["name"] for m in load_config()["models"]}
+    Imported results (e.g. claude-fable-5-1, no MindRouter config) and withdrawn models
+    (glm, mimo) are skipped, since the sensitivity jobs need a callable model."""
+    configured = callable_model_names(load_config())
     conn = db.init_db()
     try:
         rows = conn.execute(

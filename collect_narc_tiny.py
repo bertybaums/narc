@@ -29,7 +29,7 @@ import click
 import db
 import prompts
 from classify import run_classify_job
-from collect import (get_model_config, grade_prediction, load_config,
+from collect import (callable_model_names, get_model_config, grade_prediction, load_config,
                      run_narrative_sensitivity_job, run_sensitivity_job, run_trial)
 
 CREATOR = "narc-tiny"
@@ -150,7 +150,7 @@ def main(model, all_models, concurrency, skip_grammar, grammar_only, dry_run):
     conn = db.init_db()
     pids = tiny_puzzle_ids(conn)
     if all_models:
-        configured = {m["name"] for m in load_config()["models"]}
+        configured = callable_model_names(load_config())
         targets = [r[0] for r in conn.execute(
             "SELECT DISTINCT t.model_name FROM trials t JOIN puzzles p ON p.puzzle_id=t.puzzle_id "
             "WHERE p.creator=? ORDER BY 1", (CREATOR,)) if r[0] in configured]

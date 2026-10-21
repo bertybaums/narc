@@ -27,9 +27,23 @@ def load_config():
         return yaml.safe_load(f)
 
 
+def is_withdrawn(model_config):
+    """True for a model MindRouter no longer serves (`withdrawn:` in config.yaml). Its block
+    stays for the record and its results stay on the site, but nothing may call it again."""
+    return bool(model_config.get("withdrawn"))
+
+
+def callable_model_names(config):
+    """Names of configured models that can still be called (not withdrawn)."""
+    return {m["name"] for m in config["models"] if not is_withdrawn(m)}
+
+
 def get_model_config(config, name):
     for m in config["models"]:
         if m["name"] == name:
+            if is_withdrawn(m):
+                raise ValueError(f"Model {name} was withdrawn from MindRouter on "
+                                 f"{m['withdrawn']}; its results are final, so it is not run")
             return m
     raise ValueError(f"Model {name} not found in config")
 

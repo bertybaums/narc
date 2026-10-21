@@ -85,14 +85,23 @@
 <!-- AI Review Tab -->
 <div id="tab-airun" class="admin-tab" style="display:none;">
     <p class="text-muted small">
-        Run the test pipeline (collect + classify) across all 6 models. A puzzle leaves Drafts
-        only when at least one model solves it correctly in the <code>grids_only</code> or
-        <code>both</code> condition — trials alone aren't enough.
+        Run the test pipeline across all <span id="airun-model-count">active</span> models.
+        A puzzle's status is set by hand: it stays in Drafts, hidden from visitors who aren't
+        signed in, until someone makes it active, under <em>Ready to publish</em> below or with
+        the status menu on its solve page. Rerunning a model deletes its trials for that puzzle
+        and runs them again.
     </p>
-    <h5>Untested (no trials on any model)</h5>
+    <h5>Ready to publish (drafts that at least one model solved)</h5>
+    <div id="airun-ready"><em class="text-muted">Loading...</em></div>
+    <h5 class="mt-4">Untested (no trials on any model)</h5>
     <div id="airun-untested"><em class="text-muted">Loading...</em></div>
     <h5 class="mt-4">Partial coverage</h5>
     <div id="airun-coverage"><em class="text-muted">Loading...</em></div>
+    <h5 class="mt-4">Fully tested</h5>
+    <input type="search" id="airun-complete-search" class="form-control form-control-sm mb-2"
+           style="max-width:24rem;" placeholder="Search ID or title to rerun any puzzle"
+           oninput="renderComplete()">
+    <div id="airun-complete"><em class="text-muted">Loading...</em></div>
     <h5 class="mt-4">Recent Jobs</h5>
     <div id="airun-jobs"><em class="text-muted">Loading...</em></div>
 </div>
@@ -474,13 +483,18 @@ async function changePassword() {
 // --- AI Review ---
 let airunPollTimer = null;
 let airunModels = [];
+let airunComplete = [];
 
 async function loadReviewJobs() {
     const r = await fetch('/api/admin/review-jobs');
     const data = await r.json();
     airunModels = data.models || [];
+    airunComplete = data.complete || [];
+    document.getElementById('airun-model-count').textContent = airunModels.length;
+    renderReady(data.ready || []);
     renderUntested(data.untested);
     renderCoverage(data.coverage);
+    renderComplete();
     renderJobs(data.jobs);
     const anyActive = data.jobs.some(j => j.status === 'queued' || j.status === 'running');
     if (airunPollTimer) { clearTimeout(airunPollTimer); airunPollTimer = null; }
@@ -491,7 +505,7 @@ async function loadReviewJobs() {
 
 function shortModel(m) {
     return m.replace('gpt-oss-', 'gpt')
-            .replace(/qwen3\.\d-/, 'qwen')
+            .replace(/^qwen3\./, 'q3.')
             .replace('nemotron-3-super', 'nem')
             .replace('gemma-4-', 'gem');
 }
@@ -501,7 +515,7 @@ function cellForState(puzzleId, m, state) {
     if (state === 'running') return '<span class="badge bg-info">running</span>';
     if (state === 'tested')
         return `<button class="btn btn-sm btn-outline-secondary" title="Rerun ${m}"
-                onclick="runReview('${puzzleId}', '${m}', true)">✓ rerun</button>`;
+                onclick="rerunReview('${puzzleId}', '${m}')">✓ rerun</button>`;
     return `<button class="btn btn-sm btn-primary" title="Run ${m}"
             onclick="runReview('${puzzleId}', '${m}', false)">run</button>`;
 }
@@ -516,7 +530,7 @@ function renderUntested(list) {
         const allRunning = p.models.some(ms => ms.state === 'queued' || ms.state === 'running');
         const action = allRunning
           ? '<span class="badge bg-info">running</span>'
-          : `<button class="btn btn-sm btn-primary" onclick="runReview('${p.puzzle_id}')">Run all 6</button>`;
+          : `<button class="btn btn-sm btn-primary" onclick="runReview('${p.puzzle_id}')">Run all ${airunModels.length}</button>`;
         return `<tr>
             <td><a href="/solve/${p.puzzle_id}">${p.puzzle_id}</a></td>
             <td>${escapeHtml(p.title)}</td>
@@ -554,6 +568,81 @@ function renderCoverage(list) {
         <tbody>${rows}</tbody></table>`;
 }
 
+function renderReady(list) {
+    const el = document.getElementById('airun-ready');
+    if (!list.length) {
+        el.innerHTML = '<p class="text-muted">No drafts waiting. None that a model has solved.</p>';
+        return;
+    }
+    const rows = list.map(p => `<tr>
+            <td><a href="/solve/${p.puzzle_id}">${p.puzzle_id}</a></td>
+            <td class="small">${escapeHtml(p.title)}</td>
+            <td class="small">${p.solved_by} model${p.solved_by === 1 ? '' : 's'}</td>
+            <td class="small text-muted">${p.created_at || ''}</td>
+            <td><button class="btn btn-sm btn-success" onclick="publishPuzzle('${p.puzzle_id}')">Make active</button></td>
+        </tr>`).join('');
+    el.innerHTML = `<table class="table table-sm align-middle"><thead><tr>
+        <th>ID</th><th>Title</th><th title="Models with a correct answer in grids_only or both">Solved by</th>
+        <th>Created</th><th></th></tr></thead>
+        <tbody>${rows}</tbody></table>`;
+}
+
+function renderComplete() {
+    const el = document.getElementById('airun-complete');
+    if (!airunComplete.length) {
+        el.innerHTML = '<p class="text-muted">No fully tested puzzles yet.</p>';
+        return;
+    }
+    const q = document.getElementById('airun-complete-search').value.trim().toLowerCase();
+    const matches = q
+        ? airunComplete.filter(p => p.puzzle_id.toLowerCase().includes(q)
+                                 || (p.title || '').toLowerCase().includes(q))
+        : airunComplete;
+    const shown = matches.slice(0, q ? 50 : 10);
+    if (!shown.length) {
+        el.innerHTML = '<p class="text-muted">No fully tested puzzle matches.</p>';
+        return;
+    }
+    const header = airunModels.map(m => `<th class="small">${shortModel(m)}</th>`).join('');
+    const rows = shown.map(p => {
+        const cells = p.models.map(ms => `<td>${cellForState(p.puzzle_id, ms.model, ms.state)}</td>`).join('');
+        const draft = p.status === 'draft' ? ' <span class="badge bg-secondary">draft</span>' : '';
+        return `<tr>
+            <td><a href="/solve/${p.puzzle_id}">${p.puzzle_id}</a></td>
+            <td class="small">${escapeHtml(p.title)}${draft}</td>
+            ${cells}
+            <td><button class="btn btn-sm btn-outline-secondary" onclick="rerunReview('${p.puzzle_id}')">Rerun all</button></td>
+        </tr>`;
+    }).join('');
+    const more = matches.length > shown.length
+        ? `<p class="small text-muted">Showing ${shown.length} of ${matches.length}${q ? ' matches' : ', newest first'}. Search to find others.</p>`
+        : '';
+    el.innerHTML = `<table class="table table-sm align-middle"><thead><tr>
+        <th>ID</th><th>Title</th>${header}<th></th></tr></thead>
+        <tbody>${rows}</tbody></table>${more}`;
+}
+
+async function publishPuzzle(puzzleId) {
+    if (!confirm(`Make ${puzzleId} active? Visitors who aren't signed in will be able to see it.`)) return;
+    const r = await fetch(`/api/puzzles/${encodeURIComponent(puzzleId)}/status`, {
+        method: 'PUT', headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({status: 'active'})
+    });
+    if (!r.ok) {
+        const data = await r.json().catch(() => ({}));
+        alert(data.error || 'Failed to update status');
+        return;
+    }
+    loadReviewJobs();
+}
+
+function rerunReview(puzzleId, model) {
+    const who = model || `all ${airunModels.length} models`;
+    if (!confirm(`Rerun ${who} on ${puzzleId}? This deletes the existing trials for `
+                 + `${model ? 'that model' : 'every model'} on this puzzle and runs them again.`)) return;
+    runReview(puzzleId, model, true);
+}
+
 async function runMissing(puzzleId, models) {
     for (const m of models) {
         await fetch(`/api/admin/puzzles/${puzzleId}/run-review`, {
@@ -571,8 +660,16 @@ function renderJobs(jobs) {
         : v === 0 ? '<span class="text-danger">✗</span>'
         : err ? `<span class="text-warning" style="cursor:help;text-decoration:underline dotted" title="${escapeHtml(err)}">⚠</span>`
         : '<span class="text-muted">—</span>';
+    const seen = new Set();  // jobs arrive newest first
     const rows = jobs.map(j => {
         const badge = {queued:'secondary', running:'info', done:'success', failed:'danger'}[j.status] || 'secondary';
+        const key = j.puzzle_id + '\u0000' + j.model_name;
+        const newest = !seen.has(key);
+        seen.add(key);
+        const retry = j.status === 'failed' && newest
+            ? ` <button class="btn btn-sm btn-outline-warning py-0" title="Run ${j.model_name} again; finished trials are kept"
+                onclick="runReview('${j.puzzle_id}', '${j.model_name}', false)">retry</button>`
+            : '';
         const errCell = j.error ? `<br><small class="text-danger">${escapeHtml(j.error)}</small>` : '';
         let result = '<span class="text-muted">—</span>';
         if (j.status === 'done') {
@@ -589,7 +686,7 @@ function renderJobs(jobs) {
             <td><a href="/solve/${j.puzzle_id}">${j.puzzle_id}</a></td>
             <td class="small">${escapeHtml(j.title || '')}</td>
             <td class="small">${shortModel(j.model_name)}</td>
-            <td><span class="badge bg-${badge}">${j.status}</span>${errCell}</td>
+            <td><span class="badge bg-${badge}">${j.status}</span>${retry}${errCell}</td>
             <td>${result}</td>
             <td class="small text-muted">${j.started_at || j.created_at}</td>
             <td><a href="/api/admin/review-jobs/${j.job_id}/log" target="_blank">log</a></td>

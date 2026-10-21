@@ -98,6 +98,7 @@ models:
   # Added September 29, 2026. GLM returns reasoning in `reasoning_content` (gpt-oss shape);
   # MiMo returns everything in `content` (qwen3.8 shape). Both accept reasoning_effort.
   - name: glm-5.3-flash
+    withdrawn: "2026-10-01"   # no longer served by MindRouter; results are final
     provider: openai_compat
     endpoint: "https://mindrouter.uidaho.edu/v1"
     model_id: "zai-org/glm-5.3-flash"
@@ -109,6 +110,7 @@ models:
     role: subject
 
   - name: mimo-v2.6-flash
+    withdrawn: "2026-10-01"   # no longer served by MindRouter; results are final
     provider: openai_compat
     endpoint: "https://mindrouter.uidaho.edu/v1"
     model_id: "xiaomimimo/mimo-v2.6-flash"
