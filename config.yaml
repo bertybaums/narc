@@ -168,8 +168,8 @@ narrate:
   max_narrative_chars: 1500
   submissions_per_hour: 12     # per participant, all puzzles; failed runs don't count
   submissions_per_day: 40
-  max_queue: 12                # all participants: queued + running before we say "busy"
-  workers: 2                   # model runs at once per web worker process (gunicorn runs 2)
+  max_queue: 30                # all participants: queued + running before we say "busy" (was 12; raised Oct 21, 2026 for the AI Symposium room)
+  workers: 3                   # model runs at once per web worker process (gunicorn runs 2; was 2)
   reference_runs: 3            # runs per reference check
   # A puzzle is shown to participants only after its reference narrative (the
   # puzzle's own narrative, or reference_narrative if given) solves it at least
@@ -178,4 +178,9 @@ narrate:
   puzzles:
     - puzzle_id: chat             # Chat: reference solves qwen3.8-27b
     - puzzle_id: sub_118          # Playmates: reference solves gpt-oss-120b, not qwen3.8-27b
+      reference_model: gpt-oss-120b
+    # AI Symposium workshop, October 29, 2026 (NARC lab students' puzzles)
+    - puzzle_id: sub_022          # Hunt (Hadley): reference solved qwen3.8-27b on /inspect
+    - puzzle_id: Ballerina 4      # Ballerina 4 (Chloe): reference solved qwen3.8-27b on /inspect
+    - puzzle_id: narc_00001       # The Accident (Jason): qwen3.8-27b fails it on /inspect; gpt-oss-120b solves
       reference_model: gpt-oss-120b
