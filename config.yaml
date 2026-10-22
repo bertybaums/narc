@@ -184,5 +184,5 @@ narrate:
     # AI Symposium workshop, October 29, 2026 (NARC lab students' puzzles)
     - puzzle_id: sub_022          # Hunt (Hadley): reference solved qwen3.8-27b on /inspect
     - puzzle_id: Ballerina 4      # Ballerina 4 (Chloe): reference solved qwen3.8-27b on /inspect
-    - puzzle_id: narc_00001       # The Accident (Jason): qwen3.8-27b fails it on /inspect; gpt-oss-120b solves
-      reference_model: gpt-oss-120b
+    - puzzle_id: narc_00001       # The Accident (Jason): qwen3.8-27b fails it on /inspect. Reference check, Oct 21, 2026:
+      reference_model: kimi-k3    # kimi-k3 2/2 solved; gpt-oss-120b 0/5 and gemma-4-26b 0/3 (both solved it once on /inspect)
