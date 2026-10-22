@@ -166,10 +166,12 @@ narrate:
   model: qwen3.8-27b
   extraction_model: gpt-oss-120b-extract
   max_narrative_chars: 1500
-  submissions_per_hour: 12     # per participant, all puzzles; failed runs don't count
+  submissions_per_hour: 30     # per participant, all puzzles; failed runs don't count (was 12; raised Oct 21, 2026: a table may share one laptop)
   submissions_per_day: 40
-  max_queue: 30                # all participants: queued + running before we say "busy" (was 12; raised Oct 21, 2026 for the AI Symposium room)
-  workers: 3                   # model runs at once per web worker process (gunicorn runs 2; was 2)
+  max_queue: 60                # all participants: queued + running before we say "busy" (was 12; raised Oct 21, 2026 for the AI Symposium room)
+  workers: 10                  # model runs at once per web worker process (gunicorn runs 2, so 20 at once; was 2)
+                               # A qwen3.8-27b run is ~20 s and 2 requests (3 if the grid needs a strict re-read), so 20 at once is ~100 requests/min,
+                               # half the shared 200/min bucket (ratelimit.py), spread over qwen3.8's 4 backends.
   reference_runs: 3            # runs per reference check
   # A puzzle is shown to participants only after its reference narrative (the
   # puzzle's own narrative, or reference_narrative if given) solves it at least
