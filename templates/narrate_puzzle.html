@@ -5,7 +5,7 @@
 <div class="mb-3">
     <a href="{{ url_for('narrate.index') }}" class="small text-muted text-decoration-none">&larr; All puzzles</a>
     <h2 class="mt-1 mb-1">{{ data.title }}</h2>
-    <p class="text-muted mb-0">{{ data.sequence | length }} grids &middot; model: <code>{{ data.model }}</code></p>
+    <p class="text-muted mb-0">{{ data.sequence | length }} grids &middot; model: <code>{{ data.model }}</code>{% for m in data.models[1:] %} or <code>{{ m.name }}</code>{% endfor %}</p>
 </div>
 
 {% if staff and not ref.verified %}
@@ -43,6 +43,7 @@
             {% else %}
             We already have a narrative that led another AI model, <code>{{ ref.model }}</code>, to rebuild the hidden grid exactly, so a narrative that works exists.
             It hasn't yet worked on <code>{{ data.model }}</code>, so yours could be the first.
+            {% if ref.model in data.models | map(attribute='name') %}You can also test yours on <code>{{ ref.model }}</code> below.{% endif %}
             {% endif %}
             You can read it, but once you have, it's hard to write something that isn't shaped by it.
             Every narrative you submit is marked with whether you'd read it first.</p>
@@ -66,6 +67,18 @@
         </label>
         <textarea id="narrative" class="form-control narrate-textarea" rows="6"
                   maxlength="{{ data.max_chars }}" spellcheck="true"></textarea>
+        {% if data.models | length > 1 %}
+        <fieldset class="narrate-model-choice mt-2">
+            <legend class="small text-muted float-start w-auto me-2 mb-0" style="font-size:.875rem; line-height:1.5;">Test with:</legend>
+            {% for m in data.models %}
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="model" id="model-{{ loop.index }}"
+                       value="{{ m.name }}"{% if loop.first %} checked{% endif %}>
+                <label class="form-check-label small" for="model-{{ loop.index }}"><code>{{ m.name }}</code>{% if m.note %} <span class="text-muted">{{ m.note }}</span>{% endif %}</label>
+            </div>
+            {% endfor %}
+        </fieldset>
+        {% endif %}
         <div class="d-flex align-items-center flex-wrap gap-2 mt-2">
             <button id="btn-submit" type="button" class="btn btn-narc">Test with the model</button>
             <span id="char-count" class="small text-muted ms-auto"></span>
@@ -91,7 +104,10 @@
         <div id="result-done" style="display:none;">
             <div id="result-banner" class="alert mb-3"></div>
             <div id="result-grids" class="result-grids mb-3"></div>
-            <button id="btn-again" type="button" class="btn btn-outline-warning">Write another narrative</button>
+            <div class="d-flex flex-wrap gap-2">
+                <button id="btn-again" type="button" class="btn btn-outline-warning">Write another narrative</button>
+                <span id="other-model-buttons" style="display:contents;"></span>
+            </div>
         </div>
     </div>
 </div>

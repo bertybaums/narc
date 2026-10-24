@@ -341,15 +341,17 @@ def fail_attempt(conn, attempt_id, error):
     conn.commit()
 
 
-def count_active_attempts(conn, participant_id=None):
+def count_active_attempts(conn, participant_id=None, model_name=None):
+    """Queued + running attempts, optionally for one participant and/or one model."""
+    sql = "SELECT COUNT(*) FROM attempts WHERE status IN ('queued', 'running')"
+    args = []
     if participant_id:
-        return conn.execute(
-            "SELECT COUNT(*) FROM attempts WHERE participant_id=? AND status IN ('queued', 'running')",
-            (participant_id,),
-        ).fetchone()[0]
-    return conn.execute(
-        "SELECT COUNT(*) FROM attempts WHERE status IN ('queued', 'running')"
-    ).fetchone()[0]
+        sql += " AND participant_id=?"
+        args.append(participant_id)
+    if model_name:
+        sql += " AND model_name=?"
+        args.append(model_name)
+    return conn.execute(sql, args).fetchone()[0]
 
 
 def count_recent_attempts(conn, participant_id, hours):

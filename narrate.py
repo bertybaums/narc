@@ -3,8 +3,8 @@
 The participant sees the complete grid sequence (ground truth), including the grid
 the model will not see. They write a narrative; we run it through the benchmark's
 own `both` condition (collect.run_trial: same prompt, two-pass protocol, parser,
-grader) against one model, and show whether the model reconstructed the hidden
-grid. Every submission, every reveal of the reference narrative, and the model's
+grader) against the Narrate model, or one of `other_models` the participant picks
+for that narrative, and show whether the model reconstructed the hidden grid. Every submission, every reveal of the reference narrative, and the model's
 full response are recorded in narrate.db (see narrate_db.py).
 
 Access is invite-code gated. Logged-in owners/reviewers can join without a code;
@@ -53,6 +53,7 @@ _DEFAULTS = {
     "max_queue": 12,
     "workers": 2,
     "reference_runs": 3,
+    "other_models": [],
     "puzzles": [],
 }
 
@@ -64,22 +65,42 @@ def settings():
     return out
 
 
-# --- background execution ---
-# One pool per gunicorn worker process. Every model call goes through the shared
-# SQLite token bucket in ratelimit.py, so the MindRouter per-minute ceiling holds
-# across this pool, the review-job pool, and all processes.
+def model_options():
+    """Models a participant may test a narrative on, the default (`model`) first.
 
-_executor = None
+    Each carries its own runs-at-once (`workers`, per web worker process) and queue
+    cap, so a slow optional model never holds up the default one.
+    """
+    s = settings()
+    out = [{"name": s["model"], "workers": int(s["workers"]),
+            "max_queue": int(s["max_queue"]), "note": None, "default": True}]
+    for m in s["other_models"] or []:
+        if m.get("name") and m["name"] != s["model"]:
+            out.append({"name": m["name"], "workers": int(m.get("workers", 1)),
+                        "max_queue": int(m.get("max_queue", 6)), "note": m.get("note"),
+                        "default": False})
+    return out
+
+
+# --- background execution ---
+# One pool per model per gunicorn worker process. Every model call goes through the
+# shared SQLite token bucket in ratelimit.py, so the MindRouter per-minute ceiling
+# holds across these pools, the review-job pool, and all processes.
+
+_executors = {}
 _executor_lock = threading.Lock()
 
 
-def _pool():
-    global _executor
+def _pool(model=None):
+    """The run pool for `model` (default: the Narrate model). Reference checks on a
+    model participants can't pick share the default pool."""
+    options = {m["name"]: m for m in model_options()}
+    opt = options.get(model) or options[settings()["model"]]
     with _executor_lock:
-        if _executor is None:
-            _executor = ThreadPoolExecutor(max_workers=int(settings()["workers"]),
-                                           thread_name_prefix="narrate")
-    return _executor
+        if opt["name"] not in _executors:
+            _executors[opt["name"]] = ThreadPoolExecutor(
+                max_workers=opt["workers"], thread_name_prefix=f"narrate-{opt['name']}")
+    return _executors[opt["name"]]
 
 
 # --- helpers ---
@@ -153,6 +174,7 @@ def _attempt_public(row):
         "status": row["status"],
         "correct": row["correct"],
         "cell_accuracy": row["cell_accuracy"],
+        "model": row["model_name"],
         "unreadable": bool(row["parse_error"]) and predicted is None,
         "failed": row["status"] == "failed",
         "predicted_grids": predicted,
@@ -231,7 +253,8 @@ def _run_attempt(attempt_id):
             narrate_db.fail_attempt(conn, attempt_id, "puzzle no longer available")
             return
         view = grids.remask(loaded[0], json.loads(row["masked_positions"]))
-        narrate_db.finish_attempt(conn, attempt_id, **_solve_once(view, row["narrative"]))
+        narrate_db.finish_attempt(conn, attempt_id,
+                                  **_solve_once(view, row["narrative"], row["model_name"]))
     except Exception as e:
         narrate_db.fail_attempt(conn, attempt_id, f"internal error: {e}")
     finally:
@@ -313,7 +336,8 @@ def index():
                 "reference": ref,
                 "missing": False,
             })
-        return render_template("narrate_list.html", cards=cards, staff=staff, s=settings())
+        return render_template("narrate_list.html", cards=cards, staff=staff, s=settings(),
+                               models=model_options())
     finally:
         conn.close()
 
@@ -399,6 +423,7 @@ def puzzle(puzzle_id):
             "masked_positions": view["masked_positions"],
             "answer_grids": view["answer_grids"],
             "model": s["model"],
+            "models": [{"name": m["name"], "note": m["note"]} for m in model_options()],
             "max_chars": int(s["max_narrative_chars"]),
             "revealed": revealed,
             "reference": reference if revealed else None,
@@ -455,6 +480,10 @@ def api_submit(puzzle_id):
         return jsonify({"error": f"Please keep it under {max_chars} characters."}), 400
     elapsed = body.get("client_elapsed_ms")
     elapsed = int(elapsed) if isinstance(elapsed, (int, float)) and elapsed >= 0 else None
+    options = {m["name"]: m for m in model_options()}
+    model = body.get("model") or s["model"]
+    if model not in options:
+        return jsonify({"error": "That model isn't available here."}), 400
 
     conn = narrate_db.connect()
     try:
@@ -481,16 +510,16 @@ def api_submit(puzzle_id):
         if narrate_db.count_recent_attempts(conn, pid, 24) >= int(s["submissions_per_day"]):
             return jsonify({"error": f"You've reached the limit of {s['submissions_per_day']} "
                                      "narratives per day. Please come back tomorrow."}), 429
-        if narrate_db.count_active_attempts(conn) >= int(s["max_queue"]):
-            return jsonify({"error": "The model is busy with other people's narratives. "
+        if narrate_db.count_active_attempts(conn, model_name=model) >= options[model]["max_queue"]:
+            return jsonify({"error": f"{model} is busy with other people's narratives. "
                                      "Please try again in a minute."}), 503
 
         prompt_json = json.dumps(prompts.build_both(view, narrative=narrative))
         attempt_id = narrate_db.create_attempt(
-            conn, pid, puzzle_id, narrative, s["model"],
+            conn, pid, puzzle_id, narrative, model,
             json.dumps(view["masked_positions"]), prompt_json,
             client_elapsed_ms=elapsed, runner_pid=os.getpid())
-        _pool().submit(_run_attempt, attempt_id)
+        _pool(model).submit(_run_attempt, attempt_id)
         return jsonify(_attempt_public(narrate_db.get_attempt(conn, attempt_id))), 201
     finally:
         conn.close()
@@ -546,12 +575,12 @@ def admin():
             })
         attempts = conn.execute(
             """SELECT a.attempt_id, a.participant_id, a.puzzle_id, a.seq_num, a.narrative,
-                      a.saw_reference, a.status, a.correct, a.cell_accuracy, a.parse_error,
+                      a.saw_reference, a.model_name, a.status, a.correct, a.cell_accuracy, a.parse_error,
                       a.error, a.latency_ms, a.created_at, p.invite_code, p.staff_username
                FROM attempts a JOIN participants p USING (participant_id)
                ORDER BY a.attempt_id DESC LIMIT 200"""
         ).fetchall()
-        return render_template("narrate_admin.html", s=s, puzzles=puzzles,
+        return render_template("narrate_admin.html", s=s, models=model_options(), puzzles=puzzles,
                                invites=narrate_db.get_invites(conn), attempts=attempts,
                                staff=_staff_username())
     finally:

@@ -6,7 +6,8 @@
     <h2 class="me-auto mb-0">Narrate</h2>
     {% if staff %}<a href="{{ url_for('narrate.admin') }}" class="btn btn-sm btn-outline-secondary">Narrate admin</a>{% endif %}
 </div>
-<p class="text-muted mb-4">Pick a puzzle. For each one, write a narrative that helps <code>{{ s.model }}</code> rebuild the grid it can't see.</p>
+<p class="text-muted mb-4">Pick a puzzle. For each one, write a narrative that helps <code>{{ s.model }}</code> rebuild the grid it can't see.{% if models | length > 1 %}
+    You can also test any narrative on {% for m in models[1:] %}<code>{{ m.name }}</code>{{ ', ' if not loop.last }}{% endfor %}, to see whether a different model reads your story differently.{% endif %}</p>
 
 {% if not cards %}
 <div class="alert alert-secondary">No puzzles are open right now. Please check back soon.</div>

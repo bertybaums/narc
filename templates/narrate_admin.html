@@ -10,7 +10,8 @@
 <p class="small text-muted">Model <code>{{ s.model }}</code> &middot; extraction <code>{{ s.extraction_model }}</code> &middot;
     limits {{ s.submissions_per_hour }}/hour, {{ s.submissions_per_day }}/day per participant &middot;
     queue cap {{ s.max_queue }} &middot; {{ s.workers }} runs at once per web worker.
-    Settings live under <code>narrate:</code> in config.yaml.</p>
+    {% for m in models[1:] %}Participants may also pick <code>{{ m.name }}</code> (queue cap {{ m.max_queue }}, {{ m.workers }} at once per web worker).
+    {% endfor %}Settings live under <code>narrate:</code> in config.yaml.</p>
 
 <div class="card mb-4">
     <div class="card-header">Puzzles and reference narratives</div>
@@ -106,7 +107,7 @@
     <div class="card-body">
         <div class="table-responsive">
         <table class="table table-sm table-dark align-middle small">
-            <thead><tr><th>When (UTC)</th><th>Participant</th><th>Puzzle</th><th>#</th><th>Narrative</th><th>Read ref?</th><th>Result</th></tr></thead>
+            <thead><tr><th>When (UTC)</th><th>Participant</th><th>Puzzle</th><th>#</th><th>Narrative</th><th>Read ref?</th><th>Model</th><th>Result</th></tr></thead>
             <tbody>
             {% for a in attempts %}
             <tr>
@@ -117,6 +118,7 @@
                 <td>{{ a.seq_num }}</td>
                 <td style="max-width:420px; white-space:pre-wrap;">{{ a.narrative }}</td>
                 <td>{{ 'yes' if a.saw_reference else 'no' }}</td>
+                <td><code>{{ a.model_name }}</code></td>
                 <td class="text-nowrap">
                     {% if a.status in ('queued', 'running') %}<span class="text-info">{{ a.status }}</span>
                     {% elif a.status == 'failed' %}<span class="text-warning" title="{{ a.error }}">failed</span>
@@ -126,7 +128,7 @@
                 </td>
             </tr>
             {% else %}
-            <tr><td colspan="7" class="text-muted">No narratives yet.</td></tr>
+            <tr><td colspan="8" class="text-muted">No narratives yet.</td></tr>
             {% endfor %}
             </tbody>
         </table>

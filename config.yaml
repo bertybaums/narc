@@ -172,6 +172,12 @@ narrate:
   workers: 10                  # model runs at once per web worker process (gunicorn runs 2, so 20 at once; was 2)
                                # A qwen3.8-27b run is ~20 s and 2 requests (3 if the grid needs a strict re-read), so 20 at once is ~100 requests/min,
                                # half the shared 200/min bucket (ratelimit.py), spread over qwen3.8's 4 backends.
+  # Models a participant may pick instead, one narrative at a time, on the puzzle page (added Oct 23, 2026).
+  # Each has its own runs-at-once and queue cap, counted apart from the default model's.
+  other_models:
+    - name: kimi-k3
+      workers: 3               # per web worker process, so 6 at once: kimi-k3 is one engine (aspen300), not 4 backends
+      max_queue: 18            # queued + running on kimi-k3 before we say "busy"
   reference_runs: 3            # runs per reference check
   # A puzzle is shown to participants only after its reference narrative (the
   # puzzle's own narrative, or reference_narrative if given) solves it at least

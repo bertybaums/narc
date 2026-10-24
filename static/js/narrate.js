@@ -1,5 +1,7 @@
 /**
  * Narrate: write a narrative, test it against the model, see the result, repeat.
+ * When config.yaml offers other models (narrate.other_models), the participant picks
+ * one per narrative, and a finished result offers the same narrative on the others.
  *
  * Server is the source of truth for everything recorded (attempts, reveals,
  * whether the reference was seen before a submission). The browser only keeps
@@ -174,16 +176,22 @@ function setupEditor() {
     ta.addEventListener('input', count);
     count();
 
-    $('btn-submit').addEventListener('click', submit);
+    $('btn-submit').addEventListener('click', () => submit());
     $('btn-again').addEventListener('click', () => {
         $('write-card').scrollIntoView({behavior: 'smooth', block: 'start'});
         ta.focus();
     });
 }
 
-async function submit() {
-    const ta = $('narrative');
-    const narrative = ta.value.trim();
+function chosenModel() {
+    const picked = document.querySelector('input[name="model"]:checked');
+    return picked ? picked.value : NARRATE.model;
+}
+
+// With no arguments, submits the textarea to the picked model. The result card's
+// "Try this narrative on ..." buttons pass both (a replay: no drafting time is
+// recorded), leaving any new draft in the textarea untouched.
+async function submit(narrative = $('narrative').value.trim(), model = chosenModel(), replay = false) {
     hideError();
     if (!narrative) {
         showError('Write a narrative first.');
@@ -195,7 +203,8 @@ async function submit() {
         r = await fetch(`/narrate/api/${encodeURIComponent(NARRATE.puzzle_id)}/attempts`, {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({narrative, client_elapsed_ms: Date.now() - draftStartedAt})
+            body: JSON.stringify({narrative, model,
+                                  client_elapsed_ms: replay ? null : Date.now() - draftStartedAt})
         });
         data = await r.json().catch(() => ({}));
     } catch (e) {
@@ -218,6 +227,7 @@ async function submit() {
 function setBusy(busy) {
     $('btn-submit').disabled = busy;
     $('btn-submit').textContent = busy ? 'Testing…' : 'Test with the model';
+    document.querySelectorAll('#other-model-buttons button').forEach(b => { b.disabled = busy; });
 }
 
 function showError(msg) {
@@ -250,9 +260,10 @@ function showPending(attempt) {
 }
 
 function updatePendingHeadline(attempt) {
+    const model = attempt.model || NARRATE.model;
     $('pending-headline').textContent = attempt.status === 'running'
-        ? 'The model is working on the puzzle…'
-        : 'Waiting for the model to be free…';
+        ? `${model} is working on the puzzle…`
+        : `Waiting for ${model} to be free…`;
 }
 
 function poll(attemptId, delay = POLL_MS) {
@@ -298,6 +309,7 @@ function showResult(a, fresh) {
     gridsEl.innerHTML = '';
     const which = NARRATE.masked_positions.map(p => 'grid ' + (p + 1)).join(' and ');
     const label = `Narrative #${a.seq_num}: `;
+    const model = a.model || NARRATE.model;
 
     if (a.failed) {
         banner.className = 'alert alert-warning mb-3';
@@ -305,14 +317,14 @@ function showResult(a, fresh) {
             "This one doesn't count against your limit. Please submit again.";
     } else if (a.correct) {
         banner.className = 'alert alert-success mb-3';
-        banner.textContent = label + `solved. The model rebuilt ${which} exactly.`;
+        banner.textContent = label + `solved. ${model} rebuilt ${which} exactly.`;
     } else if (a.unreadable) {
         banner.className = 'alert alert-secondary mb-3';
-        banner.textContent = label + "not solved. The model answered, but no grid could be read from its answer.";
+        banner.textContent = label + `not solved. ${model} answered, but no grid could be read from its answer.`;
     } else {
         const pct = Math.round((a.cell_accuracy || 0) * 100);
         banner.className = 'alert alert-secondary mb-3';
-        banner.textContent = label + `not solved. The model's grid matched ${pct}% of the cells.`;
+        banner.textContent = label + `not solved. ${model}'s grid matched ${pct}% of the cells.`;
     }
 
     if (a.predicted_grids && !a.failed) {
@@ -321,13 +333,25 @@ function showResult(a, fresh) {
             const expected = NARRATE.answer_grids[key];
             const predicted = a.predicted_grids[key];
             if (predicted) {
-                gridsEl.appendChild(resultGrid("Model's answer", c => renderFeedbackGrid(c, predicted, expected, CELL),
+                gridsEl.appendChild(resultGrid(`${model}'s answer`, c => renderFeedbackGrid(c, predicted, expected, CELL),
                     a.correct ? '' : 'Red outlines mark cells that differ from the hidden grid.'));
             }
             gridsEl.appendChild(resultGrid(`Hidden grid ${pos + 1}`,
                 c => renderGrid(c, new Grid(expected.length, expected[0].length, expected), {cellSize: CELL})));
         }
     }
+    const others = $('other-model-buttons');
+    others.innerHTML = '';
+    for (const m of NARRATE.models) {
+        if (m.name === model) continue;
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'btn btn-outline-info';
+        b.textContent = `Try this narrative on ${m.name}`;
+        b.addEventListener('click', () => submit(a.narrative, m.name, true));
+        others.appendChild(b);
+    }
+
     if (fresh) {
         draftStartedAt = Date.now();
         $('result-card').scrollIntoView({behavior: 'smooth', block: 'nearest'});
@@ -370,6 +394,7 @@ function renderHistory() {
         num.textContent = '#' + a.seq_num;
         meta.appendChild(num);
         meta.appendChild(badge(...statusBadge(a)));
+        if (NARRATE.models.length > 1) meta.appendChild(badge(a.model || NARRATE.model, 'bg-dark border border-secondary'));
         if (a.saw_reference) meta.appendChild(badge('after reading existing narrative', 'bg-warning text-dark'));
         const when = document.createElement('span');
         when.className = 'small text-muted';
