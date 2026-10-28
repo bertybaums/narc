@@ -103,7 +103,10 @@
 </div>
 
 <div class="card mb-4">
-    <div class="card-header">Recent narratives (latest 200)</div>
+    <div class="card-header d-flex align-items-center">
+        <span class="me-auto">Recent narratives (latest 200)</span>
+        {% if guesses %}<button type="button" id="btn-all-guesses" class="btn btn-sm btn-outline-info">Show all guesses</button>{% endif %}
+    </div>
     <div class="card-body">
         <div class="table-responsive">
         <table class="table table-sm table-dark align-middle small">
@@ -125,8 +128,17 @@
                     {% elif a.correct %}<span class="text-success">solved</span>
                     {% elif a.parse_error %}<span class="text-muted" title="{{ a.parse_error }}">no grid</span>
                     {% else %}{{ '%.0f' % ((a.cell_accuracy or 0) * 100) }}% cells{% endif %}
+                    {% if a.attempt_id in guesses %}
+                    <div><button type="button" class="btn btn-link btn-sm p-0 btn-guess" data-attempt="{{ a.attempt_id }}"
+                                 aria-expanded="false" aria-controls="guess-{{ a.attempt_id }}">Show guess</button></div>
+                    {% endif %}
                 </td>
             </tr>
+            {% if a.attempt_id in guesses %}
+            <tr id="guess-{{ a.attempt_id }}" class="narrate-guess-row" style="display:none;">
+                <td colspan="8"><div class="d-flex flex-wrap gap-4 py-1 guess-grids"></div></td>
+            </tr>
+            {% endif %}
             {% else %}
             <tr><td colspan="8" class="text-muted">No narratives yet.</td></tr>
             {% endfor %}
@@ -135,4 +147,64 @@
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// "Show guess": the model's grid (red outlines mark cells that differ) beside the
+// hidden grid it was graded against. Rendered on first open.
+const GUESSES = {{ guesses | tojson }};
+
+function guessBox(title, render) {
+    const box = document.createElement('div');
+    const h = document.createElement('div');
+    h.className = 'small text-muted mb-1';
+    h.textContent = title;
+    const canvas = document.createElement('div');
+    canvas.style.display = 'inline-block';
+    render(canvas);
+    box.append(h, canvas);
+    return box;
+}
+
+function toggleGuess(id, show) {
+    const row = document.getElementById('guess-' + id);
+    const btn = document.querySelector(`.btn-guess[data-attempt="${id}"]`);
+    if (show === undefined) show = row.style.display === 'none';
+    const holder = row.querySelector('.guess-grids');
+    if (show && !holder.childElementCount) {
+        const g = GUESSES[id];
+        for (const pos of g.positions) {
+            const key = String(pos);
+            const predicted = g.predicted[key];
+            const expected = g.expected[key];
+            if (predicted && expected) {
+                holder.appendChild(guessBox(`Guess, grid ${pos + 1}`, c => renderFeedbackGrid(c, predicted, expected, 16)));
+            } else if (predicted) {
+                holder.appendChild(guessBox(`Guess, grid ${pos + 1}`,
+                    c => renderGrid(c, new Grid(predicted.length, predicted[0].length, predicted), {cellSize: 16})));
+            } else {
+                holder.appendChild(guessBox(`Guess, grid ${pos + 1}`, c => { c.textContent = 'no grid for this position'; }));
+            }
+            if (expected) {
+                holder.appendChild(guessBox(`Hidden grid ${pos + 1}`,
+                    c => renderGrid(c, new Grid(expected.length, expected[0].length, expected), {cellSize: 16})));
+            }
+        }
+    }
+    row.style.display = show ? '' : 'none';
+    btn.textContent = show ? 'Hide guess' : 'Show guess';
+    btn.setAttribute('aria-expanded', String(show));
+}
+
+document.querySelectorAll('.btn-guess').forEach(b =>
+    b.addEventListener('click', () => toggleGuess(b.dataset.attempt)));
+
+const allBtn = document.getElementById('btn-all-guesses');
+if (allBtn) allBtn.addEventListener('click', () => {
+    const show = allBtn.textContent.startsWith('Show');
+    Object.keys(GUESSES).forEach(id => toggleGuess(id, show));
+    allBtn.textContent = show ? 'Hide all guesses' : 'Show all guesses';
+});
+</script>
 {% endblock %}

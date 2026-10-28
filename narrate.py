@@ -542,6 +542,33 @@ def api_attempt(attempt_id):
 
 # --- staff ---
 
+def _admin_guesses(attempts):
+    """attempt_id -> the model's guessed grid(s) and the hidden grid(s) they were graded
+    against, for the admin table's "Show guess" rows. Puzzles are read from narc.db
+    directly, so attempts on puzzles since dropped from config still show the answer."""
+    views = {}
+    out = {}
+    conn = None
+    try:
+        for a in attempts:
+            if not a["predicted_grids"]:
+                continue
+            pid = a["puzzle_id"]
+            if pid not in views:
+                conn = conn or db.init_db()
+                row = db.get_puzzle(conn, pid)
+                views[pid] = db.puzzle_to_json(row) if row else None
+            masked = json.loads(a["masked_positions"])
+            expected = grids.remask(views[pid], masked)["answer_grids"] if views[pid] else {}
+            out[a["attempt_id"]] = {"positions": masked,
+                                    "predicted": json.loads(a["predicted_grids"]),
+                                    "expected": expected}
+    finally:
+        if conn:
+            conn.close()
+    return out
+
+
 def _require_staff():
     if not _staff_username():
         flash("You don't have permission to access this page.", "danger")
@@ -576,12 +603,14 @@ def admin():
         attempts = conn.execute(
             """SELECT a.attempt_id, a.participant_id, a.puzzle_id, a.seq_num, a.narrative,
                       a.saw_reference, a.model_name, a.status, a.correct, a.cell_accuracy, a.parse_error,
+                      a.predicted_grids, a.masked_positions,
                       a.error, a.latency_ms, a.created_at, p.invite_code, p.staff_username
                FROM attempts a JOIN participants p USING (participant_id)
                ORDER BY a.attempt_id DESC LIMIT 200"""
         ).fetchall()
         return render_template("narrate_admin.html", s=s, models=model_options(), puzzles=puzzles,
                                invites=narrate_db.get_invites(conn), attempts=attempts,
+                               guesses=_admin_guesses(attempts),
                                staff=_staff_username())
     finally:
         conn.close()
