@@ -192,3 +192,5 @@ narrate:
     - puzzle_id: Ballerina 4      # Ballerina 4 (Chloe): reference solved qwen3.8-27b on /inspect
     - puzzle_id: narc_00001       # The Accident (Jason): qwen3.8-27b fails it on /inspect. Reference check, Oct 21, 2026:
       reference_model: kimi-k3    # kimi-k3 2/2 solved; gpt-oss-120b 0/5 and gemma-4-26b 0/3 (both solved it once on /inspect)
+    # NCURA, November 2026
+    - puzzle_id: ncura-comply_rev # Compliance-no: AI Review, Nov 8, 2026: `both` solved by qwen3.8-27b and kimi-k3 (grids_only failed on all 9 models)
