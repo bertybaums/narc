@@ -1,0 +1,13 @@
+NARC: Narrative Augmented Reasoning Challenges
+Copyright 2026 Bert Baumgaertner
+
+The source code (Python, HTML templates, CSS, JavaScript and shell scripts, including the vendored simulator in nhm_vendor/) is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The content (puzzles, model results, analyses, reports and other data and documents) is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0; see LICENSE-CONTENT.md).
+
+Not covered by these licenses:
+
+- The nine human-written puzzles (metadata creator "human": data/puzzles/001.json to 007.json, data/puzzles/HadNARC1.json and HadNARC2.json, and the copies in old_narc/) belong to the people who wrote them and are not licensed here. Please ask before reusing them.
+- James-Story_Prism_Audit.pdf is Erin James's worksheet, included with permission. It is not licensed here.
+- NARC-tiny puzzles (not stored in this repository) are generated from TinyStories (Eldan and Li, 2023), which is licensed under CDLA-Sharing-1.0. Wherever they are shared they carry CDLA-Sharing-1.0, not CC BY 4.0.
+- Puzzles, stories and other material submitted by visitors to the NARC website are not covered by these licenses. They stay with their authors.

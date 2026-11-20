@@ -69,5 +69,7 @@ model judges checked that each puzzle's events are asserted by its story.
 
 ## License
 
-Not yet chosen. A data licence will be set with the release; please ask before reusing
-puzzles or results.
+- **Code** is licensed under the [Apache License 2.0](LICENSE).
+- **Content** (data, documents, figures) is licensed under [CC BY 4.0](LICENSE-CONTENT.md).
+
+Some files are not covered; see [NOTICE](NOTICE).
